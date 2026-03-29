@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lists — GD Demand List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="lists">
+  <header>
+    <h1>Demand Lists</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="players.html">Players</a>
+    </nav>
+  </header>
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="panel">
+        <h2>Levels</h2>
+        <ul id="levels"></ul>
+      </div>
+    </aside>
+
+    <section class="panel content">
+      <div class="search-row">
+        <h2 id="list-title">All Videos</h2>
+        <input id="search" type="text" placeholder="Search videos or titles..." />
+        <select id="level-filter"><option value="all">All Levels</option></select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="levels-table">
+          <thead>
+            <tr><th style="width:80px">#</th><th>Title</th><th style="width:140px">Action</th></tr>
+          </thead>
+          <tbody id="list-area"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

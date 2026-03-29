@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Players — GD Demand List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="players">
+  <header>
+    <h1>Players</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>Add Player</h2>
+      <form id="player-form" style="display:flex;gap:8px">
+        <input id="player-name" placeholder="Player name" required />
+        <button class="btn" type="submit">Add</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Players</h2>
+      <ul id="players"></ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
