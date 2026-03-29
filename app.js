@@ -1,4 +1,4 @@
-// Lightweight multi-page handler for GD Demand List
+// Lightweight multi-page handler for GD fedl
 (function(){
   function qs(id){return document.getElementById(id)}
 
