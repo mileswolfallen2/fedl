@@ -33,6 +33,18 @@ table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
 
 /* small helpers reused */
 .small{font-size:0.9rem}
+.discord-panel{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:18px;padding:26px 28px;background:linear-gradient(135deg,rgba(88,101,242,0.18),rgba(7,19,38,0.95));border:1px solid rgba(88,101,242,0.22)}
+.discord-copy{flex:1}
+.discord-badge{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.discord-logo{display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:18px;background:#5865f2;color:#fff;box-shadow:0 10px 24px rgba(88,101,242,0.32)}
+.discord-logo img{width:34px;height:34px;display:block}
+.discord-label{margin:0 0 6px 0;text-transform:uppercase;letter-spacing:0.14em;font-size:0.72rem;font-weight:700;color:#bfc7ff}
+.discord-panel h2{margin:0;font-size:1.9rem}
+.discord-text{max-width:720px;margin:0 0 16px 0;line-height:1.65;color:#dce8f5}
+.discord-highlights{display:flex;flex-wrap:wrap;gap:10px}
+.discord-highlights span{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.07);color:#eef3ff;font-size:0.92rem}
+.discord-actions{display:flex;align-items:center;justify-content:center}
+.discord-btn{padding:12px 18px;background:#5865f2;color:#fff;font-weight:700}
 .rules-view header{padding:18px 28px}
 .rules-view header h1{font-size:2rem;font-weight:800;letter-spacing:0.02em}
 .rules-view main{display:flex;justify-content:center;padding:40px 20px 64px}
@@ -46,4 +58,4 @@ table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
 .rule-section p{margin:0 0 12px 0;line-height:1.7;color:#dce8f5}
 .rules-list{margin:0;padding-left:22px}
 .rules-list li{margin:0 0 8px 0;line-height:1.55;color:#dce8f5}
-@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.video-modal iframe{height:320px}.rules-view header{padding:16px 18px}.rules-view header h1{font-size:1.55rem}.rules-page{padding:24px 20px}.rules-page h2{font-size:1.65rem}}
+@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.video-modal iframe{height:320px}.discord-panel{flex-direction:column;align-items:flex-start;padding:22px 20px}.discord-panel h2{font-size:1.55rem}.discord-actions{width:100%;justify-content:flex-start}.rules-view header{padding:16px 18px}.rules-view header h1{font-size:1.55rem}.rules-page{padding:24px 20px}.rules-page h2{font-size:1.65rem}}
