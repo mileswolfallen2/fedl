@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Error Pages - GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="error-shell">
+  <header>
+    <h1>Error Pages</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="players.html">Players</a>
+      <a href="rules.html">Rules</a>
+      <a href="roulette.html">Roulette</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel error-collection">
+      <p class="rules-kicker">Status Gallery</p>
+      <h2>Common HTTP Error Pages</h2>
+      <p class="muted small">Preview the shared error page designs below. These pages are set up as standalone static HTML files so you can use them directly or wire them into hosting rules later.</p>
+
+      <div class="status-grid">
+        <a class="status-card" href="401.html">
+          <strong>401</strong>
+          <span>Unauthorized. Sign-in or permission issue.</span>
+        </a>
+        <a class="status-card" href="403.html">
+          <strong>403</strong>
+          <span>Forbidden. Access is blocked even if the page exists.</span>
+        </a>
+        <a class="status-card" href="404.html">
+          <strong>404</strong>
+          <span>Not Found. The requested page could not be located.</span>
+        </a>
+        <a class="status-card" href="429.html">
+          <strong>429</strong>
+          <span>Too Many Requests. The user should slow down and retry later.</span>
+        </a>
+        <a class="status-card" href="500.html">
+          <strong>500</strong>
+          <span>Internal Server Error. Something failed on the server side.</span>
+        </a>
+        <a class="status-card" href="502.html">
+          <strong>502</strong>
+          <span>Bad Gateway. An upstream response was invalid.</span>
+        </a>
+        <a class="status-card" href="503.html">
+          <strong>503</strong>
+          <span>Service Unavailable. The app is down or under maintenance.</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

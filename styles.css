@@ -71,4 +71,31 @@ table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
 .rule-section p{margin:0 0 12px 0;line-height:1.7;color:#dce8f5}
 .rules-list{margin:0;padding-left:22px}
 .rules-list li{margin:0 0 8px 0;line-height:1.55;color:#dce8f5}
+.error-shell main{min-height:calc(100vh - 84px);display:flex;align-items:center;justify-content:center;padding:32px 20px 56px}
+.error-page{width:min(100%,980px);padding:0;overflow:hidden;border:1px solid rgba(92,197,255,0.12);background:
+linear-gradient(140deg,rgba(92,197,255,0.1),rgba(7,19,38,0.95) 34%),
+radial-gradient(circle at top right,rgba(255,255,255,0.07),transparent 36%),
+linear-gradient(180deg,rgba(8,18,32,0.98),rgba(7,19,38,0.94))}
+.error-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,0.85fr);gap:0}
+.error-copy{padding:34px 36px}
+.error-code{display:inline-block;margin:0 0 16px 0;padding:8px 14px;border-radius:999px;background:rgba(92,197,255,0.1);color:var(--accent);font-size:0.84rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase}
+.error-copy h2{margin:0 0 12px 0;font-size:clamp(2.2rem,5vw,4.6rem);font-weight:900;letter-spacing:0.03em}
+.error-copy p{margin:0 0 14px 0;max-width:56ch;line-height:1.7;color:#dce8f5}
+.error-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.error-actions .btn{font-weight:700;text-decoration:none}
+.ghost-btn{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.14)}
+.error-side{display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:34px 30px;background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))}
+.error-side h3{margin:0 0 10px 0;font-size:1rem;letter-spacing:0.04em;text-transform:uppercase;color:#eef6ff}
+.error-list{margin:0;padding:0;list-style:none}
+.error-list li + li{margin-top:10px}
+.error-list a{display:block;padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.05);color:#eaf2fb;text-decoration:none}
+.error-list a span{display:block;color:var(--muted);font-size:0.88rem}
+.error-tip{margin:0;padding:14px 16px;border-radius:12px;background:rgba(92,197,255,0.08);border:1px solid rgba(92,197,255,0.12);color:#d9ecff}
+.error-collection{width:min(100%,1100px)}
+.error-collection h2{margin:0 0 12px 0;font-size:2rem}
+.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.status-card{display:block;padding:18px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);text-decoration:none;color:var(--text)}
+.status-card strong{display:block;margin-bottom:6px;font-size:1.65rem}
+.status-card span{display:block;color:var(--muted);line-height:1.5}
 @media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.video-modal iframe{height:320px}.roulette-head{flex-direction:column;align-items:flex-start}.discord-panel{flex-direction:column;align-items:flex-start;padding:22px 20px}.discord-panel h2{font-size:1.55rem}.discord-actions{width:100%;justify-content:flex-start}.rules-view header{padding:16px 18px}.rules-view header h1{font-size:1.55rem}.rules-page{padding:24px 20px}.rules-page h2{font-size:1.65rem}}
+@media(max-width:900px){.error-grid{grid-template-columns:1fr}.error-copy,.error-side{padding:24px 20px}.error-copy h2{font-size:2.5rem}}

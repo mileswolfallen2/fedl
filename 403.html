@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>403 - Forbidden</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="error-shell">
+  <header>
+    <h1>GD fedl</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="errors.html">Errors</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel error-page">
+      <div class="error-grid">
+        <div class="error-copy">
+          <p class="error-code">403 Status</p>
+          <h2>Forbidden</h2>
+          <p>The page exists, but your current account or network is not allowed to open it.</p>
+          <p class="muted small">This usually means the request was understood, but access is intentionally blocked.</p>
+          <div class="error-actions">
+            <a class="btn" href="index.html">Return Home</a>
+            <a class="btn ghost-btn" href="errors.html">Browse Error Pages</a>
+          </div>
+        </div>
+        <aside class="error-side">
+          <div>
+            <h3>Possible Reasons</h3>
+            <ul class="error-list">
+              <li><a href="rules.html">Permission rules<span>You may be missing a role required for this area.</span></a></li>
+              <li><a href="index.html">Restricted content<span>The route may be intentionally blocked outside staff tools.</span></a></li>
+            </ul>
+          </div>
+          <p class="error-tip">Tip: 403 is different from 401. Logging in may not help unless your permissions change.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

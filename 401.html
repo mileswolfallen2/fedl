@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>401 - Unauthorized</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="error-shell">
+  <header>
+    <h1>GD fedl</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="errors.html">Errors</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel error-page">
+      <div class="error-grid">
+        <div class="error-copy">
+          <p class="error-code">401 Status</p>
+          <h2>Unauthorized</h2>
+          <p>This page needs a valid sign-in or a session with the right permissions before it can be opened.</p>
+          <p class="muted small">If you expected access, log in again or ask a moderator to verify your account.</p>
+          <div class="error-actions">
+            <a class="btn" href="index.html">Go Home</a>
+            <a class="btn ghost-btn" href="errors.html">See All Errors</a>
+          </div>
+        </div>
+        <aside class="error-side">
+          <div>
+            <h3>What To Check</h3>
+            <ul class="error-list">
+              <li><a href="index.html">Session expired<span>Refresh your login and try again.</span></a></li>
+              <li><a href="rules.html">Access role<span>Some pages may be limited to staff or trusted users.</span></a></li>
+            </ul>
+          </div>
+          <p class="error-tip">Tip: 401 usually means you can fix it by signing in with the correct account.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

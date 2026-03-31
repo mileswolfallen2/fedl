@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>502 - Bad Gateway</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="error-shell">
+  <header>
+    <h1>GD fedl</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="errors.html">Errors</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel error-page">
+      <div class="error-grid">
+        <div class="error-copy">
+          <p class="error-code">502 Status</p>
+          <h2>Bad Gateway</h2>
+          <p>A server acting as a gateway or proxy received an invalid response from somewhere upstream.</p>
+          <p class="muted small">This is a good fit for integrations that depend on external APIs or cached edge services.</p>
+          <div class="error-actions">
+            <a class="btn" href="index.html">Go Home</a>
+            <a class="btn ghost-btn" href="errors.html">More Status Pages</a>
+          </div>
+        </div>
+        <aside class="error-side">
+          <div>
+            <h3>Likely Causes</h3>
+            <ul class="error-list">
+              <li><a href="roulette.html">Upstream API failed<span>An external data source may have returned malformed data.</span></a></li>
+              <li><a href="index.html">Proxy issue<span>An edge layer may be misconfigured or temporarily unstable.</span></a></li>
+            </ul>
+          </div>
+          <p class="error-tip">Tip: 502 usually points to infrastructure between your app and another service, not the browser itself.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

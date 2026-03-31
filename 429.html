@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>429 - Too Many Requests</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="error-shell">
+  <header>
+    <h1>GD fedl</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="errors.html">Errors</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel error-page">
+      <div class="error-grid">
+        <div class="error-copy">
+          <p class="error-code">429 Status</p>
+          <h2>Too Many Requests</h2>
+          <p>You reached the request limit for this resource. Give it a moment, then try again.</p>
+          <p class="muted small">This is useful for API-heavy routes or rate-limited community data lookups.</p>
+          <div class="error-actions">
+            <a class="btn" href="index.html">Go Home</a>
+            <a class="btn ghost-btn" href="errors.html">View Other Errors</a>
+          </div>
+        </div>
+        <aside class="error-side">
+          <div>
+            <h3>Recommended</h3>
+            <ul class="error-list">
+              <li><a href="roulette.html">Retry later<span>Wait briefly before sending another request.</span></a></li>
+              <li><a href="rules.html">Reduce spam<span>Batch lookups instead of refreshing too often.</span></a></li>
+            </ul>
+          </div>
+          <p class="error-tip">Tip: A `Retry-After` header is often paired with 429 responses on live servers.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>500 - Internal Server Error</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="error-shell">
+  <header>
+    <h1>GD fedl</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="errors.html">Errors</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel error-page">
+      <div class="error-grid">
+        <div class="error-copy">
+          <p class="error-code">500 Status</p>
+          <h2>Internal Server Error</h2>
+          <p>Something went wrong on the server while trying to complete your request.</p>
+          <p class="muted small">The request looked valid, but the app hit an unexpected failure before it could respond normally.</p>
+          <div class="error-actions">
+            <a class="btn" href="index.html">Back Home</a>
+            <a class="btn ghost-btn" href="errors.html">All Error Pages</a>
+          </div>
+        </div>
+        <aside class="error-side">
+          <div>
+            <h3>Next Steps</h3>
+            <ul class="error-list">
+              <li><a href="index.html">Try again<span>The issue may be temporary.</span></a></li>
+              <li><a href="rules.html">Contact staff<span>Report what action triggered the crash.</span></a></li>
+            </ul>
+          </div>
+          <p class="error-tip">Tip: 500 is the general fallback when the server knows it failed but has no more specific status to use.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

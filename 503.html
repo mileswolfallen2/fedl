@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>503 - Service Unavailable</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="error-shell">
+  <header>
+    <h1>GD fedl</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="errors.html">Errors</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel error-page">
+      <div class="error-grid">
+        <div class="error-copy">
+          <p class="error-code">503 Status</p>
+          <h2>Service Unavailable</h2>
+          <p>The site is temporarily unavailable because it is overloaded, restarting, or under maintenance.</p>
+          <p class="muted small">Unlike a 500, this usually implies the outage is temporary and expected to recover.</p>
+          <div class="error-actions">
+            <a class="btn" href="index.html">Return Home</a>
+            <a class="btn ghost-btn" href="errors.html">Status Gallery</a>
+          </div>
+        </div>
+        <aside class="error-side">
+          <div>
+            <h3>While You Wait</h3>
+            <ul class="error-list">
+              <li><a href="index.html">Check back soon<span>Maintenance windows often clear quickly.</span></a></li>
+              <li><a href="rules.html">Read the rules<span>Core static content may still be available elsewhere.</span></a></li>
+            </ul>
+          </div>
+          <p class="error-tip">Tip: A `Retry-After` header is also commonly used with 503 maintenance responses.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
