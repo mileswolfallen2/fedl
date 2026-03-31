@@ -3,34 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Lists — GD fedl</title>
+  <title>Server List - GD fedl</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body data-page="lists">
+<body data-page="serverlist">
   <header>
     <h1>fedl</h1>
     <nav>
       <a href="index.html">Home</a>
-      <a href="players.html">Players</a>
-      <a href="rules.html">Rules</a>
-      <a href="serverlist.html">Server List</a>
+      <a href="lists.html">Static List</a>
       <a href="admelist.html">Edit List</a>
+      <a href="players.html">Players</a>
       <a href="roulette.html">Roulette</a>
     </nav>
   </header>
   <main class="layout">
     <aside class="sidebar">
       <div class="panel">
-        <h2>Levels</h2>
+        <h2>Live Ranges</h2>
+        <p id="live-status" class="muted">Connected to live server data</p>
         <ul id="levels"></ul>
       </div>
     </aside>
 
     <section class="panel content">
       <div class="search-row">
-        <h2 id="list-title">All Videos</h2>
+        <h2 id="list-title">Live Server List</h2>
         <input id="search" type="text" placeholder="Search videos or titles..." />
-        <select id="level-filter"><option value="all">All Levels</option></select>
+        <select id="level-filter"><option value="all">Full List</option></select>
       </div>
 
       <div class="table-wrap">

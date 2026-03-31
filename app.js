@@ -5,6 +5,8 @@
   const page = document.body.dataset.page;
   let cachedItems = null;
   let cachedLevelMeta = null;
+  let liveBound = false;
+  let liveHandlers = [];
 
   // Storage helpers
   function read(key, fallback){
@@ -18,6 +20,15 @@
       const parts = l.split('|').map(p=>p.trim());
       return {level:parts[0]||'Unknown',position:parts[1]||'',title:parts[2]||'Untitled',url:parts[3]||''};
     });
+  }
+
+  function formatData(items){
+    return items.map(item=>[
+      item.level || 'new',
+      item.position || '',
+      item.title || '',
+      item.url || ''
+    ].join('|')).join('\n');
   }
 
   function parseLevelMeta(txt){
@@ -37,10 +48,52 @@
 
   function loadItems(){
     if(cachedItems) return Promise.resolve(cachedItems);
-    return fetch('data.txt').then(r=>r.text()).then(txt=>{
-      cachedItems = parseData(txt);
+    return fetch('/api/list', {cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error('API unavailable');
+      return r.json();
+    }).then(data=>{
+      cachedItems = Array.isArray(data.items) ? data.items : [];
       return cachedItems;
+    }).catch(()=>{
+      return fetch('server/data.txt', {cache:'no-store'}).then(r=>r.text()).then(txt=>{
+        cachedItems = parseData(txt);
+        return cachedItems;
+      });
     });
+  }
+
+  function clearItemsCache(){
+    cachedItems = null;
+  }
+
+  function onLiveUpdate(handler){
+    liveHandlers.push(handler);
+  }
+
+  function notifyLiveUpdate(items){
+    liveHandlers.forEach(handler=>handler(items));
+  }
+
+  function refreshItems(){
+    clearItemsCache();
+    return loadItems().then(items=>{
+      notifyLiveUpdate(items);
+      return items;
+    });
+  }
+
+  function bindLiveUpdates(){
+    if(liveBound || typeof window.EventSource === 'undefined') return;
+    liveBound = true;
+    const source = new EventSource('/events');
+    source.addEventListener('list-update', ()=>{
+      refreshItems().catch(err=>console.error(err));
+    });
+    source.onerror = function(){
+      source.close();
+      liveBound = false;
+      window.setTimeout(bindLiveUpdates, 3000);
+    };
   }
 
   function loadLevelMeta(){
@@ -100,7 +153,7 @@
       Promise.all([loadItems(), loadLevelMeta()]).then(([items, metaMap])=>{
         if(!items.length){
           statusEl.textContent = 'No demons found.';
-          titleEl.textContent = 'Add demons to data.txt';
+          titleEl.textContent = 'Add demons to server/data.txt';
           idEl.textContent = 'Level ID: -';
           noteEl.textContent = 'No list data was found.';
           return;
@@ -146,14 +199,17 @@
     render();
   }
 
-  // Lists page
-  if(page==='lists'){
+  function initListPage(){
     const levelsEl = qs('levels'); const listArea = qs('list-area'); const titleEl = qs('list-title');
+    const searchEl = qs('search');
+    const filterSelect = qs('level-filter');
+    let currentItems = [];
+    let controlsBound = false;
     // Load hard-coded data file data.txt (category|position|title|url per line)
     function loadData(){
       loadItems().then(items=>{
-        setupLevels(items);
-      }).catch(err=>{listArea.innerHTML='<p class="muted">Failed to load data.txt — run via a local server.</p>'; console.error(err)});
+        applyItems(items);
+      }).catch(err=>{listArea.innerHTML='<p class="muted">Failed to load list data - run via the Node server.</p>'; console.error(err)});
     }
 
     function computeCategories(items){
@@ -169,7 +225,6 @@
     function setupLevels(items){
       const categories = computeCategories(items);
       levelsEl.innerHTML='';
-      const filterSelect = qs('level-filter');
       filterSelect.innerHTML = '<option value="all">Full List</option>';
       categories.forEach(cat=>{
         const li = document.createElement('li');
@@ -186,11 +241,11 @@
 
         const opt = document.createElement('option'); opt.value = cat; opt.textContent = cat; filterSelect.appendChild(opt);
       });
-      // search and filter handlers
-      qs('search').addEventListener('input', ()=> renderTable(items));
-      filterSelect.addEventListener('change', ()=> renderTable(items));
-      // default select Full List
-      selectLevel('Full List', items, levelsEl.querySelector('.level-link'));
+      if(!controlsBound){
+        searchEl.addEventListener('input', ()=> renderTable(currentItems));
+        filterSelect.addEventListener('change', ()=> renderTable(currentItems));
+        controlsBound = true;
+      }
     }
 
     function selectLevel(level, items, linkEl){
@@ -201,8 +256,8 @@
     }
 
     function renderTable(items){
-      const q = (qs('search') && qs('search').value || '').toLowerCase();
-      const levelFilter = (qs('level-filter') && qs('level-filter').value) || 'all';
+      const q = (searchEl && searchEl.value || '').toLowerCase();
+      const levelFilter = (filterSelect && filterSelect.value) || 'all';
       const filtered = items.filter(it=>{
         // apply level / category filter (support range categories like "Top 1-10")
         if(levelFilter && levelFilter!=='all' && levelFilter!=='Full List'){
@@ -221,11 +276,12 @@
         const tr = document.createElement('tr');
         const tdNum = document.createElement('td'); tdNum.textContent = it.position;
         const tdTitle = document.createElement('td'); tdTitle.textContent = it.title;
+        const tdLevel = document.createElement('td'); tdLevel.textContent = it.level;
         const tdAct = document.createElement('td');
         const a = document.createElement('a'); a.textContent='Open'; a.href='#'; a.className='btn';
         a.addEventListener('click', (e)=>{e.preventDefault(); openVideo(it.url)});
         tdAct.appendChild(a);
-        tr.appendChild(tdNum); tr.appendChild(tdTitle); tr.appendChild(tdAct);
+        tr.appendChild(tdNum); tr.appendChild(tdTitle); tr.appendChild(tdLevel); tr.appendChild(tdAct);
         tbody.appendChild(tr);
       });
     }
@@ -250,9 +306,222 @@
       const m = url.match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{6,})/); return m?m[1]:'';
     }
 
+    function applyItems(items){
+      const previousFilter = filterSelect.value || 'all';
+      currentItems = items.slice();
+      setupLevels(currentItems);
+      const availableFilters = Array.from(filterSelect.options).map(option=>option.value);
+      filterSelect.value = availableFilters.includes(previousFilter) ? previousFilter : 'all';
+      const activeText = filterSelect.value === 'all' ? 'Full List' : filterSelect.value;
+      levelsEl.querySelectorAll('.level-link').forEach(btn=>{
+        btn.classList.toggle('active', btn.textContent === activeText);
+      });
+      renderTable(currentItems);
+    }
+
     loadData();
+    return {applyItems};
+  }
+
+  // Lists page
+  if(page==='lists' || page==='serverlist'){
+    const listPage = initListPage();
+    if(page==='serverlist'){
+      bindLiveUpdates();
+      onLiveUpdate(function(items){
+        const status = qs('live-status');
+        if(status){
+          status.textContent = 'Live data updated';
+        }
+        listPage.applyItems(items);
+      });
+    }
+  }
+
+  if(page==='admelist'){
+    const statusEl = qs('admin-status');
+    const tbody = qs('admin-list-body');
+    const addBtn = qs('add-row');
+    const saveBtn = qs('save-list');
+    const searchEl = qs('admin-search');
+    let items = [];
+
+    function setStatus(message, isError){
+      if(!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function filteredItems(){
+      const query = (searchEl && searchEl.value || '').trim().toLowerCase();
+      if(!query) return items;
+      return items.filter(item=>{
+        return [item.level, item.position, item.title, item.url].some(value=>
+          String(value || '').toLowerCase().includes(query)
+        );
+      });
+    }
+
+    function normalizePositions(){
+      let position = 1;
+      items.forEach(item=>{
+        if(item._isDraft){
+          item.position = '';
+          return;
+        }
+        item.position = String(position);
+        position += 1;
+      });
+    }
+
+    function moveItemToPosition(index, rawPosition){
+      if(!items[index]) return;
+      const parsedPosition = Number(rawPosition);
+      if(!Number.isFinite(parsedPosition) || parsedPosition < 1) return;
+      const nextPosition = Math.max(1, parsedPosition);
+      const [item] = items.splice(index, 1);
+      item._isDraft = false;
+      const drafts = items.filter(entry=>entry._isDraft);
+      const ranked = items.filter(entry=>!entry._isDraft);
+      const targetIndex = Math.min(ranked.length, nextPosition - 1);
+      ranked.splice(targetIndex, 0, item);
+      items = drafts.concat(ranked);
+      normalizePositions();
+    }
+
+    function renderAdminTable(){
+      const rows = filteredItems();
+      tbody.innerHTML = '';
+      rows.forEach((item, index)=>{
+        const actualIndex = items.indexOf(item);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input data-field="position" data-index="${actualIndex}" type="number" min="1" value="${escapeAttr(item.position)}"></td>
+          <td><input data-field="level" data-index="${actualIndex}" type="text" value="${escapeAttr(item.level)}"></td>
+          <td><input data-field="title" data-index="${actualIndex}" type="text" value="${escapeAttr(item.title)}"></td>
+          <td><input data-field="url" data-index="${actualIndex}" type="url" value="${escapeAttr(item.url)}"></td>
+          <td><button type="button" class="btn danger-btn small-btn" data-delete="${actualIndex}">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      if(!rows.length){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" class="muted">No rows match your search.</td>';
+        tbody.appendChild(tr);
+      }
+    }
+
+    function saveItems(){
+      const hasUnplacedDraft = items.some(item=>{
+        const hasContent = String(item.title || '').trim() || String(item.url || '').trim() || String(item.level || '').trim();
+        return item._isDraft && hasContent;
+      });
+      if(hasUnplacedDraft){
+        setStatus('Give each new row a number before saving.', true);
+        return Promise.resolve();
+      }
+      items = items
+        .map(item=>({
+          level: String(item.level || '').trim() || 'new',
+          position: String(item.position || '').trim(),
+          title: String(item.title || '').trim(),
+          url: String(item.url || '').trim()
+        }))
+        .filter(item=>item.title);
+      normalizePositions();
+      return fetch('/api/list', {
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({text: formatData(items)})
+      }).then(r=>{
+        if(!r.ok) throw new Error('Save failed');
+        clearItemsCache();
+        renderAdminTable();
+        setStatus('Saved. Live pages update automatically.');
+      }).catch(err=>{
+        console.error(err);
+        setStatus('Could not save. Start the Node server and try again.', true);
+      });
+    }
+
+    function loadAdmin(){
+      loadItems().then(loaded=>{
+        items = loaded.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
+          level: item.level,
+          position: item.position,
+          title: item.title,
+          url: item.url,
+          _isDraft: false
+        }));
+        normalizePositions();
+        renderAdminTable();
+        setStatus('Connected to live list data.');
+      }).catch(err=>{
+        console.error(err);
+        setStatus('Could not load list data. Start the Node server first.', true);
+      });
+    }
+
+    tbody.addEventListener('input', function(event){
+      const target = event.target;
+      const field = target.getAttribute('data-field');
+      const index = Number(target.getAttribute('data-index'));
+      if(!field || Number.isNaN(index) || !items[index]) return;
+      if(field === 'position'){
+        moveItemToPosition(index, target.value);
+        renderAdminTable();
+      }else{
+        items[index][field] = target.value;
+      }
+      setStatus('Unsaved changes');
+    });
+
+    tbody.addEventListener('click', function(event){
+      const deleteButton = event.target.closest('[data-delete]');
+      if(!deleteButton) return;
+      const deleteIndex = deleteButton.getAttribute('data-delete');
+      if(deleteIndex == null) return;
+      const index = Number(deleteIndex);
+      if(Number.isNaN(index)) return;
+      items.splice(index, 1);
+      normalizePositions();
+      renderAdminTable();
+      setStatus('Row removed. Save when ready.');
+    });
+
+    addBtn.addEventListener('click', function(){
+      items.unshift({level:'new', position:'', title:'', url:'', _isDraft:true});
+      normalizePositions();
+      renderAdminTable();
+      setStatus('New row added at the top. Give it a number when you want to place it.');
+    });
+
+    saveBtn.addEventListener('click', function(){
+      saveItems();
+    });
+
+    if(searchEl){
+      searchEl.addEventListener('input', renderAdminTable);
+    }
+
+    bindLiveUpdates();
+    onLiveUpdate(function(updatedItems){
+      items = updatedItems.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
+        level: item.level,
+        position: item.position,
+        title: item.title,
+        url: item.url,
+        _isDraft: false
+      }));
+      normalizePositions();
+      renderAdminTable();
+      setStatus('List reloaded from live server.');
+    });
+
+    loadAdmin();
   }
 
   // Utility
   function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}
+  function escapeAttr(s){return escapeHtml(String(s == null ? '' : s))}
 })();

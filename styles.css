@@ -25,9 +25,20 @@ table.levels-table{width:100%;border-collapse:collapse;background:linear-gradien
 table.levels-table th,table.levels-table td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.02);text-align:left}
 table.levels-table th{color:var(--muted);font-size:0.85rem;font-weight:600}
 table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
+.levels-table input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text)}
 .btn{display:inline-block;padding:10px 14px;border-radius:999px;background:var(--accent);color:#042;cursor:pointer;border:none;font-weight:700;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
 .btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(92,197,255,0.22)}
 .muted{color:var(--muted);font-size:0.9rem}
+.error-text{color:#ff9f9f}
+.small-btn{padding:8px 12px}
+.danger-btn{background:#ff7b7b;color:#2a0909}
+.admin-shell{padding:18px 20px}
+.admin-panel{padding:20px}
+.admin-toolbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:18px}
+.admin-toolbar h2{margin:0 0 8px 0}
+.admin-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.admin-actions input[type=text]{min-width:220px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text)}
+.admin-table td:last-child{text-align:center}
 .hero-kicker{margin:0 0 12px 0;text-transform:uppercase;letter-spacing:.18em;font-size:.75rem;font-weight:800;color:var(--accent-warm)}
 .wip-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:22px;align-items:stretch;min-height:calc(100vh - 132px)}
 .wip-copy,.wip-stage{position:relative}
@@ -141,3 +152,4 @@ linear-gradient(180deg,rgba(8,18,32,0.98),rgba(7,19,38,0.94))}
 .status-card span{display:block;color:var(--muted);line-height:1.5}
 @media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.video-modal iframe{height:320px}.roulette-head{flex-direction:column;align-items:flex-start}.discord-panel{flex-direction:column;align-items:flex-start;padding:22px 20px}.discord-panel h2{font-size:1.55rem}.discord-actions{width:100%;justify-content:flex-start}.rules-view header{padding:16px 18px}.rules-view header h1{font-size:1.55rem}.rules-page{padding:24px 20px}.rules-page h2{font-size:1.65rem}}
 @media(max-width:900px){.error-grid{grid-template-columns:1fr}.error-copy,.error-side{padding:24px 20px}.error-copy h2{font-size:2.5rem}}
+@media(max-width:900px){.admin-toolbar{flex-direction:column;align-items:stretch}.admin-actions{flex-direction:column;align-items:stretch}.admin-actions input[type=text]{min-width:0;width:100%}}

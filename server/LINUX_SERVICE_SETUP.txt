@@ -1,0 +1,62 @@
+Linux system service setup
+
+This lets the server start automatically on boot on a Linux device.
+
+1. Copy the project to the Linux machine.
+   Example path:
+   /opt/fedl
+
+2. Make sure Node.js is installed.
+   Check with:
+   node -v
+
+3. Test the server manually first.
+   In the project folder run:
+   HOST=0.0.0.0 PORT=3000 node server/server.js
+
+4. Create a systemd service file.
+   Run:
+   sudo nano /etc/systemd/system/fedl.service
+
+5. Paste this into the service file.
+
+   [Unit]
+   Description=FEDL Node Server
+   After=network.target
+
+   [Service]
+   Type=simple
+   WorkingDirectory=/opt/fedl
+   ExecStart=/usr/bin/env node /opt/fedl/server/server.js
+   Environment=HOST=0.0.0.0
+   Environment=PORT=3000
+   Restart=always
+   RestartSec=3
+   User=www-data
+   Group=www-data
+
+   [Install]
+   WantedBy=multi-user.target
+
+6. Reload systemd.
+   sudo systemctl daemon-reload
+
+7. Enable the service.
+   sudo systemctl enable fedl.service
+
+8. Start the service.
+   sudo systemctl start fedl.service
+
+9. Check status.
+   sudo systemctl status fedl.service
+
+10. View logs.
+    sudo journalctl -u fedl.service -f
+
+Notes
+
+- If your project is not in /opt/fedl, change WorkingDirectory and ExecStart.
+- If www-data does not exist on your Linux system, use your own service user.
+- Make sure port 3000 is allowed through the firewall.
+- If you use a reverse proxy like Nginx, you can proxy to:
+  http://127.0.0.1:3000
