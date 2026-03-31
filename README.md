@@ -1,29 +1,35 @@
 # GD FEDL
 
-A simple static website for a Geometry Dash FEDL-style list.
+A Geometry Dash FEDL-style website with both a static list and a live editable server list.
 
 It includes:
 
 - a home page
-- a list page for ranked level videos
+- a static list page
+- a live server-backed list page
+- an admin editor page for the live list
 - a players page
 - a rules page
 
 ## Project Files
 
 - `index.html` - home page
-- `lists.html` - main list view
+- `lists.html` - static list view
+- `serverlist.html` - live server-backed list view
+- `admelist.html` - admin UI for editing the live list
 - `players.html` - player manager
 - `rules.html` - submission rules and mod guidelines
-- `app.js` - client-side logic for the list and players pages
+- `app.js` - client-side logic
 - `styles.css` - site styling
-- `data.txt` - list data used by the videos page
+- `data.txt` - static fallback list data
+- `server/data.txt` - live server list data
+- `server/server.js` - Node.js server for the live list
+- `start-server.command` - one-click launcher for macOS
+- `server/LINUX_SERVICE_SETUP.txt` - Linux `systemd` setup notes
 
-## How The List Data Works
+## Data Format
 
-The site reads `data.txt` and shows the entries on `lists.html`.
-
-Each line in `data.txt` uses this format:
+Both `data.txt` and `server/data.txt` use the same format:
 
 ```txt
 category|position|title|url
@@ -35,11 +41,25 @@ Example:
 new|1|Flamewall|https://youtu.be/x4Io4zkWVRw
 ```
 
-## Running The Site
+## Pages
 
-Because the list page uses `fetch()` to load `data.txt`, you should run the project with a local server instead of opening the HTML files directly.
+- `lists.html` reads the static list.
+- `serverlist.html` reads the live server list.
+- `admelist.html` lets you edit the live server list with a UI.
 
-Example with Python:
+## Fallback Order
+
+The live list tries these in order:
+
+1. `/api/list`
+2. `server/data.txt`
+3. `data.txt`
+
+That means `serverlist.html` can still show data even if the live API is down.
+
+## Running The Static Site
+
+If you only want the static pages, you can run a simple file server:
 
 ```bash
 python3 -m http.server 8000
@@ -51,22 +71,67 @@ Then open:
 http://localhost:8000
 ```
 
-## Editing The List
+## Running The Live Server
 
-To add a new level, add a new line to `data.txt` using the same format:
+The live editor and live list use the Node server:
 
-```txt
-new|51|Level Name|https://youtube.com/watch?v=example
+```bash
+node server/server.js
 ```
 
-Tips:
+Or to allow other devices on your network to connect:
 
-- keep positions numeric so sorting works correctly
-- use a valid YouTube link if you want the in-page video modal to work
-- avoid blank lines with partial data
+```bash
+HOST=0.0.0.0 PORT=3000 node server/server.js
+```
+
+Then open:
+
+```txt
+http://localhost:3000/serverlist.html
+http://localhost:3000/admelist.html
+```
+
+On macOS you can also use:
+
+```txt
+start-server.command
+```
+
+## Editing The Live List
+
+Open `admelist.html` through the Node server.
+
+Features:
+
+- add a new row at the top as a draft
+- give it a number when you want to place it
+- automatic shifting of other rows when a number is reused
+- delete rows only with the Delete button
+- live refresh on connected list pages after saving
+
+Draft rows must be assigned a number before saving.
+
+## Hosting On Another Device
+
+If you want one device to host the live list for other devices:
+
+1. Run the server with `HOST=0.0.0.0`.
+2. Open or forward port `3000`.
+3. Visit `http://YOUR-IP:3000/serverlist.html` or `http://YOUR-IP:3000/admelist.html`.
+
+If you already have router port forwarding set up, point it to the machine running `server/server.js`.
+
+## Linux Service
+
+For running the Node server automatically on boot on Linux, see:
+
+`server/LINUX_SERVICE_SETUP.txt`
 
 ## Notes
 
 - Player data is stored in the browser with `localStorage`
 - The players list is local to each browser/device
-- The current layout is lightweight and does not need a build step
+- The live list data is stored in `server/data.txt`
+- The static fallback list data is stored in `data.txt`
+- The project does not need a build step
