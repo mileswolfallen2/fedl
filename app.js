@@ -4,6 +4,7 @@
 
   const page = document.body.dataset.page;
   let cachedItems = null;
+  let cachedLevelMeta = null;
 
   // Storage helpers
   function read(key, fallback){
@@ -19,6 +20,21 @@
     });
   }
 
+  function parseLevelMeta(txt){
+    const map = {};
+    txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(l=>{
+      if(l.startsWith('//')) return;
+      const parts = l.split('|').map(p=>p.trim());
+      const title = parts[0] || '';
+      if(!title) return;
+      map[title] = {
+        levelId: parts[1] || 'unknown',
+        percent: parts[2] || '100'
+      };
+    });
+    return map;
+  }
+
   function loadItems(){
     if(cachedItems) return Promise.resolve(cachedItems);
     return fetch('data.txt').then(r=>r.text()).then(txt=>{
@@ -27,17 +43,45 @@
     });
   }
 
+  function loadLevelMeta(){
+    if(cachedLevelMeta) return Promise.resolve(cachedLevelMeta);
+    return fetch('level-ids.txt').then(r=>r.text()).then(txt=>{
+      cachedLevelMeta = parseLevelMeta(txt);
+      return cachedLevelMeta;
+    }).catch(()=>{
+      cachedLevelMeta = {};
+      return cachedLevelMeta;
+    });
+  }
+
+  function fetchLevelIdFromApi(title){
+    const url = `https://gdbrowser.com/api/search/${encodeURIComponent(title)}?diff=-2&demonFilter=5&count=10`;
+    return fetch(url).then(r=>r.json()).then(results=>{
+      if(!Array.isArray(results) || !results.length) return null;
+      const exact = results.find(item=>String(item.name||'').toLowerCase() === String(title||'').toLowerCase());
+      const match = exact || results[0];
+      if(!match || !match.id) return null;
+      return String(match.id);
+    }).catch(()=>null);
+  }
+
   if(page==='roulette'){
     const spinBtn = qs('roulette-spin');
     const statusEl = qs('roulette-status');
     const titleEl = qs('roulette-title');
     const rankEl = qs('roulette-rank');
+    const idEl = qs('roulette-level-id');
+    const noteEl = qs('roulette-note');
     const openEl = qs('roulette-open');
 
-    function showPick(item){
+    function showPick(item, meta){
       statusEl.textContent = 'Your demon is:';
       titleEl.textContent = item.title;
       rankEl.textContent = `Rank: #${item.position}`;
+      idEl.textContent = `Level ID: ${meta.levelId || 'unknown'}`;
+      noteEl.textContent = meta.source === 'api'
+        ? 'Level ID was looked up from the Geometry Dash community API.'
+        : 'Level ID came from your local level-ids.txt file.';
       if(item.url){
         openEl.hidden = false;
         openEl.href = item.url;
@@ -50,19 +94,37 @@
       statusEl.textContent = 'Spinning...';
       titleEl.textContent = 'Choosing a demon';
       rankEl.textContent = 'Rank: -';
+      idEl.textContent = 'Level ID: -';
+      noteEl.textContent = 'Checking your local file and API if needed.';
       openEl.hidden = true;
-      loadItems().then(items=>{
+      Promise.all([loadItems(), loadLevelMeta()]).then(([items, metaMap])=>{
         if(!items.length){
           statusEl.textContent = 'No demons found.';
           titleEl.textContent = 'Add demons to data.txt';
+          idEl.textContent = 'Level ID: -';
+          noteEl.textContent = 'No list data was found.';
           return;
         }
         const item = items[Math.floor(Math.random()*items.length)];
-        window.setTimeout(()=>showPick(item), 350);
+        const localMeta = metaMap[item.title] || {levelId:'unknown', percent:'100'};
+        if(localMeta.levelId && localMeta.levelId !== 'unknown'){
+          window.setTimeout(()=>showPick(item, {levelId: localMeta.levelId, percent: localMeta.percent, source: 'file'}), 350);
+          return;
+        }
+        fetchLevelIdFromApi(item.title).then(levelId=>{
+          const meta = {
+            levelId: levelId || 'unknown',
+            percent: localMeta.percent || '100',
+            source: levelId ? 'api' : 'file'
+          };
+          window.setTimeout(()=>showPick(item, meta), 350);
+        });
       }).catch(err=>{
         statusEl.textContent = 'Could not load the list.';
         titleEl.textContent = 'Run the site on a local server';
         rankEl.textContent = 'Rank: -';
+        idEl.textContent = 'Level ID: -';
+        noteEl.textContent = 'The local file or API lookup failed.';
         console.error(err);
       });
     });

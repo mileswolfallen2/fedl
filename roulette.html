@@ -17,12 +17,26 @@
     </nav>
   </header>
   <main>
+    <section class="panel roulette-rules">
+      <p class="roulette-kicker">Rules</p>
+      <h2>How Roulette Works</h2>
+      <ul class="rules-list">
+        <li>Extreme Demon Roulette is a community challenge built around a roulette of hard demons from a chosen list.</li>
+        <li>You can use a main list, extended list, legacy list, or a custom list like this FEDL list.</li>
+        <li>A common format is to start at <strong>1%</strong> and raise the goal by <strong>1%</strong> for each new level until you fail or finish the challenge.</li>
+        <li>Some versions allow skips, rerolls, or custom limits, depending on the rules you want to use.</li>
+        <li>This page shows the demon name, rank, and level ID for the selected result.</li>
+        <li>Percent targets are stored in <code>level-ids.txt</code> using the format <code>title|levelId|percent</code>.</li>
+        <li>If a level ID is missing in that file, this page will try to look it up through the Geometry Dash community API automatically.</li>
+      </ul>
+    </section>
+
     <section class="panel roulette-panel">
       <div class="roulette-head">
         <div>
           <p class="roulette-kicker">Random Challenge</p>
           <h2>Demon Roulette</h2>
-          <p class="muted">Spin the list and get a random demon from your current FEDL rankings.</p>
+          <p class="muted">Spin the FEDL list to get a random demon for your roulette run.</p>
         </div>
         <button class="btn roulette-btn" id="roulette-spin" type="button">Spin</button>
       </div>
@@ -31,6 +45,8 @@
         <p class="roulette-status muted" id="roulette-status">Press spin to choose a demon.</p>
         <h3 id="roulette-title">No demon selected</h3>
         <p class="roulette-rank" id="roulette-rank">Rank: -</p>
+        <p class="roulette-meta" id="roulette-level-id">Level ID: -</p>
+        <p class="roulette-note muted" id="roulette-note">Level IDs come from your local file first, then API lookup if needed.</p>
         <a class="btn roulette-open" id="roulette-open" href="#" target="_blank" rel="noopener noreferrer" hidden>Open Video</a>
       </div>
     </section>

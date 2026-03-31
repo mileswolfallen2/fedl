@@ -33,6 +33,7 @@ table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
 
 /* small helpers reused */
 .small{font-size:0.9rem}
+.roulette-rules{margin-bottom:18px}
 .roulette-panel{margin-top:18px;padding:24px 26px;background:linear-gradient(135deg,rgba(92,197,255,0.12),rgba(7,19,38,0.96));border:1px solid rgba(92,197,255,0.16)}
 .roulette-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
 .roulette-kicker{margin:0 0 8px 0;text-transform:uppercase;letter-spacing:0.14em;font-size:0.72rem;font-weight:700;color:var(--accent)}
@@ -42,6 +43,8 @@ table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
 .roulette-status{margin:0 0 8px 0}
 .roulette-card h3{margin:0 0 8px 0;font-size:1.5rem}
 .roulette-rank{margin:0 0 16px 0;font-size:1rem;color:#dce8f5}
+.roulette-meta{margin:0 0 10px 0;font-size:1rem;color:#dce8f5}
+.roulette-note{margin:10px 0 16px 0}
 .roulette-open{color:#042}
 .discord-panel{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:18px;padding:26px 28px;background:linear-gradient(135deg,rgba(88,101,242,0.18),rgba(7,19,38,0.95));border:1px solid rgba(88,101,242,0.22)}
 .discord-copy{flex:1}

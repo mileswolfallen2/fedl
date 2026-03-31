@@ -1,0 +1,52 @@
+// format: title|levelId|percent
+// replace "unknown" with the real Geometry Dash level ID when you have it
+Flamewall|unknown|100
+Thinking Space II|unknown|100
+Amethyst|unknown|100
+Tidal Wave|unknown|100
+Orbit|unknown|100
+BOOBAWAMBA|unknown|100
+Nullscapes|unknown|100
+Quantuese Processing|unknown|100
+Subsuming Vortex|unknown|100
+Andromeda|unknown|100
+Every End|unknown|100
+Silent Clubstep|unknown|100
+Anathema|unknown|100
+Acheron|unknown|100
+Ashley Wave Trials|unknown|100
+Avernus|unknown|100
+Menace|unknown|100
+Spectre|unknown|100
+Abyss Of Darkness|unknown|100
+Defeated Circles|unknown|100
+Tunnel Of Despair|unknown|100
+Subterminal Point|unknown|100
+KOCMOC|unknown|100
+Slaughterhouse|unknown|100
+Kyouki|unknown|100
+The Lightning Rod|unknown|100
+Based After Based|unknown|100
+CHIL|unknown|100
+Sakupen Circles|unknown|100
+Deimos (ItsHybrid)|unknown|100
+Eyes In The Water|unknown|100
+Voltage|unknown|100
+Firework|unknown|100
+Silentlocked|unknown|100
+poocubed|unknown|100
+KOSETSU|unknown|100
+Through The Gates|unknown|100
+Saul Goodman|unknown|100
+The Salt Factory|unknown|100
+Snowbound|unknown|100
+CONVOLSION|unknown|100
+The Apocalyptic Trilogy|unknown|100
+MINUSdry|unknown|100
+Sevvend Clubstep|unknown|100
+Edge Of Destiny|unknown|100
+The Halucination|unknown|100
+CONVULSION|unknown|100
+Solar Flare|unknown|100
+LIMBO|unknown|100
+The Catacombs|unknown|100
