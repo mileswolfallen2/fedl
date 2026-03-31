@@ -7,6 +7,7 @@ const appRoot = path.resolve(__dirname, '..');
 const dataPath = path.join(__dirname, 'data.txt');
 const port = Number(process.env.PORT) || 3000;
 const host = process.env.HOST || '127.0.0.1';
+const basePath = (process.env.BASE_PATH || '').replace(/\/$/, '');
 const clients = new Set();
 
 const contentTypes = {
@@ -42,7 +43,14 @@ function readDataText() {
   return fs.readFileSync(dataPath, 'utf8');
 }
 
+function setCorsHeaders(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,HEAD,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
 function sendJson(res, statusCode, payload) {
+  setCorsHeaders(res);
   res.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store'
@@ -69,11 +77,13 @@ function serveFile(reqPath, res) {
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
+      setCorsHeaders(res);
       res.writeHead(err.code === 'ENOENT' ? 404 : 500, {'Content-Type': 'text/plain; charset=utf-8'});
       res.end(err.code === 'ENOENT' ? 'Not found' : 'Server error');
       return;
     }
     const ext = path.extname(filePath).toLowerCase();
+    setCorsHeaders(res);
     res.writeHead(200, {
       'Content-Type': contentTypes[ext] || 'application/octet-stream',
       'Cache-Control': ext === '.html' ? 'no-store' : 'no-cache'
@@ -84,8 +94,18 @@ function serveFile(reqPath, res) {
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
+  const pathname = basePath && url.pathname.startsWith(basePath)
+    ? url.pathname.slice(basePath.length) || '/'
+    : url.pathname;
 
-  if (req.method === 'GET' && url.pathname === '/api/list') {
+  if (req.method === 'OPTIONS') {
+    setCorsHeaders(res);
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/list') {
     try {
       const text = readDataText();
       sendJson(res, 200, { items: parseData(text), text });
@@ -95,7 +115,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.method === 'PUT' && url.pathname === '/api/list') {
+  if (req.method === 'PUT' && pathname === '/api/list') {
     let body = '';
     req.on('data', chunk => {
       body += chunk;
@@ -117,7 +137,8 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.method === 'GET' && url.pathname === '/events') {
+  if (req.method === 'GET' && pathname === '/events') {
+    setCorsHeaders(res);
     res.writeHead(200, {
       'Content-Type': 'text/event-stream; charset=utf-8',
       'Cache-Control': 'no-cache, no-transform',
@@ -132,12 +153,13 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
+    setCorsHeaders(res);
     res.writeHead(405, {'Content-Type': 'text/plain; charset=utf-8'});
     res.end('Method not allowed');
     return;
   }
 
-  serveFile(url.pathname, res);
+  serveFile(pathname, res);
 });
 
 fs.watch(dataPath, { persistent: true }, () => {
@@ -147,4 +169,5 @@ fs.watch(dataPath, { persistent: true }, () => {
 server.listen(port, host, () => {
   console.log(`fedl server running at http://${host}:${port}`);
   console.log(`Using live list file: ${dataPath}`);
+  console.log(`Base path: ${basePath || '/'}`);
 });

@@ -3,6 +3,10 @@
   function qs(id){return document.getElementById(id)}
 
   const page = document.body.dataset.page;
+  const liveServerBase = 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+  const liveApiUrl = `${liveServerBase}/api/list`;
+  const liveEventsUrl = `${liveServerBase}/events`;
+  const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
   let cachedItems = null;
   let cachedLevelMeta = null;
   let liveBound = false;
@@ -48,14 +52,18 @@
 
   function loadItems(){
     if(cachedItems) return Promise.resolve(cachedItems);
-    return fetch('/api/list', {cache:'no-store'}).then(r=>{
+    return fetch(liveApiUrl, {cache:'no-store'}).then(r=>{
       if(!r.ok) throw new Error('API unavailable');
-      return r.json();
-    }).then(data=>{
-      cachedItems = Array.isArray(data.items) ? data.items : [];
+      const contentType = (r.headers.get('content-type') || '').toLowerCase();
+      if(contentType.includes('application/json')){
+        return r.json().then(data=>Array.isArray(data.items) ? data.items : []);
+      }
+      return r.text().then(txt=>parseData(txt));
+    }).then(items=>{
+      cachedItems = items;
       return cachedItems;
     }).catch(()=>{
-      return fetch('server/data.txt', {cache:'no-store'}).then(r=>{
+      return fetch(liveDataFileUrl, {cache:'no-store'}).then(r=>{
         if(!r.ok) throw new Error('server data unavailable');
         return r.text();
       }).then(txt=>{
@@ -96,7 +104,7 @@
   function bindLiveUpdates(){
     if(liveBound || typeof window.EventSource === 'undefined') return;
     liveBound = true;
-    const source = new EventSource('/events');
+    const source = new EventSource(liveEventsUrl);
     source.addEventListener('list-update', ()=>{
       refreshItems().catch(err=>console.error(err));
     });
@@ -440,7 +448,7 @@
         }))
         .filter(item=>item.title);
       normalizePositions();
-      return fetch('/api/list', {
+      return fetch(liveApiUrl, {
         method:'PUT',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify({text: formatData(items)})
