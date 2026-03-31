@@ -55,9 +55,20 @@
       cachedItems = Array.isArray(data.items) ? data.items : [];
       return cachedItems;
     }).catch(()=>{
-      return fetch('server/data.txt', {cache:'no-store'}).then(r=>r.text()).then(txt=>{
+      return fetch('server/data.txt', {cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error('server data unavailable');
+        return r.text();
+      }).then(txt=>{
         cachedItems = parseData(txt);
         return cachedItems;
+      }).catch(()=>{
+        return fetch('data.txt', {cache:'no-store'}).then(r=>{
+          if(!r.ok) throw new Error('static data unavailable');
+          return r.text();
+        }).then(txt=>{
+          cachedItems = parseData(txt);
+          return cachedItems;
+        });
       });
     });
   }
