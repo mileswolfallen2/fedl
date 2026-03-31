@@ -133,6 +133,7 @@
   // Players page
   if(page==='players'){
     const form = qs('player-form'); const nameIn = qs('player-name'); const list = qs('players');
+    if(!form || !nameIn || !list) return;
     let players = read('gd_players',[]);
     function render(){list.innerHTML=''; players.forEach((p,idx)=>{
       const li=document.createElement('li'); li.innerHTML=`<span><span class="name">${escapeHtml(p.name)}</span> <span class="muted">(${p.id})</span></span>`;

@@ -17,17 +17,25 @@
     </nav>
   </header>
   <main>
-    <section class="panel">
-      <h2>Add Player</h2>
-      <form id="player-form" style="display:flex;gap:8px">
-        <input id="player-name" placeholder="Player name" required />
-        <button class="btn" type="submit">Add</button>
-      </form>
-    </section>
+    <section class="coming-shell">
+      <div class="coming-orb orb-one" aria-hidden="true"></div>
+      <div class="coming-orb orb-two" aria-hidden="true"></div>
 
-    <section class="panel">
-      <h2>Players</h2>
-      <ul id="players"></ul>
+      <article class="panel coming-panel">
+        <p class="hero-kicker">Players Page</p>
+        <h2>Coming soon</h2>
+        <p class="coming-text">We’re still cooking this page. The roster will show up here once it is done being dramatically overdesigned.</p>
+
+        <div class="coming-loader" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <p class="dad-joke">Bad joke loading screen: I was going to make a Geometry Dash joke... but I kept missing the timing.</p>
+
+        <a class="btn" href="index.html">Back Home</a>
+      </article>
     </section>
   </main>
   <script src="app.js"></script>
