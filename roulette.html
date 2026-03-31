@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demon Roulette - GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="roulette">
+  <header>
+    <h1>Demon Roulette</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="players.html">Players</a>
+      <a href="rules.html">Rules</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel roulette-panel">
+      <div class="roulette-head">
+        <div>
+          <p class="roulette-kicker">Random Challenge</p>
+          <h2>Demon Roulette</h2>
+          <p class="muted">Spin the list and get a random demon from your current FEDL rankings.</p>
+        </div>
+        <button class="btn roulette-btn" id="roulette-spin" type="button">Spin</button>
+      </div>
+
+      <div class="roulette-card" id="roulette-card">
+        <p class="roulette-status muted" id="roulette-status">Press spin to choose a demon.</p>
+        <h3 id="roulette-title">No demon selected</h3>
+        <p class="roulette-rank" id="roulette-rank">Rank: -</p>
+        <a class="btn roulette-open" id="roulette-open" href="#" target="_blank" rel="noopener noreferrer" hidden>Open Video</a>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

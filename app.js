@@ -3,6 +3,7 @@
   function qs(id){return document.getElementById(id)}
 
   const page = document.body.dataset.page;
+  let cachedItems = null;
 
   // Storage helpers
   function read(key, fallback){
@@ -10,6 +11,62 @@
     catch(e){return fallback}
   }
   function write(key, val){localStorage.setItem(key,JSON.stringify(val))}
+
+  function parseData(txt){
+    return txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+      const parts = l.split('|').map(p=>p.trim());
+      return {level:parts[0]||'Unknown',position:parts[1]||'',title:parts[2]||'Untitled',url:parts[3]||''};
+    });
+  }
+
+  function loadItems(){
+    if(cachedItems) return Promise.resolve(cachedItems);
+    return fetch('data.txt').then(r=>r.text()).then(txt=>{
+      cachedItems = parseData(txt);
+      return cachedItems;
+    });
+  }
+
+  if(page==='roulette'){
+    const spinBtn = qs('roulette-spin');
+    const statusEl = qs('roulette-status');
+    const titleEl = qs('roulette-title');
+    const rankEl = qs('roulette-rank');
+    const openEl = qs('roulette-open');
+
+    function showPick(item){
+      statusEl.textContent = 'Your demon is:';
+      titleEl.textContent = item.title;
+      rankEl.textContent = `Rank: #${item.position}`;
+      if(item.url){
+        openEl.hidden = false;
+        openEl.href = item.url;
+      }else{
+        openEl.hidden = true;
+      }
+    }
+
+    spinBtn.addEventListener('click', ()=>{
+      statusEl.textContent = 'Spinning...';
+      titleEl.textContent = 'Choosing a demon';
+      rankEl.textContent = 'Rank: -';
+      openEl.hidden = true;
+      loadItems().then(items=>{
+        if(!items.length){
+          statusEl.textContent = 'No demons found.';
+          titleEl.textContent = 'Add demons to data.txt';
+          return;
+        }
+        const item = items[Math.floor(Math.random()*items.length)];
+        window.setTimeout(()=>showPick(item), 350);
+      }).catch(err=>{
+        statusEl.textContent = 'Could not load the list.';
+        titleEl.textContent = 'Run the site on a local server';
+        rankEl.textContent = 'Rank: -';
+        console.error(err);
+      });
+    });
+  }
 
   // Players page
   if(page==='players'){
@@ -31,12 +88,7 @@
     const levelsEl = qs('levels'); const listArea = qs('list-area'); const titleEl = qs('list-title');
     // Load hard-coded data file data.txt (category|position|title|url per line)
     function loadData(){
-      fetch('data.txt').then(r=>r.text()).then(txt=>{
-        const lines = txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-        const items = lines.map(l=>{
-          const parts = l.split('|').map(p=>p.trim());
-          return {level:parts[0]||'Unknown',position:parts[1]||'',title:parts[2]||'Untitled',url:parts[3]||''};
-        });
+      loadItems().then(items=>{
         setupLevels(items);
       }).catch(err=>{listArea.innerHTML='<p class="muted">Failed to load data.txt — run via a local server.</p>'; console.error(err)});
     }
