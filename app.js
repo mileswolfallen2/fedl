@@ -693,6 +693,7 @@
         tr.innerHTML = `
           <td><span class="status-pill status-${escapeAttr(run.status || 'pending')}">${escapeHtml(run.status || 'pending')}</span></td>
           <td><strong>${escapeHtml(run.playerName || 'Unknown')}</strong></td>
+          <td><strong>${escapeHtml(run.percent || '100')}%</strong></td>
           <td>
             <div class="run-admin-cell">
               <strong>${escapeHtml(run.levelTitle || 'Untitled')}</strong>
@@ -714,7 +715,7 @@
         const detailRow = document.createElement('tr');
         detailRow.className = 'run-admin-detail-row';
         detailRow.innerHTML = `
-          <td colspan="5">
+          <td colspan="6">
             <div class="run-admin-detail">
               <span><strong>Raw:</strong> ${run.rawFootageUrl ? `<a href="${escapeAttr(run.rawFootageUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(run.rawFootageUrl)}</a>` : 'None provided'}</span>
               <span><strong>Percent:</strong> ${escapeHtml(run.percent || '100')}%</span>
@@ -727,7 +728,7 @@
       });
       if(!rows.length){
         const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="5" class="muted">No run submissions match your search.</td>';
+        tr.innerHTML = '<td colspan="6" class="muted">No run submissions match your search.</td>';
         runsTbody.appendChild(tr);
       }
     }
