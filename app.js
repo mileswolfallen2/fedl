@@ -975,7 +975,6 @@
           <p>${escapeHtml(run.reviewNotes || run.notes || 'No notes yet.')}</p>
           <div class="submission-links">
             <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Watch run</a>
-            ${run.rawFootageUrl ? `<a class="text-link" href="${escapeAttr(run.rawFootageUrl)}" target="_blank" rel="noopener noreferrer">Raw footage</a>` : ''}
           </div>
         `;
         submissionsEl.appendChild(card);
