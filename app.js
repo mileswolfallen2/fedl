@@ -479,12 +479,19 @@
       const field = target.getAttribute('data-field');
       const index = Number(target.getAttribute('data-index'));
       if(!field || Number.isNaN(index) || !items[index]) return;
-      if(field === 'position'){
-        moveItemToPosition(index, target.value);
-        renderAdminTable();
-      }else{
-        items[index][field] = target.value;
-      }
+      if(field === 'position') return;
+      items[index][field] = target.value;
+      setStatus('Unsaved changes');
+    });
+
+    tbody.addEventListener('focusout', function(event){
+      const target = event.target;
+      if(!(target instanceof HTMLElement)) return;
+      const field = target.getAttribute('data-field');
+      const index = Number(target.getAttribute('data-index'));
+      if(field !== 'position' || Number.isNaN(index) || !items[index]) return;
+      moveItemToPosition(index, target.value);
+      renderAdminTable();
       setStatus('Unsaved changes');
     });
 
