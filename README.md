@@ -6,19 +6,24 @@ It includes:
 
 - a home page
 - a main list page
+- a run submission page
 - a players page
 - a rules page
+- an admin panel for the list and submitted runs
 
 ## Project Files
 
 - `index.html` - home page
 - `lists.html` - main live list view
+- `run.html` - live run submission page
 - `players.html` - player manager
 - `rules.html` - submission rules and mod guidelines
+- `admelist.html` - admin panel for list edits and run review
 - `app.js` - client-side logic
 - `styles.css` - site styling
 - `data.txt` - static fallback list data
 - `server/data.txt` - live server list data
+- `server/runs.json` - live run submission queue
 - `server/server.js` - Node.js server for the live list
 - `start-server.command` - one-click launcher for macOS
 - `server/LINUX_SERVICE_SETUP.txt` - Linux `systemd` setup notes
@@ -41,6 +46,8 @@ new|1|Flamewall|https://youtu.be/x4Io4zkWVRw
 
 - `lists.html` is the main live list page.
 - `roulette.html` uses the same live server-backed list.
+- `run.html` submits runs into the live moderation queue.
+- `admelist.html` lets you edit the list and review submissions.
 
 ## Fallback Order
 
@@ -77,14 +84,15 @@ node server/server.js
 Or to allow other devices on your network to connect:
 
 ```bash
-HOST=0.0.0.0 PORT=3000 node server/server.js
+HOST=0.0.0.0 PORT=8090 node server/server.js
 ```
 
 Then open:
 
 ```txt
-http://localhost:3000/lists.html
-http://localhost:3000/roulette.html
+http://localhost:8090/fedl/lists.html
+http://localhost:8090/fedl/run.html
+http://localhost:8090/fedl/admelist.html
 ```
 
 On macOS you can also use:
@@ -98,8 +106,8 @@ start-server.command
 If you want one device to host the live list for other devices:
 
 1. Run the server with `HOST=0.0.0.0`.
-2. Open or forward port `3000`.
-3. Visit `http://YOUR-IP:3000/lists.html` or `http://YOUR-IP:3000/roulette.html`.
+2. Open or forward port `8090`.
+3. Visit `http://YOUR-IP:8090/fedl/lists.html`, `http://YOUR-IP:8090/fedl/run.html`, or `http://YOUR-IP:8090/fedl/admelist.html`.
 
 If you already have router port forwarding set up, point it to the machine running `server/server.js`.
 
@@ -114,5 +122,6 @@ For running the Node server automatically on boot on Linux, see:
 - Player data is stored in the browser with `localStorage`
 - The players list is local to each browser/device
 - The live list data is stored in `server/data.txt`
+- The live run queue is stored in `server/runs.json`
 - The static fallback list data is stored in `data.txt`
 - The project does not need a build step

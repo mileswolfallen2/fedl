@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Submit Run - GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="run">
+  <header>
+    <h1>Submit Run</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="rules.html">Rules</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="admelist.html">Admin</a>
+    </nav>
+  </header>
+  <main>
+    <section class="run-shell">
+      <section class="panel run-panel">
+        <div class="run-head">
+          <div>
+            <p class="hero-kicker">FEDL Submission</p>
+            <h2>Send in a run</h2>
+            <p class="muted run-intro">Submit your completion video, attach raw footage if you have it hosted, and leave notes for the moderators. Required fields are marked below.</p>
+          </div>
+          <div class="run-head-badge">
+            <strong>Live queue</strong>
+            <span>Submissions land in the admin panel instantly when the Node server is running.</span>
+          </div>
+        </div>
+
+        <form id="run-form" class="run-form">
+          <label class="control-block" for="run-player-name">
+            <span>Player Name</span>
+            <input id="run-player-name" name="playerName" type="text" placeholder="Your in-game name" required />
+          </label>
+
+          <label class="control-block" for="run-level-title">
+            <span>Level</span>
+            <input id="run-level-title" name="levelTitle" type="text" list="run-level-options" placeholder="Level title" required />
+            <datalist id="run-level-options"></datalist>
+          </label>
+
+          <label class="control-block" for="run-video-url">
+            <span>Completion Video URL</span>
+            <input id="run-video-url" name="videoUrl" type="url" placeholder="https://youtu.be/..." required />
+          </label>
+
+          <label class="control-block" for="run-raw-footage-url">
+            <span>Raw Footage URL</span>
+            <input id="run-raw-footage-url" name="rawFootageUrl" type="url" placeholder="Optional raw footage link" />
+          </label>
+
+          <label class="control-block run-notes-block" for="run-notes">
+            <span>Notes For Mods</span>
+            <textarea id="run-notes" name="notes" rows="6" placeholder="Mention handcam, custom copy info, bug fix approval, or anything the moderators should know."></textarea>
+          </label>
+
+          <div class="run-actions">
+            <button id="run-submit" type="submit" class="btn">Submit Run</button>
+            <p id="run-form-status" class="muted">The server needs to be running for live submissions.</p>
+          </div>
+        </form>
+      </section>
+
+      <aside class="panel run-side-panel">
+        <p class="status-label">Checklist</p>
+        <h2>Before you submit</h2>
+        <div class="run-checklist">
+          <article>
+            <strong>Completion video</strong>
+            <p>Make sure the completion link is public and actually shows the run you want reviewed.</p>
+          </article>
+          <article>
+            <strong>Raw footage</strong>
+            <p>Upload raw footage somewhere staff can reach it if your run needs manual review.</p>
+          </article>
+          <article>
+            <strong>Important notes</strong>
+            <p>Call out solo or 2-player variants, custom copies, LDM use, and any handcam details in the notes box.</p>
+          </article>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel submission-panel">
+      <div class="table-header submission-header">
+        <div>
+          <p class="status-label">Submission Queue</p>
+          <h3>Recent run submissions</h3>
+        </div>
+        <p id="run-list-status" class="muted">Loading recent submissions...</p>
+      </div>
+      <div id="run-submissions" class="submission-list"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

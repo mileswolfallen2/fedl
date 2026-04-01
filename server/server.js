@@ -5,9 +5,10 @@ const { URL } = require('url');
 
 const appRoot = path.resolve(__dirname, '..');
 const dataPath = path.join(__dirname, 'data.txt');
-const port = Number(process.env.PORT) || 3000;
+const runsPath = path.join(__dirname, 'runs.json');
+const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
-const basePath = (process.env.BASE_PATH || '').replace(/\/$/, '');
+const BASE = '/fedl';
 const clients = new Set();
 
 const contentTypes = {
@@ -43,14 +44,14 @@ function readDataText() {
   return fs.readFileSync(dataPath, 'utf8');
 }
 
-function setCorsHeaders(res) {
+function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,HEAD,OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
 function sendJson(res, statusCode, payload) {
-  setCorsHeaders(res);
+  setCors(res);
   res.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store'
@@ -65,25 +66,60 @@ function sendEvent(eventName, data) {
   }
 }
 
+function ensureRunsFile() {
+  if (!fs.existsSync(runsPath)) {
+    fs.writeFileSync(runsPath, '[]\n', 'utf8');
+  }
+}
+
+function readRuns() {
+  ensureRunsFile();
+  const raw = fs.readFileSync(runsPath, 'utf8');
+  const parsed = JSON.parse(raw || '[]');
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+function writeRuns(runs) {
+  fs.writeFileSync(runsPath, `${JSON.stringify(runs, null, 2)}\n`, 'utf8');
+}
+
+function normalizeRun(payload, existingRun) {
+  return {
+    id: existingRun && existingRun.id ? existingRun.id : `run_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
+    playerName: String(payload.playerName || existingRun?.playerName || '').trim(),
+    levelTitle: String(payload.levelTitle || existingRun?.levelTitle || '').trim(),
+    videoUrl: String(payload.videoUrl || existingRun?.videoUrl || '').trim(),
+    rawFootageUrl: String(payload.rawFootageUrl || existingRun?.rawFootageUrl || '').trim(),
+    notes: String(payload.notes || existingRun?.notes || '').trim(),
+    status: String(payload.status || existingRun?.status || 'pending').trim().toLowerCase(),
+    reviewedBy: String(payload.reviewedBy || existingRun?.reviewedBy || '').trim(),
+    reviewNotes: String(payload.reviewNotes || existingRun?.reviewNotes || '').trim(),
+    submittedAt: existingRun?.submittedAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+}
+
 function serveFile(reqPath, res) {
   let filePath = path.join(appRoot, reqPath === '/' ? 'index.html' : reqPath.slice(1));
   filePath = path.normalize(filePath);
 
   if (!filePath.startsWith(appRoot)) {
-    res.writeHead(403, {'Content-Type': 'text/plain; charset=utf-8'});
+    setCors(res);
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Forbidden');
     return;
   }
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
-      setCorsHeaders(res);
-      res.writeHead(err.code === 'ENOENT' ? 404 : 500, {'Content-Type': 'text/plain; charset=utf-8'});
+      setCors(res);
+      res.writeHead(err.code === 'ENOENT' ? 404 : 500, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end(err.code === 'ENOENT' ? 'Not found' : 'Server error');
       return;
     }
+
     const ext = path.extname(filePath).toLowerCase();
-    setCorsHeaders(res);
+    setCors(res);
     res.writeHead(200, {
       'Content-Type': contentTypes[ext] || 'application/octet-stream',
       'Cache-Control': ext === '.html' ? 'no-store' : 'no-cache'
@@ -94,12 +130,14 @@ function serveFile(reqPath, res) {
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  const pathname = basePath && url.pathname.startsWith(basePath)
-    ? url.pathname.slice(basePath.length) || '/'
-    : url.pathname;
+  let pathname = url.pathname;
+
+  if (pathname.startsWith(BASE)) {
+    pathname = pathname.slice(BASE.length) || '/';
+  }
 
   if (req.method === 'OPTIONS') {
-    setCorsHeaders(res);
+    setCors(res);
     res.writeHead(204);
     res.end();
     return;
@@ -138,23 +176,97 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.method === 'GET' && pathname === '/events') {
-    setCorsHeaders(res);
+    setCors(res);
     res.writeHead(200, {
       'Content-Type': 'text/event-stream; charset=utf-8',
       'Cache-Control': 'no-cache, no-transform',
-      Connection: 'keep-alive'
+      'Connection': 'keep-alive'
     });
     res.write('retry: 3000\n\n');
     clients.add(res);
-    req.on('close', () => {
-      clients.delete(res);
+    req.on('close', () => clients.delete(res));
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/runs') {
+    try {
+      sendJson(res, 200, { items: readRuns() });
+    } catch (error) {
+      sendJson(res, 500, { error: 'Could not read server/runs.json' });
+    }
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/runs') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 2 * 1024 * 1024) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const nextRun = normalizeRun(payload);
+        if (!nextRun.playerName || !nextRun.levelTitle || !nextRun.videoUrl) {
+          sendJson(res, 400, { error: 'playerName, levelTitle, and videoUrl are required' });
+          return;
+        }
+        const runs = readRuns();
+        runs.unshift(nextRun);
+        writeRuns(runs);
+        sendEvent('runs-update', { updatedAt: nextRun.updatedAt });
+        sendJson(res, 201, { ok: true, item: nextRun });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid run payload' });
+      }
+    });
+    return;
+  }
+
+  if ((req.method === 'PUT' || req.method === 'DELETE') && pathname.startsWith('/api/runs/')) {
+    const runId = pathname.slice('/api/runs/'.length);
+    if (!runId) {
+      sendJson(res, 400, { error: 'Run id is required' });
+      return;
+    }
+
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 2 * 1024 * 1024) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const runs = readRuns();
+        const index = runs.findIndex(run => run.id === runId);
+        if (index === -1) {
+          sendJson(res, 404, { error: 'Run not found' });
+          return;
+        }
+
+        if (req.method === 'DELETE') {
+          runs.splice(index, 1);
+          writeRuns(runs);
+          sendEvent('runs-update', { updatedAt: new Date().toISOString() });
+          sendJson(res, 200, { ok: true });
+          return;
+        }
+
+        const payload = JSON.parse(body || '{}');
+        runs[index] = normalizeRun(payload, runs[index]);
+        writeRuns(runs);
+        sendEvent('runs-update', { updatedAt: runs[index].updatedAt });
+        sendJson(res, 200, { ok: true, item: runs[index] });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid run update payload' });
+      }
     });
     return;
   }
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
-    setCorsHeaders(res);
-    res.writeHead(405, {'Content-Type': 'text/plain; charset=utf-8'});
+    setCors(res);
+    res.writeHead(405, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Method not allowed');
     return;
   }
@@ -166,8 +278,14 @@ fs.watch(dataPath, { persistent: true }, () => {
   sendEvent('list-update', { updatedAt: new Date().toISOString() });
 });
 
+ensureRunsFile();
+fs.watch(runsPath, { persistent: true }, () => {
+  sendEvent('runs-update', { updatedAt: new Date().toISOString() });
+});
+
 server.listen(port, host, () => {
-  console.log(`fedl server running at http://${host}:${port}`);
+  console.log(`FEDL server running at http://${host}:${port}`);
+  console.log(`Base path: ${BASE}`);
   console.log(`Using live list file: ${dataPath}`);
-  console.log(`Base path: ${basePath || '/'}`);
+  console.log(`Using runs file: ${runsPath}`);
 });

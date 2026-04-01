@@ -3,14 +3,22 @@
   function qs(id){return document.getElementById(id)}
 
   const page = document.body.dataset.page;
-  const liveServerBase = 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+  const isFileProtocol = window.location.protocol === 'file:';
+  const runtimeBasePath = !isFileProtocol && (window.location.pathname === '/fedl' || window.location.pathname.startsWith('/fedl/'))
+    ? '/fedl'
+    : '';
+  const liveServerBase = isFileProtocol ? '' : `${window.location.origin}${runtimeBasePath}`;
+  const canUseLiveServer = !isFileProtocol;
   const liveApiUrl = `${liveServerBase}/api/list`;
+  const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
   const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
   let cachedItems = null;
+  let cachedRuns = null;
   let cachedLevelMeta = null;
   let liveBound = false;
   let liveHandlers = [];
+  let runsHandlers = [];
 
   // Storage helpers
   function read(key, fallback){
@@ -52,6 +60,15 @@
 
   function loadItems(){
     if(cachedItems) return Promise.resolve(cachedItems);
+    if(!canUseLiveServer){
+      return fetch('data.txt', {cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error('static data unavailable');
+        return r.text();
+      }).then(txt=>{
+        cachedItems = parseData(txt);
+        return cachedItems;
+      });
+    }
     return fetch(liveApiUrl, {cache:'no-store'}).then(r=>{
       if(!r.ok) throw new Error('API unavailable');
       const contentType = (r.headers.get('content-type') || '').toLowerCase();
@@ -85,12 +102,39 @@
     cachedItems = null;
   }
 
+  function loadRuns(){
+    if(cachedRuns) return Promise.resolve(cachedRuns);
+    if(!canUseLiveServer){
+      cachedRuns = [];
+      return Promise.resolve(cachedRuns);
+    }
+    return fetch(liveRunsUrl, {cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error('Runs API unavailable');
+      return r.json();
+    }).then(data=>{
+      cachedRuns = Array.isArray(data.items) ? data.items : [];
+      return cachedRuns;
+    });
+  }
+
+  function clearRunsCache(){
+    cachedRuns = null;
+  }
+
   function onLiveUpdate(handler){
     liveHandlers.push(handler);
   }
 
   function notifyLiveUpdate(items){
     liveHandlers.forEach(handler=>handler(items));
+  }
+
+  function onRunsUpdate(handler){
+    runsHandlers.push(handler);
+  }
+
+  function notifyRunsUpdate(runs){
+    runsHandlers.forEach(handler=>handler(runs));
   }
 
   function refreshItems(){
@@ -101,12 +145,23 @@
     });
   }
 
+  function refreshRuns(){
+    clearRunsCache();
+    return loadRuns().then(runs=>{
+      notifyRunsUpdate(runs);
+      return runs;
+    });
+  }
+
   function bindLiveUpdates(){
-    if(liveBound || typeof window.EventSource === 'undefined') return;
+    if(liveBound || !canUseLiveServer || typeof window.EventSource === 'undefined') return;
     liveBound = true;
     const source = new EventSource(liveEventsUrl);
     source.addEventListener('list-update', ()=>{
       refreshItems().catch(err=>console.error(err));
+    });
+    source.addEventListener('runs-update', ()=>{
+      refreshRuns().catch(err=>console.error(err));
     });
     source.onerror = function(){
       source.close();
@@ -401,16 +456,26 @@
 
   if(page==='admelist'){
     const statusEl = qs('admin-status');
-    const tbody = qs('admin-list-body');
+    const listTbody = qs('admin-list-body');
     const addBtn = qs('add-row');
     const saveBtn = qs('save-list');
     const searchEl = qs('admin-search');
+    const runsStatusEl = qs('runs-admin-status');
+    const runsTbody = qs('run-admin-body');
+    const runSearchEl = qs('run-search');
     let items = [];
+    let runs = [];
 
     function setStatus(message, isError){
       if(!statusEl) return;
       statusEl.textContent = message;
       statusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function setRunsStatus(message, isError){
+      if(!runsStatusEl) return;
+      runsStatusEl.textContent = message;
+      runsStatusEl.classList.toggle('error-text', !!isError);
     }
 
     function filteredItems(){
@@ -452,7 +517,7 @@
 
     function renderAdminTable(){
       const rows = filteredItems();
-      tbody.innerHTML = '';
+      listTbody.innerHTML = '';
       rows.forEach(item=>{
         const actualIndex = items.indexOf(item);
         const tr = document.createElement('tr');
@@ -463,16 +528,89 @@
           <td><input data-field="url" data-index="${actualIndex}" type="url" value="${escapeAttr(item.url)}"></td>
           <td><button type="button" class="btn danger-btn small-btn" data-delete="${actualIndex}">Delete</button></td>
         `;
-        tbody.appendChild(tr);
+        listTbody.appendChild(tr);
       });
       if(!rows.length){
         const tr = document.createElement('tr');
         tr.innerHTML = '<td colspan="5" class="muted">No rows match your search.</td>';
-        tbody.appendChild(tr);
+        listTbody.appendChild(tr);
+      }
+    }
+
+    function filteredRuns(){
+      const query = (runSearchEl && runSearchEl.value || '').trim().toLowerCase();
+      if(!query) return runs;
+      return runs.filter(run=>{
+        return [
+          run.status,
+          run.playerName,
+          run.levelTitle,
+          run.videoUrl,
+          run.rawFootageUrl,
+          run.notes,
+          run.reviewNotes
+        ].some(value=>String(value || '').toLowerCase().includes(query));
+      });
+    }
+
+    function formatDate(value){
+      if(!value) return 'Unknown';
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return 'Unknown';
+      return date.toLocaleString();
+    }
+
+    function renderRunsTable(){
+      const rows = filteredRuns();
+      runsTbody.innerHTML = '';
+      rows.forEach(run=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="status-pill status-${escapeAttr(run.status || 'pending')}">${escapeHtml(run.status || 'pending')}</span></td>
+          <td><strong>${escapeHtml(run.playerName || 'Unknown')}</strong></td>
+          <td>
+            <div class="run-admin-cell">
+              <strong>${escapeHtml(run.levelTitle || 'Untitled')}</strong>
+              <span class="muted small">${escapeHtml(run.notes || 'No submission notes.')}</span>
+            </div>
+          </td>
+          <td>${escapeHtml(formatDate(run.submittedAt))}</td>
+          <td>
+            <div class="run-admin-actions">
+              <a class="btn ghost-btn small-btn" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Video</a>
+              <button type="button" class="btn ghost-btn small-btn" data-run-action="approved" data-run-id="${escapeAttr(run.id)}">Approve</button>
+              <button type="button" class="btn ghost-btn small-btn" data-run-action="rejected" data-run-id="${escapeAttr(run.id)}">Reject</button>
+              <button type="button" class="btn danger-btn small-btn" data-run-delete="${escapeAttr(run.id)}">Delete</button>
+            </div>
+          </td>
+        `;
+        runsTbody.appendChild(tr);
+
+        const detailRow = document.createElement('tr');
+        detailRow.className = 'run-admin-detail-row';
+        detailRow.innerHTML = `
+          <td colspan="5">
+            <div class="run-admin-detail">
+              <span><strong>Raw:</strong> ${run.rawFootageUrl ? `<a href="${escapeAttr(run.rawFootageUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(run.rawFootageUrl)}</a>` : 'None provided'}</span>
+              <span><strong>Reviewed by:</strong> ${escapeHtml(run.reviewedBy || 'Unassigned')}</span>
+              <span><strong>Review notes:</strong> ${escapeHtml(run.reviewNotes || 'No review notes yet.')}</span>
+            </div>
+          </td>
+        `;
+        runsTbody.appendChild(detailRow);
+      });
+      if(!rows.length){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" class="muted">No run submissions match your search.</td>';
+        runsTbody.appendChild(tr);
       }
     }
 
     function saveItems(){
+      if(!canUseLiveServer){
+        setStatus('Start the Node server to save the live list.', true);
+        return Promise.resolve();
+      }
       const hasUnplacedDraft = items.some(item=>{
         const hasContent = String(item.title || '').trim() || String(item.url || '').trim() || String(item.level || '').trim();
         return item._isDraft && hasContent;
@@ -523,7 +661,65 @@
       });
     }
 
-    tbody.addEventListener('input', function(event){
+    function loadRunsAdmin(){
+      loadRuns().then(loadedRuns=>{
+        runs = loadedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+        renderRunsTable();
+        setRunsStatus('Connected to live run submissions.');
+      }).catch(err=>{
+        console.error(err);
+        setRunsStatus('Could not load run submissions.', true);
+      });
+    }
+
+    function updateRunStatus(runId, status){
+      if(!canUseLiveServer){
+        setRunsStatus('Start the Node server to review submissions.', true);
+        return;
+      }
+      const run = runs.find(entry=>entry.id === runId);
+      if(!run) return;
+      const reviewNotes = window.prompt(`Review notes for ${run.levelTitle} (${status})`, run.reviewNotes || '');
+      if(reviewNotes === null) return;
+      fetch(`${liveRunsUrl}/${encodeURIComponent(runId)}`, {
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          ...run,
+          status,
+          reviewNotes,
+          reviewedBy:'FEDL Admin'
+        })
+      }).then(r=>{
+        if(!r.ok) throw new Error('Run update failed');
+        clearRunsCache();
+        setRunsStatus(`Run marked ${status}.`);
+        return refreshRuns();
+      }).catch(err=>{
+        console.error(err);
+        setRunsStatus('Could not update that run.', true);
+      });
+    }
+
+    function deleteRun(runId){
+      if(!canUseLiveServer){
+        setRunsStatus('Start the Node server to delete submissions.', true);
+        return;
+      }
+      fetch(`${liveRunsUrl}/${encodeURIComponent(runId)}`, {
+        method:'DELETE'
+      }).then(r=>{
+        if(!r.ok) throw new Error('Run delete failed');
+        clearRunsCache();
+        setRunsStatus('Run removed from the queue.');
+        return refreshRuns();
+      }).catch(err=>{
+        console.error(err);
+        setRunsStatus('Could not delete that run.', true);
+      });
+    }
+
+    listTbody.addEventListener('input', function(event){
       const target = event.target;
       const field = target.getAttribute('data-field');
       const index = Number(target.getAttribute('data-index'));
@@ -533,7 +729,7 @@
       setStatus('Unsaved changes');
     });
 
-    tbody.addEventListener('focusout', function(event){
+    listTbody.addEventListener('focusout', function(event){
       const target = event.target;
       if(!(target instanceof HTMLElement)) return;
       const field = target.getAttribute('data-field');
@@ -544,7 +740,7 @@
       setStatus('Unsaved changes');
     });
 
-    tbody.addEventListener('click', function(event){
+    listTbody.addEventListener('click', function(event){
       const deleteButton = event.target.closest('[data-delete]');
       if(!deleteButton) return;
       const deleteIndex = deleteButton.getAttribute('data-delete');
@@ -555,6 +751,24 @@
       normalizePositions();
       renderAdminTable();
       setStatus('Row removed. Save when ready.');
+    });
+
+    runsTbody.addEventListener('click', function(event){
+      const actionButton = event.target.closest('[data-run-action]');
+      if(actionButton){
+        updateRunStatus(
+          actionButton.getAttribute('data-run-id'),
+          actionButton.getAttribute('data-run-action')
+        );
+        return;
+      }
+      const deleteButton = event.target.closest('[data-run-delete]');
+      if(deleteButton){
+        const runId = deleteButton.getAttribute('data-run-delete');
+        if(runId && window.confirm('Delete this run submission?')){
+          deleteRun(runId);
+        }
+      }
     });
 
     addBtn.addEventListener('click', function(){
@@ -571,6 +785,9 @@
     if(searchEl){
       searchEl.addEventListener('input', renderAdminTable);
     }
+    if(runSearchEl){
+      runSearchEl.addEventListener('input', renderRunsTable);
+    }
 
     bindLiveUpdates();
     onLiveUpdate(function(updatedItems){
@@ -585,8 +802,115 @@
       renderAdminTable();
       setStatus('List reloaded from live server.');
     });
+    onRunsUpdate(function(updatedRuns){
+      runs = updatedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+      renderRunsTable();
+      setRunsStatus('Run queue reloaded from the live server.');
+    });
 
     loadAdmin();
+    loadRunsAdmin();
+  }
+
+  if(page==='run'){
+    const form = qs('run-form');
+    const formStatusEl = qs('run-form-status');
+    const listStatusEl = qs('run-list-status');
+    const submissionsEl = qs('run-submissions');
+    const levelOptionsEl = qs('run-level-options');
+
+    function setRunFormStatus(message, isError){
+      if(!formStatusEl) return;
+      formStatusEl.textContent = message;
+      formStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function setRunListStatus(message, isError){
+      if(!listStatusEl) return;
+      listStatusEl.textContent = message;
+      listStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function renderRunSubmissions(runs){
+      submissionsEl.innerHTML = '';
+      if(!runs.length){
+        submissionsEl.innerHTML = '<article class="submission-card"><strong>No runs submitted yet</strong><p>The live queue is empty right now.</p></article>';
+        return;
+      }
+      runs.slice(0, 8).forEach(run=>{
+        const card = document.createElement('article');
+        card.className = 'submission-card';
+        card.innerHTML = `
+          <div class="submission-card-top">
+            <strong>${escapeHtml(run.levelTitle || 'Untitled')}</strong>
+            <span class="status-pill status-${escapeAttr(run.status || 'pending')}">${escapeHtml(run.status || 'pending')}</span>
+          </div>
+          <p class="submission-meta">By ${escapeHtml(run.playerName || 'Unknown')} • ${escapeHtml(new Date(run.submittedAt).toLocaleString())}</p>
+          <p>${escapeHtml(run.reviewNotes || run.notes || 'No notes yet.')}</p>
+          <div class="submission-links">
+            <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Watch run</a>
+            ${run.rawFootageUrl ? `<a class="text-link" href="${escapeAttr(run.rawFootageUrl)}" target="_blank" rel="noopener noreferrer">Raw footage</a>` : ''}
+          </div>
+        `;
+        submissionsEl.appendChild(card);
+      });
+    }
+
+    function loadRunPage(){
+      loadItems().then(items=>{
+        const titles = items.map(item=>item.title).filter(Boolean);
+        levelOptionsEl.innerHTML = titles.map(title=>`<option value="${escapeAttr(title)}"></option>`).join('');
+      }).catch(err=>console.error(err));
+
+      loadRuns().then(runs=>{
+        const sortedRuns = runs.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+        renderRunSubmissions(sortedRuns);
+        setRunListStatus(canUseLiveServer ? 'Live submissions are updating automatically.' : 'Run the Node server to enable live submissions.');
+      }).catch(err=>{
+        console.error(err);
+        renderRunSubmissions([]);
+        setRunListStatus('Could not load recent submissions.', true);
+      });
+    }
+
+    form.addEventListener('submit', function(event){
+      event.preventDefault();
+      if(!canUseLiveServer){
+        setRunFormStatus('Start the Node server before submitting runs.', true);
+        return;
+      }
+      const payload = {
+        playerName: qs('run-player-name').value.trim(),
+        levelTitle: qs('run-level-title').value.trim(),
+        videoUrl: qs('run-video-url').value.trim(),
+        rawFootageUrl: qs('run-raw-footage-url').value.trim(),
+        notes: qs('run-notes').value.trim()
+      };
+      setRunFormStatus('Sending your run to the live queue...');
+      fetch(liveRunsUrl, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      }).then(r=>{
+        if(!r.ok) throw new Error('Submission failed');
+        clearRunsCache();
+        form.reset();
+        setRunFormStatus('Run submitted. The admin panel can review it now.');
+        return refreshRuns();
+      }).catch(err=>{
+        console.error(err);
+        setRunFormStatus('Could not submit the run. Check the server and try again.', true);
+      });
+    });
+
+    bindLiveUpdates();
+    onRunsUpdate(function(updatedRuns){
+      const sortedRuns = updatedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+      renderRunSubmissions(sortedRuns);
+      setRunListStatus('Recent submissions reloaded from the live server.');
+    });
+
+    loadRunPage();
   }
 
   // Utility

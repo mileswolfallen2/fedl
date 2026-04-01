@@ -1,6 +1,7 @@
 Linux system service setup
 
 This lets the server start automatically on boot on a Linux device.
+MAKE A FILE NAME data.txt TO RUN DO THIS FURST
 
 1. Copy the project to the Linux machine.
    Example path:

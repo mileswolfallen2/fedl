@@ -8,20 +8,33 @@
 </head>
 <body data-page="admelist">
   <header>
-    <h1>fedl</h1>
+    <h1>FEDL Admin</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="lists.html">Lists</a>
+      <a href="run.html">Submit Run</a>
       <a href="players.html">Players</a>
       <a href="rules.html">Rules</a>
       <a href="roulette.html">Roulette</a>
     </nav>
   </header>
   <main class="admin-shell">
+    <section class="panel admin-overview-panel">
+      <div>
+        <p class="hero-kicker">Control Center</p>
+        <h2>Manage the live list and incoming runs</h2>
+        <p class="muted">Use the first panel to edit placements and the second panel to review new run submissions.</p>
+      </div>
+      <div class="admin-overview-badges">
+        <span>Live list editor</span>
+        <span>Run moderation</span>
+      </div>
+    </section>
+
     <section class="panel admin-panel">
       <div class="admin-toolbar">
         <div>
-          <p class="hero-kicker">Editor</p>
+          <p class="hero-kicker">List Editor</p>
           <h2>Manage the live list</h2>
           <p id="admin-status" class="muted">Loading list data...</p>
         </div>
@@ -44,6 +57,34 @@
             </tr>
           </thead>
           <tbody id="admin-list-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel admin-panel">
+      <div class="admin-toolbar">
+        <div>
+          <p class="hero-kicker">Run Queue</p>
+          <h2>Review submitted runs</h2>
+          <p id="runs-admin-status" class="muted">Loading run submissions...</p>
+        </div>
+        <div class="admin-actions">
+          <input id="run-search" type="text" placeholder="Search submissions..." />
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="levels-table admin-table">
+          <thead>
+            <tr>
+              <th style="width:130px">Status</th>
+              <th style="width:160px">Player</th>
+              <th>Level</th>
+              <th style="width:180px">Submitted</th>
+              <th style="width:240px">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="run-admin-body"></tbody>
         </table>
       </div>
     </section>
