@@ -113,6 +113,7 @@ function normalizeRun(payload, existingRun) {
     playerName: String(payload.playerName || existingRun?.playerName || '').trim(),
     levelTitle: String(payload.levelTitle || existingRun?.levelTitle || '').trim(),
     videoUrl: String(payload.videoUrl || existingRun?.videoUrl || '').trim(),
+    percent: String(payload.percent || existingRun?.percent || '100').trim(),
     rawFootageUrl: String(payload.rawFootageUrl || existingRun?.rawFootageUrl || '').trim(),
     notes: String(payload.notes || existingRun?.notes || '').trim(),
     status: String(payload.status || existingRun?.status || 'pending').trim().toLowerCase(),
@@ -232,8 +233,8 @@ const server = http.createServer((req, res) => {
       try {
         const payload = JSON.parse(body || '{}');
         const nextRun = normalizeRun(payload);
-        if (!nextRun.playerName || !nextRun.levelTitle || !nextRun.videoUrl) {
-          sendJson(res, 400, { error: 'playerName, levelTitle, and videoUrl are required' });
+        if (!nextRun.playerName || !nextRun.levelTitle || !nextRun.videoUrl || !nextRun.percent) {
+          sendJson(res, 400, { error: 'playerName, levelTitle, videoUrl, and percent are required' });
           return;
         }
         const runs = readRuns();

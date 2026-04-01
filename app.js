@@ -406,14 +406,40 @@
         const tdTitle = document.createElement('td'); tdTitle.textContent = it.title;
         const tdAct = document.createElement('td');
         const a = document.createElement('a'); a.textContent='Open'; a.href='#'; a.className='btn';
-        a.addEventListener('click', (e)=>{e.preventDefault(); openVideo(it.url)});
+        a.addEventListener('click', (e)=>{e.preventDefault(); openVideo(it)});
         tdAct.appendChild(a);
         tr.appendChild(tdNum); tr.appendChild(tdTitle); tr.appendChild(tdAct);
         tbody.appendChild(tr);
       });
     }
 
-    function openVideo(url){
+    function renderApprovedRunsForLevel(item, hostEl){
+      if(!hostEl) return;
+      hostEl.innerHTML = '<p class="muted">Loading approved runs...</p>';
+      loadRuns().then(runs=>{
+        const approvedRuns = runs.filter(run=>{
+          return String(run.status || '').toLowerCase() === 'approved'
+            && String(run.levelTitle || '').toLowerCase() === String(item.title || '').toLowerCase();
+        });
+        if(!approvedRuns.length){
+          hostEl.innerHTML = '<p class="muted">No approved runs have been linked to this level yet.</p>';
+          return;
+        }
+        hostEl.innerHTML = approvedRuns.map(run=>`
+          <article class="modal-run-card">
+            <strong>${escapeHtml(run.playerName || 'Unknown player')}</strong>
+            <span>${escapeHtml(run.percent || '100')}%</span>
+            <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Open run video</a>
+          </article>
+        `).join('');
+      }).catch(err=>{
+        console.error(err);
+        hostEl.innerHTML = '<p class="muted">Could not load approved runs for this level.</p>';
+      });
+    }
+
+    function openVideo(item){
+      const url = item && item.url;
       if(!url) return; const id = extractYouTubeID(url);
       if(!id){ window.open(url,'_blank'); return }
       let modal = document.querySelector('.video-modal');
@@ -424,8 +450,18 @@
         inner.appendChild(close);
         const iframe = document.createElement('iframe'); iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; iframe.allowFullscreen=true;
         inner.appendChild(iframe); modal.appendChild(inner); document.body.appendChild(modal);
+        const runsWrap = document.createElement('div'); runsWrap.className = 'modal-runs-wrap';
+        runsWrap.innerHTML = `
+          <div class="modal-runs-head">
+            <strong>Approved runs</strong>
+            <span class="muted">Player, percent, and linked video</span>
+          </div>
+          <div class="modal-runs-list"></div>
+        `;
+        inner.appendChild(runsWrap);
       }
       modal.querySelector('iframe').src = `https://www.youtube.com/embed/${id}`;
+      renderApprovedRunsForLevel(item, modal.querySelector('.modal-runs-list'));
       modal.style.display = 'flex';
     }
 
@@ -681,6 +717,7 @@
           <td colspan="5">
             <div class="run-admin-detail">
               <span><strong>Raw:</strong> ${run.rawFootageUrl ? `<a href="${escapeAttr(run.rawFootageUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(run.rawFootageUrl)}</a>` : 'None provided'}</span>
+              <span><strong>Percent:</strong> ${escapeHtml(run.percent || '100')}%</span>
               <span><strong>Reviewed by:</strong> ${escapeHtml(run.reviewedBy || 'Unassigned')}</span>
               <span><strong>Review notes:</strong> ${escapeHtml(run.reviewNotes || 'No review notes yet.')}</span>
             </div>
@@ -971,7 +1008,7 @@
             <strong>${escapeHtml(run.levelTitle || 'Untitled')}</strong>
             <span class="status-pill status-${escapeAttr(run.status || 'pending')}">${escapeHtml(run.status || 'pending')}</span>
           </div>
-          <p class="submission-meta">By ${escapeHtml(run.playerName || 'Unknown')} • ${escapeHtml(new Date(run.submittedAt).toLocaleString())}</p>
+          <p class="submission-meta">By ${escapeHtml(run.playerName || 'Unknown')} • ${escapeHtml(run.percent || '100')}% • ${escapeHtml(new Date(run.submittedAt).toLocaleString())}</p>
           <p>${escapeHtml(run.reviewNotes || run.notes || 'No notes yet.')}</p>
           <div class="submission-links">
             <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Watch run</a>
@@ -1008,6 +1045,7 @@
         playerName: qs('run-player-name').value.trim(),
         levelTitle: qs('run-level-title').value.trim(),
         videoUrl: qs('run-video-url').value.trim(),
+        percent: qs('run-percent').value.trim(),
         rawFootageUrl: qs('run-raw-footage-url').value.trim(),
         notes: qs('run-notes').value.trim()
       };
