@@ -189,6 +189,73 @@
     }).catch(()=>null);
   }
 
+  function renderApprovedRunsForLevel(item, hostEl){
+    if(!hostEl) return;
+    hostEl.innerHTML = '<p class="muted">Loading approved runs...</p>';
+    loadRuns().then(runs=>{
+      const approvedRuns = runs.filter(run=>{
+        return String(run.status || '').toLowerCase() === 'approved'
+          && String(run.levelTitle || '').toLowerCase() === String(item.title || '').toLowerCase();
+      });
+      if(!approvedRuns.length){
+        hostEl.innerHTML = '<p class="muted">No approved runs have been linked to this level yet.</p>';
+        return;
+      }
+      hostEl.innerHTML = approvedRuns.map(run=>`
+        <article class="modal-run-card">
+          <strong>${escapeHtml(run.playerName || 'Unknown player')}</strong>
+          <span>${escapeHtml(run.percent || '100')}%</span>
+          <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Open run video</a>
+        </article>
+      `).join('');
+    }).catch(err=>{
+      console.error(err);
+      hostEl.innerHTML = '<p class="muted">Could not load approved runs for this level.</p>';
+    });
+  }
+
+  function extractYouTubeID(url){
+    const m = String(url || '').match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : '';
+  }
+
+  function openVideoModal(item, options){
+    const config = Object.assign({showRuns:false}, options || {});
+    const url = item && item.url;
+    if(!url) return;
+    const id = extractYouTubeID(url);
+    if(!id){
+      window.open(url,'_blank');
+      return;
+    }
+    let modal = document.querySelector('.video-modal');
+    if(!modal){
+      modal = document.createElement('div'); modal.className='video-modal';
+      const inner = document.createElement('div'); inner.className='inner';
+      const close = document.createElement('button'); close.textContent='Close'; close.className='btn'; close.style.float='right'; close.onclick=()=>modal.remove();
+      inner.appendChild(close);
+      const iframe = document.createElement('iframe'); iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; iframe.allowFullscreen=true;
+      inner.appendChild(iframe); modal.appendChild(inner); document.body.appendChild(modal);
+      const runsWrap = document.createElement('div'); runsWrap.className = 'modal-runs-wrap';
+      runsWrap.innerHTML = `
+        <div class="modal-runs-head">
+          <strong>Approved runs</strong>
+          <span class="muted">Player, percent, and linked video</span>
+        </div>
+        <div class="modal-runs-list"></div>
+      `;
+      inner.appendChild(runsWrap);
+    }
+    modal.querySelector('iframe').src = `https://www.youtube.com/embed/${id}`;
+    const runsWrap = modal.querySelector('.modal-runs-wrap');
+    const runsList = modal.querySelector('.modal-runs-list');
+    if(runsWrap) runsWrap.hidden = !config.showRuns;
+    if(config.showRuns && runsList){
+      renderApprovedRunsForLevel(item, runsList);
+    }
+    modal.style.display = 'flex';
+  }
+
   if(page==='index'){
     const totalEl = qs('hero-total-levels');
     const topEl = qs('hero-top-entry');
@@ -265,9 +332,14 @@
         : 'Level ID came from your local level-ids.txt file.';
       if(item.url){
         openEl.hidden = false;
-        openEl.href = item.url;
+        openEl.href = '#';
+        openEl.onclick = function(e){
+          e.preventDefault();
+          openVideoModal(item, {showRuns:false});
+        };
       }else{
         openEl.hidden = true;
+        openEl.onclick = null;
       }
     }
 
@@ -308,6 +380,149 @@
         noteEl.textContent = 'The live list or API lookup failed.';
         console.error(err);
       });
+    });
+  }
+
+  if(page==='guess'){
+    const modeSelect = qs('guess-mode');
+    const startBtn = qs('guess-start');
+    const form = qs('guess-form');
+    const input = qs('guess-input');
+    const statusEl = qs('guess-status');
+    const titleEl = qs('guess-level-title');
+    const attemptsEl = qs('guess-attempts');
+    const feedbackEl = qs('guess-feedback');
+    const answerEl = qs('guess-answer');
+    const openEl = qs('guess-open');
+
+    const guessModes = {
+      casual: {label:'Casual', tries:6},
+      standard: {label:'Standard', tries:4},
+      hard: {label:'Hard', tries:3},
+      marathon: {label:'Marathon', tries:8}
+    };
+
+    const state = {
+      active: false,
+      triesLeft: guessModes.standard.tries,
+      answer: null,
+      item: null
+    };
+
+    function getRankedItems(items){
+      return items.slice().filter(item=>Number(item.position) > 0).sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+    }
+
+    function getSelectedMode(){
+      return guessModes[(modeSelect && modeSelect.value) || 'standard'] || guessModes.standard;
+    }
+
+    function resetGuessUi(message){
+      const mode = getSelectedMode();
+      state.active = false;
+      state.triesLeft = mode.tries;
+      state.answer = null;
+      state.item = null;
+      statusEl.textContent = message;
+      titleEl.textContent = 'No level selected';
+      attemptsEl.textContent = `Tries left: ${mode.tries}`;
+      feedbackEl.textContent = `Mode: ${mode.label}. Enter a rank number to start guessing.`;
+      answerEl.textContent = 'The correct rank will show here if you run out of guesses.';
+      openEl.hidden = true;
+      openEl.href = '#';
+      openEl.onclick = null;
+      input.value = '';
+    }
+
+    function finishRound(message, revealAnswer){
+      state.active = false;
+      statusEl.textContent = message;
+      attemptsEl.textContent = `Tries left: ${state.triesLeft}`;
+      answerEl.textContent = revealAnswer
+        ? `${state.item.title} is ranked #${state.answer}.`
+        : 'Correct. Start another round whenever you want.';
+      if(state.item && state.item.url){
+        openEl.hidden = false;
+        openEl.href = '#';
+        openEl.onclick = function(e){
+          e.preventDefault();
+          openVideoModal(state.item, {showRuns:false});
+        };
+      }
+    }
+
+    function startRound(){
+      const mode = getSelectedMode();
+      statusEl.textContent = 'Picking a level...';
+      attemptsEl.textContent = `Tries left: ${mode.tries}`;
+      feedbackEl.textContent = `Loading a ${mode.label.toLowerCase()} round.`;
+      answerEl.textContent = 'You will get hints after each wrong guess.';
+      openEl.hidden = true;
+      openEl.onclick = null;
+      input.value = '';
+      loadItems().then(items=>{
+        const rankedItems = getRankedItems(items);
+        if(!rankedItems.length){
+          resetGuessUi('No ranked levels were found.');
+          feedbackEl.textContent = 'Add list data first, then start another round.';
+          return;
+        }
+        const item = rankedItems[Math.floor(Math.random() * rankedItems.length)];
+        state.active = true;
+        state.triesLeft = mode.tries;
+        state.answer = Number(item.position);
+        state.item = item;
+        statusEl.textContent = 'Guess this level\'s rank.';
+        titleEl.textContent = item.title;
+        attemptsEl.textContent = `Tries left: ${mode.tries}`;
+        feedbackEl.textContent = `Mode: ${mode.label}. Guess the rank and I will tell you higher or lower.`;
+        answerEl.textContent = 'The correct rank will show here if you run out of guesses.';
+        input.value = '';
+        input.focus();
+      }).catch(err=>{
+        console.error(err);
+        resetGuessUi('Could not load the list for the guessing game.');
+        feedbackEl.textContent = 'Try again after the list finishes loading.';
+      });
+    }
+
+    function submitGuess(){
+      if(!state.active || !state.item){
+        feedbackEl.textContent = 'Start a round first so there is a level to guess.';
+        return;
+      }
+      const rawGuess = input.value.trim();
+      const guess = Number(rawGuess);
+      if(!rawGuess || !Number.isInteger(guess) || guess < 1){
+        feedbackEl.textContent = 'Enter a valid whole-number rank.';
+        return;
+      }
+      if(guess === state.answer){
+        feedbackEl.textContent = `Correct. ${state.item.title} is #${state.answer}.`;
+        finishRound('You got it.', false);
+        return;
+      }
+      state.triesLeft -= 1;
+      attemptsEl.textContent = `Tries left: ${state.triesLeft}`;
+      const direction = guess < state.answer ? 'Higher' : 'Lower';
+      if(state.triesLeft > 0){
+        feedbackEl.textContent = `${direction}. #${guess} is not the right spot.`;
+        return;
+      }
+      feedbackEl.textContent = `${direction}. That was your last guess.`;
+      finishRound('Round over.', true);
+    }
+
+    resetGuessUi('Start a round to get a level.');
+    if(modeSelect){
+      modeSelect.addEventListener('change', ()=>{
+        if(!state.active) resetGuessUi('Start a round to get a level.');
+      });
+    }
+    startBtn.addEventListener('click', startRound);
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      submitGuess();
     });
   }
 
@@ -406,67 +621,11 @@
         const tdTitle = document.createElement('td'); tdTitle.textContent = it.title;
         const tdAct = document.createElement('td');
         const a = document.createElement('a'); a.textContent='Open'; a.href='#'; a.className='btn';
-        a.addEventListener('click', (e)=>{e.preventDefault(); openVideo(it)});
+        a.addEventListener('click', (e)=>{e.preventDefault(); openVideoModal(it, {showRuns:true})});
         tdAct.appendChild(a);
         tr.appendChild(tdNum); tr.appendChild(tdTitle); tr.appendChild(tdAct);
         tbody.appendChild(tr);
       });
-    }
-
-    function renderApprovedRunsForLevel(item, hostEl){
-      if(!hostEl) return;
-      hostEl.innerHTML = '<p class="muted">Loading approved runs...</p>';
-      loadRuns().then(runs=>{
-        const approvedRuns = runs.filter(run=>{
-          return String(run.status || '').toLowerCase() === 'approved'
-            && String(run.levelTitle || '').toLowerCase() === String(item.title || '').toLowerCase();
-        });
-        if(!approvedRuns.length){
-          hostEl.innerHTML = '<p class="muted">No approved runs have been linked to this level yet.</p>';
-          return;
-        }
-        hostEl.innerHTML = approvedRuns.map(run=>`
-          <article class="modal-run-card">
-            <strong>${escapeHtml(run.playerName || 'Unknown player')}</strong>
-            <span>${escapeHtml(run.percent || '100')}%</span>
-            <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Open run video</a>
-          </article>
-        `).join('');
-      }).catch(err=>{
-        console.error(err);
-        hostEl.innerHTML = '<p class="muted">Could not load approved runs for this level.</p>';
-      });
-    }
-
-    function openVideo(item){
-      const url = item && item.url;
-      if(!url) return; const id = extractYouTubeID(url);
-      if(!id){ window.open(url,'_blank'); return }
-      let modal = document.querySelector('.video-modal');
-      if(!modal){
-        modal = document.createElement('div'); modal.className='video-modal';
-        const inner = document.createElement('div'); inner.className='inner';
-        const close = document.createElement('button'); close.textContent='Close'; close.className='btn'; close.style.float='right'; close.onclick=()=>modal.remove();
-        inner.appendChild(close);
-        const iframe = document.createElement('iframe'); iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; iframe.allowFullscreen=true;
-        inner.appendChild(iframe); modal.appendChild(inner); document.body.appendChild(modal);
-        const runsWrap = document.createElement('div'); runsWrap.className = 'modal-runs-wrap';
-        runsWrap.innerHTML = `
-          <div class="modal-runs-head">
-            <strong>Approved runs</strong>
-            <span class="muted">Player, percent, and linked video</span>
-          </div>
-          <div class="modal-runs-list"></div>
-        `;
-        inner.appendChild(runsWrap);
-      }
-      modal.querySelector('iframe').src = `https://www.youtube.com/embed/${id}`;
-      renderApprovedRunsForLevel(item, modal.querySelector('.modal-runs-list'));
-      modal.style.display = 'flex';
-    }
-
-    function extractYouTubeID(url){
-      const m = url.match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{6,})/); return m?m[1]:'';
     }
 
     function applyItems(items){

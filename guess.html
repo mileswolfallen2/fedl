@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Guess The Rank - GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="guess">
+  <header>
+    <h1>Guess The Rank</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="lists.html">Lists</a>
+      <a href="run.html">Submit Run</a>
+      <a href="players.html">Players</a>
+      <a href="rules.html">Rules</a>
+      <a href="admelist.html">Admin</a>
+    </nav>
+  </header>
+  <main>
+    <section class="roulette-shell">
+      <section class="panel roulette-panel roulette-guess-panel">
+        <div class="roulette-head">
+          <div>
+            <p class="roulette-kicker">Guessing Game</p>
+            <h2>Where Is It Ranked?</h2>
+            <p class="muted roulette-intro">A level title shows up, you guess its place on the list, and you get higher or lower hints until you solve it or run out of tries.</p>
+          </div>
+          <button class="btn roulette-btn" id="guess-start" type="button">Start Round</button>
+        </div>
+
+        <div class="roulette-card guess-card">
+          <label class="control-block control-select" for="guess-mode">
+            <span>Mode</span>
+            <select id="guess-mode">
+              <option value="casual">Casual - 6 guesses</option>
+              <option value="standard" selected>Standard - 4 guesses</option>
+              <option value="hard">Hard - 3 guesses</option>
+              <option value="marathon">Marathon - 8 guesses</option>
+            </select>
+          </label>
+
+          <p class="roulette-status muted" id="guess-status">Start a round to get a level.</p>
+          <h3 id="guess-level-title">No level selected</h3>
+          <p class="roulette-rank" id="guess-attempts">Tries left: 4</p>
+          <p class="roulette-note muted" id="guess-feedback">Pick a mode, start a round, and enter a rank number like 1, 15, or 42.</p>
+
+          <form class="guess-form" id="guess-form">
+            <label class="guess-label" for="guess-input">Your rank guess</label>
+            <div class="guess-controls">
+              <input id="guess-input" type="number" min="1" inputmode="numeric" placeholder="Guess the rank" />
+              <button class="btn" id="guess-submit" type="submit">Guess</button>
+            </div>
+          </form>
+
+          <p class="guess-answer muted" id="guess-answer">The correct rank will show here if you run out of guesses.</p>
+          <a class="btn roulette-open" id="guess-open" href="#" target="_blank" rel="noopener noreferrer" hidden>View Video</a>
+        </div>
+      </section>
+
+      <aside class="panel roulette-rules-card">
+        <p class="roulette-kicker">Modes</p>
+        <h2>How this page works</h2>
+        <div class="roulette-rule-list">
+          <article>
+            <strong>Casual</strong>
+            <p>Six guesses for a more forgiving round if you just want to learn the list.</p>
+          </article>
+          <article>
+            <strong>Standard</strong>
+            <p>Four guesses for the default version of the game.</p>
+          </article>
+          <article>
+            <strong>Hard</strong>
+            <p>Three guesses if you want the original tougher setup.</p>
+          </article>
+          <article>
+            <strong>Marathon</strong>
+            <p>Eight guesses for longer rounds and closer narrowing.</p>
+          </article>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
