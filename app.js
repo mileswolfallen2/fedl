@@ -192,7 +192,7 @@
   if(page==='index'){
     const totalEl = qs('hero-total-levels');
     const topEl = qs('hero-top-entry');
-    const lastEl = qs('hero-last-slot');
+    const approvedRunsEl = qs('hero-last-slot');
     const featuredListEl = qs('featured-list');
 
     function renderFeatured(items){
@@ -222,20 +222,28 @@
     function renderHome(items){
       const rankedItems = items.slice().sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
       const firstItem = rankedItems[0];
-      const lastItem = rankedItems[rankedItems.length - 1];
 
       if(totalEl) totalEl.textContent = String(rankedItems.length || 0);
       if(topEl) topEl.textContent = firstItem ? firstItem.title : 'Unavailable';
-      if(lastEl) lastEl.textContent = lastItem && lastItem.position ? `#${lastItem.position}` : '--';
       renderFeatured(rankedItems);
+    }
+
+    function renderApprovedRuns(runs){
+      if(!approvedRunsEl) return;
+      const approvedCount = runs.filter(run=>String(run.status || '').toLowerCase() === 'approved').length;
+      approvedRunsEl.textContent = String(approvedCount);
     }
 
     loadItems().then(renderHome).catch(()=>{
       renderHome([]);
     });
+    loadRuns().then(renderApprovedRuns).catch(()=>{
+      renderApprovedRuns([]);
+    });
 
     bindLiveUpdates();
     onLiveUpdate(renderHome);
+    onRunsUpdate(renderApprovedRuns);
   }
 
   if(page==='roulette'){
