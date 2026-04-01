@@ -350,6 +350,190 @@
     });
   }
 
+  if(page==='admelist'){
+    const statusEl = qs('admin-status');
+    const tbody = qs('admin-list-body');
+    const addBtn = qs('add-row');
+    const saveBtn = qs('save-list');
+    const searchEl = qs('admin-search');
+    let items = [];
+
+    function setStatus(message, isError){
+      if(!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function filteredItems(){
+      const query = (searchEl && searchEl.value || '').trim().toLowerCase();
+      if(!query) return items;
+      return items.filter(item=>{
+        return [item.level, item.position, item.title, item.url].some(value=>
+          String(value || '').toLowerCase().includes(query)
+        );
+      });
+    }
+
+    function normalizePositions(){
+      let position = 1;
+      items.forEach(item=>{
+        if(item._isDraft){
+          item.position = '';
+          return;
+        }
+        item.position = String(position);
+        position += 1;
+      });
+    }
+
+    function moveItemToPosition(index, rawPosition){
+      if(!items[index]) return;
+      const parsedPosition = Number(rawPosition);
+      if(!Number.isFinite(parsedPosition) || parsedPosition < 1) return;
+      const nextPosition = Math.max(1, parsedPosition);
+      const [item] = items.splice(index, 1);
+      item._isDraft = false;
+      const drafts = items.filter(entry=>entry._isDraft);
+      const ranked = items.filter(entry=>!entry._isDraft);
+      const targetIndex = Math.min(ranked.length, nextPosition - 1);
+      ranked.splice(targetIndex, 0, item);
+      items = drafts.concat(ranked);
+      normalizePositions();
+    }
+
+    function renderAdminTable(){
+      const rows = filteredItems();
+      tbody.innerHTML = '';
+      rows.forEach(item=>{
+        const actualIndex = items.indexOf(item);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input data-field="position" data-index="${actualIndex}" type="number" min="1" value="${escapeAttr(item.position)}"></td>
+          <td><input data-field="level" data-index="${actualIndex}" type="text" value="${escapeAttr(item.level)}"></td>
+          <td><input data-field="title" data-index="${actualIndex}" type="text" value="${escapeAttr(item.title)}"></td>
+          <td><input data-field="url" data-index="${actualIndex}" type="url" value="${escapeAttr(item.url)}"></td>
+          <td><button type="button" class="btn danger-btn small-btn" data-delete="${actualIndex}">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      if(!rows.length){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" class="muted">No rows match your search.</td>';
+        tbody.appendChild(tr);
+      }
+    }
+
+    function saveItems(){
+      const hasUnplacedDraft = items.some(item=>{
+        const hasContent = String(item.title || '').trim() || String(item.url || '').trim() || String(item.level || '').trim();
+        return item._isDraft && hasContent;
+      });
+      if(hasUnplacedDraft){
+        setStatus('Give each new row a number before saving.', true);
+        return Promise.resolve();
+      }
+      items = items
+        .map(item=>({
+          level: String(item.level || '').trim() || 'new',
+          position: String(item.position || '').trim(),
+          title: String(item.title || '').trim(),
+          url: String(item.url || '').trim()
+        }))
+        .filter(item=>item.title);
+      normalizePositions();
+      return fetch(liveApiUrl, {
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({text: formatData(items)})
+      }).then(r=>{
+        if(!r.ok) throw new Error('Save failed');
+        clearItemsCache();
+        renderAdminTable();
+        setStatus('Saved. Live pages update automatically.');
+      }).catch(err=>{
+        console.error(err);
+        setStatus('Could not save. Check the live server endpoint.', true);
+      });
+    }
+
+    function loadAdmin(){
+      loadItems().then(loaded=>{
+        items = loaded.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
+          level: item.level,
+          position: item.position,
+          title: item.title,
+          url: item.url,
+          _isDraft: false
+        }));
+        normalizePositions();
+        renderAdminTable();
+        setStatus('Connected to live list data.');
+      }).catch(err=>{
+        console.error(err);
+        setStatus('Could not load list data.', true);
+      });
+    }
+
+    tbody.addEventListener('input', function(event){
+      const target = event.target;
+      const field = target.getAttribute('data-field');
+      const index = Number(target.getAttribute('data-index'));
+      if(!field || Number.isNaN(index) || !items[index]) return;
+      if(field === 'position'){
+        moveItemToPosition(index, target.value);
+        renderAdminTable();
+      }else{
+        items[index][field] = target.value;
+      }
+      setStatus('Unsaved changes');
+    });
+
+    tbody.addEventListener('click', function(event){
+      const deleteButton = event.target.closest('[data-delete]');
+      if(!deleteButton) return;
+      const deleteIndex = deleteButton.getAttribute('data-delete');
+      if(deleteIndex == null) return;
+      const index = Number(deleteIndex);
+      if(Number.isNaN(index)) return;
+      items.splice(index, 1);
+      normalizePositions();
+      renderAdminTable();
+      setStatus('Row removed. Save when ready.');
+    });
+
+    addBtn.addEventListener('click', function(){
+      items.unshift({level:'new', position:'', title:'', url:'', _isDraft:true});
+      normalizePositions();
+      renderAdminTable();
+      setStatus('New row added at the top. Give it a number when you want to place it.');
+    });
+
+    saveBtn.addEventListener('click', function(){
+      saveItems();
+    });
+
+    if(searchEl){
+      searchEl.addEventListener('input', renderAdminTable);
+    }
+
+    bindLiveUpdates();
+    onLiveUpdate(function(updatedItems){
+      items = updatedItems.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
+        level: item.level,
+        position: item.position,
+        title: item.title,
+        url: item.url,
+        _isDraft: false
+      }));
+      normalizePositions();
+      renderAdminTable();
+      setStatus('List reloaded from live server.');
+    });
+
+    loadAdmin();
+  }
+
   // Utility
   function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}
+  function escapeAttr(s){return escapeHtml(String(s == null ? '' : s))}
 })();
