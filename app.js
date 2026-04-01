@@ -862,7 +862,7 @@
       loadRuns().then(runs=>{
         const sortedRuns = runs.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
         renderRunSubmissions(sortedRuns);
-        setRunListStatus(canUseLiveServer ? 'Live submissions are updating automatically.' : 'Run the Node server to enable live submissions.');
+        setRunListStatus('Live submissions are updating automatically.');
       }).catch(err=>{
         console.error(err);
         renderRunSubmissions([]);
