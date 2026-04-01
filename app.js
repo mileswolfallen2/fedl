@@ -4,11 +4,8 @@
 
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
-  const runtimeBasePath = !isFileProtocol && (window.location.pathname === '/fedl' || window.location.pathname.startsWith('/fedl/'))
-    ? '/fedl'
-    : '';
-  const liveServerBase = isFileProtocol ? '' : `${window.location.origin}${runtimeBasePath}`;
-  const canUseLiveServer = !isFileProtocol;
+  const liveServerBase = 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+  const canUseLiveServer = !isFileProtocol || !!liveServerBase;
   const liveApiUrl = `${liveServerBase}/api/list`;
   const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
