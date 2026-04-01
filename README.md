@@ -1,22 +1,18 @@
 # GD FEDL
 
-A Geometry Dash FEDL-style website with both a static list and a live editable server list.
+A Geometry Dash FEDL-style website with a live server-backed main list.
 
 It includes:
 
 - a home page
-- a static list page
-- a live server-backed list page
-- an admin editor page for the live list
+- a main list page
 - a players page
 - a rules page
 
 ## Project Files
 
 - `index.html` - home page
-- `lists.html` - static list view
-- `serverlist.html` - live server-backed list view
-- `admelist.html` - admin UI for editing the live list
+- `lists.html` - main live list view
 - `players.html` - player manager
 - `rules.html` - submission rules and mod guidelines
 - `app.js` - client-side logic
@@ -43,9 +39,8 @@ new|1|Flamewall|https://youtu.be/x4Io4zkWVRw
 
 ## Pages
 
-- `lists.html` reads the static list.
-- `serverlist.html` reads the live server list.
-- `admelist.html` lets you edit the live server list with a UI.
+- `lists.html` is the main live list page.
+- `roulette.html` uses the same live server-backed list.
 
 ## Fallback Order
 
@@ -55,7 +50,7 @@ The live list tries these in order:
 2. `server/data.txt`
 3. `data.txt`
 
-That means `serverlist.html` can still show data even if the live API is down.
+That means `lists.html` can still show data even if the live API is down.
 
 ## Running The Static Site
 
@@ -73,7 +68,7 @@ http://localhost:8000
 
 ## Running The Live Server
 
-The live editor and live list use the Node server:
+The live list uses the Node server:
 
 ```bash
 node server/server.js
@@ -88,8 +83,8 @@ HOST=0.0.0.0 PORT=3000 node server/server.js
 Then open:
 
 ```txt
-http://localhost:3000/serverlist.html
-http://localhost:3000/admelist.html
+http://localhost:3000/lists.html
+http://localhost:3000/roulette.html
 ```
 
 On macOS you can also use:
@@ -98,27 +93,13 @@ On macOS you can also use:
 start-server.command
 ```
 
-## Editing The Live List
-
-Open `admelist.html` through the Node server.
-
-Features:
-
-- add a new row at the top as a draft
-- give it a number when you want to place it
-- automatic shifting of other rows when a number is reused
-- delete rows only with the Delete button
-- live refresh on connected list pages after saving
-
-Draft rows must be assigned a number before saving.
-
 ## Hosting On Another Device
 
 If you want one device to host the live list for other devices:
 
 1. Run the server with `HOST=0.0.0.0`.
 2. Open or forward port `3000`.
-3. Visit `http://YOUR-IP:3000/serverlist.html` or `http://YOUR-IP:3000/admelist.html`.
+3. Visit `http://YOUR-IP:3000/lists.html` or `http://YOUR-IP:3000/roulette.html`.
 
 If you already have router port forwarding set up, point it to the machine running `server/server.js`.
 
