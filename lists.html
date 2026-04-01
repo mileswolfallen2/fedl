@@ -18,27 +18,58 @@
   </header>
   <main class="layout">
     <aside class="sidebar">
-      <div class="panel">
-        <h2>Levels</h2>
+      <div class="panel list-sidebar-panel">
+        <p class="sidebar-kicker">Quick Jump</p>
+        <h2>Rank ranges</h2>
+        <p class="muted">Jump straight to a section of the list and narrow things down fast.</p>
         <ul id="levels"></ul>
       </div>
     </aside>
 
-    <section class="panel content">
-      <div class="search-row">
-        <h2 id="list-title">FEDL List</h2>
-        <input id="search" type="text" placeholder="Search videos or titles..." />
-        <select id="level-filter"><option value="all">All Levels</option></select>
-      </div>
+    <section class="content list-page-shell">
+      <section class="panel list-hero-panel">
+        <div class="list-hero-copy">
+          <p class="hero-kicker">FEDL Rankings</p>
+          <h2 id="list-title">FEDL List</h2>
+          <p class="muted list-hero-text">Browse the full ranking, search for a level by name, filter by placement range, and open linked videos directly from the table.</p>
+        </div>
+        <div class="list-hero-badge">
+          <strong>Live list</strong>
+          <span>Updates pull from the current FEDL data source when available.</span>
+        </div>
+      </section>
 
-      <div class="table-wrap">
-        <table class="levels-table">
-          <thead>
-            <tr><th style="width:80px">#</th><th>Title</th><th style="width:140px">Action</th></tr>
-          </thead>
-          <tbody id="list-area"></tbody>
-        </table>
-      </div>
+      <section class="panel list-controls-panel">
+        <div class="search-row">
+          <label class="control-block" for="search">
+            <span>Search</span>
+            <input id="search" type="text" placeholder="Search titles..." />
+          </label>
+          <label class="control-block control-select" for="level-filter">
+            <span>Filter</span>
+            <select id="level-filter"><option value="all">All Levels</option></select>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel list-table-panel">
+        <div class="table-header">
+          <div>
+            <p class="status-label">List Table</p>
+            <h3>Current placements</h3>
+          </div>
+          <p class="muted table-hint">Click <strong>Open</strong> on any row to watch the linked run.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table class="levels-table">
+            <thead>
+              <tr><th style="width:80px">#</th><th>Title</th><th style="width:140px">Action</th></tr>
+            </thead>
+            <tbody id="list-area"></tbody>
+          </table>
+        </div>
+      </section>
     </section>
   </main>
   <script src="app.js"></script>

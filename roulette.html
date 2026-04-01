@@ -17,38 +17,49 @@
     </nav>
   </header>
   <main>
-    <section class="panel roulette-rules">
-      <p class="roulette-kicker">Rules</p>
-      <h2>How Roulette Works</h2>
-      <ul class="rules-list">
-        <li>Extreme Demon Roulette is a community challenge built around a roulette of hard demons from a chosen list.</li>
-        <li>You can use a main list, extended list, legacy list, or a custom list like this FEDL list.</li>
-        <li>A common format is to start at <strong>1%</strong> and raise the goal by <strong>1%</strong> for each new level until you fail or finish the challenge.</li>
-        <li>Some versions allow skips, rerolls, or custom limits, depending on the rules you want to use.</li>
-        <li>This page shows the demon name, rank, and level ID for the selected result.</li>
-        <li>Percent targets are stored in <code>level-ids.txt</code> using the format <code>title|levelId|percent</code>.</li>
-        <li>If a level ID is missing in that file, this page will try to look it up through the Geometry Dash community API automatically.</li>
-      </ul>
-    </section>
-
-    <section class="panel roulette-panel">
-      <div class="roulette-head">
-        <div>
-          <p class="roulette-kicker">Random Challenge</p>
-          <h2>Demon Roulette</h2>
-          <p class="muted">Spin the FEDL list to get a random demon for your roulette run.</p>
+    <section class="roulette-shell">
+      <section class="panel roulette-panel">
+        <div class="roulette-head">
+          <div>
+            <p class="roulette-kicker">Random Challenge</p>
+            <h2>Demon Roulette</h2>
+            <p class="muted roulette-intro">Spin the FEDL list to get a random demon for your next roulette run, practice grind, or bad decision.</p>
+          </div>
+          <button class="btn roulette-btn" id="roulette-spin" type="button">Spin</button>
         </div>
-        <button class="btn roulette-btn" id="roulette-spin" type="button">Spin</button>
-      </div>
 
-      <div class="roulette-card" id="roulette-card">
-        <p class="roulette-status muted" id="roulette-status">Press spin to choose a demon.</p>
-        <h3 id="roulette-title">No demon selected</h3>
-        <p class="roulette-rank" id="roulette-rank">Rank: -</p>
-        <p class="roulette-meta" id="roulette-level-id">Level ID: -</p>
-        <p class="roulette-note muted" id="roulette-note">Level IDs come from your local file first, then API lookup if needed.</p>
-        <a class="btn roulette-open" id="roulette-open" href="#" target="_blank" rel="noopener noreferrer" hidden>Open Video</a>
-      </div>
+        <div class="roulette-card" id="roulette-card">
+          <p class="roulette-status muted" id="roulette-status">Press spin to choose a demon.</p>
+          <h3 id="roulette-title">No demon selected</h3>
+          <p class="roulette-rank" id="roulette-rank">Rank: -</p>
+          <p class="roulette-meta" id="roulette-level-id">Level ID: -</p>
+          <p class="roulette-note muted" id="roulette-note">Level IDs come from your local file first, then API lookup if needed.</p>
+          <a class="btn roulette-open" id="roulette-open" href="#" target="_blank" rel="noopener noreferrer" hidden>Open Video</a>
+        </div>
+      </section>
+
+      <aside class="panel roulette-rules-card">
+        <p class="roulette-kicker">How It Works</p>
+        <h2>Quick rules</h2>
+        <div class="roulette-rule-list">
+          <article>
+            <strong>Pick from a list</strong>
+            <p>Use FEDL or any demon list format you want for your roulette session.</p>
+          </article>
+          <article>
+            <strong>Raise the target</strong>
+            <p>A common setup starts at 1% and increases by 1% after each new level.</p>
+          </article>
+          <article>
+            <strong>Use your own rules</strong>
+            <p>Skips, rerolls, and loss conditions can be adjusted to match your challenge format.</p>
+          </article>
+          <article>
+            <strong>Extra data included</strong>
+            <p>This page shows rank and level ID, and it tries API lookup when local info is missing.</p>
+          </article>
+        </div>
+      </aside>
     </section>
   </main>
   <script src="app.js"></script>
