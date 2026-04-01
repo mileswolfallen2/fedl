@@ -9,6 +9,7 @@ const runsPath = path.join(__dirname, 'runs.json');
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '/fedl';
+const adminPassword = String(process.env.ADMIN_PASSWORD || '');
 const clients = new Set();
 
 const contentTypes = {
@@ -47,7 +48,7 @@ function readDataText() {
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
 function sendJson(res, statusCode, payload) {
@@ -64,6 +65,29 @@ function sendEvent(eventName, data) {
   for (const client of clients) {
     client.write(message);
   }
+}
+
+function isAuthorized(req) {
+  if (!adminPassword) return true;
+  const authHeader = String(req.headers.authorization || '');
+  if (!authHeader.startsWith('Basic ')) return false;
+  try {
+    const decoded = Buffer.from(authHeader.slice(6), 'base64').toString('utf8');
+    const separatorIndex = decoded.indexOf(':');
+    const suppliedPassword = separatorIndex === -1 ? '' : decoded.slice(separatorIndex + 1);
+    return suppliedPassword === adminPassword;
+  } catch (error) {
+    return false;
+  }
+}
+
+function requireAdmin(req, res) {
+  if (isAuthorized(req)) return true;
+  setCors(res);
+  res.setHeader('WWW-Authenticate', 'Basic realm="FEDL Admin"');
+  res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('Authentication required');
+  return false;
 }
 
 function ensureRunsFile() {
@@ -154,6 +178,7 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.method === 'PUT' && pathname === '/api/list') {
+    if (!requireAdmin(req, res)) return;
     let body = '';
     req.on('data', chunk => {
       body += chunk;
@@ -224,6 +249,7 @@ const server = http.createServer((req, res) => {
   }
 
   if ((req.method === 'PUT' || req.method === 'DELETE') && pathname.startsWith('/api/runs/')) {
+    if (!requireAdmin(req, res)) return;
     const runId = pathname.slice('/api/runs/'.length);
     if (!runId) {
       sendJson(res, 400, { error: 'Run id is required' });
@@ -271,6 +297,10 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if ((pathname === '/admelist.html' || pathname === '/admelist') && !requireAdmin(req, res)) {
+    return;
+  }
+
   serveFile(pathname, res);
 });
 
@@ -288,4 +318,5 @@ server.listen(port, host, () => {
   console.log(`Base path: ${BASE}`);
   console.log(`Using live list file: ${dataPath}`);
   console.log(`Using runs file: ${runsPath}`);
+  console.log(`Admin password protection: ${adminPassword ? 'enabled' : 'disabled'}`);
 });
