@@ -457,11 +457,47 @@
     const addBtn = qs('add-row');
     const saveBtn = qs('save-list');
     const searchEl = qs('admin-search');
+    const adminPasswordEl = qs('admin-password');
+    const authStatusEl = qs('admin-auth-status');
     const runsStatusEl = qs('runs-admin-status');
     const runsTbody = qs('run-admin-body');
     const runSearchEl = qs('run-search');
     let items = [];
     let runs = [];
+    const adminPasswordKey = 'fedl_admin_password';
+
+    function getAdminPassword(){
+      try{return sessionStorage.getItem(adminPasswordKey) || '';}
+      catch(e){return '';}
+    }
+
+    function setAdminPassword(password){
+      try{
+        if(password) sessionStorage.setItem(adminPasswordKey, password);
+        else sessionStorage.removeItem(adminPasswordKey);
+      }catch(e){}
+      if(adminPasswordEl) adminPasswordEl.value = password;
+      if(authStatusEl){
+        authStatusEl.textContent = password
+          ? 'Password saved for this browser session.'
+          : 'Saved only in this browser session.';
+        authStatusEl.classList.remove('error-text');
+      }
+    }
+
+    function authHeaders(extraHeaders){
+      const headers = Object.assign({}, extraHeaders || {});
+      const password = getAdminPassword();
+      if(password){
+        headers.Authorization = `Basic ${btoa(`fedl:${password}`)}`;
+      }
+      return headers;
+    }
+
+    function handleAdminAuthFailure(message, targetSetter){
+      setAdminPassword('');
+      targetSetter(message || 'Admin password required or incorrect.', true);
+    }
 
     function setStatus(message, isError){
       if(!statusEl) return;
@@ -627,15 +663,20 @@
       normalizePositions();
       return fetch(liveApiUrl, {
         method:'PUT',
-        headers:{'Content-Type':'application/json'},
+        headers:authHeaders({'Content-Type':'application/json'}),
         body: JSON.stringify({text: formatData(items)})
       }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
         if(!r.ok) throw new Error('Save failed');
         clearItemsCache();
         renderAdminTable();
         setStatus('Saved. Live pages update automatically.');
       }).catch(err=>{
         console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above, then try again.', setStatus);
+          return;
+        }
         setStatus('Could not save. Check the live server endpoint.', true);
       });
     }
@@ -680,7 +721,7 @@
       if(reviewNotes === null) return;
       fetch(`${liveRunsUrl}/${encodeURIComponent(runId)}`, {
         method:'PUT',
-        headers:{'Content-Type':'application/json'},
+        headers:authHeaders({'Content-Type':'application/json'}),
         body: JSON.stringify({
           ...run,
           status,
@@ -688,12 +729,17 @@
           reviewedBy:'FEDL Admin'
         })
       }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
         if(!r.ok) throw new Error('Run update failed');
         clearRunsCache();
         setRunsStatus(`Run marked ${status}.`);
         return refreshRuns();
       }).catch(err=>{
         console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above to review runs.', setRunsStatus);
+          return;
+        }
         setRunsStatus('Could not update that run.', true);
       });
     }
@@ -704,14 +750,20 @@
         return;
       }
       fetch(`${liveRunsUrl}/${encodeURIComponent(runId)}`, {
-        method:'DELETE'
+        method:'DELETE',
+        headers:authHeaders()
       }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
         if(!r.ok) throw new Error('Run delete failed');
         clearRunsCache();
         setRunsStatus('Run removed from the queue.');
         return refreshRuns();
       }).catch(err=>{
         console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above to delete runs.', setRunsStatus);
+          return;
+        }
         setRunsStatus('Could not delete that run.', true);
       });
     }
@@ -784,6 +836,12 @@
     }
     if(runSearchEl){
       runSearchEl.addEventListener('input', renderRunsTable);
+    }
+    if(adminPasswordEl){
+      setAdminPassword(getAdminPassword());
+      adminPasswordEl.addEventListener('input', function(){
+        setAdminPassword(adminPasswordEl.value.trim());
+      });
     }
 
     bindLiveUpdates();

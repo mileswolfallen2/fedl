@@ -37,12 +37,15 @@ table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
 .admin-panel{padding:20px}
 .admin-overview-panel{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:24px 26px;border-radius:28px;background:linear-gradient(135deg,rgba(255,184,77,0.12),rgba(7,19,38,0.95));border:1px solid rgba(255,184,77,0.16)}
 .admin-overview-panel h2{margin:0 0 8px 0;font-size:clamp(1.9rem,4vw,2.8rem)}
+.admin-access-panel{display:grid;gap:12px;justify-items:start;min-width:min(100%,320px)}
 .admin-overview-badges{display:flex;flex-wrap:wrap;gap:10px}
 .admin-overview-badges span{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#eef5ff;font-weight:700}
+.admin-password-field{display:grid;gap:8px;width:100%;font-weight:700;color:#f2f7fd}
+.admin-password-field span{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.admin-password-field input,.admin-actions input[type=text],.admin-actions input[type=password]{min-width:220px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text)}
 .admin-toolbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:18px}
 .admin-toolbar h2{margin:0 0 8px 0}
 .admin-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.admin-actions input[type=text]{min-width:220px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text)}
 .admin-table td:last-child{text-align:center}
 .run-admin-cell{display:grid;gap:6px}
 .run-admin-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
@@ -256,5 +259,5 @@ linear-gradient(180deg,rgba(8,18,32,0.98),rgba(7,19,38,0.94))}
 .status-card span{display:block;color:var(--muted);line-height:1.5}
 @media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.sidebar .panel{height:auto}.video-modal iframe{height:320px}.home-hero{grid-template-columns:1fr;min-height:auto}.home-copy,.hero-stage{padding:24px 22px}.hero-stats,.home-section-grid,.spotlight-grid{grid-template-columns:1fr}.spotlight-panel{grid-template-columns:1fr;padding:24px 22px}.list-hero-panel,.table-header,.search-row,.roulette-head{flex-direction:column;align-items:flex-start}.control-select{max-width:none;width:100%}.roulette-shell{grid-template-columns:1fr}.discord-panel{flex-direction:column;align-items:flex-start;padding:22px 20px}.discord-panel h2{font-size:1.55rem}.discord-actions{width:100%;justify-content:flex-start}.rules-view header{padding:16px 18px}.rules-view header h1{font-size:1.55rem}.rules-page{padding:24px 20px}.rules-page h2{font-size:1.65rem}}
 @media(max-width:900px){.error-grid{grid-template-columns:1fr}.error-copy,.error-side{padding:24px 20px}.error-copy h2{font-size:2.5rem}}
-@media(max-width:900px){.admin-overview-panel,.admin-toolbar{flex-direction:column;align-items:stretch}.admin-actions{flex-direction:column;align-items:stretch}.admin-actions input[type=text]{min-width:0;width:100%}.run-shell{grid-template-columns:1fr}.run-head{flex-direction:column;align-items:flex-start}.run-form{grid-template-columns:1fr}}
+@media(max-width:900px){.admin-overview-panel,.admin-toolbar{flex-direction:column;align-items:stretch}.admin-actions{flex-direction:column;align-items:stretch}.admin-password-field input,.admin-actions input[type=text],.admin-actions input[type=password]{min-width:0;width:100%}.run-shell{grid-template-columns:1fr}.run-head{flex-direction:column;align-items:flex-start}.run-form{grid-template-columns:1fr}}
 @media(max-width:640px){header{flex-direction:column;align-items:flex-start;gap:12px}nav{display:flex;flex-wrap:wrap;gap:10px}nav a{margin-left:0}.home-copy h2{max-width:none}.hero-actions{flex-direction:column;align-items:stretch}.hero-actions .btn,.roulette-btn{width:100%;text-align:center}.list-hero-panel,.list-controls-panel,.list-table-panel,.roulette-panel,.roulette-rules-card,.run-panel,.run-side-panel,.submission-panel{padding:22px 18px}.table-hint{text-align:left}.run-admin-actions{justify-content:flex-start}}

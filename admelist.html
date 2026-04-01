@@ -25,9 +25,16 @@
         <h2>Manage the live list and incoming runs</h2>
         <p class="muted">Use the first panel to edit placements and the second panel to review new run submissions.</p>
       </div>
-      <div class="admin-overview-badges">
-        <span>Live list editor</span>
-        <span>Run moderation</span>
+      <div class="admin-access-panel">
+        <div class="admin-overview-badges">
+          <span>Live list editor</span>
+          <span>Run moderation</span>
+        </div>
+        <label class="admin-password-field" for="admin-password">
+          <span>Admin password</span>
+          <input id="admin-password" type="password" placeholder="Enter server password" autocomplete="current-password" />
+        </label>
+        <p id="admin-auth-status" class="muted">Saved only in this browser session.</p>
       </div>
     </section>
 
