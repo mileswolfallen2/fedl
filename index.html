@@ -17,48 +17,92 @@
     </nav>
   </header>
   <main>
-    <section class="wip-hero">
-      <div class="wip-copy">
-        <p class="hero-kicker">Under Construction</p>
-        <h2>We’re building something way better than a blank page.</h2>
-        <p class="hero-text">The FEDL site is currently being rebuilt. The fresh version is on the way with cleaner pages, sharper browsing, and more polished Geometry Dash chaos.</p>
+    <section class="home-hero">
+      <div class="home-copy panel">
+        <p class="hero-kicker">FEDL Hub</p>
+        <h2>Track the list, learn the rules, and jump straight into the chaos.</h2>
+        <p class="hero-text">FEDL is your quick home base for browsing ranked demons, checking submission rules, spinning a roulette challenge, and keeping up with the list without digging through a bunch of scattered pages.</p>
 
         <div class="hero-actions">
-          <a class="btn" href="lists.html">Browse Lists</a>
-          <a class="btn ghost-btn" href="rules.html">Read Rules</a>
-          <a class="btn ghost-btn" href="roulette.html">Try Roulette</a>
+          <a class="btn" href="lists.html">Open The List</a>
+          <a class="btn ghost-btn" href="rules.html">Submission Rules</a>
+          <a class="btn ghost-btn" href="roulette.html">Spin Roulette</a>
+        </div>
+
+        <div class="hero-stats" aria-label="FEDL overview">
+          <article class="stat-card">
+            <strong id="hero-total-levels">--</strong>
+            <span>Ranked levels loaded</span>
+          </article>
+          <article class="stat-card">
+            <strong id="hero-top-entry">--</strong>
+            <span>Current #1 entry</span>
+          </article>
+          <article class="stat-card">
+            <strong id="hero-last-slot">--</strong>
+            <span>Current last ranked slot</span>
+          </article>
         </div>
       </div>
 
-      <div class="wip-stage" aria-hidden="true">
-        <div class="construction-card">
-          <span class="construction-pill">WIP</span>
-          <div class="construction-grid">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="progress-shell">
-            <div class="progress-bar"></div>
-          </div>
-          <p>Polishing pages, tuning visuals, and making room for more demon-fueled nonsense.</p>
+      <aside class="hero-stage panel">
+        <p class="stage-label">Live Snapshot</p>
+        <h3>Featured list picks</h3>
+        <p class="muted">A fast preview of what is waiting inside the list page right now.</p>
+        <div class="featured-list" id="featured-list">
+          <article class="featured-card">
+            <span class="featured-rank">#--</span>
+            <strong>Loading list data...</strong>
+            <p>Pulling the latest entries for the homepage preview.</p>
+          </article>
         </div>
-      </div>
+      </aside>
     </section>
 
-    <section class="wip-status-grid">
-      <article class="panel status-panel">
-        <p class="status-label">Current Status</p>
-        <h3>Major redesign in progress</h3>
-        <p class="muted">The homepage is temporarily acting as a progress screen while the rest of the site gets cleaned up.</p>
+    <section class="home-section-grid">
+      <article class="panel info-panel">
+        <p class="status-label">Browse Faster</p>
+        <h3>The list page is built for quick checking</h3>
+        <p class="muted">Search by title, jump between rank ranges, and open completion videos without leaving the site.</p>
+        <a class="text-link" href="lists.html">Go to lists</a>
       </article>
 
-      <article class="panel status-panel">
-        <p class="status-label">What Still Works</p>
-        <h3>Lists, rules, and roulette</h3>
-        <p class="muted">You can still jump into the core sections while the extra pages are being finished.</p>
+      <article class="panel info-panel">
+        <p class="status-label">Stay Legit</p>
+        <h3>The rules page explains what submissions need</h3>
+        <p class="muted">Use it to review raw footage requirements, mod rules, skip policies, and approval expectations before you submit.</p>
+        <a class="text-link" href="rules.html">Read the rules</a>
       </article>
+
+      <article class="panel info-panel">
+        <p class="status-label">Need A Challenge</p>
+        <h3>Roulette gives you a random demon instantly</h3>
+        <p class="muted">Great for practice sessions, challenge runs, or picking something painful when you cannot decide.</p>
+        <a class="text-link" href="roulette.html">Try roulette</a>
+      </article>
+    </section>
+
+    <section class="panel spotlight-panel">
+      <div class="spotlight-copy">
+        <p class="status-label">Start Here</p>
+        <h2>What you can do on FEDL</h2>
+        <p class="spotlight-text">This site is meant to be simple: find ranked demons, watch linked runs, check moderation expectations, and get back to playing without unnecessary clutter.</p>
+      </div>
+
+      <div class="spotlight-grid">
+        <article class="spotlight-card">
+          <h3>Lists</h3>
+          <p>Browse the ranking, filter by placement ranges, and watch linked videos from each entry.</p>
+        </article>
+        <article class="spotlight-card">
+          <h3>Rules</h3>
+          <p>Check completion requirements, accepted tools, and what moderators expect from a valid run.</p>
+        </article>
+        <article class="spotlight-card">
+          <h3>Roulette</h3>
+          <p>Pull a random demon with rank and level ID details for your next roulette attempt.</p>
+        </article>
+      </div>
     </section>
 
     <section class="panel discord-panel">
@@ -73,7 +117,7 @@
           </div>
         </div>
 
-        <p class="discord-text">Join the FEDL Discord to ask questions about rules, talk about levels, share progress, report issues, and get help from moderators and other players.</p>
+        <p class="discord-text">Join the FEDL Discord to ask about rules, talk about placements, share progress, report problems, and get help from moderators and other players.</p>
 
         <div class="discord-highlights">
           <span>Rule help</span>

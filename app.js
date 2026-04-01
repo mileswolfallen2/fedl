@@ -137,6 +137,55 @@
     }).catch(()=>null);
   }
 
+  if(page==='index'){
+    const totalEl = qs('hero-total-levels');
+    const topEl = qs('hero-top-entry');
+    const lastEl = qs('hero-last-slot');
+    const featuredListEl = qs('featured-list');
+
+    function renderFeatured(items){
+      if(!featuredListEl) return;
+      const rankedItems = items.slice().sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+      const featured = rankedItems.slice(0, 3);
+      if(!featured.length){
+        featuredListEl.innerHTML = `
+          <article class="featured-card">
+            <span class="featured-rank">#--</span>
+            <strong>No list data found</strong>
+            <p>The homepage preview could not load any FEDL entries yet.</p>
+          </article>
+        `;
+        return;
+      }
+
+      featuredListEl.innerHTML = featured.map(item=>`
+        <article class="featured-card">
+          <span class="featured-rank">#${escapeHtml(item.position || '--')}</span>
+          <strong>${escapeHtml(item.title || 'Untitled')}</strong>
+          <p>${item.url ? 'Video link is ready from the list page.' : 'This entry does not have a linked video yet.'}</p>
+        </article>
+      `).join('');
+    }
+
+    function renderHome(items){
+      const rankedItems = items.slice().sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+      const firstItem = rankedItems[0];
+      const lastItem = rankedItems[rankedItems.length - 1];
+
+      if(totalEl) totalEl.textContent = String(rankedItems.length || 0);
+      if(topEl) topEl.textContent = firstItem ? firstItem.title : 'Unavailable';
+      if(lastEl) lastEl.textContent = lastItem && lastItem.position ? `#${lastItem.position}` : '--';
+      renderFeatured(rankedItems);
+    }
+
+    loadItems().then(renderHome).catch(()=>{
+      renderHome([]);
+    });
+
+    bindLiveUpdates();
+    onLiveUpdate(renderHome);
+  }
+
   if(page==='roulette'){
     const spinBtn = qs('roulette-spin');
     const statusEl = qs('roulette-status');
