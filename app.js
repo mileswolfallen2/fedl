@@ -452,6 +452,9 @@
   }
 
   if(page==='admelist'){
+    const loginScreenEl = qs('admin-login-screen');
+    const adminShellContentEl = qs('admin-shell-content');
+    const loginFormEl = qs('admin-login-form');
     const statusEl = qs('admin-status');
     const listTbody = qs('admin-list-body');
     const addBtn = qs('add-row');
@@ -481,7 +484,7 @@
         authStatusEl.textContent = password
           ? 'Password saved for this browser session.'
           : 'Saved only in this browser session.';
-        authStatusEl.classList.remove('error-text');
+        if(password) authStatusEl.classList.remove('error-text');
       }
     }
 
@@ -496,7 +499,52 @@
 
     function handleAdminAuthFailure(message, targetSetter){
       setAdminPassword('');
+      document.body.classList.add('admin-locked');
+      if(adminShellContentEl) adminShellContentEl.hidden = true;
+      if(loginScreenEl) loginScreenEl.hidden = false;
       targetSetter(message || 'Admin password required or incorrect.', true);
+    }
+
+    function unlockAdminShell(){
+      document.body.classList.remove('admin-locked');
+      if(loginScreenEl) loginScreenEl.hidden = true;
+      if(adminShellContentEl) adminShellContentEl.hidden = false;
+    }
+
+    function verifyAdminPassword(){
+      if(!getAdminPassword()){
+        handleAdminAuthFailure('Enter the admin password to continue.', function(message, isError){
+          if(!authStatusEl) return;
+          authStatusEl.textContent = message;
+          authStatusEl.classList.toggle('error-text', !!isError);
+        });
+        return Promise.resolve(false);
+      }
+      return fetch(`${liveRunsUrl}/__authcheck__`, {
+        method:'DELETE',
+        headers:authHeaders()
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(r.status !== 404) throw new Error('Admin verify failed');
+        return true;
+      }).then(ok=>{
+        unlockAdminShell();
+        if(authStatusEl){
+          authStatusEl.textContent = 'Access granted for this browser session.';
+          authStatusEl.classList.remove('error-text');
+        }
+        loadAdmin();
+        loadRunsAdmin();
+        return ok;
+      }).catch(err=>{
+        console.error(err);
+        handleAdminAuthFailure('Wrong admin password. Try again.', function(message, isError){
+          if(!authStatusEl) return;
+          authStatusEl.textContent = message;
+          authStatusEl.classList.toggle('error-text', !!isError);
+        });
+        return false;
+      });
     }
 
     function setStatus(message, isError){
@@ -839,8 +887,16 @@
     }
     if(adminPasswordEl){
       setAdminPassword(getAdminPassword());
-      adminPasswordEl.addEventListener('input', function(){
-        setAdminPassword(adminPasswordEl.value.trim());
+    }
+    if(loginFormEl){
+      loginFormEl.addEventListener('submit', function(event){
+        event.preventDefault();
+        setAdminPassword((adminPasswordEl && adminPasswordEl.value || '').trim());
+        if(authStatusEl){
+          authStatusEl.textContent = 'Checking password...';
+          authStatusEl.classList.remove('error-text');
+        }
+        verifyAdminPassword();
       });
     }
 
@@ -863,8 +919,15 @@
       setRunsStatus('Run queue reloaded from the live server.');
     });
 
-    loadAdmin();
-    loadRunsAdmin();
+    if(getAdminPassword()){
+      verifyAdminPassword();
+    }else{
+      handleAdminAuthFailure('Enter the admin password to continue.', function(message, isError){
+        if(!authStatusEl) return;
+        authStatusEl.textContent = message;
+        authStatusEl.classList.toggle('error-text', !!isError);
+      });
+    }
   }
 
   if(page==='run'){

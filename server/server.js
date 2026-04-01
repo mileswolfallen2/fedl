@@ -297,10 +297,6 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if ((pathname === '/admelist.html' || pathname === '/admelist') && !requireAdmin(req, res)) {
-    return;
-  }
-
   serveFile(pathname, res);
 });
 

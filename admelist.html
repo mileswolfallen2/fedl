@@ -6,8 +6,8 @@
   <title>Edit List - GD fedl</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body data-page="admelist">
-  <header>
+<body data-page="admelist" class="admin-locked">
+  <header id="admin-page-header">
     <h1>FEDL Admin</h1>
     <nav>
       <a href="index.html">Home</a>
@@ -19,22 +19,34 @@
     </nav>
   </header>
   <main class="admin-shell">
+    <section id="admin-login-screen" class="admin-login-screen">
+      <div class="admin-login-card">
+        <p class="hero-kicker">Admin Access</p>
+        <h2>Enter the admin password</h2>
+        <p class="muted">Submit the server password to unlock the list editor and run moderation tools.</p>
+        <form id="admin-login-form" class="admin-login-form">
+          <label class="admin-password-field" for="admin-password">
+            <span>Admin password</span>
+            <input id="admin-password" type="password" placeholder="Enter server password" autocomplete="current-password" />
+          </label>
+          <div class="admin-login-actions">
+            <button id="admin-login-submit" type="submit" class="btn">Submit</button>
+            <p id="admin-auth-status" class="muted">Saved only in this browser session.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="admin-shell-content" class="admin-shell-content" hidden>
     <section class="panel admin-overview-panel">
       <div>
         <p class="hero-kicker">Control Center</p>
         <h2>Manage the live list and incoming runs</h2>
         <p class="muted">Use the first panel to edit placements and the second panel to review new run submissions.</p>
       </div>
-      <div class="admin-access-panel">
-        <div class="admin-overview-badges">
-          <span>Live list editor</span>
-          <span>Run moderation</span>
-        </div>
-        <label class="admin-password-field" for="admin-password">
-          <span>Admin password</span>
-          <input id="admin-password" type="password" placeholder="Enter server password" autocomplete="current-password" />
-        </label>
-        <p id="admin-auth-status" class="muted">Saved only in this browser session.</p>
+      <div class="admin-overview-badges">
+        <span>Live list editor</span>
+        <span>Run moderation</span>
       </div>
     </section>
 
@@ -94,6 +106,7 @@
           <tbody id="run-admin-body"></tbody>
         </table>
       </div>
+    </section>
     </section>
   </main>
   <script src="app.js"></script>
