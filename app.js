@@ -10,6 +10,34 @@
   const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
   const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
+  const offlinePage = 'offlineindex.html';
+
+  function redirectToOffline(){
+    if(window.location.pathname.endsWith(`/${offlinePage}`)) return;
+    window.location.replace(offlinePage);
+  }
+
+  function probeLiveServer(timeoutMs = 5000){
+    const controller = new AbortController();
+    const timeoutId = setTimeout(()=>controller.abort(), timeoutMs);
+    return fetch(liveServerBase, {
+      method:'HEAD',
+      cache:'no-store',
+      signal: controller.signal
+    }).then(response => {
+      clearTimeout(timeoutId);
+      return response;
+    }).catch(error => {
+      clearTimeout(timeoutId);
+      throw error;
+    });
+  }
+
+  if(!window.location.pathname.endsWith(`/${offlinePage}`)){
+    probeLiveServer().catch(()=>{
+      redirectToOffline();
+    });
+  }
   let cachedItems = null;
   let cachedRuns = null;
   let cachedLevelMeta = null;
