@@ -99,6 +99,53 @@ node server/server.js
 http://127.0.0.1:8090/fedl/
 ```
 
+## React App Version
+
+A React-based version of the site is available in the `app/` directory. This provides the same functionality with a modern component architecture.
+
+### Building the React Web App
+
+1. Navigate to the app directory:
+   ```bash
+   cd app
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Build for production:
+   ```bash
+   npm run build
+   ```
+
+### Building Native Desktop Apps
+
+The React app can be packaged as native desktop applications for macOS and Windows using Electron.
+
+1. In the `app/` directory, install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Run in development:
+   ```bash
+   npm run electron
+   ```
+
+3. Build installers:
+   - macOS: `npm run dist`
+   - Windows: `npm run dist -- --win`
+   - Both: `npm run dist -- --mac --win`
+
+Built installers will be in `app/dist-electron/`.
+
 To expose it on your local network:
 
 ```bash
