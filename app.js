@@ -528,18 +528,149 @@
 
   // Players page
   if(page==='players'){
-    const form = qs('player-form'); const nameIn = qs('player-name'); const list = qs('players');
-    if(!form || !nameIn || !list) return;
-    let players = read('gd_players',[]);
-    function render(){list.innerHTML=''; players.forEach((p,idx)=>{
-      const li=document.createElement('li'); li.innerHTML=`<span><span class="name">${escapeHtml(p.name)}</span> <span class="muted">(${p.id})</span></span>`;
-      const actions=document.createElement('div'); actions.className='actions';
-      const edit=document.createElement('button'); edit.textContent='Edit'; edit.onclick=()=>{const nv=prompt('Edit name',p.name); if(nv){players[idx].name=nv; write('gd_players',players); render()}};
-      const del=document.createElement('button'); del.textContent='Delete'; del.onclick=()=>{if(confirm('Delete player?')){players.splice(idx,1); write('gd_players',players); render()}};
-      actions.appendChild(edit); actions.appendChild(del); li.appendChild(actions); list.appendChild(li);
-    })}
-    form.addEventListener('submit',e=>{e.preventDefault(); const name=nameIn.value.trim(); if(!name) return; players.push({id:Date.now().toString(36),name}); write('gd_players',players); nameIn.value=''; render()});
-    render();
+    const playersArea = qs('players-area');
+    const searchEl = qs('search');
+    const filterSelect = qs('group-filter');
+    const groupsEl = qs('player-groups');
+    if(!playersArea || !searchEl || !filterSelect || !groupsEl) return;
+
+    let players = [];
+
+    function getGroupKey(name){
+      const first = String(name || '').trim().charAt(0).toUpperCase();
+      return first.match(/[A-Z0-9]/) ? first : '#';
+    }
+
+    function computeGroups(items){
+      const set = new Set();
+      items.forEach(item => set.add(getGroupKey(item.name)));
+      return Array.from(set).sort((a,b)=> a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b));
+    }
+
+    function setupGroups(items){
+      const groups = computeGroups(items);
+      groupsEl.innerHTML = '';
+      filterSelect.innerHTML = '<option value="all">All players</option>';
+      groups.forEach(group => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = group;
+        btn.className = 'level-link';
+        btn.addEventListener('click', () => {
+          filterSelect.value = group;
+          renderTable();
+          groupsEl.querySelectorAll('.level-link').forEach(el=>el.classList.remove('active'));
+          btn.classList.add('active');
+        });
+        li.appendChild(btn);
+        groupsEl.appendChild(li);
+
+        const opt = document.createElement('option');
+        opt.value = group;
+        opt.textContent = group;
+        filterSelect.appendChild(opt);
+      });
+    }
+
+    function buildPlayers(runs, listItems){
+      const lookup = new Map(listItems.map(item => [String(item.title || '').toLowerCase(), Number(item.position) || 9999]));
+      const map = new Map();
+      runs.filter(run => String(run.status || '').toLowerCase() === 'approved').forEach(run => {
+        const playerName = String(run.playerName || '').trim();
+        if(!playerName) return;
+        const key = playerName.toLowerCase();
+        let entry = map.get(key);
+        if(!entry){
+          entry = {name: playerName, runs: 0, bestRank: 9999, topLevels: new Set()};
+          map.set(key, entry);
+        }
+        entry.runs += 1;
+        const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
+        if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
+        if(run.levelTitle) entry.topLevels.add(String(run.levelTitle).trim());
+      });
+      return Array.from(map.values()).map(entry => ({
+        name: entry.name,
+        runs: entry.runs,
+        bestRank: entry.bestRank === 9999 ? '—' : `#${entry.bestRank}`,
+        topLevels: Array.from(entry.topLevels).slice(0, 3).join(', ')
+      })).sort((a,b) => {
+        if(b.runs !== a.runs) return b.runs - a.runs;
+        const aRank = typeof a.bestRank === 'string' ? Number(a.bestRank.slice(1)) || 9999 : a.bestRank;
+        const bRank = typeof b.bestRank === 'string' ? Number(b.bestRank.slice(1)) || 9999 : b.bestRank;
+        if(aRank !== bRank) return aRank - bRank;
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function renderTable(){
+      const query = String(searchEl.value || '').toLowerCase().trim();
+      const filterValue = filterSelect.value || 'all';
+      const filtered = players.filter(item => {
+        if(filterValue !== 'all' && getGroupKey(item.name) !== filterValue) return false;
+        if(!query) return true;
+        return item.name.toLowerCase().includes(query);
+      });
+
+      playersArea.innerHTML = '';
+      if(!filtered.length){
+        playersArea.innerHTML = '<tr><td colspan="4" class="muted">No server players found.</td></tr>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const tr = document.createElement('tr');
+        const tdName = document.createElement('td'); tdName.textContent = item.name;
+        const tdRuns = document.createElement('td'); tdRuns.textContent = String(item.runs);
+        const tdRank = document.createElement('td'); tdRank.textContent = item.bestRank;
+        const tdLevels = document.createElement('td'); tdLevels.textContent = item.topLevels;
+        tr.appendChild(tdName);
+        tr.appendChild(tdRuns);
+        tr.appendChild(tdRank);
+        tr.appendChild(tdLevels);
+        playersArea.appendChild(tr);
+      });
+    }
+
+    function showLoading(){
+      playersArea.innerHTML = '<tr><td colspan="4" class="muted">Loading player stats from server...</td></tr>';
+    }
+
+    function syncView(newPlayers){
+      players = newPlayers;
+      setupGroups(players);
+      renderTable();
+    }
+
+    function loadPlayerStats(){
+      showLoading();
+      return Promise.all([loadRuns(), loadItems()])
+        .then(([runs, items]) => {
+          const computed = buildPlayers(runs, items);
+          syncView(computed);
+        })
+        .catch(err => {
+          console.error(err);
+          playersArea.innerHTML = '<tr><td colspan="4" class="muted">Could not load server player stats.</td></tr>';
+        });
+    }
+
+    searchEl.addEventListener('input', renderTable);
+    filterSelect.addEventListener('change', () => {
+      const activeBtn = Array.from(groupsEl.querySelectorAll('.level-link')).find(btn => btn.textContent === filterSelect.value);
+      groupsEl.querySelectorAll('.level-link').forEach(btn => btn.classList.toggle('active', btn === activeBtn));
+      renderTable();
+    });
+
+    loadPlayerStats();
+    bindLiveUpdates();
+    onRunsUpdate(() => {
+      loadPlayerStats();
+    });
+    onLiveUpdate(() => {
+      loadPlayerStats();
+    });
   }
 
   function initListPage(){
@@ -668,6 +799,9 @@
     const runsStatusEl = qs('runs-admin-status');
     const runsTbody = qs('run-admin-body');
     const runSearchEl = qs('run-search');
+    const importStatusEl = qs('import-status');
+    const importPointercrateBtn = qs('import-pointercrate');
+    const importAredlBtn = qs('import-aredl');
     let items = [];
     let runs = [];
     const adminPasswordKey = 'fedl_admin_password';
@@ -1093,6 +1227,54 @@
     if(adminPasswordEl){
       setAdminPassword(getAdminPassword());
     }
+
+    function setImportStatus(message, isError){
+      if(!importStatusEl) return;
+      importStatusEl.textContent = message;
+      importStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function toggleImportButtons(enabled){
+      [importPointercrateBtn, importAredlBtn].forEach(btn=>{ if(btn) btn.disabled = !enabled; });
+    }
+
+    function runImport(path, label){
+      setImportStatus(`Importing ${label} runs...`);
+      toggleImportButtons(false);
+      return fetch(path, {
+        method: 'POST',
+        headers: authHeaders({'Content-Type':'application/json'})
+      }).then(async response => {
+        const payload = await response.json().catch(()=>({}));
+        if(response.status === 401){
+          throw new Error('Admin auth failed');
+        }
+        if(!response.ok){
+          throw new Error(payload.error || `Import failed with status ${response.status}`);
+        }
+        return payload;
+      }).then(payload => {
+        setImportStatus(`${label} import complete. Added ${payload.added || 0} runs, skipped ${payload.skipped || 0}.`);
+        refreshRuns().catch(()=>{});
+      }).catch(error => {
+        console.error(error);
+        if(error.message === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above, then try again.', setImportStatus);
+          return;
+        }
+        setImportStatus(error.message || 'Import failed.', true);
+      }).finally(()=>{
+        toggleImportButtons(true);
+      });
+    }
+
+    if(importPointercrateBtn){
+      importPointercrateBtn.addEventListener('click', ()=> runImport('/api/import/pointercrate', 'Pointercrate'));
+    }
+    if(importAredlBtn){
+      importAredlBtn.addEventListener('click', ()=> runImport('/api/import/aredl', 'AREDL'));
+    }
+
     if(loginFormEl){
       loginFormEl.addEventListener('submit', function(event){
         event.preventDefault();

@@ -109,6 +109,20 @@
         </table>
       </div>
     </section>
+
+    <section class="panel admin-panel">
+      <div class="admin-toolbar">
+        <div>
+          <p class="hero-kicker">Import external runs</p>
+          <h2>Pointercrate / AREDL</h2>
+          <p id="import-status" class="muted">Import runs from external demonlists. AREDL import requires a server-side API key or access token. Imports run one page at a time to avoid rate limiting.</p>
+        </div>
+        <div class="admin-actions">
+          <button id="import-pointercrate" type="button" class="btn ghost-btn">Import Pointercrate</button>
+          <button id="import-aredl" type="button" class="btn ghost-btn">Import AREDL</button>
+        </div>
+      </div>
+    </section>
     </section>
   </main>
   <script src="app.js"></script>

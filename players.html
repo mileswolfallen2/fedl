@@ -19,26 +19,60 @@
       <a href="admelist.html">Admin</a>
     </nav>
   </header>
-  <main>
-    <section class="coming-shell">
-      <div class="coming-orb orb-one" aria-hidden="true"></div>
-      <div class="coming-orb orb-two" aria-hidden="true"></div>
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="panel list-sidebar-panel">
+        <p class="sidebar-kicker">Quick jump</p>
+        <h2>Player groups</h2>
+        <p class="muted">Jump to players by first letter.</p>
+        <ul id="player-groups"></ul>
+      </div>
+    </aside>
 
-      <article class="panel coming-panel">
-        <p class="hero-kicker">Players Page</p>
-        <h2>Coming soon</h2>
-        <p class="coming-text">We’re still cooking this page. The roster will show up here once it is done being dramatically overdesigned.</p>
+    <section class="content list-page-shell">
+      <section class="panel list-hero-panel">
+        <div class="list-hero-copy">
+          <p class="hero-kicker">Player tracker</p>
+          <h2 id="list-title">Local player roster</h2>
+          <p class="muted list-hero-text">Manage your player list in browser storage with the same searchable table experience as the FEDL demonlist UI.</p>
+        </div>
+        <div class="list-hero-badge">
+          <strong>Local only</strong>
+          <span>Player names are stored in this browser only.</span>
+        </div>
+      </section>
 
-        <div class="coming-loader" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
+      <section class="panel list-controls-panel">
+        <div class="search-row">
+          <label class="control-block" for="search">
+            <span>Search</span>
+            <input id="search" type="text" placeholder="Search player names..." />
+          </label>
+          <label class="control-block control-select" for="group-filter">
+            <span>Filter</span>
+            <select id="group-filter"><option value="all">All players</option></select>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel list-table-panel">
+        <div class="table-header">
+          <div>
+            <p class="status-label">Player table</p>
+            <h3>Saved players</h3>
+          </div>
+          <p class="muted table-hint">Use the search box or letter filter to locate players quickly.</p>
         </div>
 
-        <p class="dad-joke">I was going to make a Geometry Dash joke... but I kept missing the timing.</p>
-
-        <a class="btn" href="index.html">Back Home</a>
-      </article>
+        <div class="table-wrap">
+          <table class="levels-table">
+            <thead>
+              <tr><th>Name</th><th style="width:120px">Runs</th><th style="width:120px">Best rank</th><th style="width:180px">Top levels</th></tr>
+            </thead>
+            <tbody id="players-area"></tbody>
+          </table>
+        </div>
+      </section>
     </section>
   </main>
   <script src="app.js"></script>

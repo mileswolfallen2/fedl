@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FEDL Offline</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>FEDL Maintenance</h1>
+    <nav>
+      <a href="lists.html">Lists</a>
+      <a href="players.html">Players</a>
+      <a href="run.html">Submit Run</a>
+      <a href="rules.html">Rules</a>
+      <a href="roulette.html">Roulette</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel">
+      <p class="hero-kicker">Server Offline</p>
+      <h2>The FEDL backend is currently down</h2>
+      <p class="hero-text">The site is being worked on or the server is offline. This static fallback page is available while the live API is unavailable.</p>
+      <div class="hero-actions">
+        <a class="btn" href="lists.html">Browse static list</a>
+        <a class="btn ghost-btn" href="players.html">View players</a>
+        <a class="btn ghost-btn" href="rules.html">Read rules</a>
+      </div>
+    </section>
+
+    <section class="layout">
+      <article class="panel info-panel">
+        <p class="status-label">Maintenance Mode</p>
+        <h3>Live data is not available</h3>
+        <p class="muted">The server-side list and run services are currently offline. Please check back once the maintenance is complete.</p>
+      </article>
+
+      <article class="panel info-panel">
+        <p class="status-label">Static access only</p>
+        <h3>Local pages still work</h3>
+        <p class="muted">This page is designed to display even when the backend cannot respond.</p>
+      </article>
+
+      <article class="panel info-panel">
+        <p class="status-label">Try again soon</p>
+        <h3>We&apos;ll be back shortly</h3>
+        <p class="muted">Refresh this page after a few minutes to see if the FEDL server is back online.</p>
+      </article>
+    </section>
+
+    <section class="panel spotlight-panel">
+      <div class="spotlight-copy">
+        <p class="status-label">What changed</p>
+        <h2>One index page for maintenance</h2>
+        <p class="spotlight-text">This version of `1index.html` is meant for server downtime and repair work. It keeps the same visual style but avoids live data loading.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
