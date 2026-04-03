@@ -113,16 +113,72 @@
     <section class="panel admin-panel">
       <div class="admin-toolbar">
         <div>
-          <p class="hero-kicker">Import external runs</p>
-          <h2>Pointercrate / AREDL</h2>
-          <p id="import-status" class="muted">Import runs from external demonlists. AREDL import requires a server-side API key or access token. Imports run one page at a time to avoid rate limiting.</p>
+          <p class="hero-kicker">Import tool</p>
+          <h2>External lists & bulk approve</h2>
+          <p id="import-status" class="muted">Pull records from Pointercrate or AREDL (AREDL needs a server API key or token). Targeted import loads victories from the API by player or level, adds them as approved runs with notes set to “Valid run”. Bulk approve approves pending FEDL submissions only. Full imports run one page at a time to limit rate usage.</p>
         </div>
-        <div class="admin-actions">
+        <div class="admin-actions admin-import-actions">
           <button id="import-pointercrate" type="button" class="btn ghost-btn">Import Pointercrate</button>
           <button id="import-aredl" type="button" class="btn ghost-btn">Import AREDL</button>
+          <button id="import-targeted-open" type="button" class="btn ghost-btn">Import by player or level…</button>
+          <button id="bulk-approve-open" type="button" class="btn ghost-btn">Bulk-approve by player…</button>
         </div>
       </div>
     </section>
+
+    <div id="import-targeted-modal" class="video-modal bulk-approve-modal" hidden>
+      <div class="inner bulk-approve-modal-card" role="dialog" aria-modal="true" aria-labelledby="import-targeted-title">
+        <p class="hero-kicker">Import tool</p>
+        <h2 id="import-targeted-title">Import victories from API</h2>
+        <p class="muted">Choose a list, match by player or level, then import. New runs are <strong>approved</strong> with submission and review notes <strong>Valid run</strong>. Duplicates (same video URL) are skipped.</p>
+        <form id="import-targeted-form" class="admin-login-form bulk-approve-form">
+          <label class="admin-password-field" for="import-targeted-source">
+            <span>List API</span>
+            <select id="import-targeted-source" required>
+              <option value="pointercrate">Pointercrate</option>
+              <option value="aredl">AREDL</option>
+            </select>
+          </label>
+          <div class="import-targeted-mode">
+            <span class="import-targeted-mode-label">Match</span>
+            <label class="import-targeted-radio"><input type="radio" name="import-targeted-filter" value="player" checked /> Player</label>
+            <label class="import-targeted-radio"><input type="radio" name="import-targeted-filter" value="level" /> Level</label>
+          </div>
+          <label class="admin-password-field" for="import-targeted-query">
+            <span id="import-targeted-query-label">Player name</span>
+            <input id="import-targeted-query" type="text" placeholder="Name as on the list" autocomplete="off" required />
+          </label>
+          <p class="muted small import-targeted-hint">Pointercrate: use the <strong>exact</strong> player or demon name from the list, or a numeric id (player id / demon id). The old API filters were unreliable; names are resolved correctly now. AREDL prefers an exact name match, then substring, across scanned pages.</p>
+          <div class="admin-login-actions bulk-approve-actions">
+            <button type="submit" class="btn" id="import-targeted-submit">Import as valid runs</button>
+            <button type="button" class="btn ghost-btn" id="import-targeted-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="bulk-approve-modal" class="video-modal bulk-approve-modal" hidden>
+      <div class="inner bulk-approve-modal-card" role="dialog" aria-modal="true" aria-labelledby="bulk-approve-title">
+        <p class="hero-kicker">Import tool</p>
+        <h2 id="bulk-approve-title">Bulk-approve by player</h2>
+        <p class="muted">Only submissions still marked <strong>pending</strong> are updated. Approved and rejected runs are left unchanged.</p>
+        <form id="bulk-approve-form" class="admin-login-form bulk-approve-form">
+          <label class="admin-password-field" for="bulk-approve-player">
+            <span>Player name</span>
+            <input id="bulk-approve-player" type="text" placeholder="Exact name from the run queue" autocomplete="off" required />
+          </label>
+          <p id="bulk-approve-preview" class="muted" aria-live="polite"></p>
+          <label class="admin-password-field" for="bulk-approve-notes">
+            <span>Review notes (optional)</span>
+            <input id="bulk-approve-notes" type="text" placeholder="Shown on each approved run" autocomplete="off" />
+          </label>
+          <div class="admin-login-actions bulk-approve-actions">
+            <button type="submit" class="btn" id="bulk-approve-submit">Approve all pending</button>
+            <button type="button" class="btn ghost-btn" id="bulk-approve-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
     </section>
   </main>
   <script src="app.js"></script>

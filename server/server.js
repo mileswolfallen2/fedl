@@ -162,7 +162,8 @@ function normalizeImportedRun(payload, source) {
   });
 }
 
-function appendImportedRuns(importedRuns, source) {
+function appendImportedRuns(importedRuns, source, options) {
+  const validRunNote = options && String(options.validRunNote || '').trim();
   const currentRuns = readRuns();
   const seen = new Set(currentRuns.map(run => String(run.videoUrl || '').trim().toLowerCase()).filter(Boolean));
   const newRuns = [];
@@ -172,7 +173,8 @@ function appendImportedRuns(importedRuns, source) {
     const normalizedUrl = videoUrl.toLowerCase();
     if (seen.has(normalizedUrl)) return;
     seen.add(normalizedUrl);
-    newRuns.push(normalizeImportedRun(run, source));
+    const payload = validRunNote ? Object.assign({}, run, { notes: validRunNote, reviewNotes: validRunNote }) : run;
+    newRuns.push(normalizeImportedRun(payload, source));
   });
   if (newRuns.length) {
     writeRuns(newRuns.concat(currentRuns));
@@ -185,10 +187,17 @@ function appendImportedRuns(importedRuns, source) {
   };
 }
 
-async function fetchPointercrateRecords(maxPages = 20, perPage = 100) {
+function getLinkHeader(res) {
+  return res.headers.get('link') || res.headers.get('Link') || res.headers.get('links') || '';
+}
+
+async function fetchPointercrateRecordsStartingAt(startUrl, maxPages = 25) {
   const results = [];
-  let nextUrl = `https://pointercrate.com/api/v1/records/?limit=${perPage}&status=approved`;
+  let nextUrl = startUrl;
   for (let page = 0; page < maxPages && nextUrl; page += 1) {
+    if (page > 0) {
+      await sleep(1000);
+    }
     const res = await fetchWithRetry(nextUrl, {
       headers: {
         Accept: 'application/json',
@@ -196,23 +205,209 @@ async function fetchPointercrateRecords(maxPages = 20, perPage = 100) {
       }
     });
     if (!res.ok) {
-      throw new Error(`Pointercrate API responded with ${res.status}`);
+      const text = await res.text();
+      throw new Error(`Pointercrate API responded with ${res.status}: ${text.slice(0, 280)}`);
     }
     const items = await res.json();
     if (!Array.isArray(items)) {
       throw new Error('Unexpected pointercrate API response');
     }
     results.push(...items);
-    const linkHeader = res.headers.get('link') || res.headers.get('Link');
-    const links = parseLinkHeader(linkHeader);
-    if (links.next) {
-      await sleep(1000);
-      nextUrl = new URL(links.next, 'https://pointercrate.com').toString();
-      continue;
-    }
-    break;
+    const links = parseLinkHeader(getLinkHeader(res));
+    nextUrl = links.next ? new URL(links.next, 'https://pointercrate.com').toString() : null;
   }
   return results;
+}
+
+async function fetchPointercrateRecords(maxPages = 20, perPage = 100) {
+  const qs = new URLSearchParams({ limit: String(perPage), status: 'approved' }).toString();
+  return fetchPointercrateRecordsStartingAt(`https://pointercrate.com/api/v1/records/?${qs}`, maxPages);
+}
+
+/** Records API `player=` expects numeric id, not display name. Resolve name → id via /players/. */
+async function resolvePointercratePlayerIds(rawQuery) {
+  const q = String(rawQuery || '').trim();
+  if (!q) {
+    return [];
+  }
+  if (/^\d+$/.test(q)) {
+    return [q];
+  }
+  const ql = q.toLowerCase();
+  const headers = { Accept: 'application/json', 'User-Agent': 'FEDL Importer' };
+  const exactParams = new URLSearchParams({ limit: '100', name: q });
+  let players = await fetchPointercrateRecordsStartingAt(`https://pointercrate.com/api/v1/players/?${exactParams}`, 20);
+  let ids = players
+    .filter(p => p && p.name && String(p.name).trim().toLowerCase() === ql)
+    .map(p => String(p.id));
+  if (ids.length) {
+    return [...new Set(ids)];
+  }
+  const containsParams = new URLSearchParams({ limit: '100', name_contains: q });
+  players = await fetchPointercrateRecordsStartingAt(`https://pointercrate.com/api/v1/players/?${containsParams}`, 30);
+  ids = players
+    .filter(p => p && p.name && String(p.name).trim().toLowerCase() === ql)
+    .map(p => String(p.id));
+  if (ids.length) {
+    return [...new Set(ids)];
+  }
+  const loose = players.filter(
+    p => p && p.name && String(p.name).toLowerCase().includes(ql)
+  );
+  if (loose.length === 1) {
+    return [String(loose[0].id)];
+  }
+  if (loose.length > 1) {
+    throw new Error(
+      `Multiple Pointercrate players match "${q}". Use the exact list name or open the player on pointercrate.com and use their numeric id.`
+    );
+  }
+  throw new Error(
+    `No Pointercrate player matched "${q}". Check spelling or paste the numeric player id from the list profile.`
+  );
+}
+
+async function fetchPointercrateRecordsForPlayerIds(playerIds) {
+  const seen = new Set();
+  const out = [];
+  for (let i = 0; i < playerIds.length; i += 1) {
+    const id = playerIds[i];
+    const qs = new URLSearchParams({ limit: '100', status: 'approved', player: id });
+    const url = `https://pointercrate.com/api/v1/records/?${qs}`;
+    const chunk = await fetchPointercrateRecordsStartingAt(url, 30);
+    for (const r of chunk) {
+      const rid = r && r.id != null ? r.id : null;
+      if (rid != null && !seen.has(rid)) {
+        seen.add(rid);
+        out.push(r);
+      }
+    }
+    if (i < playerIds.length - 1) {
+      await sleep(600);
+    }
+  }
+  return out;
+}
+
+function filterPointercrateRecordsByQuery(records, filter, rawQuery) {
+  const trimmed = String(rawQuery || '').trim();
+  if (!trimmed) {
+    return [];
+  }
+  const ql = trimmed.toLowerCase();
+  if (filter === 'player') {
+    if (/^\d+$/.test(trimmed)) {
+      return records.filter(r => String(r.player && r.player.id != null ? r.player.id : '') === trimmed);
+    }
+    return records.filter(r => {
+      const name = String(r.player && r.player.name ? r.player.name : '')
+        .trim()
+        .toLowerCase();
+      return name === ql;
+    });
+  }
+  if (filter === 'level') {
+    if (/^\d+$/.test(trimmed)) {
+      return records.filter(r => String(r.demon && r.demon.id != null ? r.demon.id : '') === trimmed);
+    }
+    return records.filter(r => {
+      const dname = String(r.demon && r.demon.name ? r.demon.name : r.demon && r.demon.title ? r.demon.title : '')
+        .trim()
+        .toLowerCase();
+      return dname === ql;
+    });
+  }
+  return [];
+}
+
+/**
+ * Pointercrate: `demon_contains` / `player_contains` on records do not match display names reliably.
+ * Player: resolve id via /players/ then records ?player=id. Level: exact demon name or demon_id only.
+ */
+async function fetchPointercrateFiltered(filter, rawQuery) {
+  const query = String(rawQuery || '').trim();
+  if (!query) {
+    throw new Error('Query is required');
+  }
+  if (filter === 'player') {
+    const ids = await resolvePointercratePlayerIds(query);
+    const records = await fetchPointercrateRecordsForPlayerIds(ids);
+    return filterPointercrateRecordsByQuery(records, 'player', query);
+  }
+  if (filter === 'level') {
+    if (/^\d+$/.test(query)) {
+      const qs = new URLSearchParams({ limit: '100', status: 'approved', demon_id: query });
+      const url = `https://pointercrate.com/api/v1/records/?${qs}`;
+      const records = await fetchPointercrateRecordsStartingAt(url, 30);
+      return filterPointercrateRecordsByQuery(records, 'level', query);
+    }
+    const qs = new URLSearchParams({ limit: '100', status: 'approved', demon: query });
+    const url = `https://pointercrate.com/api/v1/records/?${qs}`;
+    const records = await fetchPointercrateRecordsStartingAt(url, 30);
+    const narrowed = filterPointercrateRecordsByQuery(records, 'level', query);
+    if (narrowed.length || !records.length) {
+      return narrowed;
+    }
+    throw new Error(
+      `No approved Pointercrate records for demon "${query}". Use the exact demon name as shown on the list, or the numeric demon id.`
+    );
+  }
+  throw new Error('filter must be player or level');
+}
+
+function filterAredlRecordsByQuery(records, filter, rawQuery) {
+  const trimmed = String(rawQuery || '').trim();
+  if (!trimmed) {
+    return [];
+  }
+  const query = trimmed.toLowerCase();
+  if (filter === 'player') {
+    const exact = records.filter(record => {
+      const a = String(record.submitted_by && record.submitted_by.global_name ? record.submitted_by.global_name : '')
+        .trim()
+        .toLowerCase();
+      const b = String(record.submitted_by && record.submitted_by.username ? record.submitted_by.username : '')
+        .trim()
+        .toLowerCase();
+      return a === query || b === query;
+    });
+    if (exact.length) {
+      return exact;
+    }
+    return records.filter(record => {
+      const a = String(record.submitted_by && record.submitted_by.global_name ? record.submitted_by.global_name : '')
+        .trim()
+        .toLowerCase();
+      const b = String(record.submitted_by && record.submitted_by.username ? record.submitted_by.username : '')
+        .trim()
+        .toLowerCase();
+      return (a && a.includes(query)) || (b && b.includes(query));
+    });
+  }
+  if (filter === 'level') {
+    if (/^\d+$/.test(trimmed)) {
+      return records.filter(record => {
+        const id = String(record.level && record.level.id != null ? record.level.id : '').trim();
+        return id === trimmed;
+      });
+    }
+    const exact = records.filter(record => {
+      const level = String(record.level && record.level.name ? record.level.name : '')
+        .trim()
+        .toLowerCase();
+      return level === query;
+    });
+    if (exact.length) {
+      return exact;
+    }
+    return records.filter(record => {
+      const level = String(record.level && record.level.name ? record.level.name : '')
+        .trim()
+        .toLowerCase();
+      return level && level.includes(query);
+    });
+  }
+  return [];
 }
 
 async function fetchAredlRecords(maxPages = 20, perPage = 100) {
@@ -403,6 +598,112 @@ const server = http.createServer((req, res) => {
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid run payload' });
       }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/runs/bulk-approve') {
+    if (!requireAdmin(req, res)) return;
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const playerQuery = String(payload.playerName || '').trim();
+        if (!playerQuery) {
+          sendJson(res, 400, { error: 'playerName is required' });
+          return;
+        }
+        const normalizedQuery = playerQuery.toLowerCase();
+        const reviewNotes = String(
+          payload.reviewNotes != null && String(payload.reviewNotes).trim()
+            ? payload.reviewNotes
+            : 'Bulk approved (player profile tool)'
+        ).trim();
+        const runs = readRuns();
+        let approved = 0;
+        let updatedAt = new Date().toISOString();
+        runs.forEach((run, index) => {
+          const name = String(run.playerName || '').trim().toLowerCase();
+          const status = String(run.status || 'pending').toLowerCase();
+          if (name === normalizedQuery && status === 'pending') {
+            runs[index] = normalizeRun(
+              {
+                ...run,
+                status: 'approved',
+                reviewNotes,
+                reviewedBy: 'FEDL Admin'
+              },
+              run
+            );
+            updatedAt = runs[index].updatedAt;
+            approved += 1;
+          }
+        });
+        if (approved) {
+          writeRuns(runs);
+          sendEvent('runs-update', { updatedAt });
+        }
+        sendJson(res, 200, { ok: true, approved, playerName: playerQuery });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid bulk-approve payload' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/import/targeted') {
+    if (!requireAdmin(req, res)) return;
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      (async () => {
+        try {
+          const payload = JSON.parse(body || '{}');
+          const source = String(payload.source || '').toLowerCase();
+          const filter = String(payload.filter || '').toLowerCase();
+          const query = String(payload.query || '').trim();
+          if (!['pointercrate', 'aredl'].includes(source)) {
+            sendJson(res, 400, { error: 'source must be pointercrate or aredl' });
+            return;
+          }
+          if (!['player', 'level'].includes(filter)) {
+            sendJson(res, 400, { error: 'filter must be player or level' });
+            return;
+          }
+          if (!query) {
+            sendJson(res, 400, { error: 'query is required' });
+            return;
+          }
+          const validRunNote = 'Valid run';
+          let records = [];
+          if (source === 'pointercrate') {
+            records = await fetchPointercrateFiltered(filter, query);
+          } else {
+            const pool = await fetchAredlRecords(40, 100);
+            records = filterAredlRecordsByQuery(pool, filter, query);
+          }
+          const label = source === 'pointercrate' ? 'Pointercrate' : 'AREDL';
+          const mapped = records.map(r => (source === 'pointercrate' ? mapPointercrateRecord(r) : mapAredlRecord(r)));
+          const summary = appendImportedRuns(mapped, label, { validRunNote: validRunNote });
+          sendJson(
+            res,
+            200,
+            Object.assign(
+              { ok: true, source, filter, query, matched: records.length, note: validRunNote },
+              summary
+            )
+          );
+        } catch (error) {
+          sendJson(res, 500, { error: String(error.message || error) });
+        }
+      })();
     });
     return;
   }

@@ -55,6 +55,17 @@ linear-gradient(180deg,rgba(6,16,33,0.98),rgba(7,20,38,0.99))}
 .admin-password-field input,.admin-actions input[type=text],.admin-actions input[type=password]{min-width:220px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text)}
 .admin-toolbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:18px}
 .admin-toolbar h2{margin:0 0 8px 0}
+.admin-import-actions{flex-wrap:wrap;justify-content:flex-end}
+.bulk-approve-modal[hidden]{display:none !important}
+.bulk-approve-modal-card{max-width:480px}
+.bulk-approve-modal-card h2{margin:0 0 8px 0;font-size:clamp(1.35rem,3vw,1.75rem)}
+.bulk-approve-form{margin-top:8px}
+.bulk-approve-actions{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.import-targeted-mode{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin:4px 0 8px}
+.import-targeted-mode-label{font-size:0.88rem;font-weight:700;color:var(--muted)}
+.import-targeted-radio{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:0.95rem}
+.import-targeted-radio input{accent-color:var(--accent)}
+.import-targeted-hint{margin:0 0 4px;line-height:1.45}
 .admin-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .admin-table td:last-child{text-align:center}
 .run-admin-cell{display:grid;gap:6px}
