@@ -2295,6 +2295,7 @@
     const myRunsSection = qs('run-my-runs-section');
     const savedRunsListEl = qs('run-saved-runs-list');
     const saveAccountBtn = qs('run-save-account');
+    const playerNameInput = qs('run-player-name');
 
     function setRunFormStatus(message, isError, isSuccess){
       if(!formStatusEl) return;
@@ -2307,6 +2308,23 @@
       if(!listStatusEl) return;
       listStatusEl.textContent = message;
       listStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function showRunSubmissionsShimmer(){
+      if(!submissionsEl) return;
+      submissionsEl.textContent = '';
+      for(let i = 0; i < 4; i += 1){
+        const card = document.createElement('article');
+        card.className = 'submission-card submission-card--shimmer';
+        card.setAttribute('aria-hidden', 'true');
+        submissionsEl.appendChild(card);
+      }
+    }
+
+    function applyRunPlayerDefault(){
+      if(!playerNameInput || !fedlServerUsername) return;
+      if(String(playerNameInput.value || '').trim() !== '') return;
+      playerNameInput.value = fedlServerUsername;
     }
 
     function renderRunSubmissions(runs){
@@ -2417,6 +2435,9 @@
         levelOptionsEl.innerHTML = titles.map(title=>`<option value="${escapeAttr(title)}"></option>`).join('');
       }).catch(err=>console.error(err));
 
+      showRunSubmissionsShimmer();
+      setRunListStatus('Loading recent submissions…');
+
       loadRuns().then(runs=>{
         const sortedRuns = runs.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
         renderRunSubmissions(sortedRuns);
@@ -2450,6 +2471,7 @@
 
     document.addEventListener('fedl-auth-updated', ()=>{
       renderMySavedRuns();
+      applyRunPlayerDefault();
     });
 
     form.addEventListener('submit', function(event){
@@ -2483,6 +2505,7 @@
         }
         clearRunsCache();
         form.reset();
+        applyRunPlayerDefault();
         const okMsg = fedlServerUsername
           ? `Run submitted successfully. It is linked to your account (${fedlServerUsername}) for moderators.`
           : 'Run submitted successfully. The admin panel can review it now.';
@@ -2506,6 +2529,7 @@
       .finally(()=>{
         renderMySavedRuns();
         fedlUpdateAuthNav();
+        applyRunPlayerDefault();
       });
 
     loadRunPage();
@@ -2561,9 +2585,9 @@
         setSignupStatus('Account created successfully. Loading your data…', 'success');
         return fedlPullUserStateToLocal(data.userId);
       }).then(()=>{
-        setSignupStatus('You are signed in. Redirecting to the roulette page…', 'success');
+        setSignupStatus('You are signed in. Redirecting to the home page…', 'success');
         setTimeout(()=>{
-          window.location.href = 'roulette.html';
+          window.location.href = 'index.html';
         }, FEDL_AUTH_REDIRECT_MS);
       }).catch(err=>{
         console.error(err);
@@ -2612,9 +2636,9 @@
         setLoginStatus('Signed in successfully. Loading your data…', 'success');
         return fedlPullUserStateToLocal(data.userId);
       }).then(()=>{
-        setLoginStatus('Welcome back. Redirecting to the roulette page…', 'success');
+        setLoginStatus('Welcome back. Redirecting to the home page…', 'success');
         setTimeout(()=>{
-          window.location.href = 'roulette.html';
+          window.location.href = 'index.html';
         }, FEDL_AUTH_REDIRECT_MS);
       }).catch(err=>{
         console.error(err);
@@ -2628,7 +2652,7 @@
   fedlRefreshAuthState().finally(()=>{
     fedlUpdateAuthNav();
     if ((page === 'signup' || page === 'login') && fedlServerUsername) {
-      window.location.replace('roulette.html');
+      window.location.replace('index.html');
     }
   });
 
