@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign up — GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="signup">
+  <header>
+    <h1>Sign up</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Log in</a>
+      <a href="lists.html">Lists</a>
+      <a href="roulette.html">Roulette</a>
+    </nav>
+  </header>
+  <main class="auth-main">
+    <section class="panel auth-panel">
+      <p class="hero-kicker">FEDL account</p>
+      <h2>Create an account</h2>
+      <p class="muted">Username and password are stored on your FEDL server. Roulette progress and list % sync to the server when you are signed in.</p>
+      <form id="signup-form" class="auth-form">
+        <label class="admin-password-field" for="signup-username">
+          <span>Username</span>
+          <input id="signup-username" name="username" type="text" autocomplete="username" required minlength="3" maxlength="24" pattern="[a-z0-9_]{3,24}" placeholder="letters, numbers, underscore" />
+        </label>
+        <p class="muted small auth-hint">3–24 characters, lowercase letters, numbers, or underscore only.</p>
+        <label class="admin-password-field" for="signup-password">
+          <span>Password</span>
+          <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
+        </label>
+        <label class="admin-password-field" for="signup-password2">
+          <span>Confirm password</span>
+          <input id="signup-password2" name="password2" type="password" autocomplete="new-password" required minlength="8" />
+        </label>
+        <p id="signup-status" class="muted" role="status"></p>
+        <div class="auth-actions">
+          <button type="submit" class="btn" id="signup-submit">Create account</button>
+          <a class="text-link" href="login.html">Already have an account? Log in</a>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

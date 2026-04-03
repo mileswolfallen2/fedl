@@ -12,15 +12,57 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="guess.html">Guess Game</a>
+      <a href="players.html">Players</a>
       <a href="lists.html">Lists</a>
       <a href="run.html">Submit Run</a>
-      <a href="players.html">Players</a>
       <a href="rules.html">Rules</a>
-      <a href="admelist.html">Admin</a>
+      <a href="roulette.html">Roulette</a>
     </nav>
   </header>
   <main>
     <section class="roulette-shell">
+      <div class="roulette-main-stack">
+      <section class="panel roulette-account-panel">
+        <p class="roulette-kicker">Your profile</p>
+        <h2 class="roulette-account-heading">Save roulette &amp; progress</h2>
+        <p class="muted small roulette-account-intro">Profiles are stored only in this browser. Each profile remembers your last roulette demon and a progress % per level (also shown on the list page).</p>
+        <p class="muted small roulette-login-sync-hint" id="roulette-login-sync-hint" hidden>
+          <a href="login.html">Log in</a> or <a href="signup.html">sign up</a> to sync roulette, save slots, and % across browsers.
+        </p>
+        <div class="roulette-slots-block" id="roulette-slots-block">
+          <p class="roulette-slots-heading">Roulette save slots</p>
+          <p class="muted small" id="roulette-slots-hint">Use three slots to park different demons. Requires an active profile or a signed-in account.</p>
+          <div class="roulette-slot-rows">
+            <div class="roulette-slot-row">
+              <span class="roulette-slot-title">Slot 1</span>
+              <span class="roulette-slot-label muted" id="roulette-slot-label-1">Empty</span>
+              <button type="button" class="btn ghost-btn small-btn" id="roulette-slot-save-1">Save</button>
+              <button type="button" class="btn ghost-btn small-btn" id="roulette-slot-load-1">Load</button>
+            </div>
+            <div class="roulette-slot-row">
+              <span class="roulette-slot-title">Slot 2</span>
+              <span class="roulette-slot-label muted" id="roulette-slot-label-2">Empty</span>
+              <button type="button" class="btn ghost-btn small-btn" id="roulette-slot-save-2">Save</button>
+              <button type="button" class="btn ghost-btn small-btn" id="roulette-slot-load-2">Load</button>
+            </div>
+            <div class="roulette-slot-row">
+              <span class="roulette-slot-title">Slot 3</span>
+              <span class="roulette-slot-label muted" id="roulette-slot-label-3">Empty</span>
+              <button type="button" class="btn ghost-btn small-btn" id="roulette-slot-save-3">Save</button>
+              <button type="button" class="btn ghost-btn small-btn" id="roulette-slot-load-3">Load</button>
+            </div>
+          </div>
+        </div>
+        <div class="roulette-account-controls">
+          <label class="roulette-account-label" for="roulette-account-select">Active profile</label>
+          <select id="roulette-account-select" class="roulette-account-select"></select>
+          <div class="roulette-account-create-row">
+            <input id="roulette-account-new" type="text" placeholder="New profile name" autocomplete="username" />
+            <button type="button" class="btn ghost-btn" id="roulette-account-create">Create</button>
+          </div>
+        </div>
+        <button type="button" class="btn ghost-btn roulette-restore-btn" id="roulette-restore" hidden>Restore last spin</button>
+      </section>
       <section class="panel roulette-panel">
         <div class="roulette-head">
           <div>
@@ -37,9 +79,19 @@
           <p class="roulette-rank" id="roulette-rank">Rank: -</p>
           <p class="roulette-meta" id="roulette-level-id">Level ID: -</p>
           <p class="roulette-note muted" id="roulette-note">Level IDs come from your local file first, then API lookup if needed.</p>
+          <div class="roulette-progress-block" id="roulette-progress-row" hidden>
+            <label class="roulette-progress-label" for="roulette-percent">Your % on this level</label>
+            <div class="roulette-progress-input-row">
+              <input id="roulette-percent" type="text" inputmode="decimal" placeholder="e.g. 47" autocomplete="off" />
+              <span class="muted">%</span>
+              <button type="button" class="btn small-btn" id="roulette-percent-submit">Submit %</button>
+            </div>
+            <p id="roulette-percent-hint" class="muted small roulette-percent-hint"></p>
+          </div>
           <a class="btn roulette-open" id="roulette-open" href="#" target="_blank" rel="noopener noreferrer" hidden>View Video</a>
         </div>
       </section>
+      </div>
 
       <aside class="panel roulette-rules-card">
         <p class="roulette-kicker">How It Works</p>

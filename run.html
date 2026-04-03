@@ -12,10 +12,11 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="guess.html">Guess Game</a>
+      <a href="players.html">Players</a>
       <a href="lists.html">Lists</a>
+      <a href="run.html">Submit Run</a>
       <a href="rules.html">Rules</a>
       <a href="roulette.html">Roulette</a>
-      <a href="admelist.html">Admin</a>
     </nav>
   </header>
   <main>
@@ -25,7 +26,7 @@
           <div>
             <p class="hero-kicker">FEDL Submission</p>
             <h2>Send in a run</h2>
-            <p class="muted run-intro">Submit your completion video, attach raw footage if you have it hosted, and leave notes for the moderators. Required fields are marked below.</p>
+            <p class="muted run-intro">Submit your completion video, attach raw footage if you have it hosted, and leave notes for the moderators. If you <a href="login.html">log in</a>, you can save multiple runs to your account (drafts) and queue submissions will show your username to moderators.</p>
           </div>
           <div class="run-head-badge">
             <strong>Live queue</strong>
@@ -67,6 +68,7 @@
 
           <div class="run-actions">
             <button id="run-submit" type="submit" class="btn">Submit Run</button>
+            <button type="button" id="run-save-account" class="btn ghost-btn" hidden>Save to my account</button>
             <p id="run-form-status" class="muted">The server needs to be running for live submissions.</p>
           </div>
         </form>
@@ -90,6 +92,17 @@
           </article>
         </div>
       </aside>
+    </section>
+
+    <section class="panel run-my-runs-panel" id="run-my-runs-section" hidden>
+      <div class="submission-header run-my-runs-head">
+        <div>
+          <p class="hero-kicker">Your account</p>
+          <h3>Runs saved to your account</h3>
+          <p class="muted">Keep multiple drafts here while you work on links or notes. They sync when you are signed in.</p>
+        </div>
+      </div>
+      <div id="run-saved-runs-list" class="submission-list"></div>
     </section>
 
     <section class="panel submission-panel">

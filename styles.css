@@ -31,6 +31,8 @@ table.levels-table tr:hover td{background:rgba(255,255,255,0.01)}
 .btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(92,197,255,0.22)}
 .muted{color:var(--muted);font-size:0.9rem}
 .error-text{color:#ff9f9f}
+.success-text{color:#8cf0ae!important}
+header nav a.btn{margin-left:14px;text-decoration:none;vertical-align:middle}
 .small-btn{padding:8px 12px}
 .danger-btn{background:#ff7b7b;color:#2a0909}
 .admin-shell{padding:18px 20px}
@@ -184,6 +186,34 @@ table.levels-table .btn{padding:9px 14px}
 /* small helpers reused */
 .small{font-size:0.9rem}
 .roulette-shell{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px;align-items:start}
+.roulette-main-stack{display:grid;gap:18px;min-width:0}
+.roulette-account-panel{padding:22px 24px;border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08)}
+.roulette-account-heading{margin:0 0 8px 0;font-size:1.35rem}
+.roulette-account-intro{margin:0 0 14px;line-height:1.55}
+.roulette-account-controls{display:grid;gap:10px}
+.roulette-account-label{font-size:0.88rem;font-weight:700;color:var(--muted)}
+.roulette-account-select{width:100%;max-width:320px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text);font:inherit}
+.roulette-account-create-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.roulette-account-create-row input{flex:1;min-width:160px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text);font:inherit}
+.roulette-restore-btn{margin-top:12px}
+.roulette-login-sync-hint{margin:0 0 14px;line-height:1.55}
+.roulette-login-sync-hint a{color:var(--accent)}
+.roulette-slots-block{margin:14px 0;padding:14px 0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08)}
+.roulette-slots-heading{margin:0 0 6px 0;font-size:0.95rem;font-weight:800;color:#eaf2fb}
+.roulette-slot-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:10px}
+.roulette-slot-title{min-width:52px;font-weight:700;font-size:0.88rem;color:var(--muted)}
+.roulette-slot-label{flex:1;min-width:140px;font-size:0.88rem}
+.roulette-progress-block{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08)}
+.roulette-progress-label{display:block;font-size:0.88rem;font-weight:700;margin-bottom:8px;color:#dce8f5}
+.roulette-progress-input-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.roulette-progress-input-row input{width:100px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text);font:inherit}
+.roulette-percent-hint{margin:10px 0 0;line-height:1.55;max-width:52ch}
+.modal-account-progress{margin:16px 0;padding:14px 16px;border-radius:14px;background:rgba(92,197,255,0.08);border:1px solid rgba(92,197,255,0.15)}
+.modal-account-label{margin:0 0 8px 0;font-size:0.9rem;font-weight:700}
+.modal-account-row{display:flex;gap:10px;align-items:center}
+.modal-account-pct-input{width:100px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:var(--text);font:inherit}
+.list-my-progress-cell{vertical-align:middle}
+.list-progress-input{width:100%;max-width:88px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text);font:inherit;text-align:center}
 .roulette-main-column{display:grid;gap:18px}
 .roulette-rules{margin-bottom:18px}
 .roulette-panel{margin-top:0;padding:28px;border-radius:28px;background:linear-gradient(135deg,rgba(92,197,255,0.14),rgba(7,19,38,0.96));border:1px solid rgba(92,197,255,0.18)}
@@ -233,6 +263,9 @@ table.levels-table .btn{padding:9px 14px}
 .submission-panel{margin-top:18px;padding:22px 22px 16px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06)}
 .submission-header{margin-bottom:18px}
 .submission-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.run-my-runs-panel{margin-top:8px}
+.run-my-runs-head{margin-bottom:14px}
+.run-saved-card-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 .submission-card{padding:18px;border-radius:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)}
 .submission-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .submission-card strong{font-size:1.05rem}
@@ -284,6 +317,15 @@ linear-gradient(180deg,rgba(8,18,32,0.98),rgba(7,19,38,0.94))}
 .error-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
 .error-actions .btn{font-weight:700;text-decoration:none}
 .ghost-btn{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.14)}
+.auth-main{max-width:520px;margin:0 auto;padding:28px 20px 48px}
+.auth-panel{padding:28px 26px}
+.auth-panel h2{margin:0 0 8px 0;font-size:1.45rem}
+.auth-form{display:grid;gap:16px;margin-top:18px}
+.auth-form .auth-hint{margin:-6px 0 0 0;font-size:.82rem}
+.auth-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:8px}
+header nav .fedl-auth-nav{margin-left:14px;display:inline-flex;align-items:center;flex-wrap:wrap;gap:8px 10px;vertical-align:middle}
+header nav .fedl-auth-nav a{color:var(--muted)}
+header nav .fedl-auth-nav a:hover{color:var(--text)}
 .error-side{display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:34px 30px;background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))}
 .error-side h3{margin:0 0 10px 0;font-size:1rem;letter-spacing:0.04em;text-transform:uppercase;color:#eef6ff}
 .error-list{margin:0;padding:0;list-style:none}
@@ -300,4 +342,4 @@ linear-gradient(180deg,rgba(8,18,32,0.98),rgba(7,19,38,0.94))}
 @media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.sidebar .panel{height:auto}.video-modal iframe{height:320px}.modal-runs-head,.modal-run-card{grid-template-columns:1fr}.home-hero{grid-template-columns:1fr;min-height:auto}.home-copy,.hero-stage{padding:24px 22px}.hero-stats,.home-section-grid,.spotlight-grid{grid-template-columns:1fr}.spotlight-panel{grid-template-columns:1fr;padding:24px 22px}.list-hero-panel,.table-header,.search-row,.roulette-head,.guess-controls{flex-direction:column;align-items:flex-start}.control-select{max-width:none;width:100%}.roulette-shell{grid-template-columns:1fr}.discord-panel{flex-direction:column;align-items:flex-start;padding:22px 20px}.discord-panel h2{font-size:1.55rem}.discord-actions{width:100%;justify-content:flex-start}.rules-view header{padding:16px 18px}.rules-view header h1{font-size:1.55rem}.rules-page{padding:24px 20px}.rules-page h2{font-size:1.65rem}.guess-controls input,.guess-controls .btn{width:100%}}
 @media(max-width:900px){.error-grid{grid-template-columns:1fr}.error-copy,.error-side{padding:24px 20px}.error-copy h2{font-size:2.5rem}}
 @media(max-width:900px){.admin-overview-panel,.admin-toolbar{flex-direction:column;align-items:stretch}.admin-actions{flex-direction:column;align-items:stretch}.admin-password-field input,.admin-actions input[type=text],.admin-actions input[type=password]{min-width:0;width:100%}.run-shell{grid-template-columns:1fr}.run-head{flex-direction:column;align-items:flex-start}.run-form{grid-template-columns:1fr}.admin-login-screen{padding:18px}.admin-login-card{padding:26px 22px}}
-@media(max-width:640px){header{flex-direction:column;align-items:flex-start;gap:12px}nav{display:flex;flex-wrap:wrap;gap:10px}nav a{margin-left:0}.home-copy h2{max-width:none}.hero-actions{flex-direction:column;align-items:stretch}.hero-actions .btn,.roulette-btn{width:100%;text-align:center}.list-hero-panel,.list-controls-panel,.list-table-panel,.roulette-panel,.roulette-rules-card,.run-panel,.run-side-panel,.submission-panel{padding:22px 18px}.table-hint{text-align:left}.run-admin-actions{justify-content:flex-start}}
+@media(max-width:640px){header{flex-direction:column;align-items:flex-start;gap:12px}nav{display:flex;flex-wrap:wrap;gap:10px}nav a{margin-left:0}header nav a.btn{margin-left:0}.home-copy h2{max-width:none}.hero-actions{flex-direction:column;align-items:stretch}.hero-actions .btn,.roulette-btn{width:100%;text-align:center}.list-hero-panel,.list-controls-panel,.list-table-panel,.roulette-panel,.roulette-rules-card,.run-panel,.run-side-panel,.submission-panel{padding:22px 18px}.table-hint{text-align:left}.run-admin-actions{justify-content:flex-start}}

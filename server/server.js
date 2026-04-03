@@ -1,11 +1,15 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { URL } = require('url');
 
 const appRoot = path.resolve(__dirname, '..');
 const dataPath = path.join(__dirname, 'data.txt');
 const runsPath = path.join(__dirname, 'runs.json');
+const usersPath = path.join(__dirname, 'users.json');
+const sessionsPath = path.join(__dirname, 'sessions.json');
+const userDataPath = path.join(__dirname, 'userdata.json');
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '/fedl';
@@ -105,6 +109,136 @@ function readRuns() {
 
 function writeRuns(runs) {
   fs.writeFileSync(runsPath, `${JSON.stringify(runs, null, 2)}\n`, 'utf8');
+}
+
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+function ensureUsersFile() {
+  if (!fs.existsSync(usersPath)) {
+    fs.writeFileSync(usersPath, '[]\n', 'utf8');
+  }
+}
+
+function ensureSessionsFile() {
+  if (!fs.existsSync(sessionsPath)) {
+    fs.writeFileSync(sessionsPath, '{}\n', 'utf8');
+  }
+}
+
+function ensureUserDataFile() {
+  if (!fs.existsSync(userDataPath)) {
+    fs.writeFileSync(userDataPath, '{}\n', 'utf8');
+  }
+}
+
+function readUsers() {
+  ensureUsersFile();
+  const raw = fs.readFileSync(usersPath, 'utf8');
+  const parsed = JSON.parse(raw || '[]');
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+function writeUsers(users) {
+  fs.writeFileSync(usersPath, `${JSON.stringify(users, null, 2)}\n`, 'utf8');
+}
+
+function readSessionsRaw() {
+  ensureSessionsFile();
+  const raw = fs.readFileSync(sessionsPath, 'utf8');
+  const parsed = JSON.parse(raw || '{}');
+  return parsed && typeof parsed === 'object' ? parsed : {};
+}
+
+function writeSessions(sessions) {
+  fs.writeFileSync(sessionsPath, `${JSON.stringify(sessions, null, 2)}\n`, 'utf8');
+}
+
+function cleanSessions(sessions) {
+  const now = Date.now();
+  const out = {};
+  Object.keys(sessions).forEach(token => {
+    const s = sessions[token];
+    if (s && s.expiresAt && new Date(s.expiresAt).getTime() > now) {
+      out[token] = s;
+    }
+  });
+  return out;
+}
+
+function readSessions() {
+  return cleanSessions(readSessionsRaw());
+}
+
+function createSession(userId, username) {
+  const sessions = readSessions();
+  const token = crypto.randomBytes(32).toString('hex');
+  const expiresAt = new Date(Date.now() + SESSION_TTL_MS).toISOString();
+  sessions[token] = { userId, username, expiresAt };
+  writeSessions(sessions);
+  return token;
+}
+
+function findSession(token) {
+  if (!token) {
+    return null;
+  }
+  const sessions = readSessions();
+  const s = sessions[token];
+  if (!s || new Date(s.expiresAt).getTime() <= Date.now()) {
+    return null;
+  }
+  return s;
+}
+
+function deleteSession(token) {
+  const sessions = readSessionsRaw();
+  delete sessions[token];
+  writeSessions(cleanSessions(sessions));
+}
+
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+  return { salt, hash };
+}
+
+function verifyPassword(password, salt, hashHex) {
+  try {
+    const h = crypto.scryptSync(password, salt, 64).toString('hex');
+    const a = Buffer.from(h, 'hex');
+    const b = Buffer.from(hashHex, 'hex');
+    if (a.length !== b.length) {
+      return false;
+    }
+    return crypto.timingSafeEqual(a, b);
+  } catch (error) {
+    return false;
+  }
+}
+
+function normalizeUsername(u) {
+  return String(u || '').trim().toLowerCase();
+}
+
+function usernameOk(u) {
+  return /^[a-z0-9_]{3,24}$/.test(u);
+}
+
+function getBearerToken(req) {
+  const h = String(req.headers.authorization || '');
+  const m = h.match(/^Bearer\s+(\S+)/i);
+  return m ? m[1] : '';
+}
+
+function readUserDataMap() {
+  ensureUserDataFile();
+  const raw = fs.readFileSync(userDataPath, 'utf8');
+  const parsed = JSON.parse(raw || '{}');
+  return parsed && typeof parsed === 'object' ? parsed : {};
+}
+
+function writeUserDataMap(map) {
+  fs.writeFileSync(userDataPath, `${JSON.stringify(map, null, 2)}\n`, 'utf8');
 }
 
 function sleep(ms) {
@@ -473,8 +607,71 @@ function normalizeRun(payload, existingRun) {
     reviewedBy: String(payload.reviewedBy || existingRun?.reviewedBy || '').trim(),
     reviewNotes: String(payload.reviewNotes || existingRun?.reviewNotes || '').trim(),
     submittedAt: existingRun?.submittedAt || new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
+    accountUserId: existingRun?.accountUserId || '',
+    accountUsername: existingRun?.accountUsername || ''
   };
+}
+
+const MAX_SAVED_RUNS_PER_USER = 48;
+
+function sanitizeSavedRuns(raw) {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const out = [];
+  for (let i = 0; i < raw.length && out.length < MAX_SAVED_RUNS_PER_USER; i += 1) {
+    const item = raw[i];
+    if (!item || typeof item !== 'object') continue;
+    const playerName = String(item.playerName || '').trim().slice(0, 120);
+    const levelTitle = String(item.levelTitle || '').trim().slice(0, 280);
+    if (!playerName || !levelTitle) continue;
+    out.push({
+      id: String(item.id || `sv_${Date.now().toString(36)}_${i}_${Math.random().toString(36).slice(2, 8)}`).slice(0, 96),
+      playerName,
+      levelTitle,
+      videoUrl: String(item.videoUrl || '').trim().slice(0, 2048),
+      percent: String(item.percent != null ? item.percent : '100').trim().slice(0, 12) || '100',
+      rawFootageUrl: String(item.rawFootageUrl || '').trim().slice(0, 2048),
+      notes: String(item.notes || '').trim().slice(0, 8000),
+      savedAt: String(item.savedAt || new Date().toISOString()).slice(0, 48)
+    });
+  }
+  return out;
+}
+
+const ROULETTE_SLOT_KEYS = ['1', '2', '3'];
+
+function emptyRouletteSlots() {
+  return { '1': null, '2': null, '3': null };
+}
+
+function sanitizeRouletteSlots(raw) {
+  const out = emptyRouletteSlots();
+  if (!raw || typeof raw !== 'object') {
+    return out;
+  }
+  for (const k of ROULETTE_SLOT_KEYS) {
+    const v = raw[k];
+    if (v == null || typeof v !== 'object') {
+      continue;
+    }
+    const title = String(v.title || '').trim().slice(0, 280);
+    if (!title) {
+      continue;
+    }
+    out[k] = {
+      title,
+      position: String(v.position || '').trim().slice(0, 32),
+      level: String(v.level || '').trim().slice(0, 120),
+      url: String(v.url || '').trim().slice(0, 2048),
+      levelId: String(v.levelId || '').trim().slice(0, 64),
+      noteSource: v.noteSource === 'api' ? 'api' : 'file',
+      percent: String(v.percent != null ? v.percent : '').trim().slice(0, 12),
+      savedAt: String(v.savedAt || new Date().toISOString()).slice(0, 48)
+    };
+  }
+  return out;
 }
 
 function serveFile(reqPath, res) {
@@ -518,6 +715,153 @@ const server = http.createServer((req, res) => {
     setCors(res);
     res.writeHead(204);
     res.end();
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/auth/signup') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const username = normalizeUsername(payload.username);
+        const password = String(payload.password || '');
+        if (!usernameOk(username)) {
+          sendJson(res, 400, {
+            error: 'Username must be 3-24 characters: lowercase letters, numbers, or underscore.'
+          });
+          return;
+        }
+        if (password.length < 8) {
+          sendJson(res, 400, { error: 'Password must be at least 8 characters.' });
+          return;
+        }
+        const users = readUsers();
+        if (users.some(u => u.username === username)) {
+          sendJson(res, 409, { error: 'That username is already taken.' });
+          return;
+        }
+        const { salt, hash } = hashPassword(password);
+        const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+        users.push({
+          id,
+          username,
+          passwordHash: hash,
+          salt,
+          createdAt: new Date().toISOString()
+        });
+        writeUsers(users);
+        const token = createSession(id, username);
+        sendJson(res, 201, { ok: true, token, userId: id, username });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid signup request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/auth/login') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const username = normalizeUsername(payload.username);
+        const password = String(payload.password || '');
+        const users = readUsers();
+        const user = users.find(u => u.username === username);
+        if (!user || !verifyPassword(password, user.salt, user.passwordHash)) {
+          sendJson(res, 401, { error: 'Invalid username or password.' });
+          return;
+        }
+        const token = createSession(user.id, user.username);
+        sendJson(res, 200, { ok: true, token, userId: user.id, username: user.username });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid login request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/auth/logout') {
+    const token = getBearerToken(req);
+    if (token) {
+      deleteSession(token);
+    }
+    sendJson(res, 200, { ok: true });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/auth/me') {
+    const token = getBearerToken(req);
+    const sess = findSession(token);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    sendJson(res, 200, { userId: sess.userId, username: sess.username });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/user/state') {
+    const token = getBearerToken(req);
+    const sess = findSession(token);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    const map = readUserDataMap();
+    const row = map[sess.userId] || {};
+    const data = {
+      roulettePick: row.roulettePick != null ? row.roulettePick : null,
+      levelPercents: row.levelPercents && typeof row.levelPercents === 'object' ? row.levelPercents : {},
+      savedRuns: Array.isArray(row.savedRuns) ? row.savedRuns : [],
+      rouletteSlots: sanitizeRouletteSlots(row.rouletteSlots)
+    };
+    sendJson(res, 200, { data });
+    return;
+  }
+
+  if (req.method === 'PUT' && pathname === '/api/user/state') {
+    const token = getBearerToken(req);
+    const sess = findSession(token);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 2 * 1024 * 1024) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const incoming = payload.data;
+        if (!incoming || typeof incoming !== 'object') {
+          sendJson(res, 400, { error: 'A "data" object is required' });
+          return;
+        }
+        const map = readUserDataMap();
+        map[sess.userId] = {
+          roulettePick: incoming.roulettePick != null ? incoming.roulettePick : null,
+          levelPercents:
+            incoming.levelPercents && typeof incoming.levelPercents === 'object' ? incoming.levelPercents : {},
+          savedRuns: sanitizeSavedRuns(incoming.savedRuns),
+          rouletteSlots: sanitizeRouletteSlots(incoming.rouletteSlots)
+        };
+        writeUserDataMap(map);
+        sendJson(res, 200, { ok: true });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid payload' });
+      }
+    });
     return;
   }
 
@@ -586,6 +930,11 @@ const server = http.createServer((req, res) => {
       try {
         const payload = JSON.parse(body || '{}');
         const nextRun = normalizeRun(payload);
+        const sess = findSession(getBearerToken(req));
+        if (sess) {
+          nextRun.accountUserId = sess.userId;
+          nextRun.accountUsername = sess.username;
+        }
         if (!nextRun.playerName || !nextRun.levelTitle || !nextRun.videoUrl || !nextRun.percent) {
           sendJson(res, 400, { error: 'playerName, levelTitle, videoUrl, and percent are required' });
           return;

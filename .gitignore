@@ -1,0 +1,4 @@
+# Server-side auth and user data (local only)
+server/users.json
+server/sessions.json
+server/userdata.json

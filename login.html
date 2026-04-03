@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Log in — GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="login">
+  <header>
+    <h1>Log in</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="signup.html">Sign up</a>
+      <a href="lists.html">Lists</a>
+      <a href="roulette.html">Roulette</a>
+    </nav>
+  </header>
+  <main class="auth-main">
+    <section class="panel auth-panel">
+      <p class="hero-kicker">FEDL account</p>
+      <h2>Welcome back</h2>
+      <p class="muted">Sign in to load your saved roulette pick and per-level progress from the server.</p>
+      <form id="login-form" class="auth-form">
+        <label class="admin-password-field" for="login-username">
+          <span>Username</span>
+          <input id="login-username" name="username" type="text" autocomplete="username" required />
+        </label>
+        <label class="admin-password-field" for="login-password">
+          <span>Password</span>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+        </label>
+        <p id="login-status" class="muted" role="status"></p>
+        <div class="auth-actions">
+          <button type="submit" class="btn" id="login-submit">Log in</button>
+          <a class="text-link" href="signup.html">Need an account? Sign up</a>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
