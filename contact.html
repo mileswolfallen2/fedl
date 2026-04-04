@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact Us - GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="contact">
+  <header>
+    <h1>Contact Us</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="guess.html">Guess Game</a>
+      <a href="players.html">Players</a>
+      <a href="lists.html">Lists</a>
+      <a href="run.html">Submit Run</a>
+      <a href="rules.html">Rules</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="post.html">Posts</a>
+    </nav>
+  </header>
+  <main>
+    <section class="run-shell">
+      <section class="panel run-panel">
+        <div class="run-head">
+          <div>
+            <p class="hero-kicker">FEDL Contact</p>
+            <h2>Report a bug or send feedback</h2>
+            <p class="muted run-intro">Found a bug? Have a suggestion? Fill out the form below and the admins will review it. If you <a href="login.html">log in</a>, your username will be attached to the report.</p>
+          </div>
+        </div>
+
+        <form id="contact-form" class="run-form">
+          <label class="control-block" for="contact-category">
+            <span>Category</span>
+            <select id="contact-category" name="category" required>
+              <option value="bug">Bug Report</option>
+              <option value="suggestion">Suggestion</option>
+              <option value="question">Question</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label class="control-block" for="contact-subject">
+            <span>Subject</span>
+            <input id="contact-subject" name="subject" type="text" placeholder="Brief summary of the issue" required />
+          </label>
+
+          <label class="control-block" for="contact-description">
+            <span>Description</span>
+            <textarea id="contact-description" name="description" rows="8" placeholder="Describe the bug, include steps to reproduce if applicable, and any screenshots or links that might help." required></textarea>
+          </label>
+
+          <label class="control-block" for="contact-email">
+            <span>Email (optional)</span>
+            <input id="contact-email" name="email" type="email" placeholder="Your email if you'd like a response" />
+          </label>
+
+          <div class="run-actions">
+            <button id="contact-submit" type="submit" class="btn">Submit Report</button>
+            <p id="contact-form-status" class="muted">The server needs to be running for submissions.</p>
+          </div>
+        </form>
+      </section>
+
+      <aside class="panel run-side-panel">
+        <p class="status-label">What to report</p>
+        <h2>Before you submit</h2>
+        <div class="run-checklist">
+          <article>
+            <strong>Bug details</strong>
+            <p>Include what you were doing when the bug occurred and what you expected to happen.</p>
+          </article>
+          <article>
+            <strong>Steps to reproduce</strong>
+            <p>List the steps needed to trigger the bug so we can try to replicate it.</p>
+          </article>
+          <article>
+            <strong>Screenshots or videos</strong>
+            <p>Links to screenshots or videos can help us understand the issue better.</p>
+          </article>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

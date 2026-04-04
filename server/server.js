@@ -11,6 +11,7 @@ const usersPath = path.join(__dirname, 'users.json');
 const sessionsPath = path.join(__dirname, 'sessions.json');
 const userDataPath = path.join(__dirname, 'userdata.json');
 const postsPath = path.join(__dirname, 'posts.json');
+const bugReportsPath = path.join(__dirname, 'bugreports.json');
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '/fedl';
@@ -257,6 +258,23 @@ function readPosts() {
 
 function writePosts(posts) {
   fs.writeFileSync(postsPath, `${JSON.stringify(posts, null, 2)}\n`, 'utf8');
+}
+
+function ensureBugReportsFile() {
+  if (!fs.existsSync(bugReportsPath)) {
+    fs.writeFileSync(bugReportsPath, '[]\n', 'utf8');
+  }
+}
+
+function readBugReports() {
+  ensureBugReportsFile();
+  const raw = fs.readFileSync(bugReportsPath, 'utf8');
+  const parsed = JSON.parse(raw || '[]');
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+function writeBugReports(reports) {
+  fs.writeFileSync(bugReportsPath, `${JSON.stringify(reports, null, 2)}\n`, 'utf8');
 }
 
 function normalizePost(post) {
@@ -1075,6 +1093,104 @@ const server = http.createServer((req, res) => {
     post.comments.splice(cidx, 1);
     writePosts(allPosts);
     sendJson(res, 200, { ok: true });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/bugreports') {
+    if (!requireAdmin(req, res)) return;
+    try {
+      sendJson(res, 200, { items: readBugReports() });
+    } catch (error) {
+      sendJson(res, 500, { error: 'Could not read bug reports' });
+    }
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/bugreports') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const category = String(payload.category || 'other').trim().toLowerCase();
+        const subject = String(payload.subject || '').trim().slice(0, 200);
+        const description = String(payload.description || '').trim().slice(0, 4000);
+        const email = String(payload.email || '').trim().slice(0, 200);
+        if (!subject || !description) {
+          sendJson(res, 400, { error: 'Subject and description are required' });
+          return;
+        }
+        const sess = findSession(getBearerToken(req));
+        const newReport = {
+          id: `bug_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`,
+          category,
+          subject,
+          description,
+          email,
+          submittedAt: new Date().toISOString(),
+          status: 'open',
+          accountUserId: sess ? sess.userId : '',
+          accountUsername: sess ? sess.username : ''
+        };
+        const reports = readBugReports();
+        reports.unshift(newReport);
+        writeBugReports(reports);
+        sendEvent('bugreports-update', { updatedAt: newReport.submittedAt });
+        sendJson(res, 201, { ok: true, item: newReport });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid bug report payload' });
+      }
+    });
+    return;
+  }
+
+  if ((req.method === 'PUT' || req.method === 'DELETE') && pathname.startsWith('/api/bugreports/')) {
+    if (!requireAdmin(req, res)) return;
+    const reportId = pathname.slice('/api/bugreports/'.length);
+    if (!reportId) {
+      sendJson(res, 400, { error: 'Report id is required' });
+      return;
+    }
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const reports = readBugReports();
+        const index = reports.findIndex(r => r.id === reportId);
+        if (index === -1) {
+          sendJson(res, 404, { error: 'Report not found' });
+          return;
+        }
+        if (req.method === 'DELETE') {
+          reports.splice(index, 1);
+          writeBugReports(reports);
+          sendEvent('bugreports-update', { updatedAt: new Date().toISOString() });
+          sendJson(res, 200, { ok: true });
+          return;
+        }
+        const payload = JSON.parse(body || '{}');
+        reports[index] = {
+          ...reports[index],
+          category: String(payload.category || reports[index].category || 'other').trim().toLowerCase(),
+          subject: String(payload.subject || reports[index].subject || '').trim().slice(0, 200),
+          description: String(payload.description || reports[index].description || '').trim().slice(0, 4000),
+          email: String(payload.email || reports[index].email || '').trim().slice(0, 200),
+          status: String(payload.status || reports[index].status || 'open').trim().toLowerCase(),
+          updatedAt: new Date().toISOString()
+        };
+        writeBugReports(reports);
+        sendEvent('bugreports-update', { updatedAt: reports[index].updatedAt });
+        sendJson(res, 200, { ok: true, item: reports[index] });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid bug report update payload' });
+      }
+    });
     return;
   }
 

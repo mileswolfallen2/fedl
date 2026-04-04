@@ -18,6 +18,7 @@
       <a href="rules.html">Rules</a>
       <a href="roulette.html">Roulette</a>
       <a href="post.html">Posts</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
   <main class="admin-shell">
@@ -40,19 +41,43 @@
     </section>
 
     <section id="admin-shell-content" class="admin-shell-content" hidden>
-    <section class="panel admin-overview-panel">
-      <div>
-        <p class="hero-kicker">Control Center</p>
-        <h2>Manage the live list and incoming runs</h2>
-        <p class="muted">Use the first panel to edit placements and the second panel to review new run submissions.</p>
+    <section class="admin-tabs">
+      <button type="button" class="admin-tab active" data-tab="stats">Stats</button>
+      <button type="button" class="admin-tab" data-tab="list">List Editor</button>
+      <button type="button" class="admin-tab" data-tab="runs">Run Queue</button>
+      <button type="button" class="admin-tab" data-tab="bugs">Bug Reports</button>
+      <button type="button" class="admin-tab" data-tab="import">Import</button>
+    </section>
+
+    <section class="panel admin-panel admin-tab-panel" id="tab-stats">
+      <div class="admin-toolbar">
+        <div>
+          <p class="hero-kicker">Statistics</p>
+          <h2>Overview</h2>
+          <p id="admin-stats-status" class="muted">Loading stats...</p>
+        </div>
       </div>
-      <div class="admin-overview-badges">
-        <span>Live list editor</span>
-        <span>Run moderation</span>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <strong id="stat-total-runs">--</strong>
+          <span>Total Runs</span>
+        </div>
+        <div class="stat-box">
+          <strong id="stat-pending-runs">--</strong>
+          <span>Pending</span>
+        </div>
+        <div class="stat-box">
+          <strong id="stat-levels-count">--</strong>
+          <span>Levels</span>
+        </div>
+        <div class="stat-box">
+          <strong id="stat-bug-reports">--</strong>
+          <span>Open Reports</span>
+        </div>
       </div>
     </section>
 
-    <section class="panel admin-panel">
+    <section class="panel admin-panel admin-tab-panel" id="tab-list" hidden>
       <div class="admin-toolbar">
         <div>
           <p class="hero-kicker">List Editor</p>
@@ -82,7 +107,7 @@
       </div>
     </section>
 
-    <section class="panel admin-panel">
+    <section class="panel admin-panel admin-tab-panel" id="tab-runs" hidden>
       <div class="admin-toolbar">
         <div>
           <p class="hero-kicker">Run Queue</p>
@@ -111,12 +136,40 @@
       </div>
     </section>
 
-    <section class="panel admin-panel">
+    <section class="panel admin-panel admin-tab-panel" id="tab-bugs" hidden>
+      <div class="admin-toolbar">
+        <div>
+          <p class="hero-kicker">Bug Reports</p>
+          <h2>View and manage bug reports</h2>
+          <p id="bug-reports-admin-status" class="muted">Loading bug reports...</p>
+        </div>
+        <div class="admin-actions">
+          <input id="bug-report-search" type="text" placeholder="Search reports..." />
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="levels-table admin-table">
+          <thead>
+            <tr>
+              <th style="width:100px">Category</th>
+              <th style="width:100px">Status</th>
+              <th style="width:160px">Submitted By</th>
+              <th>Subject</th>
+              <th style="width:180px">Submitted</th>
+              <th style="width:180px">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bug-reports-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel admin-panel admin-tab-panel" id="tab-import" hidden>
       <div class="admin-toolbar">
         <div>
           <p class="hero-kicker">Import tool</p>
           <h2>External lists & bulk approve</h2>
-          <p id="import-status" class="muted">Pull records from Pointercrate or AREDL (AREDL needs a server API key or token). Targeted import loads victories from the API by player or level, adds them as approved runs with notes set to “Valid run”. Bulk approve approves pending FEDL submissions only. Full imports run one page at a time to limit rate usage.</p>
+          <p id="import-status" class="muted">Pull records from Pointercrate or AREDL (AREDL needs a server API key or token). Targeted import loads victories from the API by player or level, adds them as approved runs with notes set to "Valid run". Bulk approve approves pending FEDL submissions only. Full imports run one page at a time to limit rate usage.</p>
         </div>
         <div class="admin-actions admin-import-actions">
           <button id="import-pointercrate" type="button" class="btn ghost-btn">Import Pointercrate</button>

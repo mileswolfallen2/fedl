@@ -354,3 +354,16 @@ header nav .fedl-auth-nav a:hover{color:var(--text)}
 @media(max-width:900px){.error-grid{grid-template-columns:1fr}.error-copy,.error-side{padding:24px 20px}.error-copy h2{font-size:2.5rem}}
 @media(max-width:900px){.admin-overview-panel,.admin-toolbar{flex-direction:column;align-items:stretch}.admin-actions{flex-direction:column;align-items:stretch}.admin-password-field input,.admin-actions input[type=text],.admin-actions input[type=password]{min-width:0;width:100%}.run-shell{grid-template-columns:1fr}.run-head{flex-direction:column;align-items:flex-start}.run-form{grid-template-columns:1fr}.admin-login-screen{padding:18px}.admin-login-card{padding:26px 22px}}
 @media(max-width:640px){header{flex-direction:column;align-items:flex-start;gap:12px}nav{display:flex;flex-wrap:wrap;gap:10px}nav a{margin-left:0}header nav a.btn{margin-left:0}.home-copy h2{max-width:none}.hero-actions{flex-direction:column;align-items:stretch}.hero-actions .btn,.roulette-btn{width:100%;text-align:center}.list-hero-panel,.list-controls-panel,.list-table-panel,.roulette-panel,.roulette-rules-card,.run-panel,.run-side-panel,.submission-panel{padding:22px 18px}.table-hint{text-align:left}.run-admin-actions{justify-content:flex-start}}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:16px}
+.stat-box{padding:16px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);text-align:center}
+.stat-box strong{display:block;margin-bottom:6px;font-size:1.75rem;color:var(--accent)}
+.stat-box span{display:block;color:var(--muted);font-size:.9rem}
+.bug-report-detail-row td{padding-top:0}
+.bug-report-detail{display:grid;gap:8px;padding:0 0 14px 0;color:#dce8f5}
+.bug-report-detail a{color:var(--accent)}
+.admin-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.admin-tab{padding:10px 18px;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:var(--muted);cursor:pointer;font-weight:700;transition:all .2s ease}
+.admin-tab:hover{background:rgba(255,255,255,0.08);color:var(--text)}
+.admin-tab.active{background:var(--accent);color:#042}
+.admin-tab-panel{display:block}
+.admin-tab-panel[hidden]{display:none}
