@@ -67,14 +67,7 @@
     .delete-comment{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:2px 6px;opacity:0}
     .comment:hover .delete-comment{opacity:1}
     .delete-comment:hover{color:#ff8888}
-    .video-modal{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;padding:20px}
-    .share-modal-content{background:var(--panel);border-radius:16px;padding:24px;width:100%;max-width:400px}
-    .share-modal-content h3{margin:0 0 16px 0;font-size:1.1rem;color:var(--accent)}
-    .share-modal-content a{display:block;padding:12px 16px;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:8px;color:var(--text);text-decoration:none}
-    .share-modal-content a:hover{background:rgba(255,255,255,0.1)}
-    .share-modal-content .embed-box{margin-top:12px}
-    .share-modal-content .embed-box label{font-size:0.85rem;color:var(--muted);display:block;margin-bottom:6px}
-    .share-modal-content .embed-box textarea{width:100%;height:60px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text);padding:10px;font-size:0.85rem;resize:none;font-family:monospace}
+    .video-modal iframe{width:100%;max-width:900px;aspect-ratio:16/9;border:none;border-radius:12px}
     .video-modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:1.5rem;width:40px;height:40px;border-radius:50%;cursor:pointer}
   </style>
 </head>
@@ -93,7 +86,7 @@
     </div>
   </div>
 
-  <div class="video-modal" id="videoModal">
+  <div class="video-modal" id="videoModal" style="display:none">
     <button class="video-modal-close" id="videoModalClose">&times;</button>
     <iframe id="videoModalIframe" allowfullscreen></iframe>
   </div>
