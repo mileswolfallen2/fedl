@@ -358,6 +358,9 @@ header nav .fedl-auth-nav a:hover{color:var(--text)}
 .stat-box{padding:16px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);text-align:center}
 .stat-box strong{display:block;margin-bottom:6px;font-size:1.75rem;color:var(--accent)}
 .stat-box span{display:block;color:var(--muted);font-size:.9rem}
+.stat-box-small{padding:12px}
+.stat-box-small strong{font-size:1.25rem}
+.stat-box-small span{font-size:.8rem}
 .bug-report-detail-row td{padding-top:0}
 .bug-report-detail{display:grid;gap:8px;padding:0 0 14px 0;color:#dce8f5}
 .bug-report-detail a{color:var(--accent)}
