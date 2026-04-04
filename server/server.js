@@ -10,6 +10,7 @@ const runsPath = path.join(__dirname, 'runs.json');
 const usersPath = path.join(__dirname, 'users.json');
 const sessionsPath = path.join(__dirname, 'sessions.json');
 const userDataPath = path.join(__dirname, 'userdata.json');
+const postsPath = path.join(__dirname, 'posts.json');
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '/fedl';
@@ -239,6 +240,36 @@ function readUserDataMap() {
 
 function writeUserDataMap(map) {
   fs.writeFileSync(userDataPath, `${JSON.stringify(map, null, 2)}\n`, 'utf8');
+}
+
+function ensurePostsFile() {
+  if (!fs.existsSync(postsPath)) {
+    fs.writeFileSync(postsPath, '[]\n', 'utf8');
+  }
+}
+
+function readPosts() {
+  ensurePostsFile();
+  const raw = fs.readFileSync(postsPath, 'utf8');
+  const parsed = JSON.parse(raw || '[]');
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+function writePosts(posts) {
+  fs.writeFileSync(postsPath, `${JSON.stringify(posts, null, 2)}\n`, 'utf8');
+}
+
+function normalizePost(post) {
+  return {
+    id: String(post.id || ''),
+    authorId: String(post.authorId || ''),
+    authorName: String(post.authorName || ''),
+    level: String(post.level || '').slice(0, 200),
+    content: String(post.content || '').slice(0, 4000),
+    timestamp: String(post.timestamp || new Date().toISOString()),
+    likes: Array.isArray(post.likes) ? post.likes : [],
+    comments: Array.isArray(post.comments) ? post.comments : []
+  };
 }
 
 function sleep(ms) {
@@ -862,6 +893,188 @@ const server = http.createServer((req, res) => {
         sendJson(res, 400, { error: 'Invalid payload' });
       }
     });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/posts') {
+    try {
+      const posts = readPosts();
+      sendJson(res, 200, { items: posts });
+    } catch (error) {
+      sendJson(res, 500, { error: 'Could not read posts' });
+    }
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/posts') {
+    const sess = findSession(getBearerToken(req));
+    if (!sess) {
+      sendJson(res, 401, { error: 'Sign in to post' });
+      return;
+    }
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const level = String(payload.level || '').trim().slice(0, 200);
+        const content = String(payload.content || '').trim().slice(0, 4000);
+        if (!level || !content) {
+          sendJson(res, 400, { error: 'Level and content are required' });
+          return;
+        }
+        const posts = readPosts();
+        const newPost = {
+          id: `post_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`,
+          authorId: sess.userId,
+          authorName: sess.username,
+          level,
+          content,
+          timestamp: new Date().toISOString(),
+          likes: [],
+          comments: []
+        };
+        posts.unshift(newPost);
+        writePosts(posts.slice(0, 100));
+        sendEvent('posts-update', { updatedAt: newPost.timestamp });
+        sendJson(res, 201, { ok: true, item: newPost });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid post payload' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'DELETE' && pathname.startsWith('/api/posts/')) {
+    const sess = findSession(getBearerToken(req));
+    if (!sess) {
+      sendJson(res, 401, { error: 'Sign in required' });
+      return;
+    }
+    const postId = pathname.slice('/api/posts/'.length);
+    if (!postId) {
+      sendJson(res, 400, { error: 'Post id required' });
+      return;
+    }
+    const posts = readPosts();
+    const index = posts.findIndex(p => p.id === postId);
+    if (index === -1) {
+      sendJson(res, 404, { error: 'Post not found' });
+      return;
+    }
+    if (posts[index].authorId !== sess.userId) {
+      sendJson(res, 403, { error: 'Not your post' });
+      return;
+    }
+    posts.splice(index, 1);
+    writePosts(posts);
+    sendJson(res, 200, { ok: true });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname.startsWith('/api/posts/') && pathname.endsWith('/like')) {
+    const sess = findSession(getBearerToken(req));
+    if (!sess) {
+      sendJson(res, 401, { error: 'Sign in to like' });
+      return;
+    }
+    const postId = pathname.slice('/api/posts/'.length, -'/like'.length);
+    const allPosts = readPosts();
+    const post = allPosts.find(p => p.id === postId);
+    if (!post) {
+      sendJson(res, 404, { error: 'Post not found' });
+      return;
+    }
+    if (!post.likes) post.likes = [];
+    const idx = post.likes.indexOf(sess.userId);
+    if (idx === -1) {
+      post.likes.push(sess.userId);
+    } else {
+      post.likes.splice(idx, 1);
+    }
+    writePosts(allPosts);
+    sendJson(res, 200, { ok: true, liked: idx === -1, count: post.likes.length });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname.startsWith('/api/posts/') && pathname.endsWith('/comment')) {
+    const sess = findSession(getBearerToken(req));
+    if (!sess) {
+      sendJson(res, 401, { error: 'Sign in to comment' });
+      return;
+    }
+    const postId = pathname.slice('/api/posts/'.length, -'/comment'.length);
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 4096) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const text = String(payload.text || '').trim().slice(0, 500);
+        if (!text) {
+          sendJson(res, 400, { error: 'Comment text required' });
+          return;
+        }
+        const allPosts = readPosts();
+        const post = allPosts.find(p => p.id === postId);
+        if (!post) {
+          sendJson(res, 404, { error: 'Post not found' });
+          return;
+        }
+        if (!post.comments) post.comments = [];
+        post.comments.push({
+          id: `cmt_${Date.now().toString(36)}${crypto.randomBytes(3).toString('hex')}`,
+          authorId: sess.userId,
+          authorName: sess.username,
+          text,
+          timestamp: new Date().toISOString()
+        });
+        writePosts(allPosts);
+        sendEvent('posts-update', { updatedAt: new Date().toISOString() });
+        sendJson(res, 201, { ok: true, comment: post.comments[post.comments.length - 1] });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid comment payload' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'DELETE' && pathname.startsWith('/api/posts/') && pathname.includes('/comment/')) {
+    const sess = findSession(getBearerToken(req));
+    if (!sess) {
+      sendJson(res, 401, { error: 'Sign in required' });
+      return;
+    }
+    const match = pathname.match(/^\/api\/posts\/([^/]+)\/comment\/(.+)$/);
+    if (!match) {
+      sendJson(res, 400, { error: 'Invalid path' });
+      return;
+    }
+    const postId = match[1];
+    const commentId = match[2];
+    const allPosts = readPosts();
+    const post = allPosts.find(p => p.id === postId);
+    if (!post) {
+      sendJson(res, 404, { error: 'Post not found' });
+      return;
+    }
+    const cidx = post.comments ? post.comments.findIndex(c => c.id === commentId) : -1;
+    if (cidx === -1) {
+      sendJson(res, 404, { error: 'Comment not found' });
+      return;
+    }
+    if (post.comments[cidx].authorId !== sess.userId) {
+      sendJson(res, 403, { error: 'Not your comment' });
+      return;
+    }
+    post.comments.splice(cidx, 1);
+    writePosts(allPosts);
+    sendJson(res, 200, { ok: true });
     return;
   }
 

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Updates - FEDL</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .login-screen{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:30px;background:radial-gradient(circle at top,rgba(92,197,255,0.14),transparent 28%),linear-gradient(180deg,#061021 0%,#071426 100%)}
+    .login-card{width:min(100%,420px);padding:34px;border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(7,19,38,0.96) 42%),radial-gradient(circle at top left,rgba(255,255,255,0.08),transparent 35%);border:1px solid rgba(255,255,255,0.08)}
+    .login-card h2{margin:0 0 10px 0;font-size:1.8rem}
+    .login-card p{margin:0 0 20px 0;color:var(--muted)}
+    .login-form{display:grid;gap:16px}
+    .login-form input{padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text);font-size:1rem}
+    .login-form input:focus{outline:none;border-color:var(--accent)}
+    .login-form .btn{width:100%;text-align:center}
+    .login-error{color:#ff9f9f;font-size:0.9rem;margin-top:-8px}
+    .login-screen[hidden]{display:none}
+    .post-compose{background:var(--panel);padding:20px;border-radius:12px;margin-bottom:20px}
+    .post-compose h3{margin:0 0 16px 0;font-size:1.1rem;color:var(--accent)}
+    .post-compose input,.post-compose textarea{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text);font-size:1rem;margin-bottom:12px;box-sizing:border-box}
+    .post-compose textarea{min-height:100px;resize:vertical;font-family:inherit}
+    .post-compose input:focus,.post-compose textarea:focus{outline:none;border-color:var(--accent)}
+    .post-compose .char-count{text-align:right;font-size:0.8rem;color:var(--muted);margin-top:-8px;margin-bottom:12px}
+    .posts-feed h3{margin:0 0 16px 0;font-size:1.1rem}
+    .post-card{background:var(--panel);padding:18px;border-radius:12px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.04)}
+    .post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+    .post-level{color:var(--accent);font-weight:700;font-size:1.05rem}
+    .post-meta{color:var(--muted);font-size:0.8rem}
+    .post-author{color:var(--accent-warm);font-weight:600}
+    .post-content{line-height:1.6;word-break:break-word}
+    .post-content a{color:var(--accent)}
+    .video-cube{display:flex;align-items:center;gap:12px;margin-top:12px;padding:10px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .2s}
+    .video-cube:hover{background:rgba(255,255,255,0.06)}
+    .video-cube img{width:120px;height:68px;border-radius:6px;object-fit:cover}
+    .video-cube-info{flex:1;min-width:0}
+    .video-cube-title{font-weight:600;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .video-cube-duration{font-size:0.75rem;color:var(--muted);margin-top:2px}
+    .video-cube-play{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+    .video-modal{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;padding:20px}
+    .video-modal iframe{width:100%;max-width:900px;aspect-ratio:16/9;border:none;border-radius:12px}
+    .video-modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:1.5rem;width:40px;height:40px;border-radius:50%;cursor:pointer}
+    .post-content .link-preview{margin-top:10px;padding:12px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06)}
+    .post-content .link-preview a{color:var(--accent);word-break:break-all}
+    .post-actions{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.04)}
+    .post-actions button{background:transparent;border:none;color:var(--muted);cursor:pointer;padding:6px 12px;border-radius:6px;font-size:0.85rem;display:flex;align-items:center;gap:6px}
+    .post-actions button:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+    .post-actions button.liked{color:#ff6b8a}
+    .post-actions button.liked svg{fill:#ff6b8a}
+    .empty-state{text-align:center;padding:40px;color:var(--muted)}
+    .logout-btn{background:rgba(255,255,255,0.08);color:var(--muted)}
+    .logout-btn:hover{background:rgba(255,255,255,0.12);color:var(--text)}
+    .delete-post{background:rgba(255,100,100,0.2);color:#ff8888;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem}
+    .delete-post:hover{background:rgba(255,100,100,0.3)}
+    .comments-section{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.04)}
+    .comments-section h4{font-size:0.85rem;color:var(--muted);margin:0 0 10px 0;text-transform:uppercase;letter-spacing:.1em}
+    .comment{margin-bottom:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02)}
+    .comment-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+    .comment-author{font-weight:600;font-size:0.85rem;color:var(--accent-warm)}
+    .comment-time{font-size:0.75rem;color:var(--muted)}
+    .comment-text{font-size:0.9rem;line-height:1.5}
+    .comment-input-row{display:flex;gap:8px;margin-top:10px}
+    .comment-input-row input{flex:1;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text);font-size:0.9rem}
+    .comment-input-row input:focus{outline:none;border-color:var(--accent)}
+    .comment-input-row button{padding:8px 14px;background:var(--accent);color:#042;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+    .comment-input-row button:disabled{opacity:0.5;cursor:not-allowed}
+    .delete-comment{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:2px 6px;opacity:0}
+    .comment:hover .delete-comment{opacity:1}
+    .delete-comment:hover{color:#ff8888}
+    .video-modal{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;padding:20px}
+    .share-modal-content{background:var(--panel);border-radius:16px;padding:24px;width:100%;max-width:400px}
+    .share-modal-content h3{margin:0 0 16px 0;font-size:1.1rem;color:var(--accent)}
+    .share-modal-content a{display:block;padding:12px 16px;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:8px;color:var(--text);text-decoration:none}
+    .share-modal-content a:hover{background:rgba(255,255,255,0.1)}
+    .share-modal-content .embed-box{margin-top:12px}
+    .share-modal-content .embed-box label{font-size:0.85rem;color:var(--muted);display:block;margin-bottom:6px}
+    .share-modal-content .embed-box textarea{width:100%;height:60px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text);padding:10px;font-size:0.85rem;resize:none;font-family:monospace}
+    .video-modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:1.5rem;width:40px;height:40px;border-radius:50%;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="login-screen" id="loginScreen" hidden>
+    <div class="login-card">
+      <h2>Post Updates</h2>
+      <p>Login to post level updates</p>
+      <form class="login-form" id="loginForm">
+        <input type="text" id="username" placeholder="Username" required autocomplete="username">
+        <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+        <button type="submit" class="btn">Login</button>
+        <p class="login-error" id="loginError" hidden></p>
+      </form>
+      <p style="margin-top:16px;font-size:0.85rem;color:var(--muted)">New here? <a href="signup.html" style="color:var(--accent)">Sign up</a></p>
+    </div>
+  </div>
+
+  <div class="video-modal" id="videoModal">
+    <button class="video-modal-close" id="videoModalClose">&times;</button>
+    <iframe id="videoModalIframe" allowfullscreen></iframe>
+  </div>
+
+  <header>
+    <h1><a href="index.html" style="color:var(--text);text-decoration:none">FEDL</a></h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="rules.html">Rules</a>
+      <a href="post.html">Posts</a>
+      <span class="fedl-auth-nav"></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="post-compose" id="postCompose" style="display:none">
+      <h3>Post an Update</h3>
+      <form id="postForm">
+        <input type="text" id="levelInput" placeholder="Level name or ID" required>
+        <textarea id="contentInput" placeholder="What's the update? Paste YouTube or direct links..." maxlength="4000"></textarea>
+        <div class="char-count"><span id="charCount">0</span>/4000</div>
+        <button type="submit" class="btn">Post Update</button>
+      </form>
+    </div>
+
+    <div class="posts-feed">
+      <h3>Recent Updates</h3>
+      <div id="postsContainer"></div>
+    </div>
+  </main>
+
+  <script>
+    const BASE = 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+    const AUTH_TOKEN_KEY = 'fedl_auth_token';
+    let currentUser = null;
+    let currentUserId = null;
+
+    const loginScreen = document.getElementById('loginScreen');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const postCompose = document.getElementById('postCompose');
+    const postForm = document.getElementById('postForm');
+    const contentInput = document.getElementById('contentInput');
+    const charCount = document.getElementById('charCount');
+    const postsContainer = document.getElementById('postsContainer');
+
+    function getToken() {
+      return localStorage.getItem(AUTH_TOKEN_KEY) || '';
+    }
+
+    function setToken(t) {
+      if (t) localStorage.setItem(AUTH_TOKEN_KEY, t);
+      else localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+
+    function api(path, options = {}) {
+      const opts = Object.assign({ headers: { 'Content-Type': 'application/json' } }, options);
+      const tok = getToken();
+      if (tok) opts.headers['Authorization'] = `Bearer ${tok}`;
+      if (opts.body && typeof opts.body === 'object') opts.body = JSON.stringify(opts.body);
+      return fetch(BASE + path, opts).then(r => r.json().then(j => ({ ok: r.ok, status: r.status, data: j })));
+    }
+
+    function checkAuth() {
+      const tok = getToken();
+      if (!tok) return Promise.resolve(null);
+      return api('/api/auth/me').then(res => {
+        if (res.ok && res.data && res.data.userId) {
+          currentUser = res.data.username;
+          currentUserId = res.data.userId;
+          return res.data;
+        }
+        setToken('');
+        return null;
+      });
+    }
+
+    function login(username, password) {
+      return api('/api/auth/login', { method: 'POST', body: { username, password } }).then(res => {
+        if (res.ok && res.data && res.data.token) {
+          setToken(res.data.token);
+          currentUser = res.data.username;
+          currentUserId = res.data.userId;
+          return { ok: true };
+        }
+        return { ok: false, error: res.data && res.data.error || 'Login failed' };
+      });
+    }
+
+    function logout() {
+      api('/api/auth/logout', { method: 'POST' }).catch(() => {});
+      setToken('');
+      currentUser = null;
+      currentUserId = null;
+    }
+
+    function updateUi() {
+      if (currentUser) {
+        loginScreen.hidden = true;
+        postCompose.style.display = 'block';
+        const nav = document.querySelector('.fedl-auth-nav');
+        if (nav) {
+          nav.innerHTML = `<span class="muted">Hi, <strong>${escapeHtml(currentUser)}</strong></span> <button class="btn ghost-btn small-btn logout-btn">Log out</button>`;
+          nav.querySelector('.logout-btn').onclick = () => { logout(); updateUi(); };
+        }
+      } else {
+        loginScreen.hidden = false;
+        postCompose.style.display = 'none';
+        const nav = document.querySelector('.fedl-auth-nav');
+        if (nav) nav.innerHTML = '<a href="login.html">Log in</a> <a href="signup.html">Sign up</a>';
+      }
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value;
+      const res = await login(user, pass);
+      if (res.ok) { updateUi(); loadPosts(); }
+      else {
+        loginError.textContent = res.error || 'Invalid username or password';
+        loginError.hidden = false;
+      }
+    });
+
+    contentInput.addEventListener('input', () => { charCount.textContent = contentInput.value.length; });
+
+    function parseContent(text) {
+      let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      
+      const ytRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/gi;
+      const ytMatches = [...text.matchAll(ytRegex)];
+      const ytUrls = new Set(ytMatches.map(m => m[0]));
+      
+      ytMatches.forEach(m => {
+        const vid = m[1];
+        html = html.replace(m[0], `
+          <div class="video-cube" onclick="playVideo('${vid}')">
+            <img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" alt="Video thumbnail" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 68%22><rect fill=%22%23333%22 width=%22120%22 height=%2268%22/><text x=%2260%22 y=%2240%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2212%22>Video</text></svg>'">
+            <div class="video-cube-info">
+              <div class="video-cube-title">Click to watch on YouTube</div>
+              <div class="video-cube-duration">YouTube Video</div>
+            </div>
+            <div class="video-cube-play">&#9658;</div>
+          </div>
+        `);
+      });
+      
+      const urlRegex = /(?:https?:\/\/)[^\s<>"{}|\\^`\[\]]+/gi;
+      let linksHtml = '';
+      (text.match(urlRegex) || []).filter(u => !ytUrls.has(u) && !u.includes('youtube.com') && !u.includes('youtu.be')).forEach(url => {
+        const display = url.length > 60 ? url.substring(0, 57) + '...' : url;
+        linksHtml += `<div class="link-preview"><a href="${url}" target="_blank" rel="noopener noreferrer">${display}</a></div>`;
+      });
+      html = html.replace(urlRegex, '').trim();
+      
+      let result = html.trim();
+      if (linksHtml) result += linksHtml;
+      return result || '<span style="color:var(--muted)">No text content</span>';
+    }
+
+    function closeVideoModal() {
+      document.getElementById('videoModal').style.display = 'none';
+      document.getElementById('videoModalIframe').src = '';
+    }
+
+    document.getElementById('videoModalClose').addEventListener('click', closeVideoModal);
+    document.getElementById('videoModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('videoModal')) closeVideoModal();
+    });
+
+    function playVideo(vidId) {
+      document.getElementById('videoModal').style.display = 'flex';
+      document.getElementById('videoModalIframe').src = `https://www.youtube.com/embed/${vidId}?autoplay=1`;
+    }
+
+    function formatDate(ts) {
+      const d = new Date(ts);
+      const diff = Date.now() - d;
+      if (diff < 60000) return 'just now';
+      if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+      if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function renderPosts(posts) {
+      if (!posts || posts.length === 0) {
+        postsContainer.innerHTML = '<div class="empty-state">No updates yet. Be the first to post!</div>';
+        return;
+      }
+
+      postsContainer.innerHTML = posts.map(post => {
+        const liked = currentUserId && post.likes && post.likes.includes(currentUserId);
+        const likeCount = post.likes ? post.likes.length : 0;
+        const comments = post.comments || [];
+        return `
+          <div class="post-card" id="post-${post.id}">
+            <div class="post-header">
+              <span class="post-level">${escapeHtml(post.level)}</span>
+              <span class="post-meta">by <span class="post-author">${escapeHtml(post.authorName)}</span> · ${formatDate(post.timestamp)}</span>
+            </div>
+            <div class="post-content">${parseContent(post.content)}</div>
+            <div class="post-actions">
+              <button class="${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span id="like-count-${post.id}">${likeCount}</span>
+              </button>
+              <button onclick="toggleComments('${post.id}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                ${comments.length}
+              </button>
+              ${post.authorId === currentUserId ? `<button class="delete-post" onclick="deletePost('${post.id}')" style="margin-left:auto">Delete</button>` : ''}
+            </div>
+            <div class="comments-section" id="comments-${post.id}" style="display:none">
+              <h4>Comments</h4>
+              <div class="comments-list">
+                ${comments.map(c => `
+                  <div class="comment">
+                    <div class="comment-header">
+                      <span class="comment-author">${escapeHtml(c.authorName)}</span>
+                      <span class="comment-time">${formatDate(c.timestamp)}</span>
+                      ${c.authorId === currentUserId ? `<button class="delete-comment" onclick="deleteComment('${post.id}','${c.id}')">&times;</button>` : ''}
+                    </div>
+                    <div class="comment-text">${escapeHtml(c.text)}</div>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="comment-input-row">
+                <input type="text" id="comment-input-${post.id}" placeholder="${currentUser ? 'Add a comment...' : 'Log in to comment'}" ${!currentUser ? 'disabled' : ''}>
+                <button onclick="addComment('${post.id}')" ${!currentUser ? 'disabled' : ''}>Post</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.comment-input-row input').forEach(input => {
+        input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && currentUser) {
+            const postId = input.id.replace('comment-input-', '');
+            addComment(postId);
+          }
+        });
+      });
+    }
+
+    function toggleComments(postId) {
+      const el = document.getElementById(`comments-${postId}`);
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleLike(postId) {
+      if (!currentUserId) { return; }
+      api(`/api/posts/${postId}/like`, { method: 'POST' }).then(res => {
+        if (res.ok && res.data) {
+          const btn = document.querySelector(`#post-${postId} .post-actions button:first-child`);
+          const countEl = document.getElementById(`like-count-${postId}`);
+          if (btn && countEl) {
+            btn.classList.toggle('liked', res.data.liked);
+            countEl.textContent = res.data.count;
+          }
+        }
+      });
+    }
+
+    function addComment(postId) {
+      const input = document.getElementById(`comment-input-${postId}`);
+      const text = input.value.trim();
+      if (!text) return;
+      api(`/api/posts/${postId}/comment`, { method: 'POST', body: { text } }).then(res => {
+        if (res.ok) {
+          input.value = '';
+          loadPosts();
+        }
+      });
+    }
+
+    function deleteComment(postId, commentId) {
+      api(`/api/posts/${postId}/comment/${commentId}`, { method: 'DELETE' }).then(res => {
+        if (res.ok) loadPosts();
+      });
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function loadPosts() {
+      api('/api/posts').then(res => {
+        if (res.ok && res.data && Array.isArray(res.data.items)) {
+          renderPosts(res.data.items);
+        } else {
+          postsContainer.innerHTML = '<div class="empty-state">Could not load posts.</div>';
+        }
+      }).catch(() => {
+        postsContainer.innerHTML = '<div class="empty-state">Could not load posts.</div>';
+      });
+    }
+
+    function deletePost(id) {
+      api(`/api/posts/${id}`, { method: 'DELETE' }).then(res => { if (res.ok) loadPosts(); });
+    }
+
+    postForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const level = document.getElementById('levelInput').value.trim();
+      const content = contentInput.value.trim();
+      if (!level || !content) return;
+      api('/api/posts', { method: 'POST', body: { level, content } }).then(res => {
+        if (res.ok) {
+          postForm.reset();
+          charCount.textContent = '0';
+          loadPosts();
+        }
+      });
+    });
+
+    checkAuth().finally(() => { updateUi(); loadPosts(); });
+  </script>
+</body>
+</html>
