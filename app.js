@@ -669,6 +669,16 @@
     }
   }
 
+  function calculatePoints(rank){
+    if(!rank || rank < 1) return 0;
+    if(rank <= 10) return 2000 + (10 - rank) * 50;
+    if(rank <= 20) return 1000 + (20 - rank) * 50;
+    if(rank <= 100) return 101 - rank;
+    if(rank <= 250) return 125 + Math.round((251 - rank) * 100 / 150);
+    if(rank <= 1000) return 125 + Math.round((251 - rank) * 100 / 750);
+    return 0;
+  }
+
   function openVideoModal(item, options){
     const config = Object.assign({showRuns:false}, options || {});
     const url = item && item.url;
@@ -678,6 +688,8 @@
       window.open(url,'_blank');
       return;
     }
+    const rank = Number(item.position) || 0;
+    const points = calculatePoints(rank);
     let modal = document.querySelector('.video-modal');
     if(!modal){
       modal = document.createElement('div'); modal.className='video-modal';
@@ -697,6 +709,14 @@
       inner.appendChild(runsWrap);
     }
     modal.querySelector('iframe').src = `https://www.youtube.com/embed/${id}`;
+    let pointsEl = modal.querySelector('.modal-points');
+    if(!pointsEl){
+      pointsEl = document.createElement('div'); pointsEl.className='modal-points';
+      pointsEl.style.cssText = 'font-size:1.5em;font-weight:bold;margin-bottom:10px;color:var(--accent-color,#00aaff);';
+      const inner = modal.querySelector('.inner');
+      inner.insertBefore(pointsEl, inner.querySelector('iframe'));
+    }
+    pointsEl.textContent = rank > 0 ? `Rank #${rank} — ${points} points` : '';
     const runsWrap = modal.querySelector('.modal-runs-wrap');
     const runsList = modal.querySelector('.modal-runs-list');
     if(runsWrap) runsWrap.hidden = !config.showRuns;
@@ -1312,21 +1332,23 @@
         const key = playerName.toLowerCase();
         let entry = map.get(key);
         if(!entry){
-          entry = {name: playerName, runs: 0, bestRank: 9999, topLevels: new Set()};
+          entry = {name: playerName, runs: 0, bestRank: 9999, points: 0, topLevels: new Set()};
           map.set(key, entry);
         }
         entry.runs += 1;
         const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
         if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
+        if(rank > 0 && rank < 1001) entry.points += calculatePoints(rank);
         if(run.levelTitle) entry.topLevels.add(String(run.levelTitle).trim());
       });
       return Array.from(map.values()).map(entry => ({
         name: entry.name,
         runs: entry.runs,
         bestRank: entry.bestRank === 9999 ? '—' : `#${entry.bestRank}`,
+        points: entry.points,
         topLevels: Array.from(entry.topLevels).slice(0, 3).join(', ')
       })).sort((a,b) => {
-        if(b.runs !== a.runs) return b.runs - a.runs;
+        if(b.points !== a.points) return b.points - a.points;
         const aRank = typeof a.bestRank === 'string' ? Number(a.bestRank.slice(1)) || 9999 : a.bestRank;
         const bRank = typeof b.bestRank === 'string' ? Number(b.bestRank.slice(1)) || 9999 : b.bestRank;
         if(aRank !== bRank) return aRank - bRank;
@@ -1345,7 +1367,7 @@
 
       playersArea.innerHTML = '';
       if(!filtered.length){
-        playersArea.innerHTML = '<tr><td colspan="4" class="muted">No server players found.</td></tr>';
+        playersArea.innerHTML = '<tr><td colspan="5" class="muted">No server players found.</td></tr>';
         return;
       }
 
@@ -1353,10 +1375,12 @@
         const tr = document.createElement('tr');
         const tdName = document.createElement('td'); tdName.textContent = item.name;
         const tdRuns = document.createElement('td'); tdRuns.textContent = String(item.runs);
+        const tdPoints = document.createElement('td'); tdPoints.textContent = String(item.points);
         const tdRank = document.createElement('td'); tdRank.textContent = item.bestRank;
         const tdLevels = document.createElement('td'); tdLevels.textContent = item.topLevels;
         tr.appendChild(tdName);
         tr.appendChild(tdRuns);
+        tr.appendChild(tdPoints);
         tr.appendChild(tdRank);
         tr.appendChild(tdLevels);
         playersArea.appendChild(tr);
@@ -1364,7 +1388,7 @@
     }
 
     function showLoading(){
-      playersArea.innerHTML = '<tr><td colspan="4" class="muted">Loading player stats from server...</td></tr>';
+      playersArea.innerHTML = '<tr><td colspan="5" class="muted">Loading player stats from server...</td></tr>';
     }
 
     function syncView(newPlayers){
@@ -1382,7 +1406,7 @@
         })
         .catch(err => {
           console.error(err);
-          playersArea.innerHTML = '<tr><td colspan="4" class="muted">Could not load server player stats.</td></tr>';
+          playersArea.innerHTML = '<tr><td colspan="5" class="muted">Could not load server player stats.</td></tr>';
         });
     }
 
