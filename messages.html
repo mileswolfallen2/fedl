@@ -88,7 +88,7 @@
   </main>
   <script src="app.js"></script>
   <script>
-    const TESTING_MODE = true;
+    const TESTING_MODE = false;
     const BASE = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
     const AUTH_TOKEN_KEY = 'fedl_auth_token';
     let currentUser = null;
@@ -231,6 +231,10 @@
             userDropdown.hidden = true;
           });
         });
+      } else if (res.data && res.data.error) {
+        console.error('User search error:', res.data.error);
+        userDropdown.innerHTML = '<div style="padding:10px;color:var(--muted)">Error: ' + res.data.error + '</div>';
+        userDropdown.hidden = false;
       }
     });
 
