@@ -671,12 +671,8 @@
 
   function calculatePoints(rank){
     if(!rank || rank < 1) return 0;
-    if(rank <= 10) return 2000 + (10 - rank) * 50;
-    if(rank <= 20) return 1000 + (20 - rank) * 50;
-    if(rank <= 100) return 101 - rank;
-    if(rank <= 250) return 125 + Math.round((251 - rank) * 100 / 150);
-    if(rank <= 1000) return 125 + Math.round((251 - rank) * 100 / 750);
-    return 0;
+    if(rank <= 200) return 10000 - (rank - 1) * 50;
+    return 50;
   }
 
   function openVideoModal(item, options){
@@ -1338,7 +1334,7 @@
         entry.runs += 1;
         const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
         if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
-        if(rank > 0 && rank < 1001) entry.points += calculatePoints(rank);
+        if(rank > 0 && rank < 1000) entry.points += calculatePoints(rank);
         if(run.levelTitle) entry.topLevels.add(String(run.levelTitle).trim());
       });
       return Array.from(map.values()).map(entry => ({
@@ -1575,6 +1571,7 @@
     const statusEl = qs('admin-status');
     const listTbody = qs('admin-list-body');
     const addBtn = qs('add-row');
+    const addRowBottomBtn = qs('add-row-bottom');
     const saveBtn = qs('save-list');
     const searchEl = qs('admin-search');
     const adminPasswordEl = qs('admin-password');
@@ -1979,15 +1976,16 @@
 
     listTbody.addEventListener('click', function(event){
       const deleteButton = event.target.closest('[data-delete]');
-      if(!deleteButton) return;
-      const deleteIndex = deleteButton.getAttribute('data-delete');
-      if(deleteIndex == null) return;
-      const index = Number(deleteIndex);
-      if(Number.isNaN(index)) return;
-      items.splice(index, 1);
-      normalizePositions();
-      renderAdminTable();
-      setStatus('Row removed. Save when ready.');
+      if(deleteButton){
+        const deleteIndex = deleteButton.getAttribute('data-delete');
+        if(deleteIndex == null) return;
+        const index = Number(deleteIndex);
+        if(Number.isNaN(index)) return;
+        items.splice(index, 1);
+        normalizePositions();
+        renderAdminTable();
+        setStatus('Row removed. Save when ready.');
+      }
     });
 
     runsTbody.addEventListener('click', function(event){
@@ -2014,6 +2012,15 @@
       renderAdminTable();
       setStatus('New row added at the top. Give it a number when you want to place it.');
     });
+
+    if(addRowBottomBtn){
+      addRowBottomBtn.addEventListener('click', function(){
+        items.push({level:'new', position:'', title:'', url:'', _isDraft:true});
+        normalizePositions();
+        renderAdminTable();
+        setStatus('New row added at the bottom.');
+      });
+    }
 
     saveBtn.addEventListener('click', function(){
       saveItems();
