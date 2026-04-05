@@ -1209,6 +1209,238 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (req.method === 'GET' && pathname === '/api/list') {
+    try {
+      const text = readDataText();
+      sendJson(res, 200, { items: parseData(text), text });
+    } catch (error) {
+      sendJson(res, 500, { error: 'Could not read server/data.txt' });
+    }
+    return;
+  }
+
+  if (req.method === 'PUT' && pathname === '/api/list') {
+    if (!requireAdmin(req, res)) return;
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 5 * 1024 * 1024) {
+        req.destroy();
+      }
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const text = String(payload.text || '').trim();
+        fs.writeFileSync(dataPath, `${text}\n`, 'utf8');
+        sendEvent('list-update', { updatedAt: new Date().toISOString() });
+        sendJson(res, 200, { ok: true });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid list payload' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/events') {
+    setCors(res);
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream; charset=utf-8',
+      'Cache-Control': 'no-cache, no-transform',
+      'Connection': 'keep-alive'
+    });
+    res.write('retry: 3000\n\n');
+    clients.add(res);
+    req.on('close', () => clients.delete(res));
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/runs') {
+    try {
+      sendJson(res, 200, { items: readRuns() });
+    } catch (error) {
+      sendJson(res, 500, { error: 'Could not read server/runs.json' });
+    }
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/runs') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 2 * 1024 * 1024) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const nextRun = normalizeRun(payload);
+        const sess = findSession(getBearerToken(req));
+        if (sess) {
+          nextRun.accountUserId = sess.userId;
+          nextRun.accountUsername = sess.username;
+        }
+        if (!nextRun.playerName || !nextRun.levelTitle || !nextRun.videoUrl || !nextRun.percent) {
+          sendJson(res, 400, { error: 'playerName, levelTitle, videoUrl, and percent are required' });
+          return;
+        }
+        const runs = readRuns();
+        runs.unshift(nextRun);
+        writeRuns(runs);
+        sendEvent('runs-update', { updatedAt: nextRun.updatedAt });
+        sendJson(res, 201, { ok: true, item: nextRun });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid run payload' });
+      }
+    });
+    return;
+  }
+
+  if ((req.method === 'PUT' || req.method === 'DELETE') && pathname.startsWith('/api/runs/')) {
+    if (!requireAdmin(req, res)) return;
+    const runId = pathname.slice('/api/runs/'.length);
+    if (!runId) {
+      sendJson(res, 400, { error: 'Run id is required' });
+      return;
+    }
+
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 2 * 1024 * 1024) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const runs = readRuns();
+        const index = runs.findIndex(run => run.id === runId);
+        if (index === -1) {
+          sendJson(res, 404, { error: 'Run not found' });
+          return;
+        }
+
+        if (req.method === 'DELETE') {
+          runs.splice(index, 1);
+          writeRuns(runs);
+          sendEvent('runs-update', { updatedAt: new Date().toISOString() });
+          sendJson(res, 200, { ok: true });
+          return;
+        }
+
+        const payload = JSON.parse(body || '{}');
+        runs[index] = normalizeRun(payload, runs[index]);
+        writeRuns(runs);
+        sendEvent('runs-update', { updatedAt: runs[index].updatedAt });
+        sendJson(res, 200, { ok: true, item: runs[index] });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid run update payload' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/runs/bulk-approve') {
+    if (!requireAdmin(req, res)) return;
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const playerQuery = String(payload.playerName || '').trim();
+        if (!playerQuery) {
+          sendJson(res, 400, { error: 'playerName is required' });
+          return;
+        }
+        const normalizedQuery = playerQuery.toLowerCase();
+        const reviewNotes = String(payload.reviewNotes || 'Bulk approved').trim();
+        const runs = readRuns();
+        let approved = 0;
+        let updatedAt = new Date().toISOString();
+        runs.forEach((run, index) => {
+          const name = String(run.playerName || '').trim().toLowerCase();
+          const status = String(run.status || 'pending').toLowerCase();
+          if (name === normalizedQuery && status === 'pending') {
+            runs[index] = normalizeRun({
+              ...run,
+              status: 'approved',
+              reviewNotes,
+              reviewedBy: 'FEDL Admin'
+            }, run);
+            updatedAt = runs[index].updatedAt;
+            approved += 1;
+          }
+        });
+        if (approved) {
+          writeRuns(runs);
+          sendEvent('runs-update', { updatedAt });
+        }
+        sendJson(res, 200, { ok: true, approved, playerName: playerQuery });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid bulk-approve payload' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/import/targeted') {
+    if (!requireAdmin(req, res)) return;
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
+    req.on('end', () => {
+      (async () => {
+        try {
+          const payload = JSON.parse(body || '{}');
+          const source = String(payload.source || '').toLowerCase();
+          const filter = String(payload.filter || '').toLowerCase();
+          const query = String(payload.query || '').trim();
+          if (!['pointercrate', 'aredl'].includes(source)) {
+            sendJson(res, 400, { error: 'source must be pointercrate or aredl' });
+            return;
+          }
+          if (!['player', 'level'].includes(filter)) {
+            sendJson(res, 400, { error: 'filter must be player or level' });
+            return;
+          }
+          if (!query) {
+            sendJson(res, 400, { error: 'query is required' });
+            return;
+          }
+          const validRunNote = 'Valid run';
+          let records = [];
+          if (source === 'pointercrate') {
+            records = await fetchPointercrateFiltered(filter, query);
+          } else {
+            const pool = await fetchAredlRecords(40, 100);
+            records = filterAredlRecordsByQuery(pool, filter, query);
+          }
+          const label = source === 'pointercrate' ? 'Pointercrate' : 'AREDL';
+          const mapped = records.map(r => (source === 'pointercrate' ? mapPointercrateRecord(r) : mapAredlRecord(r)));
+          const summary = appendImportedRuns(mapped, label, { validRunNote: validRunNote });
+          sendJson(res, 200, Object.assign({ ok: true, source, filter, query, matched: records.length, note: validRunNote }, summary));
+        } catch (error) {
+          sendJson(res, 500, { error: String(error.message || error) });
+        }
+      })();
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/import/pointercrate') {
+    if (!requireAdmin(req, res)) return;
+    fetchPointercrateRecords()
+      .then(records => appendImportedRuns(records.map(mapPointercrateRecord), 'Pointercrate'))
+      .then(summary => sendJson(res, 200, Object.assign({ ok: true, source: 'pointercrate' }, summary)))
+      .catch(error => sendJson(res, 500, { error: String(error.message || error) }));
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/import/aredl') {
+    if (!requireAdmin(req, res)) return;
+    fetchAredlRecords()
+      .then(records => appendImportedRuns(records.map(mapAredlRecord), 'AREDL'))
+      .then(summary => sendJson(res, 200, Object.assign({ ok: true, source: 'aredl' }, summary)))
+      .catch(error => sendJson(res, 500, { error: String(error.message || error) }));
+    return;
+  }
+
   const sess = findSession(getBearerToken(req));
 
   if (req.method === 'POST' && pathname === '/api/messages') {
