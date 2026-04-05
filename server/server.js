@@ -12,10 +12,11 @@ const sessionsPath = path.join(__dirname, 'sessions.json');
 const userDataPath = path.join(__dirname, 'userdata.json');
 const postsPath = path.join(__dirname, 'posts.json');
 const bugReportsPath = path.join(__dirname, 'bugreports.json');
+const messagesPath = path.join(__dirname, 'messages.json');
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '/fedl';
-const adminPassword = String(process.env.ADMIN_PASSWORD || '');
+const adminPassword = String(process.env.ADMIN_PASSWORD || 'test');
 const clients = new Set();
 
 const contentTypes = {
@@ -275,6 +276,23 @@ function readBugReports() {
 
 function writeBugReports(reports) {
   fs.writeFileSync(bugReportsPath, `${JSON.stringify(reports, null, 2)}\n`, 'utf8');
+}
+
+function ensureMessagesFile() {
+  if (!fs.existsSync(messagesPath)) {
+    fs.writeFileSync(messagesPath, '[]\n', 'utf8');
+  }
+}
+
+function readMessages() {
+  ensureMessagesFile();
+  const raw = fs.readFileSync(messagesPath, 'utf8');
+  const parsed = JSON.parse(raw || '[]');
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+function writeMessages(messages) {
+  fs.writeFileSync(messagesPath, `${JSON.stringify(messages, null, 2)}\n`, 'utf8');
 }
 
 function normalizePost(post) {
@@ -1151,29 +1169,26 @@ const server = http.createServer((req, res) => {
     if (!requireAdmin(req, res)) return;
     const reportId = pathname.slice('/api/bugreports/'.length);
     if (!reportId) {
-      sendJson(res, 400, { error: 'Report id is required' });
+      sendJson(res, 400, { error: 'Missing report ID' });
+      return;
+    }
+    const reports = readBugReports();
+    const index = reports.findIndex(r => r.id === reportId);
+    if (index === -1) {
+      sendJson(res, 404, { error: 'Report not found' });
+      return;
+    }
+    if (req.method === 'DELETE') {
+      reports.splice(index, 1);
+      writeBugReports(reports);
+      sendEvent('bugreports-update', { updatedAt: new Date().toISOString() });
+      sendJson(res, 200, { ok: true });
       return;
     }
     let body = '';
-    req.on('data', chunk => {
-      body += chunk;
-      if (body.length > 65536) req.destroy();
-    });
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
     req.on('end', () => {
       try {
-        const reports = readBugReports();
-        const index = reports.findIndex(r => r.id === reportId);
-        if (index === -1) {
-          sendJson(res, 404, { error: 'Report not found' });
-          return;
-        }
-        if (req.method === 'DELETE') {
-          reports.splice(index, 1);
-          writeBugReports(reports);
-          sendEvent('bugreports-update', { updatedAt: new Date().toISOString() });
-          sendJson(res, 200, { ok: true });
-          return;
-        }
         const payload = JSON.parse(body || '{}');
         reports[index] = {
           ...reports[index],
@@ -1194,253 +1209,123 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.method === 'GET' && pathname === '/api/list') {
-    try {
-      const text = readDataText();
-      sendJson(res, 200, { items: parseData(text), text });
-    } catch (error) {
-      sendJson(res, 500, { error: 'Could not read server/data.txt' });
-    }
-    return;
-  }
+  const sess = findSession(getBearerToken(req));
 
-  if (req.method === 'PUT' && pathname === '/api/list') {
-    if (!requireAdmin(req, res)) return;
+  if (req.method === 'POST' && pathname === '/api/messages') {
+    if (!sess) { sendJson(res, 401, { error: 'Login required' }); return; }
     let body = '';
-    req.on('data', chunk => {
-      body += chunk;
-      if (body.length > 5 * 1024 * 1024) {
-        req.destroy();
-      }
-    });
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
     req.on('end', () => {
       try {
         const payload = JSON.parse(body || '{}');
-        const text = String(payload.text || '').trim();
-        fs.writeFileSync(dataPath, `${text}\n`, 'utf8');
-        sendEvent('list-update', { updatedAt: new Date().toISOString() });
-        sendJson(res, 200, { ok: true });
-      } catch (error) {
-        sendJson(res, 400, { error: 'Invalid list payload' });
-      }
-    });
-    return;
-  }
-
-  if (req.method === 'GET' && pathname === '/events') {
-    setCors(res);
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream; charset=utf-8',
-      'Cache-Control': 'no-cache, no-transform',
-      'Connection': 'keep-alive'
-    });
-    res.write('retry: 3000\n\n');
-    clients.add(res);
-    req.on('close', () => clients.delete(res));
-    return;
-  }
-
-  if (req.method === 'GET' && pathname === '/api/runs') {
-    try {
-      sendJson(res, 200, { items: readRuns() });
-    } catch (error) {
-      sendJson(res, 500, { error: 'Could not read server/runs.json' });
-    }
-    return;
-  }
-
-  if (req.method === 'POST' && pathname === '/api/runs') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk;
-      if (body.length > 2 * 1024 * 1024) req.destroy();
-    });
-    req.on('end', () => {
-      try {
-        const payload = JSON.parse(body || '{}');
-        const nextRun = normalizeRun(payload);
-        const sess = findSession(getBearerToken(req));
-        if (sess) {
-          nextRun.accountUserId = sess.userId;
-          nextRun.accountUsername = sess.username;
-        }
-        if (!nextRun.playerName || !nextRun.levelTitle || !nextRun.videoUrl || !nextRun.percent) {
-          sendJson(res, 400, { error: 'playerName, levelTitle, videoUrl, and percent are required' });
+        const toUserId = String(payload.toUserId || '').trim();
+        const content = String(payload.content || '').trim().slice(0, 2000);
+        if (!toUserId || !content) {
+          sendJson(res, 400, { error: 'toUserId and content are required' });
           return;
         }
-        const runs = readRuns();
-        runs.unshift(nextRun);
-        writeRuns(runs);
-        sendEvent('runs-update', { updatedAt: nextRun.updatedAt });
-        sendJson(res, 201, { ok: true, item: nextRun });
+        const users = readUsers();
+        const toUser = users.find(u => u.id === toUserId);
+        if (!toUser) {
+          sendJson(res, 404, { error: 'Recipient user not found' });
+          return;
+        }
+        if (toUserId === sess.userId) {
+          sendJson(res, 400, { error: 'Cannot send message to yourself' });
+          return;
+        }
+        const messages = readMessages();
+        const newMessage = {
+          id: `msg_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`,
+          fromUserId: sess.userId,
+          fromUsername: sess.username,
+          toUserId,
+          toUsername: toUser.username,
+          content,
+          timestamp: new Date().toISOString(),
+          read: false
+        };
+        messages.unshift(newMessage);
+        writeMessages(messages);
+        sendEvent('messages-update', { userId: sess.userId });
+        sendEvent('messages-update', { userId: toUserId });
+        sendJson(res, 201, { ok: true, message: newMessage });
       } catch (error) {
-        sendJson(res, 400, { error: 'Invalid run payload' });
+        sendJson(res, 400, { error: 'Invalid message payload' });
       }
     });
     return;
   }
 
-  if (req.method === 'POST' && pathname === '/api/runs/bulk-approve') {
-    if (!requireAdmin(req, res)) return;
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk;
-      if (body.length > 65536) req.destroy();
-    });
-    req.on('end', () => {
-      try {
-        const payload = JSON.parse(body || '{}');
-        const playerQuery = String(payload.playerName || '').trim();
-        if (!playerQuery) {
-          sendJson(res, 400, { error: 'playerName is required' });
-          return;
-        }
-        const normalizedQuery = playerQuery.toLowerCase();
-        const reviewNotes = String(
-          payload.reviewNotes != null && String(payload.reviewNotes).trim()
-            ? payload.reviewNotes
-            : 'Bulk approved (player profile tool)'
-        ).trim();
-        const runs = readRuns();
-        let approved = 0;
-        let updatedAt = new Date().toISOString();
-        runs.forEach((run, index) => {
-          const name = String(run.playerName || '').trim().toLowerCase();
-          const status = String(run.status || 'pending').toLowerCase();
-          if (name === normalizedQuery && status === 'pending') {
-            runs[index] = normalizeRun(
-              {
-                ...run,
-                status: 'approved',
-                reviewNotes,
-                reviewedBy: 'FEDL Admin'
-              },
-              run
-            );
-            updatedAt = runs[index].updatedAt;
-            approved += 1;
-          }
+  if (req.method === 'GET' && pathname === '/api/messages') {
+    if (!sess) { sendJson(res, 401, { error: 'Login required' }); return; }
+    const messages = readMessages();
+    const userMessages = messages.filter(m => m.toUserId === sess.userId || m.fromUserId === sess.userId);
+    const conversationsMap = new Map();
+    userMessages.forEach(m => {
+      const otherId = m.fromUserId === sess.userId ? m.toUserId : m.fromUserId;
+      const otherName = m.fromUserId === sess.userId ? m.toUsername : m.fromUsername;
+      if (!conversationsMap.has(otherId)) {
+        conversationsMap.set(otherId, {
+          userId: otherId,
+          username: otherName,
+          lastMessage: m,
+          unreadCount: 0
         });
-        if (approved) {
-          writeRuns(runs);
-          sendEvent('runs-update', { updatedAt });
-        }
-        sendJson(res, 200, { ok: true, approved, playerName: playerQuery });
-      } catch (error) {
-        sendJson(res, 400, { error: 'Invalid bulk-approve payload' });
+      }
+      if (m.toUserId === sess.userId && !m.read) {
+        conversationsMap.get(otherId).unreadCount++;
       }
     });
+    const conversations = Array.from(conversationsMap.values()).sort((a, b) =>
+      new Date(b.lastMessage.timestamp) - new Date(a.lastMessage.timestamp)
+    );
+    sendJson(res, 200, { conversations });
     return;
   }
 
-  if (req.method === 'POST' && pathname === '/api/import/targeted') {
-    if (!requireAdmin(req, res)) return;
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk;
-      if (body.length > 65536) req.destroy();
-    });
-    req.on('end', () => {
-      (async () => {
-        try {
-          const payload = JSON.parse(body || '{}');
-          const source = String(payload.source || '').toLowerCase();
-          const filter = String(payload.filter || '').toLowerCase();
-          const query = String(payload.query || '').trim();
-          if (!['pointercrate', 'aredl'].includes(source)) {
-            sendJson(res, 400, { error: 'source must be pointercrate or aredl' });
-            return;
-          }
-          if (!['player', 'level'].includes(filter)) {
-            sendJson(res, 400, { error: 'filter must be player or level' });
-            return;
-          }
-          if (!query) {
-            sendJson(res, 400, { error: 'query is required' });
-            return;
-          }
-          const validRunNote = 'Valid run';
-          let records = [];
-          if (source === 'pointercrate') {
-            records = await fetchPointercrateFiltered(filter, query);
-          } else {
-            const pool = await fetchAredlRecords(40, 100);
-            records = filterAredlRecordsByQuery(pool, filter, query);
-          }
-          const label = source === 'pointercrate' ? 'Pointercrate' : 'AREDL';
-          const mapped = records.map(r => (source === 'pointercrate' ? mapPointercrateRecord(r) : mapAredlRecord(r)));
-          const summary = appendImportedRuns(mapped, label, { validRunNote: validRunNote });
-          sendJson(
-            res,
-            200,
-            Object.assign(
-              { ok: true, source, filter, query, matched: records.length, note: validRunNote },
-              summary
-            )
-          );
-        } catch (error) {
-          sendJson(res, 500, { error: String(error.message || error) });
-        }
-      })();
-    });
-    return;
-  }
-
-  if (req.method === 'POST' && pathname === '/api/import/pointercrate') {
-    if (!requireAdmin(req, res)) return;
-    fetchPointercrateRecords()
-      .then(records => appendImportedRuns(records.map(mapPointercrateRecord), 'Pointercrate'))
-      .then(summary => sendJson(res, 200, Object.assign({ ok: true, source: 'pointercrate' }, summary)))
-      .catch(error => sendJson(res, 500, { error: String(error.message || error) }));
-    return;
-  }
-
-  if (req.method === 'POST' && pathname === '/api/import/aredl') {
-    if (!requireAdmin(req, res)) return;
-    fetchAredlRecords()
-      .then(records => appendImportedRuns(records.map(mapAredlRecord), 'AREDL'))
-      .then(summary => sendJson(res, 200, Object.assign({ ok: true, source: 'aredl' }, summary)))
-      .catch(error => sendJson(res, 500, { error: String(error.message || error) }));
-    return;
-  }
-
-  if ((req.method === 'PUT' || req.method === 'DELETE') && pathname.startsWith('/api/runs/')) {
-    if (!requireAdmin(req, res)) return;
-    const runId = pathname.slice('/api/runs/'.length);
-    if (!runId) {
-      sendJson(res, 400, { error: 'Run id is required' });
+  if (req.method === 'GET' && pathname.startsWith('/api/messages/')) {
+    if (!sess) { sendJson(res, 401, { error: 'Login required' }); return; }
+    const otherUserId = pathname.slice('/api/messages/'.length);
+    if (!otherUserId) {
+      sendJson(res, 400, { error: 'Missing user ID' });
       return;
     }
-
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk;
-      if (body.length > 2 * 1024 * 1024) req.destroy();
+    const messages = readMessages();
+    const userMessages = messages.filter(m =>
+      (m.fromUserId === sess.userId && m.toUserId === otherUserId) ||
+      (m.fromUserId === otherUserId && m.toUserId === sess.userId)
+    ).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    messages.forEach(m => {
+      if (m.fromUserId === otherUserId && m.toUserId === sess.userId && !m.read) {
+        m.read = true;
+      }
     });
+    writeMessages(messages);
+    sendJson(res, 200, { messages: userMessages });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/users/search') {
+    if (!sess) { sendJson(res, 401, { error: 'Login required' }); return; }
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
     req.on('end', () => {
       try {
-        const runs = readRuns();
-        const index = runs.findIndex(run => run.id === runId);
-        if (index === -1) {
-          sendJson(res, 404, { error: 'Run not found' });
-          return;
-        }
-
-        if (req.method === 'DELETE') {
-          runs.splice(index, 1);
-          writeRuns(runs);
-          sendEvent('runs-update', { updatedAt: new Date().toISOString() });
-          sendJson(res, 200, { ok: true });
-          return;
-        }
-
         const payload = JSON.parse(body || '{}');
-        runs[index] = normalizeRun(payload, runs[index]);
-        writeRuns(runs);
-        sendEvent('runs-update', { updatedAt: runs[index].updatedAt });
-        sendJson(res, 200, { ok: true, item: runs[index] });
+        const query = String(payload.query || '').trim().toLowerCase();
+        if (!query || query.length < 2) {
+          sendJson(res, 400, { error: 'Query must be at least 2 characters' });
+          return;
+        }
+        const users = readUsers();
+        const results = users
+          .filter(u => u.username.toLowerCase().includes(query) && u.id !== sess.userId)
+          .map(u => ({ userId: u.id, username: u.username }))
+          .slice(0, 10);
+        sendJson(res, 200, { results });
       } catch (error) {
-        sendJson(res, 400, { error: 'Invalid run update payload' });
+        sendJson(res, 400, { error: 'Invalid search payload' });
       }
     });
     return;

@@ -2,3 +2,6 @@
 server/users.json
 server/sessions.json
 server/userdata.json
+server/data.txt
+server/runs.json
+server/messages.json

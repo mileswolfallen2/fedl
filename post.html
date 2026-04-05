@@ -98,6 +98,7 @@
       <a href="index.html">Home</a>
       <a href="rules.html">Rules</a>
       <a href="post.html">Posts</a>
+      <a href="messages.html">Messages</a>
       <a href="contact.html">Contact</a>
       <span class="fedl-auth-nav"></span>
     </nav>
@@ -121,7 +122,8 @@
   </main>
 
   <script>
-    const BASE = 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+    const TESTING_MODE = true;
+    const BASE = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
     const AUTH_TOKEN_KEY = 'fedl_auth_token';
     let currentUser = null;
     let currentUserId = null;
@@ -207,7 +209,7 @@
       const user = document.getElementById('username').value.trim();
       const pass = document.getElementById('password').value;
       const res = await login(user, pass);
-      if (res.ok) { updateUi(); loadPosts(); }
+      if (res.ok) { updateUi(); loadPosts(); window.location.href = window.location.href; }
       else {
         loginError.textContent = res.error || 'Invalid username or password';
         loginError.hidden = false;

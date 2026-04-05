@@ -4,7 +4,8 @@
 
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
-  const liveServerBase = 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+  const TESTING_MODE = false;
+  const liveServerBase = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
   const canUseLiveServer = !isFileProtocol || !!liveServerBase;
   const liveApiUrl = `${liveServerBase}/api/list`;
   const liveRunsUrl = `${liveServerBase}/api/runs`;
@@ -345,7 +346,8 @@
       wrap.appendChild(btn);
     } else {
       const a1 = document.createElement('a');
-      a1.href = 'login.html';
+        const returnTo = encodeURIComponent(window.location.href);
+        a1.href = 'login.html?return=' + returnTo;
       a1.textContent = 'Log in';
       wrap.appendChild(a1);
       wrap.appendChild(document.createTextNode(' '));
@@ -2857,9 +2859,11 @@
         setSignupStatus('Account created successfully. Loading your data…', 'success');
         return fedlPullUserStateToLocal(data.userId);
       }).then(()=>{
-        setSignupStatus('You are signed in. Redirecting to the home page…', 'success');
+        setSignupStatus('You are signed in. Redirecting…', 'success');
         setTimeout(()=>{
-          window.location.href = 'index.html';
+          const params = new URLSearchParams(window.location.search);
+          const returnUrl = params.get('return') || 'index.html';
+          window.location.href = returnUrl;
         }, FEDL_AUTH_REDIRECT_MS);
       }).catch(err=>{
         console.error(err);
@@ -2908,9 +2912,11 @@
         setLoginStatus('Signed in successfully. Loading your data…', 'success');
         return fedlPullUserStateToLocal(data.userId);
       }).then(()=>{
-        setLoginStatus('Welcome back. Redirecting to the home page…', 'success');
+        setLoginStatus('Welcome back. Redirecting…', 'success');
         setTimeout(()=>{
-          window.location.href = 'index.html';
+          const params = new URLSearchParams(window.location.search);
+          const returnUrl = params.get('return') || 'index.html';
+          window.location.href = returnUrl;
         }, FEDL_AUTH_REDIRECT_MS);
       }).catch(err=>{
         console.error(err);

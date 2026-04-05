@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Messages — GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="pageicon.png">
+  <style>
+    .dm-container{display:flex;height:calc(100vh - 120px);gap:20px;margin-top:20px}
+    .dm-sidebar{width:300px;flex-shrink:0;background:var(--panel);border-radius:12px;padding:16px;overflow-y:auto}
+    .dm-sidebar h3{margin:0 0 16px 0;font-size:1rem;color:var(--muted)}
+    .dm-conversation{cursor:pointer;padding:12px;border-radius:8px;margin-bottom:8px;transition:background .2s}
+    .dm-conversation:hover{background:rgba(255,255,255,0.05)}
+    .dm-conversation.active{background:rgba(0,170,255,0.15)}
+    .dm-conversation-name{font-weight:600;color:var(--accent-warm)}
+    .dm-conversation-preview{font-size:0.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dm-conversation-time{font-size:0.75rem;color:var(--muted);margin-top:4px}
+    .dm-conversation.unread .dm-conversation-name{color:var(--accent)}
+    .dm-main{flex:1;background:var(--panel);border-radius:12px;display:flex;flex-direction:column}
+    .dm-header{padding:16px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center}
+    .dm-header h3{margin:0}
+    .dm-messages{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+    .dm-message{padding:12px 16px;border-radius:12px;max-width:70%;word-wrap:break-word}
+    .dm-message.sent{background:var(--accent);color:#042;align-self:flex-end;border-bottom-right-radius:4px}
+    .dm-message.received{background:rgba(255,255,255,0.1);align-self:flex-start;border-bottom-left-radius:4px}
+    .dm-message-time{font-size:0.7rem;opacity:0.7;margin-top:4px}
+    .dm-input-row{display:flex;gap:12px;padding:16px;border-top:1px solid rgba(255,255,255,0.1)}
+    .dm-input-row input{flex:1;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text);font-size:1rem}
+    .dm-input-row input:focus{outline:none;border-color:var(--accent)}
+    .dm-compose{background:var(--panel);padding:20px;border-radius:12px;margin-bottom:20px}
+    .dm-compose h3{margin:0 0 16px 0}
+    .dm-compose input,.dm-compose input:focus{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text);font-size:1rem;margin-bottom:12px;box-sizing:border-box}
+    .dm-compose .btn{width:100%}
+    .dm-user-search{position:relative}
+    .dm-user-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--panel);border:1px solid rgba(255,255,255,0.1);border-radius:8px;max-height:200px;overflow-y:auto;z-index:100}
+    .dm-user-dropdown div{padding:10px 12px;cursor:pointer}
+    .dm-user-dropdown div:hover{background:rgba(255,255,255,0.05)}
+    .empty-state{text-align:center;padding:40px;color:var(--muted)}
+    .no-conversation-selected{flex:1;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  </style>
+</head>
+<body data-page="messages">
+  <header>
+    <h1>Messages</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="guess.html">Guess Game</a>
+      <a href="players.html">Players</a>
+      <a href="lists.html">Lists</a>
+      <a href="run.html">Submit Run</a>
+      <a href="rules.html">Rules</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="post.html">Posts</a>
+      <a href="contact.html">Contact</a>
+      <span class="fedl-auth-nav"></span>
+    </nav>
+  </header>
+  <main>
+    <div class="dm-compose" id="dmCompose">
+      <h3>New Message</h3>
+      <div class="dm-user-search">
+        <input type="text" id="userSearch" placeholder="Search for a user..." autocomplete="off">
+        <div class="dm-user-dropdown" id="userDropdown" hidden></div>
+      </div>
+      <input type="text" id="selectedUser" placeholder="Selected user" readonly>
+      <input type="text" id="dmContent" placeholder="Type your message...">
+      <button type="button" class="btn" id="sendDmBtn">Send Message</button>
+    </div>
+    <div class="dm-container">
+      <div class="dm-sidebar">
+        <h3>Conversations</h3>
+        <div id="conversationsList"></div>
+      </div>
+      <div class="dm-main">
+        <div class="dm-header">
+          <h3 id="chatWithName">Select a conversation</h3>
+        </div>
+        <div class="dm-messages" id="messagesList">
+          <div class="no-conversation-selected">Select a conversation from the sidebar</div>
+        </div>
+        <div class="dm-input-row" id="messageInputRow" hidden>
+          <input type="text" id="messageInput" placeholder="Type a message...">
+          <button type="button" class="btn" id="sendMessageBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="app.js"></script>
+  <script>
+    const TESTING_MODE = true;
+    const BASE = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+    const AUTH_TOKEN_KEY = 'fedl_auth_token';
+    let currentUser = null;
+    let currentUserId = null;
+    let conversations = [];
+    let selectedConversation = null;
+
+    function getToken() {
+      return localStorage.getItem(AUTH_TOKEN_KEY) || '';
+    }
+
+    function setToken(t) {
+      if (t) localStorage.setItem(AUTH_TOKEN_KEY, t);
+      else localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+
+    function api(path, options = {}) {
+      const opts = Object.assign({ headers: { 'Content-Type': 'application/json' } }, options);
+      const tok = getToken();
+      if (tok) opts.headers['Authorization'] = `Bearer ${tok}`;
+      if (opts.body && typeof opts.body === 'object') opts.body = JSON.stringify(opts.body);
+      return fetch(BASE + path, opts).then(r => r.json().then(j => ({ ok: r.ok, status: r.status, data: j })));
+    }
+
+    function escapeHtml(text) {
+      return String(text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatDate(ts) {
+      const d = new Date(ts);
+      const diff = Date.now() - d;
+      if (diff < 60000) return 'just now';
+      if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+      if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function checkAuth() {
+      const tok = getToken();
+      if (!tok) { window.location.href = 'login.html?return=' + encodeURIComponent(window.location.href); return Promise.resolve(null); }
+      return api('/api/auth/me').then(res => {
+        if (res.ok && res.data && res.data.userId) {
+          currentUser = res.data.username;
+          currentUserId = res.data.userId;
+          return res.data;
+        }
+        return null;
+      }).catch(() => {
+        return null;
+      });
+    }
+
+    function updateUi() {
+      const nav = document.querySelector('.fedl-auth-nav');
+      if (nav) {
+        nav.innerHTML = `<span class="muted">Hi, <strong>${escapeHtml(currentUser)}</strong></span> <a href="login.html" class="btn ghost-btn small-btn" onclick="setToken('');">Log out</a>`;
+      }
+    }
+
+    function loadConversations() {
+      api('/api/messages').then(res => {
+        if (res.ok && res.data && res.data.conversations) {
+          conversations = res.data.conversations;
+          renderConversations();
+        }
+      });
+    }
+
+    function renderConversations() {
+      const list = document.getElementById('conversationsList');
+      if (!conversations.length) {
+        list.innerHTML = '<div class="empty-state">No conversations yet</div>';
+        return;
+      }
+      list.innerHTML = conversations.map(c => `
+        <div class="dm-conversation ${c.unreadCount > 0 ? 'unread' : ''} ${selectedConversation === c.userId ? 'active' : ''}" data-user="${escapeHtml(c.userId)}">
+          <div class="dm-conversation-name">${escapeHtml(c.username)}</div>
+          <div class="dm-conversation-preview">${escapeHtml(c.lastMessage.content)}</div>
+          <div class="dm-conversation-time">${formatDate(c.lastMessage.timestamp)}</div>
+        </div>
+      `).join('');
+      list.querySelectorAll('.dm-conversation').forEach(el => {
+        el.addEventListener('click', () => selectConversation(el.dataset.user));
+      });
+    }
+
+    function selectConversation(userId) {
+      selectedConversation = userId;
+      const conv = conversations.find(c => c.userId === userId);
+      document.getElementById('chatWithName').textContent = conv ? conv.username : 'Chat';
+      document.getElementById('messageInputRow').hidden = false;
+      renderConversations();
+      loadMessages(userId);
+    }
+
+    function loadMessages(userId) {
+      api('/api/messages/' + userId).then(res => {
+        if (res.ok && res.data && res.data.messages) {
+          renderMessages(res.data.messages);
+        }
+      });
+    }
+
+    function renderMessages(messages) {
+      const list = document.getElementById('messagesList');
+      if (!messages.length) {
+        list.innerHTML = '<div class="empty-state">No messages yet. Start the conversation!</div>';
+        return;
+      }
+      list.innerHTML = messages.map(m => `
+        <div class="dm-message ${m.fromUserId === currentUserId ? 'sent' : 'received'}">
+          <div class="dm-message-content">${escapeHtml(m.content)}</div>
+          <div class="dm-message-time">${formatDate(m.timestamp)}</div>
+        </div>
+      `).join('');
+      list.scrollTop = list.scrollHeight;
+    }
+
+    const userSearchInput = document.getElementById('userSearch');
+    const userDropdown = document.getElementById('userDropdown');
+    const selectedUserInput = document.getElementById('selectedUser');
+
+    userSearchInput.addEventListener('input', async () => {
+      const query = userSearchInput.value.trim();
+      if (query.length < 2) {
+        userDropdown.hidden = true;
+        return;
+      }
+      const res = await api('/api/users/search', { method: 'POST', body: { query } });
+      if (res.ok && res.data && res.data.results) {
+        userDropdown.innerHTML = res.data.results.map(u =>
+          `<div data-user-id="${u.userId}" data-username="${u.username}">${escapeHtml(u.username)}</div>`
+        ).join('');
+        userDropdown.hidden = false;
+        userDropdown.querySelectorAll('div').forEach(el => {
+          el.addEventListener('click', () => {
+            selectedUserInput.value = el.dataset.userId;
+            selectedUserInput.dataset.username = el.dataset.username;
+            userSearchInput.value = el.dataset.username;
+            userDropdown.hidden = true;
+          });
+        });
+      }
+    });
+
+    userSearchInput.addEventListener('blur', () => {
+      setTimeout(() => userDropdown.hidden = true, 200);
+    });
+
+    document.getElementById('sendDmBtn').addEventListener('click', async () => {
+      const toUserId = selectedUserInput.value;
+      const content = document.getElementById('dmContent').value.trim();
+      if (!toUserId || !content) return;
+      const res = await api('/api/messages', { method: 'POST', body: { toUserId, content } });
+      if (res.ok) {
+        document.getElementById('dmContent').value = '';
+        selectedUserInput.value = '';
+        userSearchInput.value = '';
+        loadConversations();
+      }
+    });
+
+    document.getElementById('sendMessageBtn').addEventListener('click', async () => {
+      const content = document.getElementById('messageInput').value.trim();
+      if (!selectedConversation || !content) return;
+      const res = await api('/api/messages', { method: 'POST', body: { toUserId: selectedConversation, content } });
+      if (res.ok) {
+        document.getElementById('messageInput').value = '';
+        loadMessages(selectedConversation);
+        loadConversations();
+      }
+    });
+
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') document.getElementById('sendMessageBtn').click();
+    });
+
+    checkAuth().then(() => { updateUi(); loadConversations(); });
+  </script>
+</body>
+</html>
