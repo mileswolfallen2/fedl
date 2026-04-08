@@ -2,44 +2,140 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fedl.site/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://fedl.site/lists.html</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <priority>0.95</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://fedl.site/run.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://fedl.site/guess.html</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://fedl.site/players.html</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://fedl.site/run.html</loc>
-    <lastmod>2026-04-02</lastmod>
-    <priority>0.85</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://fedl.site/rules.html</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://fedl.site/roulette.html</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <priority>0.75</priority>
     <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/contact.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/login.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/signup.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/messages.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/post.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/admelist.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/errors.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/offlineindex.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/sitemap.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/401.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/403.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/404.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/429.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/500.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/502.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://fedl.site/503.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
   </url>
 </urlset>
