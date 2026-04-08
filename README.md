@@ -1,50 +1,45 @@
 # GD FEDL
 
-GD FEDL is a small multi-page Geometry Dash list site with a static frontend and a lightweight Node.js backend for live list data, run submissions, and admin moderation.
+GD FEDL is a Geometry Dash list site built as a multi-page static frontend with a lightweight Node.js backend. It supports live list data, run submissions, admin moderation, account login, synced user state, community posts, bug reports, and direct messages.
 
 ## What It Includes
 
-- `index.html` landing page with live list stats and featured entries
-- `lists.html` ranked list browser with search, range filters, and video modal playback
-- `run.html` run submission form with a live submission queue
-- `admelist.html` admin panel for editing the list and reviewing submitted runs
+- `index.html` landing page
+- `lists.html` ranked list browser with search, filters, and video playback
+- `run.html` run submission page
+- `admelist.html` admin page for list editing and run moderation
+- `players.html` player progress tracker
 - `guess.html` rank guessing game
-- `roulette.html` demon roulette picker with level ID lookups
-- `rules.html` submission and moderation rules
-- `players.html` browser-local player tracker
-- `errors.html` plus individual HTTP-style error pages
+- `roulette.html` demon roulette picker
+- `rules.html` rules page
+- `signup.html` and `login.html` account pages
+- `post.html` and `messages.html` community features
+- `contact.html` bug report / contact page
+- `errors.html` plus standalone HTTP-style error pages
 
 ## Tech Stack
 
 - Plain HTML, CSS, and JavaScript
-- No build step
+- No build step for the main site
 - Node.js `http` server
 - Server-Sent Events for live updates
-- Browser `localStorage` / `sessionStorage` for local state
+- Browser `localStorage` / `sessionStorage`
+- JSON and text files for simple local persistence
 
 ## Project Structure
 
-- `index.html` main landing page
-- `lists.html` live list page
-- `run.html` run submission page
-- `admelist.html` admin page
-- `guess.html` guessing game
-- `roulette.html` roulette page
-- `players.html` local player manager
-- `rules.html` rules page
-- `errors.html` error page gallery
-- `401.html`, `403.html`, `404.html`, `429.html`, `500.html`, `502.html`, `503.html` standalone error pages
-- `app.js` shared frontend logic for all pages
+- `app.js` shared frontend logic
 - `styles.css` shared site styling
 - `data.txt` static fallback list data
 - `level-ids.txt` optional local level ID lookup data for roulette
-- `server/server.js` backend for list data, run submissions, auth, and live events
-- `server/LINUX_SERVICE_SETUP.txt` example `systemd` setup notes
+- `server/server.js` backend for list data, auth, posts, messages, bug reports, and run submissions
+- `server/README.md` backend API details
+- `server/LINUX_SERVICE_SETUP.txt` example `systemd` setup
 - `start-server.command` macOS launcher for the Node server
 
-## Data Format
+## Data Files
 
-The list data file uses one entry per line in this format:
+The main list format is one entry per line:
 
 ```txt
 category|position|title|url
@@ -56,35 +51,41 @@ Example:
 new|1|Flamewall|https://youtu.be/x4Io4zkWVRw
 ```
 
-The frontend parses that into:
+The server also stores runtime data in `server/`:
 
-- `level` / category
-- `position`
-- `title`
-- `url`
+- `data.txt` live list source
+- `runs.json` submitted runs
+- `users.json` registered accounts
+- `sessions.json` login sessions
+- `userdata.json` synced user state
+- `posts.json` community posts
+- `bugreports.json` bug reports
+- `messages.json` private messages
 
-## Backend API
+Most JSON files are created automatically when first needed. `server/data.txt` is the one file you should create yourself before first run.
 
-The Node server exposes these routes:
+## Main Backend Features
 
-- `GET /api/list` returns the live list
-- `PUT /api/list` replaces the live list data
-- `GET /api/runs` returns submitted runs
-- `POST /api/runs` creates a run submission
-- `PUT /api/runs/:id` updates a submission
-- `DELETE /api/runs/:id` deletes a submission
-- `GET /events` streams `list-update` and `runs-update` events
+- `GET /api/list` and `PUT /api/list` for live list data
+- `GET /api/runs`, `POST /api/runs`, `PUT /api/runs/:id`, `DELETE /api/runs/:id`
+- `POST /api/runs/bulk-approve` for admin moderation
+- `POST /api/auth/signup`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`
+- `GET /api/user/state`, `PUT /api/user/state` for synced client state
+- `GET /api/posts`, `POST /api/posts`, like/comment routes, and post deletion
+- `GET /api/bugreports`, `POST /api/bugreports`, admin update/delete routes
+- `GET /api/messages`, `POST /api/messages`, conversation lookup, and user search
+- `GET /events` for SSE updates
+- Pointercrate and AREDL import routes for admins
 
-If `ADMIN_PASSWORD` is set, list editing and run moderation routes require HTTP Basic auth.
+See [server/README.md](/Users/miles/Documents/GitHub/fedl/server/README.md) for the fuller API reference.
 
 ## Local Setup
 
 1. Make sure Node.js is installed.
-2. Create the server data files if they do not exist yet:
+2. Create the live list data file if it does not exist yet:
 
 ```bash
 printf "new|1|Example Level|https://youtu.be/example\n" > server/data.txt
-printf "[]\n" > server/runs.json
 ```
 
 3. Start the server:
@@ -99,53 +100,6 @@ node server/server.js
 http://127.0.0.1:8090/fedl/
 ```
 
-## React App Version
-
-A React-based version of the site is available in the `app/` directory. This provides the same functionality with a modern component architecture.
-
-### Building the React Web App
-
-1. Navigate to the app directory:
-   ```bash
-   cd app
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start development server:
-   ```bash
-   npm run dev
-   ```
-
-4. Build for production:
-   ```bash
-   npm run build
-   ```
-
-### Building Native Desktop Apps
-
-The React app can be packaged as native desktop applications for macOS and Windows using Electron.
-
-1. In the `app/` directory, install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Run in development:
-   ```bash
-   npm run electron
-   ```
-
-3. Build installers:
-   - macOS: `npm run dist`
-   - Windows: `npm run dist -- --win`
-   - Both: `npm run dist -- --mac --win`
-
-Built installers will be in `app/dist-electron/`.
-
 To expose it on your local network:
 
 ```bash
@@ -158,35 +112,13 @@ On macOS you can also run:
 ./start-server.command
 ```
 
-## Important Frontend Note
-
-`app.js` currently uses this hardcoded live server base:
-
-```txt
-https://raspberrypi-1.tail46eacb.ts.net/fedl
-```
-
-That means:
-
-- when the site is opened over `http` or `https`, the frontend will try that remote live server first
-- when the site is opened directly from disk with `file://`, it falls back to local `data.txt`
-- if you want the frontend to use your own local Node server as the primary live backend, update `liveServerBase` in `app.js`
-
-## Fallback Behavior
-
-List loading tries these sources in order:
-
-1. Remote live API: `/api/list`
-2. Remote live data file: `/server/data.txt`
-3. Local `data.txt`
-
-Run data comes from the live runs API when available. If the live backend is unavailable, run submissions and moderation will not work.
-
 ## Environment Variables
 
 - `HOST` server bind host, default `127.0.0.1`
 - `PORT` server port, default `8090`
-- `ADMIN_PASSWORD` optional admin password for protected write actions
+- `ADMIN_PASSWORD` admin password for protected write routes
+- `AREDL_ACCESS_TOKEN` bearer token for AREDL imports
+- `AREDL_API_KEY` API key for AREDL imports
 
 Example:
 
@@ -194,20 +126,32 @@ Example:
 ADMIN_PASSWORD=changeme HOST=0.0.0.0 PORT=8090 node server/server.js
 ```
 
+## Frontend Live Server Note
+
+`app.js` uses a hardcoded live server base:
+
+```txt
+https://raspberrypi-1.tail46eacb.ts.net/fedl
+```
+
+That means:
+
+- the frontend will try the remote live server first
+- if the live server probe fails, the app redirects to `offlineindex.html`
+- if you want local development against your own server, update `TESTING_MODE` or `liveServerBase` in `app.js`
+
 ## Notes
 
-- `players.html` stores player data only in the current browser via `localStorage`
-- admin auth is stored only for the current browser session
-- `roulette.html` can use `level-ids.txt` first, then fall back to the GD Browser API lookup
-- the backend automatically creates `server/runs.json` if it is missing
-- the backend does not automatically create `server/data.txt`, so create that file before first run
+- `players.html` stores local player progress in the browser, with optional server sync when signed in
+- admin-protected routes use HTTP Basic auth
+- account auth uses bearer tokens from the backend
+- `roulette.html` can use `level-ids.txt` before falling back to external lookups
+- the backend serves the repo root as static files under the `/fedl` base path
 
 ## Linux Service
 
-For running the server on boot with `systemd`, see:
-
-- `server/LINUX_SERVICE_SETUP.txt`
+For `systemd` setup notes, see [server/LINUX_SERVICE_SETUP.txt](/Users/miles/Documents/GitHub/fedl/server/LINUX_SERVICE_SETUP.txt).
 
 ## License
 
-See `LICENSE`.
+See [LICENSE](/Users/miles/Documents/GitHub/fedl/LICENSE).
