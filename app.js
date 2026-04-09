@@ -5,7 +5,7 @@
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
   const TESTING_MODE = false;
-  const liveServerBase = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://raspberrypi-1.tail46eacb.ts.net/fedl';
+  const liveServerBase = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://server.fedl.site/fedl';
   const canUseLiveServer = !isFileProtocol || !!liveServerBase;
   const liveApiUrl = `${liveServerBase}/api/list`;
   const liveRunsUrl = `${liveServerBase}/api/runs`;
