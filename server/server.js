@@ -6,6 +6,7 @@ const { URL } = require('url');
 
 const appRoot = path.resolve(__dirname, '..');
 const dataPath = path.join(__dirname, 'data.txt');
+const legacyDataPath = path.join(appRoot, 'data.txt');
 const runsPath = path.join(__dirname, 'runs.json');
 const usersPath = path.join(__dirname, 'users.json');
 const sessionsPath = path.join(__dirname, 'sessions.json');
@@ -48,8 +49,37 @@ function parseData(text) {
     });
 }
 
+function safeReadJsonFile(filePath, fallbackValue, label) {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    if (!String(raw || '').trim()) {
+      return fallbackValue;
+    }
+    return JSON.parse(raw);
+  } catch (error) {
+    console.error(`[FEDL] Failed to read ${label}: ${error.message}`);
+    return fallbackValue;
+  }
+}
+
 function readDataText() {
-  return fs.readFileSync(dataPath, 'utf8');
+  const serverCopyExists = fs.existsSync(dataPath);
+  const serverCopy = serverCopyExists ? fs.readFileSync(dataPath, 'utf8') : '';
+  if (String(serverCopy || '').trim()) {
+    return serverCopy;
+  }
+  if (fs.existsSync(legacyDataPath)) {
+    return fs.readFileSync(legacyDataPath, 'utf8');
+  }
+  return serverCopy;
+}
+
+function writeDataText(text) {
+  const normalized = `${String(text || '').trim()}\n`;
+  fs.writeFileSync(dataPath, normalized, 'utf8');
+  if (legacyDataPath !== dataPath && fs.existsSync(legacyDataPath)) {
+    fs.writeFileSync(legacyDataPath, normalized, 'utf8');
+  }
 }
 
 function setCors(res) {
@@ -105,8 +135,7 @@ function ensureRunsFile() {
 
 function readRuns() {
   ensureRunsFile();
-  const raw = fs.readFileSync(runsPath, 'utf8');
-  const parsed = JSON.parse(raw || '[]');
+  const parsed = safeReadJsonFile(runsPath, [], 'runs file');
   return Array.isArray(parsed) ? parsed : [];
 }
 
@@ -136,8 +165,7 @@ function ensureUserDataFile() {
 
 function readUsers() {
   ensureUsersFile();
-  const raw = fs.readFileSync(usersPath, 'utf8');
-  const parsed = JSON.parse(raw || '[]');
+  const parsed = safeReadJsonFile(usersPath, [], 'users file');
   return Array.isArray(parsed) ? parsed : [];
 }
 
@@ -147,8 +175,7 @@ function writeUsers(users) {
 
 function readSessionsRaw() {
   ensureSessionsFile();
-  const raw = fs.readFileSync(sessionsPath, 'utf8');
-  const parsed = JSON.parse(raw || '{}');
+  const parsed = safeReadJsonFile(sessionsPath, {}, 'sessions file');
   return parsed && typeof parsed === 'object' ? parsed : {};
 }
 
@@ -235,8 +262,7 @@ function getBearerToken(req) {
 
 function readUserDataMap() {
   ensureUserDataFile();
-  const raw = fs.readFileSync(userDataPath, 'utf8');
-  const parsed = JSON.parse(raw || '{}');
+  const parsed = safeReadJsonFile(userDataPath, {}, 'user data file');
   return parsed && typeof parsed === 'object' ? parsed : {};
 }
 
@@ -252,8 +278,7 @@ function ensurePostsFile() {
 
 function readPosts() {
   ensurePostsFile();
-  const raw = fs.readFileSync(postsPath, 'utf8');
-  const parsed = JSON.parse(raw || '[]');
+  const parsed = safeReadJsonFile(postsPath, [], 'posts file');
   return Array.isArray(parsed) ? parsed : [];
 }
 
@@ -269,8 +294,7 @@ function ensureBugReportsFile() {
 
 function readBugReports() {
   ensureBugReportsFile();
-  const raw = fs.readFileSync(bugReportsPath, 'utf8');
-  const parsed = JSON.parse(raw || '[]');
+  const parsed = safeReadJsonFile(bugReportsPath, [], 'bug reports file');
   return Array.isArray(parsed) ? parsed : [];
 }
 
@@ -286,9 +310,22 @@ function ensureMessagesFile() {
 
 function readMessages() {
   ensureMessagesFile();
-  const raw = fs.readFileSync(messagesPath, 'utf8');
-  const parsed = JSON.parse(raw || '[]');
+  const parsed = safeReadJsonFile(messagesPath, [], 'messages file');
   return Array.isArray(parsed) ? parsed : [];
+}
+
+function safeWatch(filePath, eventName) {
+  try {
+    if (!fs.existsSync(filePath)) {
+      return null;
+    }
+    return fs.watch(filePath, { persistent: true }, () => {
+      sendEvent(eventName, { updatedAt: new Date().toISOString() });
+    });
+  } catch (error) {
+    console.error(`[FEDL] Could not watch ${filePath}: ${error.message}`);
+    return null;
+  }
 }
 
 function writeMessages(messages) {
@@ -1232,7 +1269,7 @@ const server = http.createServer((req, res) => {
       try {
         const payload = JSON.parse(body || '{}');
         const text = String(payload.text || '').trim();
-        fs.writeFileSync(dataPath, `${text}\n`, 'utf8');
+        writeDataText(text);
         sendEvent('list-update', { updatedAt: new Date().toISOString() });
         sendJson(res, 200, { ok: true });
       } catch (error) {
@@ -1573,19 +1610,24 @@ const server = http.createServer((req, res) => {
   serveFile(pathname, res);
 });
 
-fs.watch(dataPath, { persistent: true }, () => {
-  sendEvent('list-update', { updatedAt: new Date().toISOString() });
-});
-
 ensureRunsFile();
-fs.watch(runsPath, { persistent: true }, () => {
-  sendEvent('runs-update', { updatedAt: new Date().toISOString() });
+safeWatch(dataPath, 'list-update');
+safeWatch(legacyDataPath, 'list-update');
+safeWatch(runsPath, 'runs-update');
+
+server.on('error', error => {
+  console.error(`[FEDL] Server failed to start: ${error.message}`);
+  if (error && error.code) {
+    console.error(`[FEDL] Error code: ${error.code}`);
+  }
+  process.exit(1);
 });
 
 server.listen(port, host, () => {
   console.log(`FEDL server running at http://${host}:${port}`);
   console.log(`Base path: ${BASE}`);
   console.log(`Using live list file: ${dataPath}`);
+  console.log(`Legacy list fallback: ${legacyDataPath}`);
   console.log(`Using runs file: ${runsPath}`);
   console.log(`Admin password protection: ${adminPassword ? 'enabled' : 'disabled'}`);
 });

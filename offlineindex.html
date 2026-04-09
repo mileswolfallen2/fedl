@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/png" href="pageicon.png">
 </head>
-<body>
+<body data-page="offlineindex">
   <header>
-    <h1>FEDL Maintenance</h1>
+    <h1>FEDL Offline</h1>
     <nav>
+      <a href="index.html">Home</a>
       <a href="lists.html">Lists</a>
       <a href="players.html">Players</a>
       <a href="run.html">Submit Run</a>
@@ -19,44 +20,77 @@
     </nav>
   </header>
   <main>
+    <section class="home-hero">
+      <div class="home-copy panel">
+        <p class="hero-kicker">Offline Mode</p>
+        <h2>FEDL is using the local list right now.</h2>
+        <p class="hero-text">Live features are unavailable at the moment, but you can still browse the ranked list from the local <code>data.txt</code> file and keep using the static pages.</p>
+        <div class="hero-actions">
+          <a class="btn" href="lists.html">Browse list</a>
+          <a class="btn ghost-btn" href="rules.html">Read rules</a>
+          <a class="btn ghost-btn" href="roulette.html">Open roulette</a>
+        </div>
+        <div class="hero-stats" aria-label="FEDL offline overview">
+          <article class="stat-card">
+            <strong id="hero-total-levels">--</strong>
+            <span>Levels from local data</span>
+          </article>
+          <article class="stat-card">
+            <strong id="hero-top-entry">--</strong>
+            <span>Current top entry</span>
+          </article>
+          <article class="stat-card">
+            <strong id="hero-last-slot">Local</strong>
+            <span>Status</span>
+          </article>
+        </div>
+      </div>
+
+      <aside class="hero-stage panel">
+        <p class="stage-label">Local Snapshot</p>
+        <h3>Featured list picks</h3>
+        <p class="muted">Pulled from the bundled list file so the site still has something useful to show.</p>
+        <div class="featured-list" id="featured-list">
+          <article class="featured-card">
+            <span class="featured-rank">#--</span>
+            <strong>Loading list data...</strong>
+            <p>Reading the local list file.</p>
+          </article>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel list-table-panel">
+      <div class="table-header">
+        <div>
+          <p class="status-label">Local List</p>
+          <h3>Top 10 from data.txt</h3>
+        </div>
+        <p class="muted table-hint">This preview stays available even when live features are down.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="levels-table">
+          <thead>
+            <tr><th style="width:110px">Rank</th><th>Title</th></tr>
+          </thead>
+          <tbody id="offline-list-area">
+            <tr><td colspan="2" class="muted">Loading local list...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="panel">
-      <p class="hero-kicker">Server Offline</p>
-      <h2>The FEDL backend is currently down</h2>
-      <p class="hero-text">The site is being worked on or the server is offline. This static fallback page is available while the live API is unavailable.</p>
+      <p class="hero-kicker">Offline Fallback</p>
+      <h2>Static pages are still available</h2>
+      <p class="hero-text">You can keep browsing the list, rules, roulette, and other static pages while the live parts of the site are unavailable.</p>
       <div class="hero-actions">
-        <a class="btn" href="lists.html">Browse static list</a>
+        <a class="btn" href="lists.html">Browse full list</a>
         <a class="btn ghost-btn" href="players.html">View players</a>
         <a class="btn ghost-btn" href="rules.html">Read rules</a>
       </div>
     </section>
-
-    <section class="layout">
-      <article class="panel info-panel">
-        <p class="status-label">Maintenance Mode</p>
-        <h3>Live data is not available</h3>
-        <p class="muted">The server-side list and run services are currently offline. Please check back once the maintenance is complete.</p>
-      </article>
-
-      <article class="panel info-panel">
-        <p class="status-label">Static access only</p>
-        <h3>Local pages still work</h3>
-        <p class="muted">This page is designed to display even when the backend cannot respond.</p>
-      </article>
-
-      <article class="panel info-panel">
-        <p class="status-label">Try again soon</p>
-        <h3>We&apos;ll be back shortly</h3>
-        <p class="muted">Refresh this page after a few minutes to see if the FEDL server is back online.</p>
-      </article>
-    </section>
-
-    <section class="panel spotlight-panel">
-      <div class="spotlight-copy">
-        <p class="status-label">What changed</p>
-        <h2>One index page for maintenance</h2>
-        <p class="spotlight-text">This version of `1index.html` is meant for server downtime and repair work. It keeps the same visual style but avoids live data loading.</p>
-      </div>
-    </section>
   </main>
+  <script src="app.js" defer></script>
 </body>
 </html>

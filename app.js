@@ -39,7 +39,8 @@
     });
   }
 
-  if(!window.location.pathname.endsWith(`/${offlinePage}`)){
+  const pagesNeedingLiveStatus = new Set(['index', 'run', 'messages', 'post', 'contact', 'signup', 'login', 'admelist']);
+  if(pagesNeedingLiveStatus.has(page) && !window.location.pathname.endsWith(`/${offlinePage}`)){
     probeLiveServer().catch(()=>{
       redirectToOffline();
     });
@@ -57,6 +58,16 @@
     catch(e){return fallback}
   }
   function write(key, val){localStorage.setItem(key,JSON.stringify(val))}
+
+  function debounce(fn, wait){
+    let timeoutId = null;
+    return function(){
+      const ctx = this;
+      const args = arguments;
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(()=>fn.apply(ctx, args), wait);
+    };
+  }
 
   const FEDL_USER_ACCOUNTS = 'fedl_user_accounts';
   const FEDL_USER_ACCOUNT_ACTIVE = 'fedl_user_account_active';
@@ -725,11 +736,12 @@
     modal.style.display = 'flex';
   }
 
-  if(page==='index'){
+  function bindHomeSnapshot(includeRuns){
     const totalEl = qs('hero-total-levels');
     const topEl = qs('hero-top-entry');
     const approvedRunsEl = qs('hero-last-slot');
     const featuredListEl = qs('featured-list');
+    const listPreviewEl = qs('offline-list-area');
 
     function renderFeatured(items){
       if(!featuredListEl) return;
@@ -762,6 +774,15 @@
       if(totalEl) totalEl.textContent = String(rankedItems.length || 0);
       if(topEl) topEl.textContent = firstItem ? firstItem.title : 'Unavailable';
       renderFeatured(rankedItems);
+      if(listPreviewEl){
+        const preview = rankedItems.slice(0, 10);
+        listPreviewEl.innerHTML = preview.length ? preview.map(item=>`
+          <tr>
+            <td>#${escapeHtml(item.position || '--')}</td>
+            <td>${escapeHtml(item.title || 'Untitled')}</td>
+          </tr>
+        `).join('') : '<tr><td colspan="2" class="muted">No local list data found.</td></tr>';
+      }
     }
 
     function renderApprovedRuns(runs){
@@ -773,13 +794,24 @@
     loadItems().then(renderHome).catch(()=>{
       renderHome([]);
     });
-    loadRuns().then(renderApprovedRuns).catch(()=>{
-      renderApprovedRuns([]);
-    });
-
-    bindLiveUpdates();
+    if(includeRuns){
+      loadRuns().then(renderApprovedRuns).catch(()=>{
+        renderApprovedRuns([]);
+      });
+      onRunsUpdate(renderApprovedRuns);
+    }else if(approvedRunsEl){
+      approvedRunsEl.textContent = 'Local';
+    }
     onLiveUpdate(renderHome);
-    onRunsUpdate(renderApprovedRuns);
+  }
+
+  if(page==='index'){
+    bindHomeSnapshot(true);
+    bindLiveUpdates();
+  }
+
+  if(page==='offlineindex'){
+    bindHomeSnapshot(false);
   }
 
   if(page==='roulette'){
@@ -890,7 +922,7 @@
               panel.appendChild(note);
             }
           }
-          note.textContent = `Signed in as ${fedlServerUsername}. Progress syncs to this server (this browser keeps a copy).`;
+          note.textContent = `Signed in as ${fedlServerUsername}. Progress syncs online and this browser keeps a copy.`;
           note.style.display = '';
         }else{
           if(controls) controls.style.display = '';
@@ -1101,7 +1133,7 @@
       Promise.all([loadItems(), loadLevelMeta()]).then(([items, metaMap])=>{
         if(!items.length){
           statusEl.textContent = 'No demons found.';
-          titleEl.textContent = 'Add demons to the live server list';
+          titleEl.textContent = 'Add demons to the list';
           idEl.textContent = 'Level ID: -';
           noteEl.textContent = 'No list data was found.';
           return;
@@ -1122,10 +1154,10 @@
         });
       }).catch(err=>{
         statusEl.textContent = 'Could not load the list.';
-        titleEl.textContent = 'Run the site on a local server';
+        titleEl.textContent = 'Open the full site';
         rankEl.textContent = 'Rank: -';
         idEl.textContent = 'Level ID: -';
-        noteEl.textContent = 'The live list or API lookup failed.';
+        noteEl.textContent = 'The list or lookup failed.';
         console.error(err);
       });
     });
@@ -1365,10 +1397,11 @@
 
       playersArea.innerHTML = '';
       if(!filtered.length){
-        playersArea.innerHTML = '<tr><td colspan="5" class="muted">No server players found.</td></tr>';
+        playersArea.innerHTML = '<tr><td colspan="5" class="muted">No player data found.</td></tr>';
         return;
       }
 
+      const fragment = document.createDocumentFragment();
       filtered.forEach(item => {
         const tr = document.createElement('tr');
         const tdName = document.createElement('td'); tdName.textContent = item.name;
@@ -1381,12 +1414,13 @@
         tr.appendChild(tdPoints);
         tr.appendChild(tdRank);
         tr.appendChild(tdLevels);
-        playersArea.appendChild(tr);
+        fragment.appendChild(tr);
       });
+      playersArea.appendChild(fragment);
     }
 
     function showLoading(){
-      playersArea.innerHTML = '<tr><td colspan="5" class="muted">Loading player stats from server...</td></tr>';
+      playersArea.innerHTML = '<tr><td colspan="5" class="muted">Loading player stats...</td></tr>';
     }
 
     function syncView(newPlayers){
@@ -1404,11 +1438,11 @@
         })
         .catch(err => {
           console.error(err);
-          playersArea.innerHTML = '<tr><td colspan="5" class="muted">Could not load server player stats.</td></tr>';
+          playersArea.innerHTML = '<tr><td colspan="5" class="muted">Could not load player stats.</td></tr>';
         });
     }
 
-    searchEl.addEventListener('input', renderTable);
+    searchEl.addEventListener('input', debounce(renderTable, 120));
     filterSelect.addEventListener('change', () => {
       const activeBtn = Array.from(groupsEl.querySelectorAll('.level-link')).find(btn => btn.textContent === filterSelect.value);
       groupsEl.querySelectorAll('.level-link').forEach(btn => btn.classList.toggle('active', btn === activeBtn));
@@ -1436,7 +1470,7 @@
       const run = ()=>{
         loadItems().then(items=>{
           applyItems(items);
-        }).catch(err=>{listArea.innerHTML='<p class="muted">Failed to load list data - run via the Node server.</p>'; console.error(err)});
+        }).catch(err=>{listArea.innerHTML='<p class="muted">Failed to load list data.</p>'; console.error(err)});
       };
       fedlRefreshAuthState()
         .then(()=> fedlPullUserStateToLocal(fedlServerUserId))
@@ -1473,7 +1507,7 @@
         const opt = document.createElement('option'); opt.value = cat; opt.textContent = cat; filterSelect.appendChild(opt);
       });
       if(!controlsBound){
-        searchEl.addEventListener('input', ()=> renderTable(currentItems));
+        searchEl.addEventListener('input', debounce(()=> renderTable(currentItems), 120));
         filterSelect.addEventListener('change', ()=> renderTable(currentItems));
         controlsBound = true;
       }
@@ -1503,7 +1537,12 @@
       }).sort((a,b)=> (Number(a.position)||0)-(Number(b.position)||0));
 
       const tbody = qs('list-area'); tbody.innerHTML='';
+      if(!filtered.length){
+        tbody.innerHTML = '<tr><td colspan="4" class="muted">No levels match this search or range.</td></tr>';
+        return;
+      }
       const accId = fedlDataUserId();
+      const fragment = document.createDocumentFragment();
       filtered.forEach(it=>{
         const tr = document.createElement('tr');
         const tdNum = document.createElement('td'); tdNum.textContent = it.position;
@@ -1533,8 +1572,9 @@
         a.addEventListener('click', (e)=>{e.preventDefault(); openVideoModal(it, {showRuns:true})});
         tdAct.appendChild(a);
         tr.appendChild(tdNum); tr.appendChild(tdTitle); tr.appendChild(tdPct); tr.appendChild(tdAct);
-        tbody.appendChild(tr);
+        fragment.appendChild(tr);
       });
+      tbody.appendChild(fragment);
     }
 
     function applyItems(items){
@@ -2751,7 +2791,7 @@
     form.addEventListener('submit', function(event){
       event.preventDefault();
       if(!canUseLiveServer){
-        setRunFormStatus('Start the Node server before submitting runs.', true);
+        setRunFormStatus('Submitting runs is not available right now.', true);
         return;
       }
       const payload = {
@@ -2795,7 +2835,7 @@
     onRunsUpdate(function(updatedRuns){
       const sortedRuns = updatedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
       renderRunSubmissions(sortedRuns);
-      setRunListStatus('Recent submissions reloaded from the live server.');
+      setRunListStatus('Recent submissions reloaded.');
     });
 
     fedlRefreshAuthState()
@@ -2823,7 +2863,7 @@
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
       if (!canUseLiveServer) {
-        setSignupStatus('Open this site through the FEDL server (not as a local file) to sign up.', 'error');
+        setSignupStatus('Sign up is not available right now.', 'error');
         return;
       }
       const username = String(qs('signup-username').value || '').trim().toLowerCase();
@@ -2885,7 +2925,7 @@
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
       if (!canUseLiveServer) {
-        setLoginStatus('Open this site through the FEDL server to log in.', 'error');
+        setLoginStatus('Log in is not available right now.', 'error');
         return;
       }
       const username = String(qs('login-username').value || '').trim().toLowerCase();
@@ -2950,7 +2990,7 @@
       form.addEventListener('submit', function(event){
         event.preventDefault();
         if(!canUseLiveServer){
-          setContactFormStatus('Start the Node server before submitting.', true);
+          setContactFormStatus('Reports are not available right now.', true);
           return;
         }
         const payload = {
