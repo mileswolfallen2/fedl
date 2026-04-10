@@ -1,0 +1,6 @@
+name = "fedl-email-worker"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+FORWARD_TO = ""

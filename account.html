@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Account — GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="pageicon.png">
+</head>
+<body data-page="account">
+  <header>
+    <h1>Account</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="post.html">Posts</a>
+      <a href="messages.html">Messages</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main class="account-main">
+    <section class="panel account-hero">
+      <p class="hero-kicker">FEDL account</p>
+      <h2>Manage your account</h2>
+      <p class="muted">Update the email tied to your account, change your password, and send yourself a password reset link.</p>
+      <p id="account-overview-status" class="muted" role="status"></p>
+      <div class="account-summary-grid">
+        <article class="account-summary-card">
+          <span class="account-summary-label">Username</span>
+          <strong id="account-username">Loading…</strong>
+        </article>
+        <article class="account-summary-card">
+          <span class="account-summary-label">Joined</span>
+          <strong id="account-created">Loading…</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel account-panel">
+      <h3>Email</h3>
+      <p class="muted">Add the inbox you want FEDL to use for account recovery.</p>
+      <form id="account-email-form" class="auth-form">
+        <label class="admin-password-field" for="account-email">
+          <span>Email address</span>
+          <input id="account-email" name="email" type="email" autocomplete="email" required />
+        </label>
+        <p id="account-email-status" class="muted" role="status"></p>
+        <div class="auth-actions">
+          <button type="submit" class="btn">Save email</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel account-panel">
+      <h3>Password reset email</h3>
+      <p id="account-reset-support" class="muted">Loading reset email settings…</p>
+      <p id="account-reset-status" class="muted" role="status"></p>
+      <div class="auth-actions">
+        <button type="button" class="btn" id="account-reset-email-btn">Email me a reset link</button>
+        <a class="text-link" href="reset-password.html">Open reset page</a>
+      </div>
+    </section>
+
+    <section class="panel account-panel">
+      <h3>Change password</h3>
+      <p class="muted">Use this if you already know your current password and just want to swap it.</p>
+      <form id="account-password-form" class="auth-form">
+        <label class="admin-password-field" for="account-current-password">
+          <span>Current password</span>
+          <input id="account-current-password" name="currentPassword" type="password" autocomplete="current-password" required />
+        </label>
+        <label class="admin-password-field" for="account-new-password">
+          <span>New password</span>
+          <input id="account-new-password" name="newPassword" type="password" autocomplete="new-password" required minlength="8" />
+        </label>
+        <label class="admin-password-field" for="account-confirm-password">
+          <span>Confirm new password</span>
+          <input id="account-confirm-password" name="confirmPassword" type="password" autocomplete="new-password" required minlength="8" />
+        </label>
+        <p id="account-password-status" class="muted" role="status"></p>
+        <div class="auth-actions">
+          <button type="submit" class="btn" id="account-password-submit">Update password</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>

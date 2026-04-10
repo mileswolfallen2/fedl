@@ -4,7 +4,7 @@
 
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
-  const TESTING_MODE = false;
+  const TESTING_MODE = true;
   const liveServerBase = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://server.fedl.site/fedl';
   const canUseLiveServer = !isFileProtocol || !!liveServerBase;
   const liveApiUrl = `${liveServerBase}/api/list`;
@@ -39,7 +39,7 @@
     });
   }
 
-  const pagesNeedingLiveStatus = new Set(['index', 'run', 'messages', 'post', 'contact', 'signup', 'login', 'admelist']);
+  const pagesNeedingLiveStatus = new Set(['index', 'run', 'messages', 'post', 'contact', 'signup', 'login', 'account', 'reset-password', 'admelist']);
   if(pagesNeedingLiveStatus.has(page) && !window.location.pathname.endsWith(`/${offlinePage}`)){
     probeLiveServer().catch(()=>{
       redirectToOffline();
@@ -336,6 +336,11 @@
       strong.textContent = fedlServerUsername;
       label.appendChild(strong);
       wrap.appendChild(label);
+      wrap.appendChild(document.createTextNode(' '));
+      const accountLink = document.createElement('a');
+      accountLink.href = 'account.html';
+      accountLink.textContent = 'Account';
+      wrap.appendChild(accountLink);
       wrap.appendChild(document.createTextNode(' '));
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -2850,15 +2855,23 @@
   }
 
   const FEDL_USERNAME_RE = /^[a-z0-9_]{3,24}$/;
+  const FEDL_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const FEDL_AUTH_REDIRECT_MS = 1400;
+  function fedlSetFormStatus(el, msg, kind){
+    if (!el) {
+      return;
+    }
+    el.textContent = msg || '';
+    el.className =
+      kind === 'error' ? 'muted error-text' : kind === 'success' ? 'muted success-text' : 'muted';
+  }
+
   if (page === 'signup') {
     const form = qs('signup-form');
     const statusEl = qs('signup-status');
     const submitBtn = qs('signup-submit');
     function setSignupStatus(msg, kind){
-      statusEl.textContent = msg || '';
-      statusEl.className =
-        kind === 'error' ? 'muted error-text' : kind === 'success' ? 'muted success-text' : 'muted';
+      fedlSetFormStatus(statusEl, msg, kind);
     }
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
@@ -2867,10 +2880,15 @@
         return;
       }
       const username = String(qs('signup-username').value || '').trim().toLowerCase();
+      const email = String((qs('signup-email') && qs('signup-email').value) || '').trim().toLowerCase();
       const password = qs('signup-password').value || '';
       const password2 = qs('signup-password2').value || '';
       if (!FEDL_USERNAME_RE.test(username)) {
         setSignupStatus('Use 3–24 characters: lowercase letters, numbers, or underscore only.', 'error');
+        return;
+      }
+      if (email && !FEDL_EMAIL_RE.test(email)) {
+        setSignupStatus('Enter a valid email address.', 'error');
         return;
       }
       if (password.length < 8) {
@@ -2886,7 +2904,7 @@
       fetch(liveApiPath('/api/auth/signup'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, email, password })
       }).then(async r=>{
         const { data, message } = await fedlReadJsonResponse(r);
         if (!r.ok) {
@@ -2918,9 +2936,7 @@
     const statusEl = qs('login-status');
     const submitBtn = qs('login-submit');
     function setLoginStatus(msg, kind){
-      statusEl.textContent = msg || '';
-      statusEl.className =
-        kind === 'error' ? 'muted error-text' : kind === 'success' ? 'muted success-text' : 'muted';
+      fedlSetFormStatus(statusEl, msg, kind);
     }
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
@@ -2964,6 +2980,304 @@
         submitBtn.disabled = false;
       });
     });
+  }
+
+  if (page === 'account') {
+    const overviewStatusEl = qs('account-overview-status');
+    const emailForm = qs('account-email-form');
+    const emailStatusEl = qs('account-email-status');
+    const emailInput = qs('account-email');
+    const accountUsernameEl = qs('account-username');
+    const accountCreatedEl = qs('account-created');
+    const resetSupportEl = qs('account-reset-support');
+    const resetBtn = qs('account-reset-email-btn');
+    const resetStatusEl = qs('account-reset-status');
+    const passwordForm = qs('account-password-form');
+    const passwordStatusEl = qs('account-password-status');
+    const passwordSubmit = qs('account-password-submit');
+
+    function setOverviewStatus(msg, kind){
+      fedlSetFormStatus(overviewStatusEl, msg, kind);
+    }
+    function setEmailStatus(msg, kind){
+      fedlSetFormStatus(emailStatusEl, msg, kind);
+    }
+    function setResetStatus(msg, kind){
+      fedlSetFormStatus(resetStatusEl, msg, kind);
+    }
+    function setPasswordStatus(msg, kind){
+      fedlSetFormStatus(passwordStatusEl, msg, kind);
+    }
+    function formatJoinedDate(iso){
+      if (!iso) return 'Unknown';
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return 'Unknown';
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    function authHeaders(){
+      return {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${fedlGetAuthToken()}`
+      };
+    }
+    function loadAccount(){
+      if (!fedlGetAuthToken()) {
+        window.location.replace('login.html?return=' + encodeURIComponent('account.html'));
+        return Promise.resolve();
+      }
+      setOverviewStatus('Loading your account…');
+      return fetch(liveApiPath('/api/account'), {
+        headers: { Authorization: `Bearer ${fedlGetAuthToken()}` },
+        cache: 'no-store'
+      }).then(async r=>{
+        const { data, message } = await fedlReadJsonResponse(r);
+        if (!r.ok) {
+          throw new Error(message || 'Could not load account details.');
+        }
+        if (accountUsernameEl) {
+          accountUsernameEl.textContent = data.username || 'Unknown';
+        }
+        if (accountCreatedEl) {
+          accountCreatedEl.textContent = formatJoinedDate(data.createdAt);
+        }
+        if (emailInput) {
+          emailInput.value = data.email || '';
+        }
+        if (resetBtn) {
+          resetBtn.disabled = !data.email;
+        }
+        if (resetSupportEl) {
+          if (!data.emailDeliveryConfigured) {
+            resetSupportEl.textContent = 'Password reset email is ready in the app, but the server still needs SMTP configured for help@fedl.site before it can send mail.';
+          } else if (!data.email) {
+            resetSupportEl.textContent = 'Add your email address first, then you can send yourself a reset link from this page.';
+          } else {
+            resetSupportEl.textContent = `Reset emails will be sent to ${data.email} from help@fedl.site once mail delivery is configured with that sender.`;
+          }
+        }
+        setOverviewStatus('');
+      }).catch(err=>{
+        console.error(err);
+        setOverviewStatus(err.message || 'Could not load your account.', 'error');
+        if (String(err.message || '').toLowerCase().includes('not signed in')) {
+          window.location.replace('login.html?return=' + encodeURIComponent('account.html'));
+        }
+      });
+    }
+
+    if (emailForm) {
+      emailForm.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        const email = String(emailInput ? emailInput.value : '').trim().toLowerCase();
+        if (!FEDL_EMAIL_RE.test(email)) {
+          setEmailStatus('Enter a valid email address.', 'error');
+          return;
+        }
+        setEmailStatus('Saving your email…');
+        fetch(liveApiPath('/api/account'), {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: JSON.stringify({ email })
+        }).then(async r=>{
+          const { message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not update email.');
+          }
+          setEmailStatus('Email updated.', 'success');
+          if (resetBtn) {
+            resetBtn.disabled = false;
+          }
+          if (resetSupportEl) {
+            resetSupportEl.textContent = `Reset emails will be sent to ${email} from help@fedl.site once mail delivery is configured with that sender.`;
+          }
+        }).catch(err=>{
+          console.error(err);
+          setEmailStatus(err.message || 'Could not update email.', 'error');
+        });
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function(){
+        resetBtn.disabled = true;
+        setResetStatus('Sending reset email…');
+        fetch(liveApiPath('/api/account/password-reset-email'), {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${fedlGetAuthToken()}` }
+        }).then(async r=>{
+          const { message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not send reset email.');
+          }
+          setResetStatus('Reset email sent. Check your inbox for a link from help@fedl.site.', 'success');
+        }).catch(err=>{
+          console.error(err);
+          setResetStatus(err.message || 'Could not send reset email.', 'error');
+        }).finally(()=>{
+          resetBtn.disabled = false;
+        });
+      });
+    }
+
+    if (passwordForm) {
+      passwordForm.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        const currentPassword = String(qs('account-current-password').value || '');
+        const newPassword = String(qs('account-new-password').value || '');
+        const confirmPassword = String(qs('account-confirm-password').value || '');
+        if (!currentPassword) {
+          setPasswordStatus('Enter your current password.', 'error');
+          return;
+        }
+        if (newPassword.length < 8) {
+          setPasswordStatus('New password must be at least 8 characters.', 'error');
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          setPasswordStatus('New passwords do not match.', 'error');
+          return;
+        }
+        if (passwordSubmit) {
+          passwordSubmit.disabled = true;
+        }
+        setPasswordStatus('Updating password…');
+        fetch(liveApiPath('/api/account/password'), {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: JSON.stringify({ currentPassword, newPassword })
+        }).then(async r=>{
+          const { data, message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not update password.');
+          }
+          if (data && data.token) {
+            fedlSetAuthToken(data.token);
+          }
+          passwordForm.reset();
+          setPasswordStatus('Password updated.', 'success');
+        }).catch(err=>{
+          console.error(err);
+          setPasswordStatus(err.message || 'Could not update password.', 'error');
+        }).finally(()=>{
+          if (passwordSubmit) {
+            passwordSubmit.disabled = false;
+          }
+        });
+      });
+    }
+
+    loadAccount();
+  }
+
+  if (page === 'reset-password') {
+    const requestForm = qs('reset-request-form');
+    const requestStatusEl = qs('reset-request-status');
+    const requestSubmit = qs('reset-request-submit');
+    const requestInput = qs('reset-identifier');
+    const tokenInput = qs('reset-token');
+    const resetForm = qs('reset-password-form');
+    const resetStatusEl = qs('reset-password-status');
+    const resetSubmit = qs('reset-password-submit');
+
+    function setRequestStatus(msg, kind){
+      fedlSetFormStatus(requestStatusEl, msg, kind);
+    }
+    function setResetPasswordStatus(msg, kind){
+      fedlSetFormStatus(resetStatusEl, msg, kind);
+    }
+
+    if (tokenInput) {
+      const params = new URLSearchParams(window.location.search);
+      tokenInput.value = params.get('token') || '';
+    }
+
+    if (requestForm) {
+      requestForm.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        if (!canUseLiveServer) {
+          setRequestStatus('Password reset is not available right now.', 'error');
+          return;
+        }
+        const identifier = String(requestInput ? requestInput.value : '').trim().toLowerCase();
+        if (!identifier) {
+          setRequestStatus('Enter your username or email.', 'error');
+          return;
+        }
+        if (requestSubmit) {
+          requestSubmit.disabled = true;
+        }
+        setRequestStatus('Checking for your account…');
+        fetch(liveApiPath('/api/auth/request-password-reset'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier })
+        }).then(async r=>{
+          const { message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not request password reset.');
+          }
+          setRequestStatus('If that account has an email on file, we sent a reset link.', 'success');
+        }).catch(err=>{
+          console.error(err);
+          setRequestStatus(err.message || 'Could not request password reset.', 'error');
+        }).finally(()=>{
+          if (requestSubmit) {
+            requestSubmit.disabled = false;
+          }
+        });
+      });
+    }
+
+    if (resetForm) {
+      resetForm.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        if (!canUseLiveServer) {
+          setResetPasswordStatus('Password reset is not available right now.', 'error');
+          return;
+        }
+        const token = String(tokenInput ? tokenInput.value : '').trim();
+        const newPassword = String(qs('reset-new-password').value || '');
+        const confirmPassword = String(qs('reset-confirm-password').value || '');
+        if (!token) {
+          setResetPasswordStatus('Paste the reset token or open the link from your email.', 'error');
+          return;
+        }
+        if (newPassword.length < 8) {
+          setResetPasswordStatus('New password must be at least 8 characters.', 'error');
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          setResetPasswordStatus('New passwords do not match.', 'error');
+          return;
+        }
+        if (resetSubmit) {
+          resetSubmit.disabled = true;
+        }
+        setResetPasswordStatus('Resetting your password…');
+        fetch(liveApiPath('/api/auth/reset-password'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, newPassword })
+        }).then(async r=>{
+          const { message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not reset password.');
+          }
+          resetForm.reset();
+          if (tokenInput) {
+            tokenInput.value = '';
+          }
+          setResetPasswordStatus('Password reset complete. You can log in with your new password now.', 'success');
+        }).catch(err=>{
+          console.error(err);
+          setResetPasswordStatus(err.message || 'Could not reset password.', 'error');
+        }).finally(()=>{
+          if (resetSubmit) {
+            resetSubmit.disabled = false;
+          }
+        });
+      });
+    }
   }
 
   if(page==='contact'){

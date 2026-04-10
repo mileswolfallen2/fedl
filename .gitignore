@@ -5,3 +5,6 @@ server/userdata.json
 server/data.txt
 server/runs.json
 server/messages.json
+
+# Environment variables
+server/.env

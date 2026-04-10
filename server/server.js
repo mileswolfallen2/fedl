@@ -11,6 +11,7 @@ const runsPath = path.join(__dirname, 'runs.json');
 const usersPath = path.join(__dirname, 'users.json');
 const sessionsPath = path.join(__dirname, 'sessions.json');
 const userDataPath = path.join(__dirname, 'userdata.json');
+const resetTokensPath = path.join(__dirname, 'reset_tokens.json');
 const postsPath = path.join(__dirname, 'posts.json');
 const bugReportsPath = path.join(__dirname, 'bugreports.json');
 const messagesPath = path.join(__dirname, 'messages.json');
@@ -144,6 +145,8 @@ function writeRuns(runs) {
 }
 
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+const PASSWORD_RESET_TTL_MS = 60 * 60 * 1000;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function ensureUsersFile() {
   if (!fs.existsSync(usersPath)) {
@@ -160,6 +163,12 @@ function ensureSessionsFile() {
 function ensureUserDataFile() {
   if (!fs.existsSync(userDataPath)) {
     fs.writeFileSync(userDataPath, '{}\n', 'utf8');
+  }
+}
+
+function ensureResetTokensFile() {
+  if (!fs.existsSync(resetTokensPath)) {
+    fs.writeFileSync(resetTokensPath, '{}\n', 'utf8');
   }
 }
 
@@ -254,6 +263,18 @@ function usernameOk(u) {
   return /^[a-z0-9_]{3,24}$/.test(u);
 }
 
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
+function emailOk(email) {
+  return EMAIL_RE.test(String(email || '').trim());
+}
+
+function hashToken(token) {
+  return crypto.createHash('sha256').update(String(token || '')).digest('hex');
+}
+
 function getBearerToken(req) {
   const h = String(req.headers.authorization || '');
   const m = h.match(/^Bearer\s+(\S+)/i);
@@ -268,6 +289,272 @@ function readUserDataMap() {
 
 function writeUserDataMap(map) {
   fs.writeFileSync(userDataPath, `${JSON.stringify(map, null, 2)}\n`, 'utf8');
+}
+
+function readResetTokensRaw() {
+  ensureResetTokensFile();
+  const parsed = safeReadJsonFile(resetTokensPath, {}, 'reset tokens file');
+  return parsed && typeof parsed === 'object' ? parsed : {};
+}
+
+function cleanResetTokens(tokens) {
+  const now = Date.now();
+  const out = {};
+  Object.keys(tokens).forEach(key => {
+    const row = tokens[key];
+    if (row && row.expiresAt && new Date(row.expiresAt).getTime() > now) {
+      out[key] = row;
+    }
+  });
+  return out;
+}
+
+function readResetTokens() {
+  return cleanResetTokens(readResetTokensRaw());
+}
+
+function writeResetTokens(tokens) {
+  fs.writeFileSync(resetTokensPath, `${JSON.stringify(tokens, null, 2)}\n`, 'utf8');
+}
+
+function revokeUserSessions(userId) {
+  const sessions = readSessionsRaw();
+  Object.keys(sessions).forEach(token => {
+    const row = sessions[token];
+    if (row && row.userId === userId) {
+      delete sessions[token];
+    }
+  });
+  writeSessions(cleanSessions(sessions));
+}
+
+function removeResetTokensForUser(userId) {
+  const tokens = readResetTokensRaw();
+  Object.keys(tokens).forEach(key => {
+    const row = tokens[key];
+    if (row && row.userId === userId) {
+      delete tokens[key];
+    }
+  });
+  writeResetTokens(cleanResetTokens(tokens));
+}
+
+function getSessionFromRequest(req) {
+  return findSession(getBearerToken(req));
+}
+
+function getAppBaseUrl(req) {
+  const explicit = String(process.env.APP_BASE_URL || '').trim().replace(/\/+$/, '');
+  if (explicit) {
+    return explicit;
+  }
+  const proto = String(req.headers['x-forwarded-proto'] || '').trim() || 'http';
+  const hostHeader = String(req.headers['x-forwarded-host'] || req.headers.host || '').trim();
+  return `${proto}://${hostHeader}${BASE}`;
+}
+
+function getResetPasswordUrl(req, token) {
+  return `${getAppBaseUrl(req)}/reset-password.html?token=${encodeURIComponent(token)}`;
+}
+
+function mailConfigured() {
+  return !!(
+    String(process.env.SMTP_HOST || '').trim() &&
+    String(process.env.SMTP_FROM || '').trim()
+  );
+}
+
+function workerEmailConfigured() {
+  return !!String(process.env.CF_WORKER_URL || '').trim();
+}
+
+async function sendMailViaWorker({ to, subject, text }) {
+  const workerUrl = String(process.env.CF_WORKER_URL || '').trim();
+  
+  const res = await fetch(`${workerUrl}/send`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ to, subject, text })
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Worker email failed: ${err}`);
+  }
+
+  return res.json();
+}
+
+function createLineReader(socket) {
+  let buffer = '';
+  const queue = [];
+  const waiters = [];
+
+  function flush() {
+    while (waiters.length && queue.length) {
+      waiters.shift()(queue.shift());
+    }
+  }
+
+  socket.on('data', chunk => {
+    buffer += chunk.toString('utf8');
+    let idx = buffer.indexOf('\r\n');
+    while (idx !== -1) {
+      queue.push(buffer.slice(0, idx));
+      buffer = buffer.slice(idx + 2);
+      idx = buffer.indexOf('\r\n');
+    }
+    flush();
+  });
+
+  return {
+    nextLine() {
+      if (queue.length) {
+        return Promise.resolve(queue.shift());
+      }
+      return new Promise(resolve => {
+        waiters.push(resolve);
+      });
+    }
+  };
+}
+
+async function readSmtpResponse(reader) {
+  const lines = [];
+  while (true) {
+    const line = await reader.nextLine();
+    lines.push(line);
+    if (!/^\d{3}-/.test(line)) {
+      return {
+        code: Number(String(line || '').slice(0, 3)),
+        lines
+      };
+    }
+  }
+}
+
+function smtpCommand(socket, reader, command, expectedCodes) {
+  return new Promise((resolve, reject) => {
+    socket.write(`${command}\r\n`, async error => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      try {
+        const response = await readSmtpResponse(reader);
+        if (!expectedCodes.includes(response.code)) {
+          reject(new Error(`SMTP ${response.code}: ${response.lines.join(' | ')}`));
+          return;
+        }
+        resolve(response);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+}
+
+function buildMailMessage({ from, to, subject, text }) {
+  const messageId = `<${crypto.randomBytes(12).toString('hex')}@fedl.site>`;
+  const normalizedText = String(text || '').replace(/\r?\n/g, '\r\n').replace(/^\./gm, '..');
+  return [
+    `From: ${from}`,
+    `To: ${to}`,
+    `Subject: ${subject}`,
+    `Date: ${new Date().toUTCString()}`,
+    `Message-ID: ${messageId}`,
+    'MIME-Version: 1.0',
+    'Content-Type: text/plain; charset=utf-8',
+    'Content-Transfer-Encoding: 8bit',
+    '',
+    normalizedText,
+    '.'
+  ].join('\r\n');
+}
+
+async function sendMail({ to, subject, text }) {
+  if (!mailConfigured() && !workerEmailConfigured()) {
+    throw new Error('Email delivery is not configured. Set SMTP_* vars or CF_WORKER_URL.');
+  }
+
+  if (!mailConfigured()) {
+    return sendMailViaWorker({ to, subject, text });
+  }
+
+  const tls = require('tls');
+  const net = require('net');
+  const hostName = String(process.env.SMTP_HOST || '').trim();
+  const portNumber = Number(process.env.SMTP_PORT) || 465;
+  const secure = String(process.env.SMTP_SECURE || 'true').trim().toLowerCase() !== 'false';
+  const smtpUser = String(process.env.SMTP_USER || '').trim();
+  const smtpPass = String(process.env.SMTP_PASS || '');
+  const from = String(process.env.SMTP_FROM || '').trim();
+  const ehloName = String(process.env.SMTP_EHLO_NAME || 'fedl.site').trim();
+
+  const socket = secure
+    ? tls.connect({ host: hostName, port: portNumber, servername: hostName })
+    : require('net').connect({ host: hostName, port: portNumber });
+
+  await new Promise((resolve, reject) => {
+    socket.once('connect', resolve);
+    socket.once('error', reject);
+  });
+
+  const reader = createLineReader(socket);
+
+  try {
+    const greeting = await readSmtpResponse(reader);
+    if (greeting.code !== 220) {
+      throw new Error(`SMTP ${greeting.code}: ${greeting.lines.join(' | ')}`);
+    }
+    await smtpCommand(socket, reader, `EHLO ${ehloName}`, [250]);
+    if (smtpUser || smtpPass) {
+      await smtpCommand(socket, reader, 'AUTH LOGIN', [334]);
+      await smtpCommand(socket, reader, Buffer.from(smtpUser).toString('base64'), [334]);
+      await smtpCommand(socket, reader, Buffer.from(smtpPass).toString('base64'), [235]);
+    }
+    await smtpCommand(socket, reader, `MAIL FROM:<${from}>`, [250]);
+    await smtpCommand(socket, reader, `RCPT TO:<${to}>`, [250, 251]);
+    await smtpCommand(socket, reader, 'DATA', [354]);
+    await smtpCommand(socket, reader, buildMailMessage({ from, to, subject, text }), [250]);
+    await smtpCommand(socket, reader, 'QUIT', [221]);
+  } finally {
+    socket.end();
+  }
+}
+
+async function sendPasswordResetEmail(req, user) {
+  if (!user || !user.email) {
+    throw new Error('This account does not have an email address yet.');
+  }
+  const token = crypto.randomBytes(32).toString('hex');
+  const tokenHash = hashToken(token);
+  const resetTokens = readResetTokensRaw();
+  const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MS).toISOString();
+  resetTokens[tokenHash] = {
+    userId: user.id,
+    email: user.email,
+    username: user.username,
+    expiresAt,
+    createdAt: new Date().toISOString()
+  };
+  writeResetTokens(cleanResetTokens(resetTokens));
+
+  const resetUrl = getResetPasswordUrl(req, token);
+  await sendMail({
+    to: user.email,
+    subject: 'Reset your FEDL password',
+    text: [
+      `Hi ${user.username},`,
+      '',
+      'We received a request to reset your FEDL password.',
+      '',
+      `Reset your password here: ${resetUrl}`,
+      '',
+      'This link expires in 1 hour. If you did not request a reset, you can ignore this email.'
+    ].join('\n')
+  });
+  return { expiresAt, resetUrl };
 }
 
 function ensurePostsFile() {
@@ -833,6 +1120,7 @@ const server = http.createServer((req, res) => {
         const payload = JSON.parse(body || '{}');
         const username = normalizeUsername(payload.username);
         const password = String(payload.password || '');
+        const email = normalizeEmail(payload.email);
         if (!usernameOk(username)) {
           sendJson(res, 400, {
             error: 'Username must be 3-24 characters: lowercase letters, numbers, or underscore.'
@@ -848,18 +1136,27 @@ const server = http.createServer((req, res) => {
           sendJson(res, 409, { error: 'That username is already taken.' });
           return;
         }
+        if (email && !emailOk(email)) {
+          sendJson(res, 400, { error: 'Enter a valid email address.' });
+          return;
+        }
+        if (email && users.some(u => u.email && u.email === email)) {
+          sendJson(res, 409, { error: 'That email is already being used by another account.' });
+          return;
+        }
         const { salt, hash } = hashPassword(password);
         const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
         users.push({
           id,
           username,
+          email,
           passwordHash: hash,
           salt,
           createdAt: new Date().toISOString()
         });
         writeUsers(users);
         const token = createSession(id, username);
-        sendJson(res, 201, { ok: true, token, userId: id, username });
+        sendJson(res, 201, { ok: true, token, userId: id, username, email });
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid signup request' });
       }
@@ -903,13 +1200,244 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.method === 'GET' && pathname === '/api/auth/me') {
-    const token = getBearerToken(req);
-    const sess = findSession(token);
+    const sess = getSessionFromRequest(req);
     if (!sess) {
       sendJson(res, 401, { error: 'Not signed in' });
       return;
     }
-    sendJson(res, 200, { userId: sess.userId, username: sess.username });
+    const users = readUsers();
+    const user = users.find(u => u.id === sess.userId);
+    sendJson(res, 200, {
+      userId: sess.userId,
+      username: sess.username,
+      email: user && user.email ? user.email : ''
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/auth/request-password-reset') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const identifier = String(payload.identifier || '').trim().toLowerCase();
+        if (!identifier) {
+          sendJson(res, 400, { error: 'Enter your username or email address.' });
+          return;
+        }
+        const users = readUsers();
+        const user = users.find(u =>
+          u.username === identifier || (u.email && String(u.email).toLowerCase() === identifier)
+        );
+        if (user && user.email && (mailConfigured() || workerEmailConfigured())) {
+          try {
+            await sendPasswordResetEmail(req, user);
+          } catch (error) {
+            console.error(`[FEDL] Password reset request email failed: ${error.message}`);
+          }
+        }
+        sendJson(res, 200, {
+          ok: true,
+          message: 'If that account has a reset email configured, we sent a reset link.'
+        });
+      } catch (error) {
+        console.error(`[FEDL] Password reset request failed: ${error.message}`);
+        sendJson(res, 400, { error: 'Invalid password reset request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/auth/reset-password') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const token = String(payload.token || '').trim();
+        const newPassword = String(payload.newPassword || '');
+        if (!token) {
+          sendJson(res, 400, { error: 'Reset token is required.' });
+          return;
+        }
+        if (newPassword.length < 8) {
+          sendJson(res, 400, { error: 'Password must be at least 8 characters.' });
+          return;
+        }
+        const tokens = readResetTokens();
+        const tokenHash = hashToken(token);
+        const row = tokens[tokenHash];
+        if (!row || !row.userId) {
+          sendJson(res, 400, { error: 'That reset link is invalid or has expired.' });
+          return;
+        }
+        const users = readUsers();
+        const user = users.find(u => u.id === row.userId);
+        if (!user) {
+          delete tokens[tokenHash];
+          writeResetTokens(cleanResetTokens(tokens));
+          sendJson(res, 400, { error: 'That reset link is invalid or has expired.' });
+          return;
+        }
+        const { salt, hash } = hashPassword(newPassword);
+        user.salt = salt;
+        user.passwordHash = hash;
+        user.updatedAt = new Date().toISOString();
+        writeUsers(users);
+        delete tokens[tokenHash];
+        writeResetTokens(cleanResetTokens(tokens));
+        revokeUserSessions(user.id);
+        removeResetTokensForUser(user.id);
+        sendJson(res, 200, { ok: true });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid password reset request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/account') {
+    const sess = getSessionFromRequest(req);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    const users = readUsers();
+    const user = users.find(u => u.id === sess.userId);
+    if (!user) {
+      sendJson(res, 404, { error: 'Account not found' });
+      return;
+    }
+    sendJson(res, 200, {
+      userId: user.id,
+      username: user.username,
+      email: user.email || '',
+      createdAt: user.createdAt || '',
+      passwordResetEmailEnabled: !!(user.email && (mailConfigured() || workerEmailConfigured())),
+      emailDeliveryConfigured: mailConfigured() || workerEmailConfigured()
+    });
+    return;
+  }
+
+  if (req.method === 'PUT' && pathname === '/api/account') {
+    const sess = getSessionFromRequest(req);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const email = normalizeEmail(payload.email);
+        if (!emailOk(email)) {
+          sendJson(res, 400, { error: 'Enter a valid email address.' });
+          return;
+        }
+        const users = readUsers();
+        const user = users.find(u => u.id === sess.userId);
+        if (!user) {
+          sendJson(res, 404, { error: 'Account not found' });
+          return;
+        }
+        if (users.some(u => u.id !== user.id && u.email && u.email === email)) {
+          sendJson(res, 409, { error: 'That email is already being used by another account.' });
+          return;
+        }
+        user.email = email;
+        user.updatedAt = new Date().toISOString();
+        writeUsers(users);
+        sendJson(res, 200, { ok: true, email });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid account update request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'PUT' && pathname === '/api/account/password') {
+    const sess = getSessionFromRequest(req);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const currentPassword = String(payload.currentPassword || '');
+        const newPassword = String(payload.newPassword || '');
+        if (newPassword.length < 8) {
+          sendJson(res, 400, { error: 'Password must be at least 8 characters.' });
+          return;
+        }
+        const users = readUsers();
+        const user = users.find(u => u.id === sess.userId);
+        if (!user) {
+          sendJson(res, 404, { error: 'Account not found' });
+          return;
+        }
+        if (!verifyPassword(currentPassword, user.salt, user.passwordHash)) {
+          sendJson(res, 401, { error: 'Your current password is incorrect.' });
+          return;
+        }
+        const { salt, hash } = hashPassword(newPassword);
+        user.salt = salt;
+        user.passwordHash = hash;
+        user.updatedAt = new Date().toISOString();
+        writeUsers(users);
+        removeResetTokensForUser(user.id);
+        revokeUserSessions(user.id);
+        const token = createSession(user.id, user.username);
+        sendJson(res, 200, { ok: true, token });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid password update request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/api/account/password-reset-email') {
+    const sess = getSessionFromRequest(req);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    if (!mailConfigured() && !workerEmailConfigured()) {
+      sendJson(res, 503, { error: 'Password reset email is not configured on the server yet.' });
+      return;
+    }
+    const users = readUsers();
+    const user = users.find(u => u.id === sess.userId);
+    if (!user) {
+      sendJson(res, 404, { error: 'Account not found' });
+      return;
+    }
+    if (!user.email) {
+      sendJson(res, 400, { error: 'Add an email address to your account before requesting a reset email.' });
+      return;
+    }
+    sendPasswordResetEmail(req, user).then(result => {
+      sendJson(res, 200, { ok: true, expiresAt: result.expiresAt });
+    }).catch(error => {
+      console.error(`[FEDL] Password reset email failed: ${error.message}`);
+      sendJson(res, 500, { error: 'Could not send the reset email right now.' });
+    });
     return;
   }
 

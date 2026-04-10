@@ -31,6 +31,11 @@
           <input id="signup-username" name="username" type="text" autocomplete="username" required minlength="3" maxlength="24" pattern="[a-z0-9_]{3,24}" placeholder="letters, numbers, underscore" />
         </label>
         <p class="muted small auth-hint">3–24 characters, lowercase letters, numbers, or underscore only.</p>
+        <label class="admin-password-field" for="signup-email">
+          <span>Email</span>
+          <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="Needed for password reset emails" />
+        </label>
+        <p class="muted small auth-hint">Optional now, but needed if you want FEDL to send password reset links.</p>
         <label class="admin-password-field" for="signup-password">
           <span>Password</span>
           <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />

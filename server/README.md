@@ -25,6 +25,14 @@ node server.js
 | `ADMIN_PASSWORD` | _(empty)_ | If set, **HTTP Basic** password for admin-only routes (username can be anything; password must match) |
 | `AREDL_ACCESS_TOKEN` | _(empty)_ | Bearer token for AREDL import APIs |
 | `AREDL_API_KEY` | _(empty)_ | API key header for AREDL import APIs |
+| `APP_BASE_URL` | _(derived from request)_ | Public site base used in password reset links, for example `https://fedl.site` or `https://server.fedl.site/fedl` |
+| `SMTP_HOST` | _(empty)_ | SMTP host for password reset emails |
+| `SMTP_PORT` | `465` | SMTP port |
+| `SMTP_SECURE` | `true` | Use TLS from connect time; set to `false` only if your mail server accepts plain SMTP |
+| `SMTP_USER` | _(empty)_ | SMTP username for authenticated mailboxes |
+| `SMTP_PASS` | _(empty)_ | SMTP password |
+| `SMTP_FROM` | _(empty)_ | Sender address for password reset emails, e.g. `help@fedl.site` |
+| `SMTP_EHLO_NAME` | `fedl.site` | Optional EHLO/HELO name sent to the SMTP server |
 
 Console output shows the effective `PORT`, `HOST`, data paths, and whether admin protection is enabled.
 
@@ -50,9 +58,10 @@ Responses to API routes set permissive CORS headers (`Access-Control-Allow-Origi
 |------|------|
 | `data.txt` | Pipe-separated demon list source (`category\|position\|title\|url` lines) |
 | `runs.json` | Run submission queue (moderation) |
-| `users.json` | Registered FEDL accounts (hashed passwords) |
+| `users.json` | Registered FEDL accounts (hashed passwords + account email) |
 | `sessions.json` | Bearer session tokens + expiry |
 | `userdata.json` | Per-user synced state (roulette, list %, saved runs, roulette slots) |
+| `reset_tokens.json` | One-time password reset tokens + expiry |
 
 These files are created on demand where noted below. Use `.gitignore` for `users.json`, `sessions.json`, and `userdata.json` if they contain real data.
 
@@ -132,8 +141,44 @@ Run objects include (among others): `id`, `playerName`, `levelTitle`, `videoUrl`
 #### `GET /api/auth/me`
 
 - **Header:** `Authorization: Bearer <token>`
-- **200:** `{ "userId", "username" }`
+- **200:** `{ "userId", "username", "email" }`
 - **401:** invalid or expired token
+
+#### `POST /api/auth/request-password-reset`
+
+- **Body:** `{ "identifier": "username-or-email" }`
+- **200:** generic success response whether or not a matching account exists
+
+#### `POST /api/auth/reset-password`
+
+- **Body:** `{ "token", "newPassword" }`
+- **200:** `{ "ok": true }`
+- **400:** invalid/expired token or invalid password
+
+### Account settings
+
+#### `GET /api/account`
+
+- **Header:** `Authorization: Bearer <token>`
+- **200:** account profile including `username`, `email`, `createdAt`, and whether reset email delivery is configured
+
+#### `PUT /api/account`
+
+- **Header:** `Authorization: Bearer <token>`
+- **Body:** `{ "email": "helpful@example.com" }`
+- **200:** `{ "ok": true, "email": "..." }`
+
+#### `PUT /api/account/password`
+
+- **Header:** `Authorization: Bearer <token>`
+- **Body:** `{ "currentPassword", "newPassword" }`
+- **200:** `{ "ok": true, "token": "new-session-token" }`
+
+#### `POST /api/account/password-reset-email`
+
+- **Header:** `Authorization: Bearer <token>`
+- Sends a reset link to the email saved on the current account
+- Requires SMTP to be configured server-side
 
 ### User state (synced client storage)
 
