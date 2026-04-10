@@ -1817,18 +1817,27 @@ const server = http.createServer((req, res) => {
       try {
         const payload = JSON.parse(body || '{}');
         const text = String(payload.text || '').trim();
-        const oldText = readDataText();
-        const oldLines = new Set(oldText.split('\n').map(l => l.trim()).filter(Boolean));
-        const newLines = text.split('\n').map(l => l.trim()).filter(Boolean);
-        const addedLines = newLines.filter(l => !oldLines.has(l));
+        const oldItems = parseData(readDataText());
+        const newItems = parseData(text);
+        const oldLevels = new Map(oldItems.map(i => [i.title, i.position]));
+        const newLevels = new Map(newItems.map(i => [i.title, i.position]));
+        const addedLevels = [];
+        const movedLevels = [];
+        for (const [title, newPos] of newLevels) {
+          if (!oldLevels.has(title)) {
+            addedLevels.push(title);
+          } else if (oldLevels.get(title) !== newPos) {
+            movedLevels.push({ title, from: oldLevels.get(title), to: newPos });
+          }
+        }
         writeDataText(text);
         sendEvent('list-update', { updatedAt: new Date().toISOString() });
-        if (addedLines.length > 0) {
-          const newLevels = addedLines.map(line => {
-            const parts = line.split('|');
-            return parts[2] || line;
-          }).join(', ');
-          sendDiscordNotification(`🆕 **New levels added to the list:** ${newLevels}`);
+        if (addedLevels.length > 0) {
+          sendDiscordNotification(`🆕 **New levels added:** ${addedLevels.join(', ')}`);
+        }
+        if (movedLevels.length > 0) {
+          const moves = movedLevels.map(m => `${m.title} (#${m.from} → #${m.to})`).join(', ');
+          sendDiscordNotification(`📝 **Level positions changed:** ${moves}`);
         }
         sendJson(res, 200, { ok: true });
       } catch (error) {
