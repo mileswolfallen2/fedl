@@ -2880,15 +2880,10 @@
         return;
       }
       const username = String(qs('signup-username').value || '').trim().toLowerCase();
-      const email = String((qs('signup-email') && qs('signup-email').value) || '').trim().toLowerCase();
       const password = qs('signup-password').value || '';
       const password2 = qs('signup-password2').value || '';
       if (!FEDL_USERNAME_RE.test(username)) {
         setSignupStatus('Use 3–24 characters: lowercase letters, numbers, or underscore only.', 'error');
-        return;
-      }
-      if (email && !FEDL_EMAIL_RE.test(email)) {
-        setSignupStatus('Enter a valid email address.', 'error');
         return;
       }
       if (password.length < 8) {
@@ -2904,7 +2899,7 @@
       fetch(liveApiPath('/api/auth/signup'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, password })
       }).then(async r=>{
         const { data, message } = await fedlReadJsonResponse(r);
         if (!r.ok) {
@@ -2984,12 +2979,8 @@
 
   if (page === 'account') {
     const overviewStatusEl = qs('account-overview-status');
-    const emailForm = qs('account-email-form');
-    const emailStatusEl = qs('account-email-status');
-    const emailInput = qs('account-email');
     const accountUsernameEl = qs('account-username');
     const accountCreatedEl = qs('account-created');
-    const resetSupportEl = qs('account-reset-support');
     const resetBtn = qs('account-reset-email-btn');
     const resetStatusEl = qs('account-reset-status');
     const passwordForm = qs('account-password-form');
@@ -2998,9 +2989,6 @@
 
     function setOverviewStatus(msg, kind){
       fedlSetFormStatus(overviewStatusEl, msg, kind);
-    }
-    function setEmailStatus(msg, kind){
-      fedlSetFormStatus(emailStatusEl, msg, kind);
     }
     function setResetStatus(msg, kind){
       fedlSetFormStatus(resetStatusEl, msg, kind);
@@ -3040,21 +3028,6 @@
         if (accountCreatedEl) {
           accountCreatedEl.textContent = formatJoinedDate(data.createdAt);
         }
-        if (emailInput) {
-          emailInput.value = data.email || '';
-        }
-        if (resetBtn) {
-          resetBtn.disabled = !data.email;
-        }
-        if (resetSupportEl) {
-          if (!data.emailDeliveryConfigured) {
-            resetSupportEl.textContent = 'Password reset email is ready in the app, but the server still needs SMTP configured for help@fedl.site before it can send mail.';
-          } else if (!data.email) {
-            resetSupportEl.textContent = 'Add your email address first, then you can send yourself a reset link from this page.';
-          } else {
-            resetSupportEl.textContent = `Reset emails will be sent to ${data.email} from help@fedl.site once mail delivery is configured with that sender.`;
-          }
-        }
         setOverviewStatus('');
       }).catch(err=>{
         console.error(err);
@@ -3065,54 +3038,22 @@
       });
     }
 
-    if (emailForm) {
-      emailForm.addEventListener('submit', function(ev){
-        ev.preventDefault();
-        const email = String(emailInput ? emailInput.value : '').trim().toLowerCase();
-        if (!FEDL_EMAIL_RE.test(email)) {
-          setEmailStatus('Enter a valid email address.', 'error');
-          return;
-        }
-        setEmailStatus('Saving your email…');
-        fetch(liveApiPath('/api/account'), {
-          method: 'PUT',
-          headers: authHeaders(),
-          body: JSON.stringify({ email })
-        }).then(async r=>{
-          const { message } = await fedlReadJsonResponse(r);
-          if (!r.ok) {
-            throw new Error(message || 'Could not update email.');
-          }
-          setEmailStatus('Email updated.', 'success');
-          if (resetBtn) {
-            resetBtn.disabled = false;
-          }
-          if (resetSupportEl) {
-            resetSupportEl.textContent = `Reset emails will be sent to ${email} from help@fedl.site once mail delivery is configured with that sender.`;
-          }
-        }).catch(err=>{
-          console.error(err);
-          setEmailStatus(err.message || 'Could not update email.', 'error');
-        });
-      });
-    }
-
     if (resetBtn) {
       resetBtn.addEventListener('click', function(){
         resetBtn.disabled = true;
-        setResetStatus('Sending reset email…');
+        setResetStatus('Sending reset code to your messages…');
         fetch(liveApiPath('/api/account/password-reset-email'), {
           method: 'POST',
           headers: { Authorization: `Bearer ${fedlGetAuthToken()}` }
         }).then(async r=>{
           const { message } = await fedlReadJsonResponse(r);
           if (!r.ok) {
-            throw new Error(message || 'Could not send reset email.');
+            throw new Error(message || 'Could not send reset code.');
           }
-          setResetStatus('Reset email sent. Check your inbox for a link from help@fedl.site.', 'success');
+          setResetStatus('Reset code sent! Check your messages.', 'success');
         }).catch(err=>{
           console.error(err);
-          setResetStatus(err.message || 'Could not send reset email.', 'error');
+          setResetStatus(err.message || 'Could not send reset code.', 'error');
         }).finally(()=>{
           resetBtn.disabled = false;
         });
@@ -3212,11 +3153,14 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ identifier })
         }).then(async r=>{
-          const { message } = await fedlReadJsonResponse(r);
+          const data = await fedlReadJsonResponse(r);
           if (!r.ok) {
-            throw new Error(message || 'Could not request password reset.');
+            throw new Error(data.message || 'Could not request password reset.');
           }
-          setRequestStatus('If that account has an email on file, we sent a reset link.', 'success');
+          setRequestStatus(data.message || 'Check your messages for the reset code.', 'success');
+          if (requestInput) {
+            requestInput.value = '';
+          }
         }).catch(err=>{
           console.error(err);
           setRequestStatus(err.message || 'Could not request password reset.', 'error');
@@ -3239,7 +3183,7 @@
         const newPassword = String(qs('reset-new-password').value || '');
         const confirmPassword = String(qs('reset-confirm-password').value || '');
         if (!token) {
-          setResetPasswordStatus('Paste the reset token or open the link from your email.', 'error');
+          setResetPasswordStatus('Paste the reset code below.', 'error');
           return;
         }
         if (newPassword.length < 8) {

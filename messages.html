@@ -24,6 +24,8 @@
     .dm-message{padding:12px 16px;border-radius:12px;max-width:70%;word-wrap:break-word}
     .dm-message.sent{background:var(--accent);color:#042;align-self:flex-end;border-bottom-right-radius:4px}
     .dm-message.received{background:rgba(255,255,255,0.1);align-self:flex-start;border-bottom-left-radius:4px}
+    .dm-message.system{background:rgba(255,184,77,0.12);border:1px solid rgba(255,184,77,0.25);align-self:stretch;max-width:90%}
+    .dm-message.system .dm-message-content{white-space:pre-wrap}
     .dm-message-time{font-size:0.7rem;opacity:0.7;margin-top:4px}
     .dm-input-row{display:flex;gap:12px;padding:16px;border-top:1px solid rgba(255,255,255,0.1)}
     .dm-input-row input{flex:1;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text);font-size:1rem}
@@ -159,17 +161,35 @@
 
     function renderConversations() {
       const list = document.getElementById('conversationsList');
-      if (!conversations.length) {
+      
+      const hasSystemMessages = conversations.some(c => c.userId === 'system');
+      const userConversations = conversations.filter(c => c.userId !== 'system');
+      
+      let html = '';
+      
+      if (hasSystemMessages) {
+        html += `
+          <div class="dm-conversation system ${selectedConversation === 'system' ? 'active' : ''}" data-user="system" style="border-left: 3px solid var(--accent-warm);">
+            <div class="dm-conversation-name" style="color: var(--accent-warm);">System Notifications</div>
+            <div class="dm-conversation-preview">Password resets and alerts</div>
+          </div>
+        `;
+      }
+      
+      if (!userConversations.length && !hasSystemMessages) {
         list.innerHTML = '<div class="empty-state">No conversations yet</div>';
         return;
       }
-      list.innerHTML = conversations.map(c => `
+      
+      html += userConversations.map(c => `
         <div class="dm-conversation ${c.unreadCount > 0 ? 'unread' : ''} ${selectedConversation === c.userId ? 'active' : ''}" data-user="${escapeHtml(c.userId)}">
           <div class="dm-conversation-name">${escapeHtml(c.username)}</div>
           <div class="dm-conversation-preview">${escapeHtml(c.lastMessage.content)}</div>
           <div class="dm-conversation-time">${formatDate(c.lastMessage.timestamp)}</div>
         </div>
       `).join('');
+      
+      list.innerHTML = html;
       list.querySelectorAll('.dm-conversation').forEach(el => {
         el.addEventListener('click', () => selectConversation(el.dataset.user));
       });
@@ -177,11 +197,25 @@
 
     function selectConversation(userId) {
       selectedConversation = userId;
-      const conv = conversations.find(c => c.userId === userId);
-      document.getElementById('chatWithName').textContent = conv ? conv.username : 'Chat';
-      document.getElementById('messageInputRow').hidden = false;
+      if (userId === 'system') {
+        document.getElementById('chatWithName').textContent = 'System Notifications';
+        document.getElementById('messageInputRow').hidden = true;
+        loadSystemMessages();
+      } else {
+        const conv = conversations.find(c => c.userId === userId);
+        document.getElementById('chatWithName').textContent = conv ? conv.username : 'Chat';
+        document.getElementById('messageInputRow').hidden = false;
+        loadMessages(userId);
+      }
       renderConversations();
-      loadMessages(userId);
+    }
+
+    function loadSystemMessages() {
+      api('/api/messages/system').then(res => {
+        if (res.ok && res.data && res.data.messages) {
+          renderMessages(res.data.messages, true);
+        }
+      });
     }
 
     function loadMessages(userId) {
@@ -192,18 +226,24 @@
       });
     }
 
-    function renderMessages(messages) {
+    function renderMessages(messages, isSystem = false) {
       const list = document.getElementById('messagesList');
       if (!messages.length) {
-        list.innerHTML = '<div class="empty-state">No messages yet. Start the conversation!</div>';
+        list.innerHTML = '<div class="empty-state">No messages yet.</div>';
         return;
       }
-      list.innerHTML = messages.map(m => `
-        <div class="dm-message ${m.fromUserId === currentUserId ? 'sent' : 'received'}">
-          <div class="dm-message-content">${escapeHtml(m.content)}</div>
-          <div class="dm-message-time">${formatDate(m.timestamp)}</div>
-        </div>
-      `).join('');
+      list.innerHTML = messages.map(m => {
+        const isCode = m.type === 'password_reset';
+        const content = isCode 
+          ? `<strong style="color: var(--accent); font-family: monospace; font-size: 1.1em; display: block; margin: 8px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; word-break: break-all;">${escapeHtml(m.content)}</strong>`
+          : escapeHtml(m.content);
+        return `
+          <div class="dm-message ${isSystem ? 'system' : (m.fromUserId === currentUserId ? 'sent' : 'received')}" style="${isSystem ? 'background: rgba(255,184,77,0.15); border: 1px solid rgba(255,184,77,0.3); max-width: 85%;' : ''}">
+            <div class="dm-message-content">${content}</div>
+            <div class="dm-message-time">${formatDate(m.timestamp)}</div>
+          </div>
+        `;
+      }).join('');
       list.scrollTop = list.scrollHeight;
     }
 

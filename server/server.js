@@ -1120,7 +1120,6 @@ const server = http.createServer((req, res) => {
         const payload = JSON.parse(body || '{}');
         const username = normalizeUsername(payload.username);
         const password = String(payload.password || '');
-        const email = normalizeEmail(payload.email);
         if (!usernameOk(username)) {
           sendJson(res, 400, {
             error: 'Username must be 3-24 characters: lowercase letters, numbers, or underscore.'
@@ -1136,27 +1135,18 @@ const server = http.createServer((req, res) => {
           sendJson(res, 409, { error: 'That username is already taken.' });
           return;
         }
-        if (email && !emailOk(email)) {
-          sendJson(res, 400, { error: 'Enter a valid email address.' });
-          return;
-        }
-        if (email && users.some(u => u.email && u.email === email)) {
-          sendJson(res, 409, { error: 'That email is already being used by another account.' });
-          return;
-        }
         const { salt, hash } = hashPassword(password);
         const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
         users.push({
           id,
           username,
-          email,
           passwordHash: hash,
           salt,
           createdAt: new Date().toISOString()
         });
         writeUsers(users);
         const token = createSession(id, username);
-        sendJson(res, 201, { ok: true, token, userId: id, username, email });
+        sendJson(res, 201, { ok: true, token, userId: id, username });
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid signup request' });
       }
@@ -1209,8 +1199,7 @@ const server = http.createServer((req, res) => {
     const user = users.find(u => u.id === sess.userId);
     sendJson(res, 200, {
       userId: sess.userId,
-      username: sess.username,
-      email: user && user.email ? user.email : ''
+      username: sess.username
     });
     return;
   }
@@ -1221,28 +1210,53 @@ const server = http.createServer((req, res) => {
       body += chunk;
       if (body.length > 65536) req.destroy();
     });
-    req.on('end', async () => {
+    req.on('end', () => {
       try {
         const payload = JSON.parse(body || '{}');
         const identifier = String(payload.identifier || '').trim().toLowerCase();
         if (!identifier) {
-          sendJson(res, 400, { error: 'Enter your username or email address.' });
+          sendJson(res, 400, { error: 'Enter your username.' });
           return;
         }
         const users = readUsers();
-        const user = users.find(u =>
-          u.username === identifier || (u.email && String(u.email).toLowerCase() === identifier)
-        );
-        if (user && user.email && (mailConfigured() || workerEmailConfigured())) {
-          try {
-            await sendPasswordResetEmail(req, user);
-          } catch (error) {
-            console.error(`[FEDL] Password reset request email failed: ${error.message}`);
-          }
+        const user = users.find(u => u.username === identifier);
+        if (user) {
+          const token = crypto.randomBytes(32).toString('hex');
+          const tokenHash = hashToken(token);
+          const resetTokens = readResetTokensRaw();
+          const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MS).toISOString();
+          resetTokens[tokenHash] = {
+            userId: user.id,
+            expiresAt,
+            createdAt: new Date().toISOString()
+          };
+          writeResetTokens(cleanResetTokens(resetTokens));
+
+          const messages = readMessages();
+          const newMessage = {
+            id: `msg_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`,
+            fromUserId: 'system',
+            fromUsername: 'FEDL System',
+            toUserId: user.id,
+            toUsername: user.username,
+            content: `Your password reset code is: ${token}\n\nThis code expires in 1 hour. If you did not request a reset, you can ignore this message.`,
+            timestamp: new Date().toISOString(),
+            read: false,
+            type: 'password_reset'
+          };
+          messages.unshift(newMessage);
+          writeMessages(messages);
+          sendEvent('messages-update', { userId: user.id });
+
+          sendJson(res, 200, {
+            ok: true,
+            message: 'Check your messages for the reset code.'
+          });
+          return;
         }
         sendJson(res, 200, {
           ok: true,
-          message: 'If that account has a reset email configured, we sent a reset link.'
+          message: 'If that account exists, a reset code has been sent to their messages.'
         });
       } catch (error) {
         console.error(`[FEDL] Password reset request failed: ${error.message}`);
@@ -1264,7 +1278,7 @@ const server = http.createServer((req, res) => {
         const token = String(payload.token || '').trim();
         const newPassword = String(payload.newPassword || '');
         if (!token) {
-          sendJson(res, 400, { error: 'Reset token is required.' });
+          sendJson(res, 400, { error: 'Reset code is required.' });
           return;
         }
         if (newPassword.length < 8) {
@@ -1275,7 +1289,7 @@ const server = http.createServer((req, res) => {
         const tokenHash = hashToken(token);
         const row = tokens[tokenHash];
         if (!row || !row.userId) {
-          sendJson(res, 400, { error: 'That reset link is invalid or has expired.' });
+          sendJson(res, 400, { error: 'That reset code is invalid or has expired.' });
           return;
         }
         const users = readUsers();
@@ -1283,7 +1297,7 @@ const server = http.createServer((req, res) => {
         if (!user) {
           delete tokens[tokenHash];
           writeResetTokens(cleanResetTokens(tokens));
-          sendJson(res, 400, { error: 'That reset link is invalid or has expired.' });
+          sendJson(res, 400, { error: 'That reset code is invalid or has expired.' });
           return;
         }
         const { salt, hash } = hashPassword(newPassword);
@@ -1318,50 +1332,7 @@ const server = http.createServer((req, res) => {
     sendJson(res, 200, {
       userId: user.id,
       username: user.username,
-      email: user.email || '',
-      createdAt: user.createdAt || '',
-      passwordResetEmailEnabled: !!(user.email && (mailConfigured() || workerEmailConfigured())),
-      emailDeliveryConfigured: mailConfigured() || workerEmailConfigured()
-    });
-    return;
-  }
-
-  if (req.method === 'PUT' && pathname === '/api/account') {
-    const sess = getSessionFromRequest(req);
-    if (!sess) {
-      sendJson(res, 401, { error: 'Not signed in' });
-      return;
-    }
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk;
-      if (body.length > 65536) req.destroy();
-    });
-    req.on('end', () => {
-      try {
-        const payload = JSON.parse(body || '{}');
-        const email = normalizeEmail(payload.email);
-        if (!emailOk(email)) {
-          sendJson(res, 400, { error: 'Enter a valid email address.' });
-          return;
-        }
-        const users = readUsers();
-        const user = users.find(u => u.id === sess.userId);
-        if (!user) {
-          sendJson(res, 404, { error: 'Account not found' });
-          return;
-        }
-        if (users.some(u => u.id !== user.id && u.email && u.email === email)) {
-          sendJson(res, 409, { error: 'That email is already being used by another account.' });
-          return;
-        }
-        user.email = email;
-        user.updatedAt = new Date().toISOString();
-        writeUsers(users);
-        sendJson(res, 200, { ok: true, email });
-      } catch (error) {
-        sendJson(res, 400, { error: 'Invalid account update request' });
-      }
+      createdAt: user.createdAt || ''
     });
     return;
   }
@@ -1418,26 +1389,40 @@ const server = http.createServer((req, res) => {
       sendJson(res, 401, { error: 'Not signed in' });
       return;
     }
-    if (!mailConfigured() && !workerEmailConfigured()) {
-      sendJson(res, 503, { error: 'Password reset email is not configured on the server yet.' });
-      return;
-    }
     const users = readUsers();
     const user = users.find(u => u.id === sess.userId);
     if (!user) {
       sendJson(res, 404, { error: 'Account not found' });
       return;
     }
-    if (!user.email) {
-      sendJson(res, 400, { error: 'Add an email address to your account before requesting a reset email.' });
-      return;
-    }
-    sendPasswordResetEmail(req, user).then(result => {
-      sendJson(res, 200, { ok: true, expiresAt: result.expiresAt });
-    }).catch(error => {
-      console.error(`[FEDL] Password reset email failed: ${error.message}`);
-      sendJson(res, 500, { error: 'Could not send the reset email right now.' });
-    });
+    const token = crypto.randomBytes(32).toString('hex');
+    const tokenHash = hashToken(token);
+    const resetTokens = readResetTokensRaw();
+    const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MS).toISOString();
+    resetTokens[tokenHash] = {
+      userId: user.id,
+      expiresAt,
+      createdAt: new Date().toISOString()
+    };
+    writeResetTokens(cleanResetTokens(resetTokens));
+
+    const messages = readMessages();
+    const newMessage = {
+      id: `msg_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`,
+      fromUserId: 'system',
+      fromUsername: 'FEDL System',
+      toUserId: user.id,
+      toUsername: user.username,
+      content: `Your password reset code is: ${token}\n\nThis code expires in 1 hour. If you did not request a reset, you can ignore this message.`,
+      timestamp: new Date().toISOString(),
+      read: false,
+      type: 'password_reset'
+    };
+    messages.unshift(newMessage);
+    writeMessages(messages);
+    sendEvent('messages-update', { userId: user.id });
+
+    sendJson(res, 200, { ok: true, expiresAt });
     return;
   }
 
@@ -2074,10 +2059,35 @@ const server = http.createServer((req, res) => {
         conversationsMap.get(otherId).unreadCount++;
       }
     });
-    const conversations = Array.from(conversationsMap.values()).sort((a, b) =>
+    let conversations = Array.from(conversationsMap.values()).sort((a, b) =>
       new Date(b.lastMessage.timestamp) - new Date(a.lastMessage.timestamp)
     );
+    
+    const systemMessages = messages.filter(m => m.toUserId === sess.userId && m.fromUserId === 'system');
+    if (systemMessages.length > 0) {
+      const lastSystem = systemMessages.reduce((latest, m) => 
+        new Date(m.timestamp) > new Date(latest.timestamp) ? m : latest
+      , systemMessages[0]);
+      const unreadSystem = systemMessages.filter(m => !m.read).length;
+      conversations.unshift({
+        userId: 'system',
+        username: 'System',
+        lastMessage: lastSystem,
+        unreadCount: unreadSystem
+      });
+    }
+    
     sendJson(res, 200, { conversations });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/api/messages/system') {
+    if (!sess) { sendJson(res, 401, { error: 'Login required' }); return; }
+    const messages = readMessages();
+    const systemMessages = messages.filter(m => m.toUserId === sess.userId && m.fromUserId === 'system')
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const unreadCount = systemMessages.filter(m => !m.read).length;
+    sendJson(res, 200, { messages: systemMessages, unreadCount });
     return;
   }
 

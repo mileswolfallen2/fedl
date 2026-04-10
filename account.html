@@ -23,7 +23,7 @@
     <section class="panel account-hero">
       <p class="hero-kicker">FEDL account</p>
       <h2>Manage your account</h2>
-      <p class="muted">Update the email tied to your account, change your password, and send yourself a password reset link.</p>
+      <p class="muted">Change your password and view your account details.</p>
       <p id="account-overview-status" class="muted" role="status"></p>
       <div class="account-summary-grid">
         <article class="account-summary-card">
@@ -38,26 +38,11 @@
     </section>
 
     <section class="panel account-panel">
-      <h3>Email</h3>
-      <p class="muted">Add the inbox you want FEDL to use for account recovery.</p>
-      <form id="account-email-form" class="auth-form">
-        <label class="admin-password-field" for="account-email">
-          <span>Email address</span>
-          <input id="account-email" name="email" type="email" autocomplete="email" required />
-        </label>
-        <p id="account-email-status" class="muted" role="status"></p>
-        <div class="auth-actions">
-          <button type="submit" class="btn">Save email</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="panel account-panel">
-      <h3>Password reset email</h3>
-      <p id="account-reset-support" class="muted">Loading reset email settings…</p>
+      <h3>Password reset</h3>
+      <p class="muted">Forgot your password? Request a reset code which will be sent to your messages.</p>
       <p id="account-reset-status" class="muted" role="status"></p>
       <div class="auth-actions">
-        <button type="button" class="btn" id="account-reset-email-btn">Email me a reset link</button>
+        <button type="button" class="btn" id="account-reset-email-btn">Send reset to my messages</button>
         <a class="text-link" href="reset-password.html">Open reset page</a>
       </div>
     </section>
