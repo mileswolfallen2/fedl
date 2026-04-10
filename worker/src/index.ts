@@ -30,12 +30,16 @@ export default {
       }
 
       try {
-        await env.SEND_EMAIL.send({
-          from: `FEDL <help@fedl.site>`,
-          to: body.to,
-          subject: body.subject,
-          text: body.text,
-        });
+        if (env.SEND_EMAIL) {
+          await env.SEND_EMAIL.send({
+            from: `FEDL <help@fedl.site>`,
+            to: body.to,
+            subject: body.subject,
+            text: body.text,
+          });
+        } else {
+          throw new Error('SEND_EMAIL binding not configured. Go to Workers & Pages → your worker → Settings → Bindings to add it.');
+        }
 
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
@@ -55,6 +59,8 @@ export default {
 } satisfies ExportedHandler<Env>;
 
 interface Env {
-  SEND_EMAIL: any;
+  SEND_EMAIL?: {
+    send(options: { from: string; to: string; subject: string; text: string }): Promise<void>;
+  };
   FORWARD_TO: string;
 }
