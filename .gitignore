@@ -8,3 +8,4 @@ server/messages.json
 
 # Environment variables
 server/.env
+server/config.json

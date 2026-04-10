@@ -15,6 +15,41 @@ const resetTokensPath = path.join(__dirname, 'reset_tokens.json');
 const postsPath = path.join(__dirname, 'posts.json');
 const bugReportsPath = path.join(__dirname, 'bugreports.json');
 const messagesPath = path.join(__dirname, 'messages.json');
+const configPath = path.join(__dirname, 'config.json');
+
+const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
+const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
+
+async function sendDiscordNotification(message) {
+  if (!discordWebhookUrl || !discordWebhookUrl.startsWith('http')) {
+    return;
+  }
+  try {
+    const https = require('https');
+    const payload = JSON.stringify({ content: message });
+    const url = new URL(discordWebhookUrl);
+    const options = {
+      hostname: url.hostname,
+      port: 443,
+      path: url.pathname + url.search,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      }
+    };
+    const req = https.request(options, (res) => {
+      if (res.statusCode >= 400) {
+        console.error(`[FEDL] Discord webhook error: ${res.statusCode}`);
+      }
+    });
+    req.on('error', (e) => console.error(`[FEDL] Discord webhook error: ${e.message}`));
+    req.write(payload);
+    req.end();
+  } catch (e) {
+    console.error(`[FEDL] Discord notification failed: ${e.message}`);
+  }
+}
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '/fedl';
@@ -1782,8 +1817,19 @@ const server = http.createServer((req, res) => {
       try {
         const payload = JSON.parse(body || '{}');
         const text = String(payload.text || '').trim();
+        const oldText = readDataText();
+        const oldLines = new Set(oldText.split('\n').map(l => l.trim()).filter(Boolean));
+        const newLines = text.split('\n').map(l => l.trim()).filter(Boolean);
+        const addedLines = newLines.filter(l => !oldLines.has(l));
         writeDataText(text);
         sendEvent('list-update', { updatedAt: new Date().toISOString() });
+        if (addedLines.length > 0) {
+          const newLevels = addedLines.map(line => {
+            const parts = line.split('|');
+            return parts[2] || line;
+          }).join(', ');
+          sendDiscordNotification(`🆕 **New levels added to the list:** ${newLevels}`);
+        }
         sendJson(res, 200, { ok: true });
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid list payload' });
