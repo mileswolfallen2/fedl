@@ -12,19 +12,18 @@
   <link rel="icon" type="image/png" href="pageicon.png">
 </head>
 <body data-page="index">
-  <header>
-    <h1>FEDL - Ranked Demon List</h1>
-    <nav>
+  <header role="banner">
+    <h1>FEDL</h1>
+    <nav role="navigation" aria-label="Main navigation">
       <a href="index.html">Home</a>
-      <a href="guess.html">Guess Game</a>
-      <a href="players.html">Players</a>
       <a href="lists.html">Lists</a>
       <a href="run.html">Submit Run</a>
-      <a href="rules.html">Rules</a>
       <a href="roulette.html">Roulette</a>
-      <a href="post.html">Posts</a>
+      <a href="rules.html">Rules</a>
+      <a href="players.html">Players</a>
       <a href="messages.html">Messages</a>
       <a href="contact.html">Contact</a>
+      <a href="about.html">About</a>
     </nav>
   </header>
   <main>
@@ -46,15 +45,27 @@
         <div class="hero-stats" aria-label="FEDL overview">
           <article class="stat-card">
             <strong id="hero-total-levels">--</strong>
-            <span>Ranked levels loaded</span>
+            <span>Ranked Levels</span>
           </article>
           <article class="stat-card">
             <strong id="hero-top-entry">--</strong>
-            <span>Current #1 entry</span>
+            <span>#1 Demon</span>
           </article>
           <article class="stat-card">
             <strong id="hero-last-slot">--</strong>
-            <span>Approved runs</span>
+            <span>Verified Runs</span>
+          </article>
+          <article class="stat-card">
+            <strong id="hero-total-players">--</strong>
+            <span>Top Player</span>
+          </article>
+          <article class="stat-card">
+            <strong id="hero-recent-runs">--</strong>
+            <span>Levels Added This Week</span>
+          </article>
+          <article class="stat-card">
+            <strong id="hero-list-updated">--</strong>
+            <span>Last Updated</span>
           </article>
         </div>
       </div>
@@ -64,10 +75,20 @@
         <h3>Top 10 levels</h3>
         <p class="muted">A fast preview of what is waiting inside the list page right now.</p>
         <div class="featured-list" id="featured-list">
-          <article class="featured-card">
-            <span class="featured-rank">#--</span>
-            <strong>Loading list data...</strong>
-            <p>Pulling the latest entries for the homepage preview.</p>
+          <article class="featured-card skeleton-card">
+            <span class="featured-rank skeleton" style="width:40px;height:24px"></span>
+            <strong class="skeleton skeleton-title"></strong>
+            <p class="skeleton skeleton-text"></p>
+          </article>
+          <article class="featured-card skeleton-card">
+            <span class="featured-rank skeleton" style="width:40px;height:24px"></span>
+            <strong class="skeleton skeleton-title"></strong>
+            <p class="skeleton skeleton-text"></p>
+          </article>
+          <article class="featured-card skeleton-card">
+            <span class="featured-rank skeleton" style="width:40px;height:24px"></span>
+            <strong class="skeleton skeleton-title"></strong>
+            <p class="skeleton skeleton-text"></p>
           </article>
         </div>
       </aside>
@@ -164,7 +185,7 @@
       <div class="discord-copy">
         <div class="discord-badge">
           <span class="discord-logo" aria-hidden="true">
-            <img src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d7f4ef6498ac018f2c55_Symbol.svg" alt="Discord logo" />
+            <img src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d7f4ef6498ac018f2c55_Symbol.svg" alt="Discord logo" loading="lazy" />
           </span>
           <div>
             <p class="discord-label">Community</p>

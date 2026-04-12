@@ -86,7 +86,7 @@ linear-gradient(180deg,rgba(6,16,33,0.98),rgba(7,20,38,0.99))}
 .home-copy h2{margin:0 0 14px 0;font-size:clamp(2.6rem,6vw,5.3rem);max-width:12ch;position:relative;z-index:1}
 .hero-text{max-width:60ch;margin:0;position:relative;z-index:1;color:var(--text);line-height:1.75;font-size:1.02rem}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;position:relative;z-index:1}
-.hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:28px;position:relative;z-index:1}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;position:relative;z-index:1}
 .stat-card{padding:16px 18px;border-radius:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px)}
 .stat-card strong{display:block;margin-bottom:8px;font-size:clamp(1.4rem,3vw,2rem);color:var(--text)}
 .stat-card span{display:block;color:var(--text);line-height:1.45;font-size:.94rem}
@@ -497,3 +497,12 @@ header nav .fedl-auth-nav a:hover{color:var(--text)}
 [data-theme="highcontrast"] header{border-bottom:3px solid var(--accent)}
 [data-theme="highcontrast"] nav a{font-weight:700}
 [data-theme="highcontrast"] nav a:hover{background:var(--accent);color:var(--bg)}
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.05) 25%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.05) 75%);background-size:200% 100%;animation:skeleton-loading 1.5s ease-in-out infinite;border-radius:4px}
+.skeleton-text{height:1em;margin:0.5em 0}
+.skeleton-title{height:1.5em;width:60%;margin:0.5em 0}
+.skeleton-box{height:80px;border-radius:8px}
+@keyframes skeleton-loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.page-transition{opacity:0;transition:opacity 0.3s ease}
+.page-transition.loaded{opacity:1}
+body{animation:page-enter 0.3s ease}
+@keyframes page-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}

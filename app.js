@@ -39,7 +39,7 @@
     });
   }
 
-  const pagesNeedingLiveStatus = new Set(['index', 'run', 'messages', 'post', 'contact', 'signup', 'login', 'account', 'reset-password', 'admelist']);
+  const pagesNeedingLiveStatus = new Set(['index', 'run', 'messages', 'contact', 'signup', 'login', 'account', 'reset-password', 'admelist']);
   if(pagesNeedingLiveStatus.has(page) && !window.location.pathname.endsWith(`/${offlinePage}`)){
     probeLiveServer().catch(()=>{
       redirectToOffline();
@@ -83,6 +83,27 @@
       Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
       document.body.dataset.theme = saved;
     }
+    try {
+      const activeId = localStorage.getItem('fedl_user_account_active');
+      if (activeId) {
+        const userData = JSON.parse(localStorage.getItem('fedl_user_data_' + activeId));
+        if (userData && userData.theme) {
+          const themeName = userData.theme;
+          const accountVars = themes[themeName];
+          if (accountVars) {
+            document.documentElement.style.setProperty('--bg', accountVars['--bg']);
+            document.documentElement.style.setProperty('--panel', accountVars['--panel']);
+            document.documentElement.style.setProperty('--accent', accountVars['--accent']);
+            document.documentElement.style.setProperty('--muted', accountVars['--muted']);
+            document.documentElement.style.setProperty('--text', accountVars['--text']);
+            document.documentElement.style.setProperty('--card', accountVars['--card']);
+            document.documentElement.style.setProperty('--accent-warm', accountVars['--accent-warm']);
+            document.body.dataset.theme = themeName;
+            localStorage.setItem('fedl_theme', themeName);
+          }
+        }
+      }
+    } catch(e) {}
   })();
 
   function debounce(fn, wait){
@@ -133,7 +154,7 @@
   }
 
   function fedlDefaultUserData(){
-    return { roulettePick: null, levelPercents: {}, savedRuns: [], rouletteSlots: fedlEmptyRouletteSlots() };
+    return { roulettePick: null, levelPercents: {}, savedRuns: [], rouletteSlots: fedlEmptyRouletteSlots(), theme: 'dark' };
   }
 
   function fedlGetAccountPayload(accountId){
@@ -771,6 +792,9 @@
     const totalEl = qs('hero-total-levels');
     const topEl = qs('hero-top-entry');
     const approvedRunsEl = qs('hero-last-slot');
+    const playersEl = qs('hero-total-players');
+    const recentRunsEl = qs('hero-recent-runs');
+    const lastUpdatedEl = qs('hero-list-updated');
     const featuredListEl = qs('featured-list');
     const listPreviewEl = qs('offline-list-area');
 
@@ -796,6 +820,7 @@
           <p>${item.url ? 'Video link is ready from the list page.' : 'This entry does not have a linked video yet.'}</p>
         </article>
       `).join('');
+      document.querySelectorAll('.skeleton-card').forEach(el => el.remove());
     }
 
     function renderHome(items){
@@ -804,6 +829,9 @@
 
       if(totalEl) totalEl.textContent = String(rankedItems.length || 0);
       if(topEl) topEl.textContent = firstItem ? firstItem.title : 'Unavailable';
+      if(playersEl) playersEl.textContent = 'Loading...';
+      if(recentRunsEl) recentRunsEl.textContent = '0';
+      if(lastUpdatedEl) lastUpdatedEl.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       renderFeatured(rankedItems);
       if(listPreviewEl){
         const preview = rankedItems.slice(0, 10);
@@ -2349,6 +2377,27 @@
       }
       if(bulkApproveModal && !bulkApproveModal.hidden) closeBulkApproveModal();
     });
+    document.addEventListener('keydown', event=>{
+      if(event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
+      const key = event.key.toLowerCase();
+      if(key === '/' && !event.ctrlKey && !event.metaKey){
+        event.preventDefault();
+        const searchInput = document.querySelector('.search-row input[type="text"], #list-search, .levels-table input');
+        if(searchInput) searchInput.focus();
+      }
+      if(key === 'h' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'index.html';
+      }
+      if(key === 'l' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'lists.html';
+      }
+      if(key === 'r' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'run.html';
+      }
+      if(key === '?' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'rules.html';
+      }
+    });
 
     if(loginFormEl){
       loginFormEl.addEventListener('submit', function(event){
@@ -3049,11 +3098,35 @@
         const name = this.value;
         localStorage.setItem(FEDL_THEME_KEY, name);
         applyTheme(name);
+        const activeId = fedlAccountId();
+        if (activeId) {
+          const accounts = fedlListAccounts();
+          const account = accounts.find(a => a.id === activeId);
+          if (account) {
+            account.theme = name;
+            fedlSaveAccountsList(accounts);
+            const userData = fedlGetAccountPayload(activeId);
+            userData.theme = name;
+            write(`fedl_user_data_${activeId}`, userData);
+          }
+        }
         setThemeStatus('Theme saved!', 'success');
       });
     });
 
+    function loadAccountTheme() {
+      const activeId = fedlAccountId();
+      if (activeId) {
+        const userData = fedlGetAccountPayload(activeId);
+        if (userData && userData.theme) {
+          localStorage.setItem(FEDL_THEME_KEY, userData.theme);
+          applyTheme(userData.theme);
+        }
+      }
+    }
+
     loadTheme();
+    loadAccountTheme();
 
     const overviewStatusEl = qs('account-overview-status');
     const accountUsernameEl = qs('account-username');
