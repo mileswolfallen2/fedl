@@ -829,9 +829,6 @@
 
       if(totalEl) totalEl.textContent = String(rankedItems.length || 0);
       if(topEl) topEl.textContent = firstItem ? firstItem.title : 'Unavailable';
-      if(playersEl) playersEl.textContent = 'Loading...';
-      if(recentRunsEl) recentRunsEl.textContent = '0';
-      if(lastUpdatedEl) lastUpdatedEl.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       renderFeatured(rankedItems);
       if(listPreviewEl){
         const preview = rankedItems.slice(0, 10);
@@ -844,23 +841,71 @@
       }
     }
 
+    function renderHomeStats(runs, items){
+      const lookup = new Map((items || []).map(item => [String(item.title || '').toLowerCase(), Number(item.position) || 9999]));
+      const map = new Map();
+      runs.forEach(run=>{
+        if(String(run.status || '').toLowerCase() !== 'approved') return;
+        const playerName = String(run.playerName || '').trim();
+        if(!playerName) return;
+        const key = playerName.toLowerCase();
+        let entry = map.get(key);
+        if(!entry){
+          entry = {name: playerName, runs: 0, bestRank: 9999, points: 0};
+          map.set(key, entry);
+        }
+        entry.runs += 1;
+        const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
+        if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
+        if(rank > 0 && rank < 1000) entry.points += calculatePoints(rank);
+      });
+      const sortedPlayers = Array.from(map.values()).sort((a,b)=>{
+        if(b.points !== a.points) return b.points - a.points;
+        const aRank = a.bestRank === 9999 ? 9999 : a.bestRank;
+        const bRank = b.bestRank === 9999 ? 9999 : b.bestRank;
+        if(aRank !== bRank) return aRank - bRank;
+        return a.name.localeCompare(b.name);
+      });
+      const topPlayer = sortedPlayers[0]?.name || 'None';
+      if(playersEl) playersEl.textContent = topPlayer;
+      const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      const recentRuns = runs.filter(run=>{
+        if(String(run.status || '').toLowerCase() !== 'approved') return false;
+        const submitted = run.submittedAt ? new Date(run.submittedAt).getTime() : 0;
+        return submitted >= oneWeekAgo;
+      }).length;
+      if(recentRunsEl) recentRunsEl.textContent = String(recentRuns);
+      const sortedRuns = runs.slice().sort((a,b)=>new Date(b.submittedAt||0) - new Date(a.submittedAt||0));
+      const latestRun = sortedRuns.find(run=>run.submittedAt);
+      if(lastUpdatedEl) lastUpdatedEl.textContent = latestRun 
+        ? new Date(latestRun.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : 'N/A';
+    }
+
     function renderApprovedRuns(runs){
       if(!approvedRunsEl) return;
       const approvedCount = runs.filter(run=>String(run.status || '').toLowerCase() === 'approved').length;
       approvedRunsEl.textContent = String(approvedCount);
     }
 
-    loadItems().then(renderHome).catch(()=>{
+    loadItems().then(items=>{
+      renderHome(items);
+      if(includeRuns){
+        loadRuns().then(runs=>{
+          renderApprovedRuns(runs);
+          renderHomeStats(runs, items);
+        }).catch(()=>{
+          renderApprovedRuns([]);
+          renderHomeStats([], items);
+        });
+        onRunsUpdate(runs=>{
+          renderApprovedRuns(runs);
+          renderHomeStats(runs, items);
+        });
+      }
+    }).catch(()=>{
       renderHome([]);
     });
-    if(includeRuns){
-      loadRuns().then(renderApprovedRuns).catch(()=>{
-        renderApprovedRuns([]);
-      });
-      onRunsUpdate(renderApprovedRuns);
-    }else if(approvedRunsEl){
-      approvedRunsEl.textContent = 'Local';
-    }
     onLiveUpdate(renderHome);
   }
 
