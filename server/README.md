@@ -62,6 +62,10 @@ Responses to API routes set permissive CORS headers (`Access-Control-Allow-Origi
 | `sessions.json` | Bearer session tokens + expiry |
 | `userdata.json` | Per-user synced state (roulette, list %, saved runs, roulette slots) |
 | `reset_tokens.json` | One-time password reset tokens + expiry |
+| `mods.json` | List of moderator usernames |
+| `bugreports.json` | Bug reports submitted via contact form |
+| `messages.json` | Private messages between users |
+| `config.json` | Server configuration (e.g., Discord webhook URL) |
 
 These files are created on demand where noted below. Use `.gitignore` for `users.json`, `sessions.json`, and `userdata.json` if they contain real data.
 
@@ -88,7 +92,7 @@ Unless noted, bodies are **JSON** with `Content-Type: application/json`. Errors 
 
 #### `PUT /api/list`
 
-- **Auth:** Admin Basic (if `ADMIN_PASSWORD` is set)
+- **Auth:** Admin Basic or Mod Bearer (if `ADMIN_PASSWORD` is set)
 - **Body:** `{ "text": "full data.txt content" }`
 - **200:** `{ "ok": true }` — writes `data.txt`, emits `list-update`
 
@@ -109,15 +113,39 @@ Run objects include (among others): `id`, `playerName`, `levelTitle`, `videoUrl`
 
 #### `PUT /api/runs/:id` / `DELETE /api/runs/:id`
 
-- **Auth:** Admin Basic
+- **Auth:** Admin Basic or Mod Bearer
 - **PUT body:** fields merged via `normalizeRun` with existing run
 200 / 404 / 400 as appropriate; emits `runs-update` on success
 
 #### `POST /api/runs/bulk-approve`
 
-- **Auth:** Admin Basic
+- **Auth:** Admin Basic or Mod Bearer
 - **Body:** `{ "playerName": "exact match", "reviewNotes?": "..." }`
 - **200:** `{ "ok": true, "approved": number, "playerName": "..." }` — approves all **pending** runs whose `playerName` matches (case-insensitive); may emit `runs-update`
+
+### Mod management
+
+#### `GET /api/mods`
+
+- **Auth:** Mod Bearer
+- **200:** `{ "mods": [ "username", ... ] }`
+
+#### `POST /api/mods`
+
+- **Auth:** Mod Bearer
+- **Body:** `{ "username": "newmod" }`
+- **201:** `{ "ok": true, "mods": [ ... ] }` — adds user to mods list
+
+#### `DELETE /api/mods`
+
+- **Auth:** Mod Bearer
+- **Body:** `{ "username": "oldmod" }`
+- **200:** `{ "ok": true, "mods": [ ... ] }` — removes user from mods list
+
+#### `GET /api/modcheck`
+
+- **Auth:** Basic or Bearer
+- **200:** `{ "isMod": true/false, "username": "..." }` — checks if authenticated user is a mod
 
 ### Auth (FEDL user accounts)
 
@@ -194,24 +222,64 @@ Run objects include (among others): `id`, `playerName`, `levelTitle`, `videoUrl`
 - **Body:** `{ "data": { ...same fields as above... } }` — server sanitizes `savedRuns` and `rouletteSlots` (size limits and field trimming)
 - **200:** `{ "ok": true }`
 - **401 / 400**
+### Bug reports
 
+#### `GET /api/bugreports`
+
+- **Auth:** Admin Basic or Mod Bearer
+- **200:** `{ "items": [ bugreport, ... ] }`
+
+#### `POST /api/bugreports`
+
+- **Body:** `{ "category", "subject", "description", "email?" }`
+- **201:** `{ "ok": true, "item": bugreport }` — emits `bugreports-update`
+
+#### `PUT /api/bugreports/:id` / `DELETE /api/bugreports/:id`
+
+- **Auth:** Admin Basic or Mod Bearer
+- **PUT body:** fields to update (category, subject, description, email, status)
+- 200 / 404 / 400; emits `bugreports-update` on success
+
+### Messages
+
+#### `GET /api/messages`
+
+- **Header:** `Authorization: Bearer <token>`
+- **200:** `{ "items": [ message, ... ] }` — user's messages
+
+#### `POST /api/messages`
+
+- **Header:** `Authorization: Bearer <token>`
+- **Body:** `{ "toUsername", "content" }`
+- **201:** `{ "ok": true, "item": message }` — emits `messages-update` to recipient
+
+#### `GET /api/messages/conversation?with=username`
+
+- **Header:** `Authorization: Bearer <token>`
+- **200:** `{ "items": [ message, ... ] }` — conversation with specified user
+
+#### `POST /api/messages/search`
+
+- **Header:** `Authorization: Bearer <token>`
+- **Body:** `{ "query": "username prefix" }`
+- **200:** `{ "items": [ { "username", "userId" }, ... ] }` — user search results
 ### Imports (admin + external APIs)
 
 #### `POST /api/import/pointercrate`
 
-- **Auth:** Admin Basic
+- **Auth:** Admin Basic or Mod Bearer
 - Fetches Pointercrate records, maps to run shape, appends to `runs.json`
 - **200:** summary object with counts (see implementation)
 
 #### `POST /api/import/aredl`
 
-- **Auth:** Admin Basic  
+- **Auth:** Admin Basic or Mod Bearer
 - Requires `AREDL_ACCESS_TOKEN` or `AREDL_API_KEY` configured
 - **200:** summary / **500** on configuration or API errors
 
 #### `POST /api/import/targeted`
 
-- **Auth:** Admin Basic
+- **Auth:** Admin Basic or Mod Bearer
 - **Body:** `{ "source": "pointercrate" | "aredl", "filter": "player" | "level", "query": "string" }`
 - Filters remote records and appends matching runs
 

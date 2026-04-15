@@ -28,24 +28,16 @@
     <section id="admin-login-screen" class="admin-login-screen">
       <div class="admin-login-card">
         <p class="hero-kicker">Admin Access</p>
-        <h2>Log in with your account</h2>
-        <p class="muted">Enter your username, account password, and admin password to access the admin panel.</p>
+        <h2>Enter admin password</h2>
+        <p class="muted">Enter the server admin password to access the admin panel.</p>
         <form id="admin-login-form" class="admin-login-form">
-          <label class="admin-password-field" for="admin-username">
-            <span>Username</span>
-            <input id="admin-username" type="text" placeholder="Enter your username" autocomplete="username" />
-          </label>
-          <label class="admin-password-field" for="admin-account-password">
-            <span>Account password</span>
-            <input id="admin-account-password" type="password" placeholder="Enter your account password" autocomplete="current-password" />
-          </label>
           <label class="admin-password-field" for="admin-password">
             <span>Admin password</span>
             <input id="admin-password" type="password" placeholder="Enter server admin password" autocomplete="current-password" />
           </label>
           <div class="admin-login-actions">
             <button id="admin-login-submit" type="submit" class="btn">Submit</button>
-            <p id="admin-auth-status" class="muted">Saved only in this browser session.</p>
+            <p id="admin-auth-status" class="muted"></p>
           </div>
         </form>
       </div>
@@ -56,6 +48,7 @@
       <button type="button" class="admin-tab active" data-tab="stats">Stats</button>
       <button type="button" class="admin-tab" data-tab="list">List Editor</button>
       <button type="button" class="admin-tab" data-tab="runs">Run Queue</button>
+      <button type="button" class="admin-tab" data-tab="mods">Mods</button>
       <button type="button" class="admin-tab" data-tab="bugs">Bug Reports</button>
       <button type="button" class="admin-tab" data-tab="import">Import</button>
     </section>
@@ -147,6 +140,46 @@
           </thead>
           <tbody id="run-admin-body"></tbody>
         </table>
+      </div>
+    </section>
+
+    <section class="panel admin-panel admin-tab-panel" id="tab-mods" hidden>
+      <div class="admin-toolbar">
+        <div>
+          <p class="hero-kicker">Mod Management</p>
+          <h2>Manage moderators</h2>
+          <p id="mods-admin-status" class="muted">Loading mods...</p>
+        </div>
+        <div class="admin-actions">
+          <button id="add-mod-btn" type="button" class="btn">Add Mod</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="levels-table admin-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th style="width:200px">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="mods-body"></tbody>
+        </table>
+      </div>
+      <div id="add-mod-modal" class="video-modal" hidden>
+        <div class="inner modal-card" role="dialog" aria-modal="true" aria-labelledby="add-mod-title">
+          <p class="hero-kicker">Add Mod</p>
+          <h2 id="add-mod-title">Add a new moderator</h2>
+          <form id="add-mod-form" class="admin-login-form">
+            <label class="admin-password-field" for="new-mod-username">
+              <span>Username</span>
+              <input id="new-mod-username" type="text" placeholder="Enter username" required />
+            </label>
+            <div class="admin-login-actions">
+              <button type="submit" class="btn">Add Mod</button>
+              <button type="button" class="btn ghost-btn" id="add-mod-cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
 

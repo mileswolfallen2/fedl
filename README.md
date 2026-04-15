@@ -12,9 +12,15 @@ GD FEDL is a Geometry Dash list site built as a multi-page static frontend with 
 - `guess.html` rank guessing game
 - `roulette.html` demon roulette picker
 - `rules.html` rules page
+- `about.html` about page
 - `signup.html` and `login.html` account pages
+- `account.html` account settings page
+- `reset-password.html` password reset page
 - `post.html` and `messages.html` community features
 - `contact.html` bug report / contact page
+- `support.html` support page
+- `sitemap.html` sitemap page
+- `offlineindex.html` offline fallback page
 - `errors.html` plus standalone HTTP-style error pages
 
 ## Tech Stack
