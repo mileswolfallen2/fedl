@@ -14,25 +14,7 @@ const userDataPath = path.join(__dirname, 'userdata.json');
 const resetTokensPath = path.join(__dirname, 'reset_tokens.json');
 const bugReportsPath = path.join(__dirname, 'bugreports.json');
 const messagesPath = path.join(__dirname, 'messages.json');
-const modsPath = path.join(__dirname, 'mods.json');
 const configPath = path.join(__dirname, 'config.json');
-
-function readMods() {
-  try {
-    if (fs.existsSync(modsPath)) {
-      const raw = fs.readFileSync(modsPath, 'utf8');
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed;
-    }
-  } catch (e) {}
-  return [];
-}
-
-function writeMods(mods) {
-  fs.writeFileSync(modsPath, JSON.stringify(mods, null, 2) + '\n', 'utf8');
-}
-
-let MOD_USERS = readMods();
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
 const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
@@ -171,28 +153,13 @@ function isAuthorized(req) {
   }
 }
 
-function requireMod(req, res) {
-  const token = getBearerToken(req);
-  const sess = findSession(token);
-  if (!sess) {
-    setCors(res);
-    res.writeHead(401, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Authentication required' }));
-    return false;
-  }
-  const username = String(sess.username || '').toLowerCase();
-  if (!MOD_USERS.includes(username)) {
-    setCors(res);
-    res.writeHead(403, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Not authorized' }));
-    return false;
-  }
-  return true;
-}
-
 function requireAdmin(req, res) {
   if (isAuthorized(req)) return true;
-  return requireMod(req, res);
+  setCors(res);
+  res.setHeader('WWW-Authenticate', 'Basic realm="FEDL Admin"');
+  res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('Authentication required');
+  return false;
 }
 
 function ensureRunsFile() {
@@ -632,6 +599,7 @@ function safeReadBugReports() {
   } catch (e) {
     return [];
   }
+}
 }
 
 function readPosts() {
@@ -1728,95 +1696,6 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.method === 'DELETE' && pathname === '/api/runs/__authcheck__') {
-    if (!requireAdmin(req, res)) return;
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
-  if (req.method === 'GET' && pathname === '/api/modcheck') {
-    let username = '';
-    const authHeader = String(req.headers.authorization || '');
-    if (authHeader.startsWith('Basic ')) {
-      try {
-        const decoded = Buffer.from(authHeader.slice(6), 'base64').toString('utf8');
-        const separatorIndex = decoded.indexOf(':');
-        username = separatorIndex === -1 ? '' : decoded.slice(0, separatorIndex).toLowerCase();
-      } catch (error) {
-        sendJson(res, 400, { error: 'Invalid authorization header' });
-        return;
-      }
-    } else if (authHeader.startsWith('Bearer ')) {
-      const token = authHeader.slice(7);
-      const sess = findSession(token);
-      if (sess) {
-        username = String(sess.username || '').toLowerCase();
-      }
-    }
-    if (!username) {
-      sendJson(res, 401, { error: 'Authorization required' });
-      return;
-    }
-    const isMod = MOD_USERS.includes(username);
-    sendJson(res, 200, { isMod: isMod, username: username });
-    return;
-  }
-
-  if (pathname === '/api/mods') {
-    if (req.method === 'GET') {
-      if (!requireMod(req, res)) return;
-      sendJson(res, 200, { mods: MOD_USERS });
-      return;
-    }
-    if (req.method === 'POST') {
-      if (!requireMod(req, res)) return;
-      let body = '';
-      req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
-      req.on('end', () => {
-        try {
-          const payload = JSON.parse(body || '{}');
-          const newMod = String(payload.username || '').trim().toLowerCase();
-          if (!newMod) {
-            sendJson(res, 400, { error: 'username is required' });
-            return;
-          }
-          if (MOD_USERS.includes(newMod)) {
-            sendJson(res, 400, { error: 'User is already a mod' });
-            return;
-          }
-          MOD_USERS.push(newMod);
-          writeMods(MOD_USERS);
-          sendJson(res, 201, { ok: true, mods: MOD_USERS });
-        } catch (e) {
-          sendJson(res, 400, { error: 'Invalid request body' });
-        }
-      });
-      return;
-    }
-    if (req.method === 'DELETE') {
-      if (!requireMod(req, res)) return;
-      let body = '';
-      req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
-      req.on('end', () => {
-        try {
-          const payload = JSON.parse(body || '{}');
-          const removeMod = String(payload.username || '').trim().toLowerCase();
-          if (!removeMod) {
-            sendJson(res, 400, { error: 'username is required' });
-            return;
-          }
-          MOD_USERS = MOD_USERS.filter(m => m !== removeMod);
-          writeMods(MOD_USERS);
-          sendJson(res, 200, { ok: true, mods: MOD_USERS });
-        } catch (e) {
-          sendJson(res, 400, { error: 'Invalid request body' });
-        }
-      });
-      return;
-    }
-  }
-
   if (req.method === 'POST' && pathname === '/api/runs') {
     let body = '';
     req.on('data', chunk => {
@@ -2171,5 +2050,4 @@ server.listen(port, host, () => {
   console.log(`Legacy list fallback: ${legacyDataPath}`);
   console.log(`Using runs file: ${runsPath}`);
   console.log(`Admin password protection: ${adminPassword ? 'enabled' : 'disabled'}`);
-  console.log(`Mods loaded from mods.json`);
 });

@@ -11,6 +11,7 @@
   const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
   const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
+  const MOD_USERS = ['wolf_reaper90'];
   /** Use for POST /api/import/* and any path under the same base as list/runs (not root-relative /api/...). */
   function liveApiPath(path){
     const p = String(path || '').startsWith('/') ? path : `/${path}`;
@@ -369,63 +370,53 @@
     nav.appendChild(wrap);
   }
 
-function isFedlMod(){
-      if(!fedlServerUsername || !canUseLiveServer) return Promise.resolve(false);
-      const token = fedlGetAuthToken();
-      if(!token) return Promise.resolve(false);
-      return fetch(liveApiPath('/api/modcheck'), {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(r=>r.ok ? r.json() : Promise.resolve({isMod:false})).then(d=>d.isMod||false).catch(()=>false);
+  function fedlUpdateAuthNav(){
+    const wrap = document.querySelector('.fedl-auth-nav');
+    if (!wrap) {
+      return;
     }
-
-    function fedlUpdateAuthNav(){
-      const wrap = document.querySelector('.fedl-auth-nav');
-      if (!wrap) {
-        return;
+    wrap.textContent = '';
+    if (fedlServerUsername) {
+      const isMod = MOD_USERS.includes(fedlServerUsername.toLowerCase());
+      const label = document.createElement('span');
+      label.className = 'fedl-auth-label muted';
+      label.appendChild(document.createTextNode('Hi, '));
+      const strong = document.createElement('strong');
+      strong.textContent = fedlServerUsername;
+      label.appendChild(strong);
+      wrap.appendChild(label);
+      wrap.appendChild(document.createTextNode(' '));
+      if (isMod) {
+        const adminLink = document.createElement('a');
+        adminLink.href = 'admelist.html';
+        adminLink.textContent = 'Admin';
+        wrap.appendChild(adminLink);
+        wrap.appendChild(document.createTextNode(' '));
       }
-      wrap.textContent = '';
-      if (fedlServerUsername) {
-        isFedlMod().then(isMod=>{
-          const label = document.createElement('span');
-          label.className = 'fedl-auth-label muted';
-          label.appendChild(document.createTextNode('Hi, '));
-          const strong = document.createElement('strong');
-          strong.textContent = fedlServerUsername;
-          label.appendChild(strong);
-          wrap.appendChild(label);
-          wrap.appendChild(document.createTextNode(' '));
-          if (isMod) {
-            const adminLink = document.createElement('a');
-            adminLink.href = 'admelist.html';
-            adminLink.textContent = 'Admin';
-            wrap.appendChild(adminLink);
-            wrap.appendChild(document.createTextNode(' '));
-          }
-          const accountLink = document.createElement('a');
-          accountLink.href = 'account.html';
-          accountLink.textContent = 'Account';
-          wrap.appendChild(accountLink);
-          wrap.appendChild(document.createTextNode(' '));
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'btn ghost-btn small-btn fedl-logout-btn';
-          btn.textContent = 'Log out';
-          btn.addEventListener('click', ()=>{
-            const tok = fedlGetAuthToken();
-            if (tok && canUseLiveServer) {
-              fetch(`${liveServerBase}/api/auth/logout`, {
-                method: 'POST',
-                headers: { Authorization: `Bearer ${tok}` }
-              }).catch(()=>{});
-            }
-            fedlClearServerSession();
-            fedlUpdateAuthNav();
-            document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
-            window.location.reload();
-          });
-          wrap.appendChild(btn);
-        });
-      } else {
+      const accountLink = document.createElement('a');
+      accountLink.href = 'account.html';
+      accountLink.textContent = 'Account';
+      wrap.appendChild(accountLink);
+      wrap.appendChild(document.createTextNode(' '));
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn ghost-btn small-btn fedl-logout-btn';
+      btn.textContent = 'Log out';
+      btn.addEventListener('click', ()=>{
+        const tok = fedlGetAuthToken();
+        if (tok && canUseLiveServer) {
+          fetch(`${liveServerBase}/api/auth/logout`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${tok}` }
+          }).catch(()=>{});
+        }
+        fedlClearServerSession();
+        fedlUpdateAuthNav();
+        document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+        window.location.reload();
+      });
+      wrap.appendChild(btn);
+    } else {
       const a1 = document.createElement('a');
         const returnTo = encodeURIComponent(window.location.href);
         a1.href = 'login.html?return=' + returnTo;
@@ -1738,6 +1729,8 @@ function isFedlMod(){
     const addRowBottomBtn = qs('add-row-bottom');
     const saveBtn = qs('save-list');
     const searchEl = qs('admin-search');
+    const adminUsernameEl = qs('admin-username');
+    const adminAccountPasswordEl = qs('admin-account-password');
     const adminPasswordEl = qs('admin-password');
     const authStatusEl = qs('admin-auth-status');
     const runsStatusEl = qs('runs-admin-status');
@@ -1769,9 +1762,9 @@ function isFedlMod(){
 
     function getAdminSession(){
       try{
-        const stored = sessionStorage.getItem(adminPasswordKey);
+        const stored = sessionStorage.getItem(adminSessionKey);
         if(stored){
-          return { adminPassword: stored };
+          return JSON.parse(stored);
         }
       }catch(e){}
       return null;
@@ -1779,10 +1772,8 @@ function isFedlMod(){
 
     function setAdminSession(session){
       try{
-        if(session && session.adminPassword){
-          sessionStorage.setItem(adminPasswordKey, session.adminPassword);
-        }else{
-          sessionStorage.removeItem(adminPasswordKey);
+        if(session){
+          sessionStorage.setItem(adminSessionKey, JSON.stringify(session));
         }else{
           sessionStorage.removeItem(adminSessionKey);
         }
@@ -1834,9 +1825,17 @@ function isFedlMod(){
 
     function verifyAdminPassword(){
       const session = getAdminSession();
-      const password = session?.adminPassword || '';
-      if(!password){
-        handleAdminAuthFailure('Enter the admin password to continue.', function(message, isError){
+      if(!session || !session.username || !session.accountPassword || !session.adminPassword){
+        handleAdminAuthFailure('Enter username, account password, and admin password to continue.', function(message, isError){
+          if(!authStatusEl) return;
+          authStatusEl.textContent = message;
+          authStatusEl.classList.toggle('error-text', !!isError);
+        });
+        return Promise.resolve(false);
+      }
+      const username = session.username.toLowerCase();
+      if(!MOD_USERS.includes(username)){
+        handleAdminAuthFailure('You are not authorized to access the admin panel.', function(message, isError){
           if(!authStatusEl) return;
           authStatusEl.textContent = message;
           authStatusEl.classList.toggle('error-text', !!isError);
@@ -1844,15 +1843,37 @@ function isFedlMod(){
         return Promise.resolve(false);
       }
       if(authStatusEl){
-        authStatusEl.textContent = 'Verifying...';
+        authStatusEl.textContent = 'Verifying account...';
         authStatusEl.classList.remove('error-text');
       }
-      return fetch(`${liveRunsUrl}/__authcheck__`, {
-        method:'DELETE',
-        headers:authHeaders()
+      return fetch(liveApiPath('/api/auth/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: session.username, password: session.accountPassword })
       }).then(r=>{
-        if(r.status === 401) throw new Error('Wrong password');
-        if(r.status !== 404 && r.status !== 204) throw new Error('Verify failed');
+        if(!r.ok){
+          throw new Error('Invalid account password');
+        }
+        return r.json();
+      }).then(data=>{
+        const token = data.data?.token;
+        if(!token){
+          throw new Error('Invalid account password');
+        }
+        fedlSetAuthToken(token);
+        fedlServerUserId = data.data.userId;
+        fedlServerUsername = data.data.username;
+        document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+        if(authStatusEl){
+          authStatusEl.textContent = 'Verifying admin access...';
+        }
+        return fetch(`${liveRunsUrl}/__authcheck__`, {
+          method:'DELETE',
+          headers:authHeaders()
+        });
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(r.status !== 404) throw new Error('Admin verify failed');
         return true;
       }).then(ok=>{
         unlockAdminShell();
@@ -1862,10 +1883,16 @@ function isFedlMod(){
         }
         loadAdmin();
         loadRunsAdmin();
-        return true;
+        return ok;
       }).catch(err=>{
         console.error(err);
-        handleAdminAuthFailure('Wrong admin password. Try again.', function(message, isError){
+        let msg = 'Wrong admin password. Try again.';
+        if(err.message === 'Invalid account password'){
+          msg = 'Invalid account password. Try again.';
+        }else if(err.message === 'You are not authorized to access the admin panel.'){
+          msg = 'You are not authorized to access the admin panel.';
+        }
+        handleAdminAuthFailure(msg, function(message, isError){
           if(!authStatusEl) return;
           authStatusEl.textContent = message;
           authStatusEl.classList.toggle('error-text', !!isError);
@@ -2490,21 +2517,17 @@ function isFedlMod(){
       if(key === '?' && !event.ctrlKey && !event.metaKey){
         window.location.href = 'rules.html';
       }
-      if(key === 'w' && event.shiftKey && !event.ctrlKey && !event.metaKey){
-        window.location.href = 'admelist.html';
-      }
-      if(key === 'e' && event.shiftKey && !event.ctrlKey && !event.metaKey && page === 'index'){
-        window.location.href = 'admelist.html';
-      }
     });
 
     if(loginFormEl){
       loginFormEl.addEventListener('submit', function(event){
         event.preventDefault();
+        const username = (adminUsernameEl && adminUsernameEl.value || '').trim();
+        const accountPassword = (adminAccountPasswordEl && adminAccountPasswordEl.value || '').trim();
         const adminPassword = (adminPasswordEl && adminPasswordEl.value || '').trim();
-        setAdminSession({ adminPassword });
+        setAdminSession({ username, accountPassword, adminPassword });
         if(authStatusEl){
-          authStatusEl.textContent = 'Verifying...';
+          authStatusEl.textContent = 'Checking credentials...';
           authStatusEl.classList.remove('error-text');
         }
         verifyAdminPassword();
@@ -2739,132 +2762,6 @@ function isFedlMod(){
       refreshBugReports().then(()=>{
         setBugReportsStatus('Bug reports loaded.');
       });
-    }
-
-    const modsBody = qs('mods-body');
-    const modsAdminStatusEl = qs('mods-admin-status');
-    const addModBtn = qs('add-mod-btn');
-    const addModModal = qs('add-mod-modal');
-    const addModForm = qs('add-mod-form');
-    const addModCancelBtn = qs('add-mod-cancel');
-    let mods = [];
-
-    function setModsStatus(message, isError){
-      if(!modsAdminStatusEl) return;
-      modsAdminStatusEl.textContent = message;
-      modsAdminStatusEl.classList.toggle('error-text', !!isError);
-    }
-
-    function loadMods(){
-      return fetch(liveApiPath('/api/mods'), {
-        headers: authHeaders()
-      }).then(r=>{
-        if(r.status === 401) throw new Error('Auth required');
-        if(!r.ok) throw new Error('Failed to load mods');
-        return r.json();
-      }).then(data=>{
-        mods = data.mods || [];
-        return mods;
-      }).catch(err=>{
-        console.error(err);
-        setModsStatus('Could not load mods.', true);
-        return [];
-      });
-    }
-
-    function renderModsTable(){
-      if(!modsBody) return;
-      if(!mods.length){
-        modsBody.innerHTML = '<tr><td colspan="2" class="muted">No mods found.</td></tr>';
-        return;
-      }
-      modsBody.innerHTML = mods.map(mod=>`
-        <tr>
-          <td><strong>${escapeHtml(mod)}</strong></td>
-          <td>
-            <button type="button" class="btn danger-btn small-btn" data-mod-remove="${escapeAttr(mod)}">Remove</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function refreshMods(){
-      return loadMods().then(loaded=>{
-        mods = loaded;
-        renderModsTable();
-        setModsStatus('Mods loaded.');
-      });
-    }
-
-    if(addModBtn){
-      addModBtn.addEventListener('click', ()=>{
-        if(addModModal) addModModal.hidden = false;
-        const input = qs('new-mod-username');
-        if(input) input.value = '';
-        if(input) input.focus();
-      });
-    }
-
-    if(addModCancelBtn){
-      addModCancelBtn.addEventListener('click', ()=>{
-        if(addModModal) addModModal.hidden = true;
-      });
-    }
-
-    if(addModForm){
-      addModForm.addEventListener('submit', (e)=>{
-        e.preventDefault();
-        const username = qs('new-mod-username').value.trim();
-        if(!username) return;
-        setModsStatus('Adding mod...');
-        fetch(liveApiPath('/api/mods'), {
-          method: 'POST',
-          headers: authHeaders(),
-          body: JSON.stringify({ username: username })
-        }).then(r=>{
-          if(r.status === 401) throw new Error('Auth required');
-          if(!r.ok) return r.json().then(err=>{throw new Error(err.error||'Failed');});
-          return r.json();
-        }).then(data=>{
-          mods = data.mods || [];
-          renderModsTable();
-          setModsStatus('Mod added successfully.');
-          if(addModModal) addModModal.hidden = true;
-        }).catch(err=>{
-          console.error(err);
-          setModsStatus(err.message || 'Could not add mod.', true);
-        });
-      });
-    }
-
-    if(modsBody){
-      modsBody.addEventListener('click', (e)=>{
-        const removeBtn = e.target.closest('[data-mod-remove]');
-        if(!removeBtn) return;
-        const username = removeBtn.dataset.modRemove;
-        if(!username || !confirm(`Remove ${username} as mod?`)) return;
-        setModsStatus('Removing mod...');
-        fetch(liveApiPath('/api/mods'), {
-          method: 'DELETE',
-          headers: authHeaders(),
-          body: JSON.stringify({ username: username })
-        }).then(r=>{
-          if(r.status === 401) throw new Error('Auth required');
-          if(!r.ok) return r.json().then(err=>{throw new Error(err.error||'Failed');});
-          return r.json();
-        }).then(data=>{
-          mods = data.mods || [];
-          renderModsTable();
-          setModsStatus('Mod removed successfully.');
-        }).catch(err=>{
-          console.error(err);
-          setModsStatus(err.message || 'Could not remove mod.', true);
-        });
-      });
-    }
-
-    if(modsBody || addModBtn){
-      refreshMods();
     }
 
     onLiveUpdate(function(updatedItems){
