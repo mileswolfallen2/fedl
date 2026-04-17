@@ -11,7 +11,7 @@
   const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
   const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
-  const MOD_USERS = ['wolf_reaper90','dioxyx'];
+  const MOD_USERS = ['wolf_reaper90','dioxyx','steve'];
   /** Use for POST /api/import/* and any path under the same base as list/runs (not root-relative /api/...). */
   function liveApiPath(path){
     const p = String(path || '').startsWith('/') ? path : `/${path}`;
@@ -1726,6 +1726,13 @@
   }
 
   if(page==='admelist'){
+    fedlRefreshAuthState().then(j=>{
+      if(!j) return;
+      const username = (j.username || '').toLowerCase();
+      if(!username || !MOD_USERS.map(m=>m.toLowerCase()).includes(username)){
+        window.location.href = 'index.html';
+      }
+    });
     const loginScreenEl = qs('admin-login-screen');
     const adminShellContentEl = qs('admin-shell-content');
     const loginFormEl = qs('admin-login-form');
@@ -2077,7 +2084,7 @@
           ...run,
           status,
           reviewNotes,
-          reviewedBy:'FEDL Admin'
+          reviewedBy: fedlServerUsername || 'FEDL Admin'
         })
       }).then(r=>{
         if(r.status === 401) throw new Error('Admin auth failed');
