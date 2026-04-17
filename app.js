@@ -1723,16 +1723,14 @@
     const loginScreenEl = qs('admin-login-screen');
     const adminShellContentEl = qs('admin-shell-content');
     const loginFormEl = qs('admin-login-form');
+    const adminPasswordEl = qs('admin-password');
+    const authStatusEl = qs('admin-auth-status');
     const statusEl = qs('admin-status');
     const listTbody = qs('admin-list-body');
     const addBtn = qs('add-row');
     const addRowBottomBtn = qs('add-row-bottom');
     const saveBtn = qs('save-list');
     const searchEl = qs('admin-search');
-    const adminUsernameEl = qs('admin-username');
-    const adminAccountPasswordEl = qs('admin-account-password');
-    const adminPasswordEl = qs('admin-password');
-    const authStatusEl = qs('admin-auth-status');
     const runsStatusEl = qs('runs-admin-status');
     const runsTbody = qs('run-admin-body');
     const runSearchEl = qs('run-search');
@@ -1758,44 +1756,20 @@
     let items = [];
     let runs = [];
     const adminPasswordKey = 'fedl_admin_password';
-    const adminSessionKey = 'fedl_admin_session';
-
-    function getAdminSession(){
-      try{
-        const stored = sessionStorage.getItem(adminSessionKey);
-        if(stored){
-          return JSON.parse(stored);
-        }
-      }catch(e){}
-      return null;
-    }
-
-    function setAdminSession(session){
-      try{
-        if(session){
-          sessionStorage.setItem(adminSessionKey, JSON.stringify(session));
-        }else{
-          sessionStorage.removeItem(adminSessionKey);
-        }
-      }catch(e){}
-      if(adminUsernameEl) adminUsernameEl.value = session?.username || '';
-      if(adminAccountPasswordEl) adminAccountPasswordEl.value = session?.accountPassword || '';
-      if(adminPasswordEl) adminPasswordEl.value = session?.adminPassword || '';
-    }
 
     function getAdminPassword(){
-      const session = getAdminSession();
-      return session?.adminPassword || '';
+      try{return sessionStorage.getItem(adminPasswordKey) || '';}
+      catch(e){return '';}
     }
 
     function setAdminPassword(password){
-      const session = getAdminSession() || {};
-      session.adminPassword = password || '';
-      setAdminSession(session);
+      try{
+        if(password) sessionStorage.setItem(adminPasswordKey, password);
+        else sessionStorage.removeItem(adminPasswordKey);
+      }catch(e){}
+      if(adminPasswordEl) adminPasswordEl.value = password;
       if(authStatusEl){
-        authStatusEl.textContent = password
-          ? 'Password saved for this browser session.'
-          : 'Saved only in this browser session.';
+        authStatusEl.textContent = password ? 'Password saved for this browser session.' : 'Saved only in this browser session.';
         if(password) authStatusEl.classList.remove('error-text');
       }
     }
@@ -1809,12 +1783,15 @@
       return headers;
     }
 
-    function handleAdminAuthFailure(message, targetSetter){
+    function handleAdminAuthFailure(message){
       setAdminPassword('');
       document.body.classList.add('admin-locked');
       if(adminShellContentEl) adminShellContentEl.hidden = true;
       if(loginScreenEl) loginScreenEl.hidden = false;
-      targetSetter(message || 'Admin password required or incorrect.', true);
+      if(authStatusEl){
+        authStatusEl.textContent = message || 'Admin password required or incorrect.';
+        authStatusEl.classList.add('error-text');
+      }
     }
 
     function unlockAdminShell(){
@@ -1824,81 +1801,43 @@
     }
 
     function verifyAdminPassword(){
-      const session = getAdminSession();
-      if(!session || !session.username || !session.accountPassword || !session.adminPassword){
-        handleAdminAuthFailure('Enter username, account password, and admin password to continue.', function(message, isError){
-          if(!authStatusEl) return;
-          authStatusEl.textContent = message;
-          authStatusEl.classList.toggle('error-text', !!isError);
-        });
+      if(!getAdminPassword()){
+        handleAdminAuthFailure('Enter the admin password to continue.');
         return Promise.resolve(false);
       }
-      const username = session.username.toLowerCase();
-      if(!MOD_USERS.includes(username)){
-        handleAdminAuthFailure('You are not authorized to access the admin panel.', function(message, isError){
-          if(!authStatusEl) return;
-          authStatusEl.textContent = message;
-          authStatusEl.classList.toggle('error-text', !!isError);
-        });
-        return Promise.resolve(false);
-      }
-      if(authStatusEl){
-        authStatusEl.textContent = 'Verifying account...';
-        authStatusEl.classList.remove('error-text');
-      }
-      return fetch(liveApiPath('/api/auth/login'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: session.username, password: session.accountPassword })
-      }).then(r=>{
-        if(!r.ok){
-          throw new Error('Invalid account password');
-        }
-        return r.json();
-      }).then(data=>{
-        const token = data.data?.token;
-        if(!token){
-          throw new Error('Invalid account password');
-        }
-        fedlSetAuthToken(token);
-        fedlServerUserId = data.data.userId;
-        fedlServerUsername = data.data.username;
-        document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
-        if(authStatusEl){
-          authStatusEl.textContent = 'Verifying admin access...';
-        }
-        return fetch(`${liveRunsUrl}/__authcheck__`, {
-          method:'DELETE',
-          headers:authHeaders()
-        });
+      return fetch(`${liveRunsUrl}/__authcheck__`, {
+        method:'DELETE',
+        headers:authHeaders()
       }).then(r=>{
         if(r.status === 401) throw new Error('Admin auth failed');
-        if(r.status !== 404) throw new Error('Admin verify failed');
+        if(r.status !== 404 && r.status !== 204) throw new Error('Verify failed');
         return true;
       }).then(ok=>{
         unlockAdminShell();
-        if(authStatusEl){
-          authStatusEl.textContent = 'Access granted for this browser session.';
-          authStatusEl.classList.remove('error-text');
-        }
         loadAdmin();
         loadRunsAdmin();
         return ok;
       }).catch(err=>{
         console.error(err);
-        let msg = 'Wrong admin password. Try again.';
-        if(err.message === 'Invalid account password'){
-          msg = 'Invalid account password. Try again.';
-        }else if(err.message === 'You are not authorized to access the admin panel.'){
-          msg = 'You are not authorized to access the admin panel.';
-        }
-        handleAdminAuthFailure(msg, function(message, isError){
-          if(!authStatusEl) return;
-          authStatusEl.textContent = message;
-          authStatusEl.classList.toggle('error-text', !!isError);
-        });
+        handleAdminAuthFailure('Wrong admin password. Try again.');
         return false;
       });
+    }
+
+    if(loginFormEl){
+      loginFormEl.addEventListener('submit', function(event){
+        event.preventDefault();
+        setAdminPassword((adminPasswordEl && adminPasswordEl.value || '').trim());
+        if(authStatusEl){
+          authStatusEl.textContent = 'Checking password...';
+          authStatusEl.classList.remove('error-text');
+        }
+        verifyAdminPassword();
+      });
+    }
+
+    if(getAdminPassword()){
+      verifyAdminPassword();
     }
 
     function setStatus(message, isError){
@@ -2519,21 +2458,6 @@
       }
     });
 
-    if(loginFormEl){
-      loginFormEl.addEventListener('submit', function(event){
-        event.preventDefault();
-        const username = (adminUsernameEl && adminUsernameEl.value || '').trim();
-        const accountPassword = (adminAccountPasswordEl && adminAccountPasswordEl.value || '').trim();
-        const adminPassword = (adminPasswordEl && adminPasswordEl.value || '').trim();
-        setAdminSession({ username, accountPassword, adminPassword });
-        if(authStatusEl){
-          authStatusEl.textContent = 'Checking credentials...';
-          authStatusEl.classList.remove('error-text');
-        }
-        verifyAdminPassword();
-      });
-    }
-
     bindLiveUpdates();
     onLiveUpdate(function(updatedItems){
       items = updatedItems.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
@@ -2553,16 +2477,8 @@
       setRunsStatus('Run queue reloaded from the live server.');
     });
 
-    const session = getAdminSession();
-    if(session && session.username && session.accountPassword && session.adminPassword){
-      verifyAdminPassword();
-    }else{
-      handleAdminAuthFailure('Enter username, account password, and admin password to continue.', function(message, isError){
-        if(!authStatusEl) return;
-        authStatusEl.textContent = message;
-        authStatusEl.classList.toggle('error-text', !!isError);
-      });
-    }
+    loadAdmin();
+    loadRunsAdmin();
 
     const bugReportsBody = qs('bug-reports-body');
     const bugReportSearchEl = qs('bug-report-search');

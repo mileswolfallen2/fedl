@@ -28,20 +28,12 @@
     <section id="admin-login-screen" class="admin-login-screen">
       <div class="admin-login-card">
         <p class="hero-kicker">Admin Access</p>
-        <h2>Log in with your account</h2>
-        <p class="muted">Enter your username, account password, and admin password to access the admin panel.</p>
+        <h2>Enter the admin password</h2>
+        <p class="muted">Submit the server password to unlock the list editor and run moderation tools.</p>
         <form id="admin-login-form" class="admin-login-form">
-          <label class="admin-password-field" for="admin-username">
-            <span>Username</span>
-            <input id="admin-username" type="text" placeholder="Enter your username" autocomplete="username" />
-          </label>
-          <label class="admin-password-field" for="admin-account-password">
-            <span>Account password</span>
-            <input id="admin-account-password" type="password" placeholder="Enter your account password" autocomplete="current-password" />
-          </label>
           <label class="admin-password-field" for="admin-password">
             <span>Admin password</span>
-            <input id="admin-password" type="password" placeholder="Enter server admin password" autocomplete="current-password" />
+            <input id="admin-password" type="password" placeholder="Enter server password" autocomplete="current-password" />
           </label>
           <div class="admin-login-actions">
             <button id="admin-login-submit" type="submit" class="btn">Submit</button>
@@ -56,6 +48,7 @@
       <button type="button" class="admin-tab active" data-tab="stats">Stats</button>
       <button type="button" class="admin-tab" data-tab="list">List Editor</button>
       <button type="button" class="admin-tab" data-tab="runs">Run Queue</button>
+      <button type="button" class="admin-tab" data-tab="mods">Mods</button>
       <button type="button" class="admin-tab" data-tab="bugs">Bug Reports</button>
       <button type="button" class="admin-tab" data-tab="import">Import</button>
     </section>
