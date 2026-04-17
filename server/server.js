@@ -600,6 +600,7 @@ function safeReadBugReports() {
     return [];
   }
 }
+}
 
 function readPosts() {
   ensurePostsFile();
