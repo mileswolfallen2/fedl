@@ -11,7 +11,7 @@
   const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
   const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
-  const MOD_USERS = ['wolf_reaper90'];
+  const MOD_USERS = ['wolf_reaper90','dioxyx'];
   /** Use for POST /api/import/* and any path under the same base as list/runs (not root-relative /api/...). */
   function liveApiPath(path){
     const p = String(path || '').startsWith('/') ? path : `/${path}`;
@@ -370,6 +370,11 @@
     nav.appendChild(wrap);
   }
 
+  function isFedlMod(){
+      if(!fedlServerUsername) return Promise.resolve(false);
+      return Promise.resolve(MOD_USERS.includes(fedlServerUsername.toLowerCase()));
+    }
+
   function fedlUpdateAuthNav(){
     const wrap = document.querySelector('.fedl-auth-nav');
     if (!wrap) {
@@ -377,45 +382,46 @@
     }
     wrap.textContent = '';
     if (fedlServerUsername) {
-      const isMod = MOD_USERS.includes(fedlServerUsername.toLowerCase());
-      const label = document.createElement('span');
-      label.className = 'fedl-auth-label muted';
-      label.appendChild(document.createTextNode('Hi, '));
-      const strong = document.createElement('strong');
-      strong.textContent = fedlServerUsername;
-      label.appendChild(strong);
-      wrap.appendChild(label);
-      wrap.appendChild(document.createTextNode(' '));
-      if (isMod) {
-        const adminLink = document.createElement('a');
-        adminLink.href = 'admelist.html';
-        adminLink.textContent = 'Admin';
-        wrap.appendChild(adminLink);
+      isFedlMod().then(isMod=>{
+        const label = document.createElement('span');
+        label.className = 'fedl-auth-label muted';
+        label.appendChild(document.createTextNode('Hi, '));
+        const strong = document.createElement('strong');
+        strong.textContent = fedlServerUsername;
+        label.appendChild(strong);
+        wrap.appendChild(label);
         wrap.appendChild(document.createTextNode(' '));
-      }
-      const accountLink = document.createElement('a');
-      accountLink.href = 'account.html';
-      accountLink.textContent = 'Account';
-      wrap.appendChild(accountLink);
-      wrap.appendChild(document.createTextNode(' '));
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn ghost-btn small-btn fedl-logout-btn';
-      btn.textContent = 'Log out';
-      btn.addEventListener('click', ()=>{
-        const tok = fedlGetAuthToken();
-        if (tok && canUseLiveServer) {
-          fetch(`${liveServerBase}/api/auth/logout`, {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${tok}` }
-          }).catch(()=>{});
+        if (isMod) {
+          const adminLink = document.createElement('a');
+          adminLink.href = 'admelist.html';
+          adminLink.textContent = 'Admin';
+          wrap.appendChild(adminLink);
+          wrap.appendChild(document.createTextNode(' '));
         }
-        fedlClearServerSession();
-        fedlUpdateAuthNav();
-        document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
-        window.location.reload();
+        const accountLink = document.createElement('a');
+        accountLink.href = 'account.html';
+        accountLink.textContent = 'Account';
+        wrap.appendChild(accountLink);
+        wrap.appendChild(document.createTextNode(' '));
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn ghost-btn small-btn fedl-logout-btn';
+        btn.textContent = 'Log out';
+        btn.addEventListener('click', ()=>{
+          const tok = fedlGetAuthToken();
+          if (tok && canUseLiveServer) {
+            fetch(`${liveServerBase}/api/auth/logout`, {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${tok}` }
+            }).catch(()=>{});
+          }
+          fedlClearServerSession();
+          fedlUpdateAuthNav();
+          document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+          window.location.reload();
+        });
+        wrap.appendChild(btn);
       });
-      wrap.appendChild(btn);
     } else {
       const a1 = document.createElement('a');
         const returnTo = encodeURIComponent(window.location.href);
