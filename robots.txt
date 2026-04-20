@@ -1,0 +1,6 @@
+# Allow all pages on fedl.site
+User-agent: *
+Allow: /
+
+# Subdomains should have their own robots.txt files
+# to define their crawling policies
