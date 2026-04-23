@@ -3172,8 +3172,20 @@
     function setSignupStatus(msg, kind){
       fedlSetFormStatus(statusEl, msg, kind);
     }
+    function checkTurnstile(){
+      const turnstileEl = window.turnstile;
+      if(turnstileEl){
+        const token = turnstileEl.getResponse();
+        if(!token){
+          setSignupStatus('Please complete the verification challenge.', 'error');
+          return false;
+        }
+      }
+      return true;
+    }
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
+      if(!checkTurnstile()) return;
       if (!canUseLiveServer) {
         setSignupStatus('Sign up is not available right now.', 'error');
         return;
@@ -3232,8 +3244,20 @@
     function setLoginStatus(msg, kind){
       fedlSetFormStatus(statusEl, msg, kind);
     }
+    function checkTurnstile(){
+      const turnstileEl = window.turnstile;
+      if(turnstileEl){
+        const token = turnstileEl.getResponse();
+        if(!token){
+          setLoginStatus('Please complete the verification challenge.', 'error');
+          return false;
+        }
+      }
+      return true;
+    }
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
+      if(!checkTurnstile()) return;
       if (!canUseLiveServer) {
         setLoginStatus('Log in is not available right now.', 'error');
         return;
