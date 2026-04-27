@@ -128,17 +128,17 @@ ADMIN_PASSWORD=changeme HOST=0.0.0.0 PORT=8090 node server/server.js
 
 ## Frontend Live Server Note
 
-`app.js` uses a hardcoded live server base:
+`app.js` and `onepage.js` both use a hardcoded live server base:
 
 ```txt
-https://raspberrypi-1.tail46eacb.ts.net/fedl
+https://server.fedl.site/fedl
 ```
 
 That means:
 
 - the frontend will try the remote live server first
 - if the live server probe fails, the app redirects to `offlineindex.html`
-- if you want local development against your own server, update `TESTING_MODE` or `liveServerBase` in `app.js`
+- if you want local development against your own server, update `TESTING_MODE` or `liveServerBase` in `app.js` and `onepage.js`
 
 ## Notes
 
