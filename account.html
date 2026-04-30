@@ -121,6 +121,28 @@
     </section>
 
     <section class="panel account-panel">
+      <h3>Animations</h3>
+      <p class="muted">Toggle visual animations across the site.</p>
+      <label class="toggle-label">
+        <input type="checkbox" id="account-animations-toggle" checked>
+        <span class="toggle-text">Enable animations</span>
+      </label>
+      <div style="margin-top:12px">
+        <label class="toggle-label">
+          <input type="checkbox" id="account-list-animations-toggle" checked>
+          <span class="toggle-text">Animate list items</span>
+        </label>
+      </div>
+      <div style="margin-top:12px">
+        <label class="toggle-label" for="account-animation-speed">
+          <span class="toggle-text">Animation speed</span>
+        </label>
+        <input type="range" id="account-animation-speed" min="500" max="5000" step="100" value="3000" style="width:100%;margin-top:4px">
+        <span id="account-animation-speed-label" style="font-size:0.85em;color:var(--muted)">3000ms</span>
+      </div>
+    </section>
+
+    <section class="panel account-panel">
       <h3>Password reset</h3>
       <p class="muted">Forgot your password? Request a reset code which will be sent to your messages.</p>
       <p id="account-reset-status" class="muted" role="status"></p>

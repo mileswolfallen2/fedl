@@ -406,6 +406,18 @@ header nav .fedl-auth-nav a:hover{color:var(--text)}
 .theme-preview-candy{background:linear-gradient(135deg,#fdf2f8,#f472b6)}
 .theme-preview-highcontrast{background:linear-gradient(135deg,#000,#fff)}
 .theme-preview-original{background:linear-gradient(135deg,#0f1724,#071326)}
+.toggle-label{display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:8px}
+.toggle-text{font-size:0.95em}
+.toggle-label input[type="checkbox"]{width:40px;height:20px;appearance:none;background:#555;border-radius:10px;position:relative;outline:none;cursor:pointer;transition:background 0.3s}
+.toggle-label input[type="checkbox"]::before{content:"";position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform 0.3s}
+.toggle-label input[type="checkbox"]:checked{background:var(--accent)}
+.toggle-label input[type="checkbox"]:checked::before{transform:translateX(20px)}
+
+.roulette-wheel-wrap{display:flex;justify-content:center;margin:20px 0}
+.roulette-wheel{width:300px;height:300px;border-radius:50%;position:relative;overflow:hidden;border:4px solid var(--accent);box-shadow:0 0 20px rgba(92,197,255,0.3)}
+.roulette-wheel-inner{width:100%;height:100%;border-radius:50%;position:relative;transition:none}
+.roulette-wheel-segment{position:absolute;width:50%;height:50%;transform-origin:100% 100%;top:0;left:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold;text-shadow:0 1px 2px rgba(0,0,0,0.5);overflow:hidden}
+.roulette-wheel-pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:20px solid var(--accent);z-index:10;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
 
 [data-theme="cyberpunk"] .btn{box-shadow:0 0 12px var(--accent), inset 0 0 8px rgba(0,255,159,0.1);position:relative;overflow:hidden}
 [data-theme="cyberpunk"] .btn::after{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,159,0.3),transparent);animation:cyberglitch 3s infinite}

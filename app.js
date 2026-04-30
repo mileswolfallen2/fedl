@@ -4,7 +4,7 @@
 
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
-  const TESTING_MODE = false;
+  const TESTING_MODE = false; // Set to true to enable testing mode with test server and mod accounts
   const liveServerBase = TESTING_MODE ? 'http://127.0.0.1:8090/fedl' : 'https://server.fedl.site/fedl';
   const canUseLiveServer = !isFileProtocol || !!liveServerBase;
   const liveApiUrl = `${liveServerBase}/api/list`;
@@ -42,7 +42,7 @@
   }
 
   const pagesNeedingLiveStatus = new Set(['index', 'run', 'messages', 'contact', 'signup', 'login', 'account', 'reset-password', 'admelist']);
-  if(pagesNeedingLiveStatus.has(page) && !window.location.pathname.endsWith(`/${offlinePage}`)){
+  if(!TESTING_MODE && pagesNeedingLiveStatus.has(page) && !window.location.pathname.endsWith(`/${offlinePage}`)){
     probeLiveServer().catch(()=>{
       redirectToOffline();
     });
@@ -60,6 +60,83 @@
     catch(e){return fallback}
   }
   function write(key, val){localStorage.setItem(key,JSON.stringify(val))}
+
+  function loadAnimeJS() {
+    return new Promise((resolve, reject) => {
+      if (window.anime) { resolve(window.anime); return; }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js';
+      script.onload = () => resolve(window.anime);
+      script.onerror = () => reject(new Error('Failed to load anime.js'));
+      document.head.appendChild(script);
+    });
+  }
+
+  function animateNumber(el, endValue) {
+    if (!window.anime || animationsDisabled()) { el.textContent = String(endValue); return; }
+    const obj = { val: 0 };
+    window.anime({
+      targets: obj,
+      val: endValue,
+      duration: 2000,
+      easing: 'easeOutExpo',
+      round: 1,
+      update: () => { el.textContent = Math.floor(obj.val); }
+    });
+  }
+
+  const numberObserver = ('IntersectionObserver' in window) ? new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        if (el.dataset.animated) return;
+        el.dataset.animated = 'true';
+        const endVal = parseInt(el.dataset.endValue, 10);
+        if (!isNaN(endVal)) animateNumber(el, endVal);
+        numberObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.1 }) : null;
+
+  function observeNumberEl(el) {
+    if (!numberObserver || !el) return;
+    numberObserver.observe(el);
+  }
+
+  const FEDL_ANIMATIONS_KEY = 'fedl_animations_disabled';
+  const FEDL_LIST_ANIM_KEY = 'fedl_list_anim_disabled';
+  const FEDL_ANIM_SPEED_KEY = 'fedl_anim_speed';
+
+  function animationsDisabled(){
+    const val = localStorage.getItem(FEDL_ANIMATIONS_KEY);
+    if (val === null) return false;
+    return val === 'true';
+  }
+  function setAnimationsDisabled(val){
+    localStorage.setItem(FEDL_ANIMATIONS_KEY, String(val));
+  }
+  function listAnimationsDisabled(){
+    return localStorage.getItem(FEDL_LIST_ANIM_KEY) === 'true';
+  }
+  function getAnimationSpeed(){
+    const val = localStorage.getItem(FEDL_ANIM_SPEED_KEY);
+    return val ? parseInt(val, 10) : 3000;
+  }
+  loadAnimeJS().then(() => {
+    if (window.anime) {
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+          if(!animationsDisabled()) window.anime({ targets: btn, scale: 0.95, duration: 500, easing: 'easeInOutQuad' });
+        });
+        btn.addEventListener('mouseup', () => {
+          if(!animationsDisabled()) window.anime({ targets: btn, scale: 1, duration: 500, easing: 'easeInOutQuad' });
+        });
+        btn.addEventListener('mouseleave', () => {
+          if(!animationsDisabled()) window.anime({ targets: btn, scale: 1, duration: 500, easing: 'easeInOutQuad' });
+        });
+      });
+    }
+  }).catch(() => {});
 
   (function initTheme(){
     const themes = {
@@ -801,7 +878,16 @@
       renderApprovedRunsForLevel(item, runsList);
     }
     updateAccountProgressInModal(modal, item);
-    modal.style.display = 'flex';
+    if(!animationsDisabled() && window.anime){
+      modal.style.opacity = '0';
+      modal.style.transform = 'scale(0.95)';
+      modal.style.display = 'flex';
+      window.anime({ targets: modal, opacity: [0,1], scale: [0.95,1], duration: 3000, easing: 'easeInOutCubic' });
+    } else {
+      modal.style.opacity = '1';
+      modal.style.transform = 'scale(1)';
+      modal.style.display = 'flex';
+    }
   }
 
   function bindHomeSnapshot(includeRuns){
@@ -843,7 +929,7 @@
       const rankedItems = items.slice().sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
       const firstItem = rankedItems[0];
 
-      if(totalEl) totalEl.textContent = String(rankedItems.length || 0);
+      if(totalEl) { totalEl.dataset.endValue = rankedItems.length || 0; totalEl.textContent = '0'; observeNumberEl(totalEl); }
       if(topEl) topEl.textContent = firstItem ? firstItem.title : 'Unavailable';
       renderFeatured(rankedItems);
       if(listPreviewEl){
@@ -890,7 +976,7 @@
         const submitted = run.submittedAt ? new Date(run.submittedAt).getTime() : 0;
         return submitted >= oneWeekAgo;
       }).length;
-      if(recentRunsEl) recentRunsEl.textContent = String(recentRuns);
+      if(recentRunsEl) { recentRunsEl.dataset.endValue = recentRuns; recentRunsEl.textContent = '0'; observeNumberEl(recentRunsEl); }
       const sortedRuns = runs.slice().sort((a,b)=>new Date(b.submittedAt||0) - new Date(a.submittedAt||0));
       const latestRun = sortedRuns.find(run=>run.submittedAt);
       if(lastUpdatedEl) lastUpdatedEl.textContent = latestRun 
@@ -901,7 +987,9 @@
     function renderApprovedRuns(runs){
       if(!approvedRunsEl) return;
       const approvedCount = runs.filter(run=>String(run.status || '').toLowerCase() === 'approved').length;
-      approvedRunsEl.textContent = String(approvedCount);
+      approvedRunsEl.dataset.endValue = approvedCount;
+      approvedRunsEl.textContent = '0';
+      observeNumberEl(approvedRunsEl);
     }
 
     loadItems().then(items=>{
@@ -1411,6 +1499,55 @@
         fedlUpdateAuthNav();
       });
 
+    const wheelWrap = document.getElementById('roulette-wheel-wrap');
+    const wheelInner = document.getElementById('roulette-wheel-inner');
+
+    function buildWheel(items){
+      if(!wheelInner || !items.length) return;
+      wheelInner.innerHTML = '';
+      const segmentAngle = 360 / Math.min(items.length, 20);
+      const colors = ['#5cc5ff','#ff6b35','#84cc16','#a78bfa','#f472b6','#ff9f1c','#00ff9f','#e056fd','#38bdf8','#ff4500','#34d399','#ffb84d','#c792ea','#5cc5ff','#fbbf24','#ff2a6d','#88ff88','#0ea5e9','#fb923c','#f0abfc'];
+      const count = Math.min(items.length, 20);
+      for(let i = 0; i < count; i++){
+        const seg = document.createElement('div');
+        seg.className = 'roulette-wheel-segment';
+        seg.style.transform = `rotate(${i * segmentAngle}deg)`;
+        seg.style.background = colors[i % colors.length];
+        seg.style.clipPath = `polygon(0 0, 100% 0, 100% ${50 + 50 * Math.cos((segmentAngle/2) * Math.PI/180)}% 100% ${50 - 50 * Math.sin((segmentAngle/2) * Math.PI/180)}%)`;
+        seg.textContent = items[i].title.substring(0,8);
+        wheelInner.appendChild(seg);
+      }
+    }
+
+    function spinWheel(targetIndex, totalItems, duration){
+      if(!wheelInner || animationsDisabled()) return Promise.resolve();
+      const segmentAngle = 360 / Math.min(totalItems, 20);
+      const spins = 5;
+      const finalAngle = spins * 360 - (targetIndex * segmentAngle);
+      wheelInner.style.transition = 'none';
+      wheelInner.style.transform = 'rotate(0deg)';
+      return new Promise(resolve => {
+        window.setTimeout(() => {
+          if(window.anime){
+            window.anime({
+              targets: wheelInner,
+              rotate: [0, finalAngle],
+              duration: duration,
+              easing: 'easeOutCubic',
+              update: () => {
+                wheelInner.style.transition = 'none';
+              },
+              complete: resolve
+            });
+          } else {
+            wheelInner.style.transition = `transform ${duration}ms ease-out`;
+            wheelInner.style.transform = `rotate(${finalAngle}deg)`;
+            window.setTimeout(resolve, duration);
+          }
+        }, 50);
+      });
+    }
+
     spinBtn.addEventListener('click', ()=>{
       statusEl.textContent = 'Spinning...';
       titleEl.textContent = 'Choosing a demon';
@@ -1428,19 +1565,24 @@
           noteEl.textContent = 'No list data was found.';
           return;
         }
-        const item = items[Math.floor(Math.random()*items.length)];
-        const localMeta = metaMap[item.title] || {levelId:'unknown', percent:'100'};
-        if(localMeta.levelId && localMeta.levelId !== 'unknown'){
-          window.setTimeout(()=>showPick(item, {levelId: localMeta.levelId, percent: localMeta.percent, source: 'file'}), 350);
-          return;
-        }
-        fetchLevelIdFromApi(item.title).then(levelId=>{
-          const meta = {
-            levelId: levelId || 'unknown',
-            percent: localMeta.percent || '100',
-            source: levelId ? 'api' : 'file'
-          };
-          window.setTimeout(()=>showPick(item, meta), 350);
+        buildWheel(items);
+        const targetIndex = Math.floor(Math.random()*Math.min(items.length, 20));
+        const item = items[targetIndex] || items[Math.floor(Math.random()*items.length)];
+        const spinDuration = getAnimationSpeed();
+        spinWheel(targetIndex, items.length, spinDuration).then(() => {
+          const localMeta = metaMap[item.title] || {levelId:'unknown', percent:'100'};
+          if(localMeta.levelId && localMeta.levelId !== 'unknown'){
+            showPick(item, {levelId: localMeta.levelId, percent: localMeta.percent, source: 'file'});
+            return;
+          }
+          fetchLevelIdFromApi(item.title).then(levelId=>{
+            const meta = {
+              levelId: levelId || 'unknown',
+              percent: localMeta.percent || '100',
+              source: levelId ? 'api' : 'file'
+            };
+            showPick(item, meta);
+          });
         });
       }).catch(err=>{
         statusEl.textContent = 'Could not load the list.';
@@ -1814,7 +1956,6 @@
       const q = (searchEl && searchEl.value || '').toLowerCase();
       const levelFilter = (filterSelect && filterSelect.value) || 'all';
       const filtered = items.filter(it=>{
-        // apply level / category filter (support range categories like "Top 1-10")
         if(levelFilter && levelFilter!=='all' && levelFilter!=='Full List'){
           const m = levelFilter.match(/Top\s*(\d+)-(\d+)/i);
           if(m){
@@ -1831,10 +1972,13 @@
         tbody.innerHTML = '<tr><td colspan="4" class="muted">No levels match this search or range.</td></tr>';
         return;
       }
+      currentItems = filtered;
       const accId = fedlDataUserId();
       const fragment = document.createDocumentFragment();
+      const allRows = [];
       filtered.forEach(it=>{
         const tr = document.createElement('tr');
+        if(window.anime && !animationsDisabled()){ tr.style.opacity = '0'; tr.style.transform = 'translateX(-20px) translateY(10px)'; }
         const tdNum = document.createElement('td'); tdNum.textContent = it.position;
         const tdTitle = document.createElement('td'); tdTitle.textContent = it.title;
         const tdPct = document.createElement('td');
@@ -1846,9 +1990,7 @@
           inp.value = fedlGetLevelPercent(accId, it.title) || '';
           inp.placeholder = '%';
           inp.title = 'Your progress for this level (this browser)';
-          inp.addEventListener('change', ()=>{
-            fedlSetLevelPercent(accId, it.title, inp.value);
-          });
+          inp.addEventListener('change', ()=>{ fedlSetLevelPercent(accId, it.title, inp.value); });
           tdPct.appendChild(inp);
         }else{
           const span = document.createElement('span');
@@ -1862,9 +2004,32 @@
         a.addEventListener('click', (e)=>{e.preventDefault(); openVideoModal(it, {showRuns:true})});
         tdAct.appendChild(a);
         tr.appendChild(tdNum); tr.appendChild(tdTitle); tr.appendChild(tdPct); tr.appendChild(tdAct);
+        allRows.push(tr);
         fragment.appendChild(tr);
       });
       tbody.appendChild(fragment);
+      if(window.anime && !animationsDisabled() && !listAnimationsDisabled()){
+        const speed = getAnimationSpeed();
+        const rowObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if(entry.isIntersecting){
+              const row = entry.target;
+              window.anime({
+                targets: row,
+                opacity: [0,1],
+                translateX: [-20,0],
+                translateY: [10,0],
+                duration: speed,
+                easing: 'easeOutCubic'
+              });
+              rowObserver.unobserve(row);
+            }
+          });
+        }, { threshold: 0.1 });
+        allRows.forEach(row => rowObserver.observe(row));
+      } else {
+        allRows.forEach(r => { r.style.opacity = '1'; r.style.transform = 'translateX(0) translateY(0)'; });
+      }
     }
 
     function applyItems(items){
@@ -3173,6 +3338,7 @@
       fedlSetFormStatus(statusEl, msg, kind);
     }
     function checkTurnstile(){
+      if(TESTING_MODE) return true;
       const turnstileEl = window.turnstile;
       if(turnstileEl){
         const token = turnstileEl.getResponse();
@@ -3245,6 +3411,7 @@
       fedlSetFormStatus(statusEl, msg, kind);
     }
     function checkTurnstile(){
+      if(TESTING_MODE) return true;
       const turnstileEl = window.turnstile;
       if(turnstileEl){
         const token = turnstileEl.getResponse();
@@ -3321,12 +3488,38 @@
       original: { '--bg': '#0f1724', '--panel': '#071326', '--accent': '#5cc5ff', '--muted': '#9fb3c8', '--text': '#e6eef8', '--card': '#081220', '--accent-warm': '#ffb84d' }
     };
 
-    function applyTheme(name) {
+    function applyTheme(name, animate = true) {
       const root = document.documentElement;
       const vars = themes[name];
       if (!vars) return;
-      Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
-      document.body.dataset.theme = name;
+
+      if (animate && window.anime && !animationsDisabled()) {
+        let overlay = document.getElementById('theme-transition-overlay');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.id = 'theme-transition-overlay';
+          overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:' + vars['--accent'];
+          document.body.appendChild(overlay);
+        }
+        overlay.style.background = vars['--accent'];
+        window.anime({
+          targets: overlay,
+          opacity: [0, 0.3, 0],
+          duration: 600,
+          easing: 'easeInOutQuad',
+          begin: () => { overlay.style.display = 'block'; },
+          update: (anim) => {
+            if (anim.progress > 30 && anim.progress < 70) {
+              Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+              document.body.dataset.theme = name;
+            }
+          },
+          complete: () => { overlay.style.display = 'none'; }
+        });
+      } else {
+        Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+        document.body.dataset.theme = name;
+      }
     }
 
     function setThemeStatus(msg, kind) {
@@ -3335,7 +3528,7 @@
 
     function loadTheme() {
       const saved = localStorage.getItem(FEDL_THEME_KEY) || 'dark';
-      applyTheme(saved);
+      applyTheme(saved, false);
       document.querySelectorAll('input[name="theme"]').forEach(el => {
         el.checked = el.value === saved;
       });
@@ -3344,6 +3537,15 @@
     document.querySelectorAll('input[name="theme"]').forEach(el => {
       el.addEventListener('change', function() {
         const name = this.value;
+        const preview = this.parentElement.querySelector('.theme-preview');
+        if (window.anime && preview && !animationsDisabled()) {
+          window.anime({
+            targets: preview,
+            scale: [1, 1.2, 1],
+            duration: 400,
+            easing: 'easeInOutBack'
+          });
+        }
         localStorage.setItem(FEDL_THEME_KEY, name);
         applyTheme(name);
         const activeId = fedlAccountId();
@@ -3368,13 +3570,38 @@
         const userData = fedlGetAccountPayload(activeId);
         if (userData && userData.theme) {
           localStorage.setItem(FEDL_THEME_KEY, userData.theme);
-          applyTheme(userData.theme);
+          applyTheme(userData.theme, false);
         }
       }
     }
 
     loadTheme();
     loadAccountTheme();
+
+    const animToggle = qs('account-animations-toggle');
+    if(animToggle){
+      animToggle.checked = !animationsDisabled();
+      animToggle.addEventListener('change', function(){
+        setAnimationsDisabled(!this.checked);
+      });
+    }
+    const listAnimToggle = qs('account-list-animations-toggle');
+    if(listAnimToggle){
+      listAnimToggle.checked = !listAnimationsDisabled();
+      listAnimToggle.addEventListener('change', function(){
+        localStorage.setItem(FEDL_LIST_ANIM_KEY, String(!this.checked));
+      });
+    }
+    const speedSlider = qs('account-animation-speed');
+    const speedLabel = qs('account-animation-speed-label');
+    if(speedSlider && speedLabel){
+      speedSlider.value = getAnimationSpeed();
+      speedLabel.textContent = speedSlider.value + 'ms';
+      speedSlider.addEventListener('input', function(){
+        localStorage.setItem(FEDL_ANIM_SPEED_KEY, String(this.value));
+        speedLabel.textContent = this.value + 'ms';
+      });
+    }
 
     const overviewStatusEl = qs('account-overview-status');
     const accountUsernameEl = qs('account-username');
