@@ -138,6 +138,176 @@
     }
   }).catch(() => {});
 
+  // Page transition helper
+  function animatePageTransition(callback){
+    if(animationsDisabled() || !window.anime){
+      if(callback) callback();
+      return;
+    }
+    let overlay = document.getElementById('page-transition-overlay');
+    if(!overlay){
+      overlay = document.createElement('div');
+      overlay.id = 'page-transition-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:99998;pointer-events:none;opacity:0;background:var(--accent);mix-blend-mode:screen;transition:opacity 0.3s ease';
+      document.body.appendChild(overlay);
+    }
+    overlay.style.opacity = '0';
+    overlay.style.display = 'block';
+    window.anime({
+      targets: overlay,
+      opacity: [0, 0.15, 0],
+      duration: 600,
+      easing: 'easeInOutQuad',
+      begin: () => { overlay.style.opacity = '0'; },
+      update: (anim) => {
+        if(anim.progress > 20 && anim.progress < 60 && callback){
+          callback();
+          callback = null;
+        }
+      },
+      complete: () => { overlay.style.display = 'none'; }
+    });
+  }
+
+  // Celebration particles helper
+  function createCelebrationParticles(count){
+    if(animationsDisabled() || !window.anime) return;
+    const colors = ['#5cc5ff','#ffb84d','#84cc16','#a78bfa','#f472b6','#ff9f1c','#00ff9f','#e056fd'];
+    for(let i = 0; i < (count || 8); i++){
+      const p = document.createElement('div');
+      p.className = 'celebration-particle';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = `${30 + Math.random() * 40}%`;
+      p.style.top = `${40 + Math.random() * 30}%`;
+      document.body.appendChild(p);
+      const angle = (Math.PI * 2 * i) / count;
+      const dist = 40 + Math.random() * 80;
+      window.anime({
+        targets: p,
+        '--px': [0, Math.cos(angle) * dist + 'px'],
+        '--py': [0, Math.sin(angle) * dist * -1 + 'px'],
+        opacity: [1, 0],
+        scale: [1, 0],
+        duration: 800 + Math.random() * 400,
+        easing: 'easeOutQuad',
+        complete: () => p.remove()
+      });
+    }
+  }
+
+  // Add page transition to nav links
+  (function initNavTransitions(){
+    if(animationsDisabled()) return;
+    document.querySelectorAll('header nav a').forEach(link => {
+      link.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if(!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+        e.preventDefault();
+        animatePageTransition(() => {
+          window.location.href = href;
+        });
+      });
+    });
+  })();
+
+  // Page-enter animation for all pages
+  (function initPageEnter(){
+    const page = document.body.dataset.page;
+    if(!page) return;
+    const main = document.querySelector('main');
+    if(main && window.anime && !animationsDisabled()){
+      main.style.opacity = '0';
+      main.style.transform = 'translateY(12px)';
+      window.anime({
+        targets: main,
+        opacity: [0, 1],
+        translateY: [12, 0],
+        duration: getAnimationSpeed() * 0.5,
+        easing: 'easeOutCubic'
+      });
+    } else if(main){
+      main.style.opacity = '1';
+      main.style.transform = 'translateY(0)';
+    }
+    // Input focus animation
+    if(window.anime && !animationsDisabled()){
+      document.querySelectorAll('input[type="text"], input[type="number"], input[type="password"], input[type="url"], textarea, select').forEach(el => {
+        el.addEventListener('focus', function(){
+          window.anime({ targets: this, scale: [1, 1.01, 1], duration: 300, easing: 'easeOutQuad' });
+        });
+      });
+    }
+    // Staggered nav items animation
+    if(window.anime && !animationsDisabled()){
+      const navLinks = document.querySelectorAll('header nav a');
+      navLinks.forEach((link, i) => {
+        link.style.opacity = '0';
+        link.style.transform = 'translateY(-8px)';
+        window.anime({
+          targets: link,
+          opacity: [0, 1],
+          translateY: [-8, 0],
+          duration: 400,
+          delay: 60 * i,
+          easing: 'easeOutCubic'
+        });
+      });
+    }
+    // Stats cards scroll observer (index page)
+    if(page === 'index' && window.anime && !animationsDisabled() && 'IntersectionObserver' in window){
+      const statCards = document.querySelectorAll('.stat-card, .stats-grid .stat-box');
+      if(statCards.length){
+        const statObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry, idx) => {
+            if(entry.isIntersecting){
+              window.anime({
+                targets: entry.target,
+                opacity: [0, 1],
+                translateY: [15, 0],
+                scale: [0.95, 1],
+                duration: getAnimationSpeed() * 0.4,
+                delay: idx * 80,
+                easing: 'easeOutCubic'
+              });
+              statObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        statCards.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(15px) scale(0.95)';
+          statObserver.observe(card);
+        });
+      }
+      // Featured cards stagger
+      const featuredCards = document.querySelectorAll('.featured-card');
+      if(featuredCards.length){
+        const featObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if(entry.isIntersecting){
+              const cards = entry.target.parentElement.querySelectorAll('.featured-card');
+              cards.forEach((card, i) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(12px)';
+                window.anime({
+                  targets: card,
+                  opacity: [0, 1],
+                  translateY: [12, 0],
+                  duration: 500,
+                  delay: i * 100,
+                  easing: 'easeOutCubic'
+                });
+              });
+              featObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        const featuredList = document.querySelector('.featured-list');
+        if(featuredList) featObserver.observe(featuredList);
+      }
+    }
+  })();
+
   (function initTheme(){
     const themes = {
       dark: { '--bg': '#0f1724', '--panel': '#071326', '--accent': '#5cc5ff', '--muted': '#9fb3c8', '--text': '#e6eef8', '--card': '#081220', '--accent-warm': '#ffb84d' },
@@ -1339,6 +1509,11 @@
 
     function showPick(item, meta){
       lastRoulette = { item, meta };
+      const card = qs('roulette-card');
+      if(card && window.anime && !animationsDisabled()){
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.9) translateY(12px)';
+      }
       statusEl.textContent = 'Your demon is:';
       titleEl.textContent = item.title;
       rankEl.textContent = `Rank: #${item.position}`;
@@ -1372,6 +1547,17 @@
         refreshRouletteAccountUi();
       }
       syncPercentRow();
+      if(card && window.anime && !animationsDisabled()){
+        const speed = getAnimationSpeed();
+        window.anime({
+          targets: card,
+          opacity: [0, 1],
+          scale: [0.9, 1.02, 1],
+          translateY: [12, -2, 0],
+          duration: speed,
+          easing: 'easeOutCubic'
+        });
+      }
     }
 
     function saveRouletteSlot(slotKey){
@@ -1397,6 +1583,11 @@
         fedlSetLevelPercent(aid, lastRoulette.item.title, pct);
       }
       refreshRouletteSlotsUi();
+      const slotRow = document.querySelector(`.roulette-slot-row:nth-child(${slotKey})`);
+      if(slotRow && window.anime && !animationsDisabled()){
+        slotRow.classList.add('slot-active');
+        window.anime({ targets: slotRow, backgroundColor: ['rgba(92,197,255,0.2)', 'rgba(92,197,255,0.08)'], duration: 500, easing: 'easeOutQuad', complete: () => slotRow.classList.remove('slot-active') });
+      }
     }
 
     function loadRouletteSlot(slotKey){
@@ -1557,6 +1748,11 @@
       openEl.hidden = true;
       if(pctRow) pctRow.hidden = true;
       if(pctHint) pctHint.textContent = '';
+      spinBtn.classList.add('btn-loading');
+      spinBtn.disabled = true;
+      if(window.anime && !animationsDisabled()){
+        window.anime({ targets: spinBtn, scale: [1, 1.05, 1], duration: 600, easing: 'easeInOutSine', loop: true });
+      }
       Promise.all([loadItems(), loadLevelMeta()]).then(([items, metaMap])=>{
         if(!items.length){
           statusEl.textContent = 'No demons found.';
@@ -1570,6 +1766,11 @@
         const item = items[targetIndex] || items[Math.floor(Math.random()*items.length)];
         const spinDuration = getAnimationSpeed();
         spinWheel(targetIndex, items.length, spinDuration).then(() => {
+          spinBtn.classList.remove('btn-loading');
+          spinBtn.disabled = false;
+          if(window.anime && !animationsDisabled()){
+            window.anime({ targets: spinBtn, scale: [1.05, 1], duration: 300, easing: 'easeOutBack' });
+          }
           const localMeta = metaMap[item.title] || {levelId:'unknown', percent:'100'};
           if(localMeta.levelId && localMeta.levelId !== 'unknown'){
             showPick(item, {levelId: localMeta.levelId, percent: localMeta.percent, source: 'file'});
@@ -1661,6 +1862,16 @@
           openVideoModal(state.item, {showRuns:false});
         };
       }
+      if(window.anime && !animationsDisabled()){
+        const speed = getAnimationSpeed();
+        window.anime({
+          targets: answerEl,
+          opacity: [0, 1],
+          translateY: [8, 0],
+          duration: speed * 0.5,
+          easing: 'easeOutCubic'
+        });
+      }
     }
 
     function startRound(){
@@ -1711,6 +1922,12 @@
       }
       if(guess === state.answer){
         feedbackEl.textContent = `Correct. ${state.item.title} is #${state.answer}.`;
+        feedbackEl.className = 'roulette-note muted guess-correct success-shine';
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: feedbackEl, scale: [1, 1.05, 1], duration: 600, easing: 'easeOutBack' });
+        }
+        // Celebration particles
+        createCelebrationParticles(10);
         finishRound('You got it.', false);
         return;
       }
@@ -1719,9 +1936,14 @@
       const direction = guess < state.answer ? 'Higher' : 'Lower';
       if(state.triesLeft > 0){
         feedbackEl.textContent = `${direction}. #${guess} is not the right spot.`;
+        feedbackEl.className = 'roulette-note muted guess-wrong';
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: feedbackEl, translateX: [-6, 6, -6, 6, 0], duration: 400, easing: 'easeInOutQuad' });
+        }
         return;
       }
       feedbackEl.textContent = `${direction}. That was your last guess.`;
+      feedbackEl.className = 'roulette-note muted guess-wrong';
       finishRound('Round over.', true);
     }
 
@@ -1729,6 +1951,17 @@
     if(modeSelect){
       modeSelect.addEventListener('change', ()=>{
         if(!state.active) resetGuessUi('Start a round to get a level.');
+        const card = qs('guess-card');
+        if(card && window.anime && !animationsDisabled()){
+          card.classList.add('mode-switching');
+          window.anime({
+            targets: card,
+            opacity: [0.5, 1],
+            duration: 300,
+            easing: 'easeOutQuad',
+            complete: () => { card.classList.remove('mode-switching'); }
+          });
+        }
       });
     }
     startBtn.addEventListener('click', startRound);
@@ -1950,6 +2183,12 @@
       if(linkEl) linkEl.classList.add('active');
       qs('level-filter').value = level;
       renderTable(items);
+      if(window.anime && !animationsDisabled() && !listAnimationsDisabled()){
+        const tableWrap = document.querySelector('.table-wrap');
+        if(tableWrap){
+          window.anime({ targets: tableWrap, translateY: [8, 0], opacity: [0.7, 1], duration: 400, easing: 'easeOutQuad' });
+        }
+      }
     }
 
     function renderTable(items){
@@ -1968,6 +2207,12 @@
       }).sort((a,b)=> (Number(a.position)||0)-(Number(b.position)||0));
 
       const tbody = qs('list-area'); tbody.innerHTML='';
+      if((q || levelFilter !== 'all' && levelFilter !== 'Full List') && window.anime && !animationsDisabled()){
+        const tableWrap = document.querySelector('.table-wrap');
+        if(tableWrap){
+          window.anime({ targets: tableWrap, scale: [0.99, 1], duration: 300, easing: 'easeOutQuad' });
+        }
+      }
       if(!filtered.length){
         tbody.innerHTML = '<tr><td colspan="4" class="muted">No levels match this search or range.</td></tr>';
         return;
@@ -1990,7 +2235,12 @@
           inp.value = fedlGetLevelPercent(accId, it.title) || '';
           inp.placeholder = '%';
           inp.title = 'Your progress for this level (this browser)';
-          inp.addEventListener('change', ()=>{ fedlSetLevelPercent(accId, it.title, inp.value); });
+          inp.addEventListener('change', ()=>{
+            fedlSetLevelPercent(accId, it.title, inp.value);
+            if(window.anime && !animationsDisabled() && !listAnimationsDisabled()){
+              window.anime({ targets: inp, scale: [1, 1.08, 1], duration: 400, easing: 'easeOutBack' });
+            }
+          });
           tdPct.appendChild(inp);
         }else{
           const span = document.createElement('span');
@@ -2536,7 +2786,14 @@
     });
 
     if(searchEl){
-      searchEl.addEventListener('input', renderAdminTable);
+      searchEl.addEventListener('input', debounce(()=> renderTable(currentItems), 120));
+      searchEl.addEventListener('input', function(){
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: this, scale: [1, 1.02, 1], duration: 400, easing: 'easeOutQuad' });
+        }
+      });
+      filterSelect.addEventListener('change', ()=> renderTable(currentItems));
+      controlsBound = true;
     }
     if(runSearchEl){
       runSearchEl.addEventListener('input', renderRunsTable);
@@ -3064,7 +3321,21 @@
     adminTabButtons.forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const tab = btn.getAttribute('data-tab');
-        if(tab) switchAdminTab(tab);
+        if(tab) {
+          const panel = document.getElementById(`tab-${tab}`);
+          if(panel && window.anime && !animationsDisabled()){
+            panel.style.opacity = '0';
+            panel.style.transform = 'translateY(6px)';
+            window.anime({
+              targets: panel,
+              opacity: [0, 1],
+              translateY: [6, 0],
+              duration: 300,
+              easing: 'easeOutCubic'
+            });
+          }
+          switchAdminTab(tab);
+        }
       });
     });
   }
@@ -3116,9 +3387,10 @@
         submissionsEl.innerHTML = '<article class="submission-card"><strong>No runs submitted yet</strong><p>The live queue is empty right now.</p></article>';
         return;
       }
-      runs.slice(0, 8).forEach(run=>{
+      runs.slice(0, 8).forEach((run, idx)=>{
         const card = document.createElement('article');
-        card.className = 'submission-card';
+        card.className = 'submission-card run-card-in';
+        card.style.animationDelay = `${idx * 60}ms`;
         const acct = run.accountUsername
           ? ` • Account: ${escapeHtml(run.accountUsername)}`
           : '';
@@ -3152,13 +3424,14 @@
       if(!runs.length){
         const empty = document.createElement('p');
         empty.className = 'muted';
-        empty.textContent = 'No runs saved yet. Fill the form and use “Save to my account” to keep drafts, or submit to the live queue.';
+        empty.textContent = 'No runs saved yet. Fill the form and use "Save to my account" to keep drafts, or submit to the live queue.';
         savedRunsListEl.appendChild(empty);
         return;
       }
-      runs.forEach(entry=>{
+      runs.forEach((entry, idx)=>{
         const card = document.createElement('article');
-        card.className = 'submission-card run-saved-card';
+        card.className = 'submission-card run-saved-card run-card-in';
+        card.style.animationDelay = `${idx * 60}ms`;
         const top = document.createElement('div');
         top.className = 'submission-card-top';
         const strong = document.createElement('strong');
@@ -3202,8 +3475,12 @@
         delBtn.className = 'btn ghost-btn small-btn';
         delBtn.textContent = 'Remove';
         delBtn.addEventListener('click', ()=>{
-          fedlRemoveSavedRun(fedlServerUserId, entry.id);
-          renderMySavedRuns();
+          const cardEl = card;
+          animateSavedRunCard(cardEl, 'out');
+          setTimeout(()=>{
+            fedlRemoveSavedRun(fedlServerUserId, entry.id);
+            renderMySavedRuns();
+          }, 320);
         });
         actions.appendChild(fillBtn);
         actions.appendChild(delBtn);
@@ -3248,8 +3525,39 @@
           return;
         }
         setRunFormStatus('Run saved to your account. You can keep multiple saved runs and load them anytime.', false, true);
+        if(window.anime && !animationsDisabled()){
+          const statusEl = qs('run-form-status');
+          if(statusEl){
+            window.anime({ targets: statusEl, scale: [1, 1.03, 1], duration: 500, easing: 'easeOutBack' });
+          }
+        }
         renderMySavedRuns();
       });
+    }
+
+    function animateSavedRunCard(card, direction){
+      if(!window.anime || animationsDisabled()) return;
+      if(direction === 'in'){
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(16px) scale(0.96)';
+        window.anime({
+          targets: card,
+          opacity: [0, 1],
+          translateY: [16, 0],
+          scale: [0.96, 1],
+          duration: getAnimationSpeed() * 0.5,
+          easing: 'easeOutCubic'
+        });
+      } else if(direction === 'out'){
+        window.anime({
+          targets: card,
+          opacity: [1, 0],
+          scale: [1, 0.95],
+          duration: 300,
+          easing: 'easeInCubic',
+          complete: () => { card.remove(); }
+        });
+      }
     }
 
     document.addEventListener('fedl-auth-updated', ()=>{
@@ -3272,6 +3580,11 @@
         notes: qs('run-notes').value.trim()
       };
       setRunFormStatus('Sending your run to the live queue...');
+      const submitBtn = qs('run-submit');
+      if(submitBtn && window.anime && !animationsDisabled()){
+        submitBtn.classList.add('btn-loading');
+        submitBtn.disabled = true;
+      }
       const headers = { 'Content-Type': 'application/json' };
       const tok = fedlGetAuthToken();
       if(tok){
@@ -3293,9 +3606,26 @@
           ? `Run submitted successfully. It is linked to your account (${fedlServerUsername}) for moderators.`
           : 'Run submitted successfully. The admin panel can review it now.';
         setRunFormStatus(okMsg, false, true);
+        const submitBtn = qs('run-submit');
+        if(submitBtn){
+          submitBtn.classList.remove('btn-loading');
+          submitBtn.disabled = false;
+        }
+        if(window.anime && !animationsDisabled()){
+          const statusEl = qs('run-form-status');
+          if(statusEl){
+            statusEl.className = 'muted success-text run-success success-shine';
+            window.anime({ targets: statusEl, scale: [1, 1.03, 1], duration: 500, easing: 'easeOutBack' });
+          }
+        }
         return refreshRuns();
-      }).catch(err=>{
+        }).catch(err=>{
         console.error(err);
+        const submitBtn = qs('run-submit');
+        if(submitBtn){
+          submitBtn.classList.remove('btn-loading');
+          submitBtn.disabled = false;
+        }
         setRunFormStatus(err.message || 'Could not submit the run. Check the server and try again.', true);
       });
     });
@@ -3561,6 +3891,11 @@
           }
         }
         setThemeStatus('Theme saved!', 'success');
+        const themePanel = document.querySelector('.account-panel:nth-child(2)');
+        if(themePanel && window.anime && !animationsDisabled()){
+          themePanel.classList.add('success-shine');
+          window.anime({ targets: themePanel, scale: [1, 1.01, 1], duration: 400, easing: 'easeOutBack', complete: () => themePanel.classList.remove('success-shine') });
+        }
       });
     });
 
@@ -3583,6 +3918,10 @@
       animToggle.checked = !animationsDisabled();
       animToggle.addEventListener('change', function(){
         setAnimationsDisabled(!this.checked);
+        const panel = this.closest('.account-panel');
+        if(panel && window.anime && !animationsDisabled()){
+          window.anime({ targets: panel, scale: [1, 1.01, 1], duration: 400, easing: 'easeOutBack' });
+        }
       });
     }
     const listAnimToggle = qs('account-list-animations-toggle');
@@ -3590,6 +3929,10 @@
       listAnimToggle.checked = !listAnimationsDisabled();
       listAnimToggle.addEventListener('change', function(){
         localStorage.setItem(FEDL_LIST_ANIM_KEY, String(!this.checked));
+        const panel = this.closest('.account-panel');
+        if(panel && window.anime && !animationsDisabled()){
+          window.anime({ targets: panel, scale: [1, 1.01, 1], duration: 400, easing: 'easeOutBack' });
+        }
       });
     }
     const speedSlider = qs('account-animation-speed');
@@ -3600,6 +3943,9 @@
       speedSlider.addEventListener('input', function(){
         localStorage.setItem(FEDL_ANIM_SPEED_KEY, String(this.value));
         speedLabel.textContent = this.value + 'ms';
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: speedLabel, scale: [1, 1.1, 1], duration: 300, easing: 'easeOutBack' });
+        }
       });
     }
 
@@ -3693,6 +4039,9 @@
         const confirmPassword = String(qs('account-confirm-password').value || '');
         if (!currentPassword) {
           setPasswordStatus('Enter your current password.', 'error');
+          if(window.anime && !animationsDisabled()){
+            window.anime({ targets: qs('account-current-password'), translateX: [-4,4,-4,4,0], duration: 300, easing: 'easeInOutQuad' });
+          }
           return;
         }
         if (newPassword.length < 8) {
