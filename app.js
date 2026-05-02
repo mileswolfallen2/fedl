@@ -5,7 +5,10 @@
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
   const TESTING_MODE = true; // Set to true to enable testing mode with test server and mod accounts
-  const liveServerBase = TESTING_MODE ? 'https://server.fedl.site/fedl' : 'https://server.fedl.site/fedl';
+  console.log('Current origin:', window.location.origin, 'isFileProtocol:', isFileProtocol);
+  const liveServerBase = TESTING_MODE
+    ? (isFileProtocol ? 'http://localhost:8090' : window.location.origin)
+    : 'https://server.fedl.site/fedl';
   const canUseLiveServer = !isFileProtocol || !!liveServerBase;
   const liveApiUrl = `${liveServerBase}/api/list`;
   const liveRunsUrl = `${liveServerBase}/api/runs`;
@@ -3796,6 +3799,100 @@
       });
     });
   }
+
+  // Handle Google Sign-In callback
+  window.handleGoogleSignIn = function(response) {
+    if (!response || !response.credential) {
+      console.error('Google Sign-In failed: No credential received');
+      return;
+    }
+
+    const statusEl = qs('login-status');
+    if (statusEl) {
+      fedlSetFormStatus(statusEl, 'Signing in with Google…');
+    }
+
+    // Send the JWT token to your backend for verification
+    fetch(liveApiPath('/api/auth/google'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: response.credential })
+    }).then(async r => {
+      const { data, message } = await fedlReadJsonResponse(r);
+      if (!r.ok) {
+        throw new Error(message || 'Google authentication failed');
+      }
+      fedlSetAuthToken(data.token);
+      fedlServerUserId = data.userId;
+      fedlServerUsername = data.username;
+      document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'Signed in successfully. Loading your data…', 'success');
+      }
+      return fedlPullUserStateToLocal(data.userId);
+    }).then(() => {
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'Welcome back. Redirecting…', 'success');
+      }
+      setTimeout(() => {
+        const params = new URLSearchParams(window.location.search);
+        const returnUrl = params.get('return') || 'index.html';
+        window.location.href = returnUrl;
+      }, FEDL_AUTH_REDIRECT_MS);
+    }).catch(err => {
+      console.error('Google Sign-In error:', err);
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, err.message || 'Could not sign in with Google.', 'error');
+      }
+    });
+  };
+
+  // Handle Google Sign-Up callback
+  window.handleGoogleSignUp = function(response) {
+    if (!response || !response.credential) {
+      console.error('Google Sign-Up failed: No credential received');
+      return;
+    }
+
+    const statusEl = qs('signup-status');
+    if (statusEl) {
+      fedlSetFormStatus(statusEl, 'Creating account with Google…');
+    }
+
+    // Send the JWT token to your backend for verification
+    fetch(liveApiPath('/api/auth/google-signup'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: response.credential })
+    }).then(async r => {
+      const { data, message } = await fedlReadJsonResponse(r);
+      if (!r.ok) {
+        throw new Error(message || 'Google sign-up failed');
+      }
+      fedlSetAuthToken(data.token);
+      fedlServerUserId = data.userId;
+      fedlServerUsername = data.username;
+      document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'Account created successfully. Loading your data…', 'success');
+      }
+      return fedlPullUserStateToLocal(data.userId);
+    }).then(() => {
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'You are signed in. Redirecting…', 'success');
+      }
+      setTimeout(() => {
+        const params = new URLSearchParams(window.location.search);
+        const returnUrl = params.get('return') || 'index.html';
+        window.location.href = returnUrl;
+      }, FEDL_AUTH_REDIRECT_MS);
+    }).catch(err => {
+      console.error('Google Sign-Up error:', err);
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, err.message || 'Could not create account with Google.', 'error');
+      }
+    });
+  };
 
   if (page === 'account') {
     const FEDL_THEME_KEY = 'fedl_theme';

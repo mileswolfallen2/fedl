@@ -51,7 +51,7 @@ async function sendDiscordNotification(message) {
 }
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
-const BASE = '/fedl';
+const BASE = '';
 const adminPassword = String(process.env.ADMIN_PASSWORD || 'test');
 const clients = new Set();
 
@@ -121,6 +121,7 @@ function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Cross-Origin-Opener-Policy', 'unsafe-none');
 }
 
 function sendJson(res, statusCode, payload) {
@@ -160,6 +161,63 @@ function requireAdmin(req, res) {
   res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('Authentication required');
   return false;
+}
+
+async function verifyGoogleToken(token) {
+  try {
+    // Decode the JWT header to get the key ID
+    const header = JSON.parse(Buffer.from(token.split('.')[0], 'base64').toString());
+    const kid = header.kid;
+    
+    // Fetch Google's public keys
+    const response = await new Promise((resolve, reject) => {
+      const https = require('https');
+      https.get('https://www.googleapis.com/oauth2/v3/certs', (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => resolve(JSON.parse(data)));
+      }).on('error', reject);
+    });
+    
+    const key = response.keys.find(k => k.kid === kid);
+    if (!key) {
+      throw new Error('Invalid key ID');
+    }
+    
+    // Verify the JWT
+    const crypto = require('crypto');
+    const verifier = crypto.createVerify('RSA-SHA256');
+    verifier.update(token.split('.').slice(0, 2).join('.'));
+    
+    const publicKey = `-----BEGIN CERTIFICATE-----\n${key.x5c[0]}\n-----END CERTIFICATE-----`;
+    const signature = Buffer.from(token.split('.')[2], 'base64');
+    
+    if (!verifier.verify(publicKey, signature)) {
+      throw new Error('Invalid signature');
+    }
+    
+    // Decode the payload
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    
+    // Verify claims
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp < now) {
+      throw new Error('Token expired');
+    }
+    if (payload.iat > now) {
+      throw new Error('Token issued in future');
+    }
+    if (payload.iss !== 'https://accounts.google.com') {
+      throw new Error('Invalid issuer');
+    }
+    if (!payload.aud.includes('271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com')) {
+      throw new Error('Invalid audience');
+    }
+    
+    return payload;
+  } catch (error) {
+    throw new Error(`Token verification failed: ${error.message}`);
+  }
 }
 
 function ensureRunsFile() {
@@ -1132,8 +1190,9 @@ function serveFile(reqPath, res) {
   });
 }
 
-const server = http.createServer((req, res) => {
-  const url = new URL(req.url, `http://${req.headers.host}`);
+function handleRequest(req, res) {
+  const scheme = req.connection.encrypted ? 'https' : 'http';
+  const url = new URL(req.url, `${scheme}://${req.headers.host}`);
   let pathname = url.pathname;
 
   if (pathname.startsWith(BASE)) {
@@ -1350,6 +1409,97 @@ const server = http.createServer((req, res) => {
         sendJson(res, 200, { ok: true });
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid password reset request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname.replace(BASE, '') === '/api/auth/google') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const token = String(payload.token || '');
+        if (!token) {
+          sendJson(res, 400, { error: 'Token is required.' });
+          return;
+        }
+        verifyGoogleToken(token).then(googleUser => {
+          const users = readUsers();
+          const user = users.find(u => u.googleId === googleUser.sub);
+          if (!user) {
+            sendJson(res, 404, { error: 'No account found with this Google account. Please sign up first.' });
+            return;
+          }
+          const sessionToken = createSession(user.id, user.username);
+          sendJson(res, 200, { ok: true, token: sessionToken, userId: user.id, username: user.username });
+        }).catch(error => {
+          console.error(`[FEDL] Google auth failed: ${error.message}`);
+          sendJson(res, 401, { error: 'Google authentication failed.' });
+        });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid Google auth request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname.replace(BASE, '') === '/api/auth/google-signup') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const token = String(payload.token || '');
+        if (!token) {
+          sendJson(res, 400, { error: 'Token is required.' });
+          return;
+        }
+        verifyGoogleToken(token).then(googleUser => {
+          const users = readUsers();
+          let user = users.find(u => u.googleId === googleUser.sub);
+          if (user) {
+            sendJson(res, 409, { error: 'An account with this Google account already exists.' });
+            return;
+          }
+          // Generate a unique username based on Google name/email
+          let baseUsername = (googleUser.name || googleUser.email.split('@')[0] || 'user').toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 20);
+          let username = baseUsername;
+          let counter = 1;
+          while (users.some(u => u.username === username)) {
+            username = `${baseUsername}${counter}`;
+            counter++;
+            if (counter > 100) {
+              sendJson(res, 400, { error: 'Could not generate a unique username.' });
+              return;
+            }
+          }
+          const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+          user = {
+            id,
+            username,
+            googleId: googleUser.sub,
+            email: googleUser.email,
+            name: googleUser.name,
+            createdAt: new Date().toISOString()
+          };
+          users.push(user);
+          writeUsers(users);
+          const sessionToken = createSession(id, username);
+          sendJson(res, 201, { ok: true, token: sessionToken, userId: id, username });
+        }).catch(error => {
+          console.error(`[FEDL] Google signup failed: ${error.message}`);
+          sendJson(res, 400, { error: 'Google sign-up failed.' });
+        });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid Google sign-up request' });
       }
     });
     return;
@@ -2027,7 +2177,23 @@ const server = http.createServer((req, res) => {
   }
 
   serveFile(pathname, res);
-});
+}
+
+const server = (() => {
+  const keyPath = path.join(__dirname, 'key.pem');
+  const certPath = path.join(__dirname, 'cert.pem');
+  const isHttps = fs.existsSync(keyPath) && fs.existsSync(certPath);
+  if (isHttps) {
+    const https = require('https');
+    const options = {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certPath)
+    };
+    return https.createServer(options, handleRequest);
+  } else {
+    return http.createServer(handleRequest);
+  }
+})();
 
 ensureRunsFile();
 safeWatch(dataPath, 'list-update');
@@ -2043,7 +2209,8 @@ server.on('error', error => {
 });
 
 server.listen(port, host, () => {
-  console.log(`FEDL server running at http://${host}:${port}`);
+  const scheme = fs.existsSync(path.join(__dirname, 'key.pem')) && fs.existsSync(path.join(__dirname, 'cert.pem')) ? 'https' : 'http';
+  console.log(`FEDL server running at ${scheme}://${host}:${port}`);
   console.log(`Base path: ${BASE}`);
   console.log(`Using live list file: ${dataPath}`);
   console.log(`Legacy list fallback: ${legacyDataPath}`);

@@ -628,3 +628,7 @@ header nav .fedl-auth-nav a:hover{color:var(--text)}
 .page-transition.loaded{opacity:1}
 body{animation:page-enter 0.3s ease}
 @keyframes page-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:0.9rem}
+.auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.1)}
+.g_id_signin{display:flex;justify-content:center;margin:16px 0}
+#g_id_onload{display:none}
