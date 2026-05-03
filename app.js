@@ -14,10 +14,61 @@
         if (j && j.token) {
           fedlSetAuthToken(j.token);
           window.location.reload();
+        } else if (j && j.needUsername) {
+          // Prompt user to choose a username for the new Google-based account
+          promptForUsername(j);
         }
       }).catch(()=>{});
     } catch(e){ /* ignore */ }
   };
+
+  function promptForUsername(payload){
+    const page = document.body.dataset.page;
+    // Determine container to inject UI
+    const containerId = page === 'login' ? 'google-username-container' : 'google-username-container-signup';
+    let container = document.getElementById(containerId);
+    if (!container) {
+      // Try to append near the Google sign-in blocks if container not found
+      container = document.createElement('div');
+      container.id = containerId;
+      container.style.textAlign = 'center';
+      container.style.marginTop = '6px';
+      // Try to place after the sign-in block in login card or signup card
+      const insertAfter = document.querySelector('.auth-panel') || document.body;
+      insertAfter.appendChild(container);
+    }
+    container.innerHTML = `
+      <div class="google-username-prompt" style="display:inline-block; text-align:left; background:#fff; padding:12px; border-radius:8px; border:1px solid #ddd; margin-top:6px;">
+        <div style="margin-bottom:6px; font-weight:600; color:#000;">Choose a username</div>
+        <input id="google-username-input" value="${payload.suggestedUsername || ''}" type="text" pattern="[a-z0-9_]{3,24}" placeholder="3-24 chars, a-z 0-9 _" style="width:260px; padding:8px; border-radius:6px; border:1px solid #ccc;" />
+        <button id="google-finalize-btn" class="btn" style="margin-left:8px;">Create account</button>
+        <div id="google-username-status" class="muted" style="margin-top:6px; display:block;"></div>
+      </div>`;
+    const finalBtn = document.getElementById('google-finalize-btn');
+    const input = document.getElementById('google-username-input');
+    const status = document.getElementById('google-username-status');
+    finalBtn.addEventListener('click', ()=>{
+      const username = String((input && input.value) || '').trim();
+      if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+        status.textContent = 'Username must be 3-24 characters: lowercase letters, numbers, or underscore.';
+        status.style.color = '#e11d48';
+        return;
+      }
+      fetch('/api/auth/google/finalize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ googleId: payload.googleId, email: payload.email, name: payload.name, username })
+      }).then(r => r.json()).then(res => {
+        if (res && res.token) {
+          fedlSetAuthToken(res.token);
+          window.location.reload();
+        } else {
+          status.textContent = res.error || 'Failed to finalize username';
+          status.style.color = '#e11d48';
+        }
+      }).catch(()=>{ status.textContent = 'Network error'; status.style.color = '#e11d48'; });
+    });
+  }
 
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
@@ -31,7 +82,7 @@
   const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
   const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
-  const MOD_USERS = ['wolf_reaper90','dioxyx','steve'];
+  const MOD_USERS = ['wolf_reaper90','dioxyx','steve','testing'];
   const SPA_PAGE_KEY = 'onepage';
   /** Use for POST /api/import/* and any path under the same base as list/runs (not root-relative /api/...). */
   function liveApiPath(path){

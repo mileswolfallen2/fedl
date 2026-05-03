@@ -596,6 +596,28 @@ async function sendMailViaWorker({ to, subject, text }) {
     throw new Error(`Worker email failed: ${err}`);
   }
 
+  // Username availability check for Google sign-up flow
+  if (req.method === 'GET' && pathname === '/api/username-available') {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const uname = String(url.searchParams.get('username') || '').trim().toLowerCase();
+    if (!uname) {
+      sendJson(res, 400, { available: false, reason: 'empty' });
+      return;
+    }
+    if (!usernameOk(uname)) {
+      sendJson(res, 200, { available: false, reason: 'invalid' });
+      return;
+    }
+    const users = readUsers();
+    const exists = users.find(u => String(u.username || '').toLowerCase() === uname);
+    if (exists) {
+      sendJson(res, 200, { available: false, reason: 'taken' });
+    } else {
+      sendJson(res, 200, { available: true });
+    }
+    return;
+  }
+
   return res.json();
 }
 
@@ -1431,12 +1453,56 @@ function handleRequest(req, res) {
           }
         }
         if (!user) {
-          user = createUserFromGoogle(googleId, email, name);
+          // Do not auto-create yet; ask client to pick a username
+          const baseUsername = email ? deriveUsernameFromEmail(email) : `google_${Date.now().toString(36)}`;
+          return sendJson(res, 200, {
+            ok: true,
+            needUsername: true,
+            googleId,
+            email,
+            name,
+            suggestedUsername: baseUsername
+          });
         }
         const token = createSession(user.id, user.username);
         sendJson(res, 200, { ok: true, token, userId: user.id, username: user.username });
       } catch (e) {
         sendJson(res, 500, { error: 'Google token flow failed' });
+      }
+    });
+    return;
+  }
+
+  // Finalize Google sign-up with chosen username
+  if (req.method === 'POST' && pathname === '/api/auth/google/finalize') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const { googleId, email, name, username } = payload;
+        if (!googleId) {
+          sendJson(res, 400, { error: 'Missing googleId' });
+          return;
+        }
+        const users = readUsers();
+        const uname = String(username || '').trim();
+        if (!uname || !usernameOk(uname)) {
+          sendJson(res, 400, { error: 'Invalid username' });
+          return;
+        }
+        if (users.find(u => String(u.username || '').toLowerCase() === uname.toLowerCase())) {
+          sendJson(res, 409, { error: 'That username is already taken.' });
+          return;
+        }
+        const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+        const newUser = { id, username: uname, googleId, email: email || '', name: name || '', createdAt: new Date().toISOString() };
+        users.push(newUser);
+        writeUsers(users);
+        const token = createSession(newUser.id, newUser.username);
+        sendJson(res, 200, { ok: true, token, userId: newUser.id, username: newUser.username });
+      } catch (e) {
+        sendJson(res, 400, { error: 'Finalize failed' });
       }
     });
     return;
