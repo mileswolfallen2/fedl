@@ -1,6 +1,23 @@
 // Lightweight multi-page handler for GD fedl
 (function(){
   function qs(id){return document.getElementById(id)}
+  // Ensure Google Sign-In callback exists on the page
+  window.handleCredentialResponse = window.handleCredentialResponse || function(cred){
+    try {
+      const idToken = cred && cred.credential ? cred.credential : cred;
+      if (!idToken) return;
+      fetch('/api/auth/google/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_token: idToken })
+      }).then(r => r.json()).then(j => {
+        if (j && j.token) {
+          fedlSetAuthToken(j.token);
+          window.location.reload();
+        }
+      }).catch(()=>{});
+    } catch(e){ /* ignore */ }
+  };
 
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
@@ -3847,7 +3864,7 @@
     });
   };
 
-  // Handle Google Sign-Up callback
+  // Handle Google Sign-Up callback (unify with Google token endpoint)
   window.handleGoogleSignUp = function(response) {
     if (!response || !response.credential) {
       console.error('Google Sign-Up failed: No credential received');
@@ -3859,11 +3876,11 @@
       fedlSetFormStatus(statusEl, 'Creating account with Google…');
     }
 
-    // Send the JWT token to your backend for verification
-    fetch(liveApiPath('/api/auth/google-signup'), {
+    // Send the JWT token to your backend for verification (use token endpoint)
+    fetch(liveApiPath('/api/auth/google/token'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: response.credential })
+      body: JSON.stringify({ id_token: response.credential })
     }).then(async r => {
       const { data, message } = await fedlReadJsonResponse(r);
       if (!r.ok) {

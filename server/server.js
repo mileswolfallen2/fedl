@@ -17,9 +17,31 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
+// Google OAuth credentials (env/.env or NV/EMV/EV files)
+let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
+let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
+// Lightweight .env loader (server/.env)
+function loadEnvFromFile(){
+  try {
+    const envPath = require('path').join(__dirname, '.env');
+    if (!fs.existsSync(envPath)) return;
+    const raw = fs.readFileSync(envPath, 'utf8');
+    raw.split(/\r?\n/).forEach(line => {
+      const m = String(line || '').trim().match(/^([^=]+)=(.*)$/);
+      if (m) {
+        const key = m[1].trim();
+        const val = m[2];
+        if (key) process.env[key] = val;
+      }
+    });
+  } catch (e) {}
+}
+loadEnvFromFile();
+googleClientId = String(process.env.GOOGLE_CLIENT_ID || googleClientId || '').trim();
+googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || googleClientSecret || '').trim();
 const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
 
-async function sendDiscordNotification(message) {
+ async function sendDiscordNotification(message) {
   if (!discordWebhookUrl || !discordWebhookUrl.startsWith('http')) {
     return;
   }
@@ -48,6 +70,106 @@ async function sendDiscordNotification(message) {
   } catch (e) {
     console.error(`[FEDL] Discord notification failed: ${e.message}`);
   }
+}
+
+// Google OAuth: verify an ID token issued by Google
+async function verifyGoogleIdToken(idToken){
+  try {
+    const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
+    if (!res.ok) return null;
+    const payload = await res.json();
+    if (!payload || typeof payload !== 'object') return null;
+    if (googleClientId && (payload.aud || payload.client_id) !== googleClientId) return null;
+    const iss = String(payload.iss || '');
+    if (iss !== 'accounts.google.com' && iss !== 'https://accounts.google.com') return null;
+    if (payload.exp && Date.now() > payload.exp * 1000) return null;
+    return payload;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Load OAuth credentials from NV/EMV/EV files or environment
+function readKvLine(line){
+  const m = String(line || '').trim().match(/^([A-Za-z0-9_]+)=(.*)$/);
+  if (!m) return null;
+  return [m[1], m[2]];
+}
+
+function readKvFileSimple(filePath){
+  try {
+    if (!fs.existsSync(filePath)) return null;
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const out = {};
+    raw.split(/\r?\n/).forEach(line => {
+      const kv = readKvLine(line);
+      if (kv) out[kv[0]] = kv[1];
+    });
+    return Object.keys(out).length ? out : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function loadOAuthCredentials(){
+  const nvPath = require('path').join(appRoot, 'NV', 'google_oauth.nv');
+  const emvPath = require('path').join(appRoot, 'EMV', 'google_oauth.emv');
+  const evPath = require('path').join(appRoot, 'EV', 'google_oauth.env');
+
+  let data = readKvFileSimple(nvPath);
+  if (data && data.GOOGLE_CLIENT_ID) {
+    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    return;
+  }
+  data = readKvFileSimple(emvPath);
+  if (data && data.GOOGLE_CLIENT_ID) {
+    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    return;
+  }
+  data = readKvFileSimple(evPath);
+  if (data && data.GOOGLE_CLIENT_ID) {
+    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    return;
+  }
+  if (process.env.GOOGLE_CLIENT_ID) googleClientId = String(process.env.GOOGLE_CLIENT_ID).trim();
+  if (process.env.GOOGLE_CLIENT_SECRET) googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET).trim();
+}
+
+loadOAuthCredentials();
+
+function findUserByGoogleId(googleId){
+  const users = readUsers();
+  return users.find(u => String(u.googleId || '') === String(googleId));
+}
+function findUserByEmail(email){
+  const em = String(email || '').trim().toLowerCase();
+  const users = readUsers();
+  return users.find(u => String((u.email || '')).toLowerCase() === em);
+}
+function deriveUsernameFromEmail(email){
+  const local = String(email || '').split('@')[0] || 'user';
+  let base = local.toLowerCase().replace(/[^a-z0-9_]/g, '');
+  if (!base) base = 'user';
+  const users = readUsers();
+  let candidate = base;
+  let i = 0;
+  while (users.find(u => String(u.username || '') === candidate)) {
+    i += 1;
+    candidate = `${base}_${i}`;
+  }
+  return candidate;
+}
+function createUserFromGoogle(googleId, email, name){
+  const users = readUsers();
+  const username = email ? deriveUsernameFromEmail(email) : `google_${Date.now().toString(36)}`;
+  const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+  const user = { id, username, googleId, email, name, createdAt: new Date().toISOString() };
+  users.push(user);
+  writeUsers(users);
+  return user;
 }
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
@@ -1272,6 +1394,49 @@ function handleRequest(req, res) {
         sendJson(res, 200, { ok: true, token, userId: user.id, username: user.username });
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid login request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && (pathname === '/api/auth/google/token' || pathname === '/fedl/api/auth/google/token')) {
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const idToken = String(payload.id_token || '').trim();
+        if (!idToken) {
+          sendJson(res, 400, { error: 'id_token is required' });
+          return;
+        }
+        const verified = await verifyGoogleIdToken(idToken);
+        if (!verified) {
+          sendJson(res, 401, { error: 'Invalid Google token' });
+          return;
+        }
+        const googleId = String(verified.sub || '').trim();
+        const email = String(verified.email || '').trim();
+        const name = String(verified.name || verified.given_name || '').trim();
+        let user = null;
+        if (googleId) user = findUserByGoogleId(googleId);
+        const users = readUsers();
+        if (!user && email) {
+          const byEmail = users.find(u => String((u.email || '')).toLowerCase() === email.toLowerCase());
+          if (byEmail) {
+            byEmail.googleId = googleId;
+            byEmail.email = email;
+            writeUsers(users);
+            user = byEmail;
+          }
+        }
+        if (!user) {
+          user = createUserFromGoogle(googleId, email, name);
+        }
+        const token = createSession(user.id, user.username);
+        sendJson(res, 200, { ok: true, token, userId: user.id, username: user.username });
+      } catch (e) {
+        sendJson(res, 500, { error: 'Google token flow failed' });
       }
     });
     return;

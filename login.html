@@ -28,7 +28,7 @@
     </nav>
   </header>
   <main class="auth-main">
-    <section class="panel auth-panel">
+    <section class="panel auth-panel auth-card">
       <p class="hero-kicker">FEDL account</p>
       <h2>Welcome back</h2>
       <p class="muted">Sign in to load your saved roulette pick and per-level progress from the server.</p>
@@ -49,20 +49,12 @@
           <a class="text-link" href="reset-password.html">Forgot password?</a>
         </div>
       </form>
-      <div class="auth-divider">
-        <span>Or</span>
+      <div id="google-signin-container" style="text-align:center; margin: 12px 0 6px;">
+        <div id="g_id_onload" data-client_id="271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com" data-context="signin" data-callback="handleCredentialResponse" data-auto_prompt="true"></div>
+        <div class="g_id_signin" data-type="standard" data-width="320"></div>
       </div>
-      <p class="muted small" style="text-align: center; margin: 16px 0;">
-        Google Sign-In might now work for now. Use the form above if it is not working.
-      </p>
-      
-      <div id="g_id_onload"
-           data-client_id="271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com"
-           data-callback="handleGoogleSignIn">
-      </div>
-      <div class="g_id_signin" data-type="standard"></div>
-      
-    </section>
+      </section>
+    <div class="auth-blob"></div>
   </main>
   <script src="app.js" defer></script>
   <script src="script.js"></script>
