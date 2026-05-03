@@ -7,7 +7,7 @@
   const TESTING_MODE = true; // Set to true to enable testing mode with test server and mod accounts
   console.log('Current origin:', window.location.origin, 'isFileProtocol:', isFileProtocol);
   const liveServerBase = TESTING_MODE
-    ? (isFileProtocol ? 'http://localhost:8090' : window.location.origin)
+    ? 'http://localhost:8090'
     : 'https://server.fedl.site/fedl';
   const canUseLiveServer = !isFileProtocol || !!liveServerBase;
   const liveApiUrl = `${liveServerBase}/api/list`;
