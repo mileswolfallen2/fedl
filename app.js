@@ -72,7 +72,7 @@
 
   const page = document.body.dataset.page;
   const isFileProtocol = window.location.protocol === 'file:';
-  const TESTING_MODE = true; // Set to true to enable testing mode with test server and mod accounts
+  const TESTING_MODE = false; // Set to true to enable testing mode with test server and mod accounts
   console.log('Current origin:', window.location.origin, 'isFileProtocol:', isFileProtocol);
   const liveServerBase = TESTING_MODE
     ? 'http://localhost:8090'
@@ -82,7 +82,7 @@
   const liveRunsUrl = `${liveServerBase}/api/runs`;
   const liveEventsUrl = `${liveServerBase}/events`;
   const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
-  const MOD_USERS = ['wolf_reaper90','dioxyx','steve','testing'];
+  const MOD_USERS = ['wolf_reaper90','dioxyx','steve'];
   const SPA_PAGE_KEY = 'onepage';
   /** Use for POST /api/import/* and any path under the same base as list/runs (not root-relative /api/...). */
   function liveApiPath(path){
