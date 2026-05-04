@@ -2857,14 +2857,12 @@
     });
 
     if(searchEl){
-      searchEl.addEventListener('input', debounce(()=> renderTable(currentItems), 120));
+      searchEl.addEventListener('input', debounce(()=> renderAdminTable(), 120));
       searchEl.addEventListener('input', function(){
         if(window.anime && !animationsDisabled()){
           window.anime({ targets: this, scale: [1, 1.02, 1], duration: 400, easing: 'easeOutQuad' });
         }
       });
-      filterSelect.addEventListener('change', ()=> renderTable(currentItems));
-      controlsBound = true;
     }
     if(runSearchEl){
       runSearchEl.addEventListener('input', renderRunsTable);
