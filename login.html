@@ -41,7 +41,8 @@
           <span>Password</span>
           <input id="login-password" name="password" type="password" autocomplete="current-password" required />
         </label>
-        <!-- <div class="cf-turnstile" data-sitekey="0x4AAAAAAC_RrrNCJVX_wbHb"></div> -->
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAC_RrrNCJVX_wbHb" data-callback="fedlTurnstileSuccess"></div>
+        <input type="hidden" id="turnstile-response" name="cf-turnstile-response" value="" />
         <p id="login-status" class="muted" role="status"></p>
         <div class="auth-actions">
           <button type="submit" class="btn" id="login-submit">Log in</button>

@@ -46,7 +46,8 @@
           <span>Confirm password</span>
           <input id="signup-password2" name="password2" type="password" autocomplete="new-password" required minlength="8" />
         </label>
-        <!-- <div class="cf-turnstile" data-sitekey="0x4AAAAAAC_RrrNCJVX_wbHb"></div> -->
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAC_RrrNCJVX_wbHb" data-callback="fedlTurnstileSuccess"></div>
+        <input type="hidden" id="turnstile-response" name="cf-turnstile-response" value="" />
         <p id="signup-status" class="muted" role="status"></p>
         <div class="auth-actions">
           <button type="submit" class="btn" id="signup-submit">Create account</button>
