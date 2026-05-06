@@ -29,6 +29,18 @@
     }
   };
 
+  window.signinGoogle = function(){
+    window.location.href = '/auth/google';
+  };
+
+  window.signinDiscord = function(){
+    window.location.href = '/auth/discord';
+  };
+
+  window.signinGithub = function(){
+    window.location.href = '/auth/github';
+  };
+
   function promptForUsername(payload){
     const page = document.body.dataset.page;
     // Determine container to inject UI
