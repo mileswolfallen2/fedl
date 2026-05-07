@@ -17,7 +17,7 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
-const publicFrontendBase = String(process.env.FRONTEND_BASE_URL || process.env.FRONTEND_HOST || process.env.PUBLIC_HOST || serverConfig.frontendHost || '').trim().replace(/\/+$|\s+$/g, '');
+const publicFrontendBase = String(process.env.FRONTEND_BASE_URL || process.env.FRONTEND_HOST || process.env.PUBLIC_HOST || serverConfig.frontendHost || 'https://fedl.site').trim().replace(/\/+$|\s+$/g, '');
 // Google OAuth credentials (env/.env or NV/EMV/EV files)
 let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
 let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
@@ -1587,21 +1587,21 @@ function handleRequest(req, res) {
   }
 
   // Discord OAuth
-if (req.method === 'GET' && matchesRoute('/auth/google')) {
-  if (!googleClientId || !googleClientSecret) {
-    sendError(res, 500, 'Google OAuth not configured');
+  if (req.method === 'GET' && matchesRoute('/auth/google')) {
+    if (!googleClientId || !googleClientSecret) {
+      sendError(res, 500, 'Google OAuth not configured');
+      return;
+    }
+    if (!publicFrontendBase) {
+      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+      return;
+    }
+    const redirectUri = `${publicFrontendBase}/oauth-callback`;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&access_type=online&prompt=select_account&state=google`;
+    res.writeHead(302, { Location: authUrl });
+    res.end();
     return;
   }
-  if (!publicFrontendBase) {
-    sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
-    return;
-  }
-  const redirectUri = `${publicFrontendBase}/oauth-callback.html`;
-  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&access_type=online&prompt=select_account&state=google`;
-  res.writeHead(302, { Location: authUrl });
-  res.end();
-  return;
-}
 
   if (req.method === 'POST' && matchesRoute('/api/auth/google/relay')) {
   let body = '';
@@ -1673,20 +1673,20 @@ if (req.method === 'GET' && matchesRoute('/auth/google')) {
 }
 
   if (req.method === 'GET' && matchesRoute('/auth/discord')) {
-  if (!discordClientId) {
-    sendError(res, 500, 'Discord OAuth not configured');
+    if (!discordClientId) {
+      sendError(res, 500, 'Discord OAuth not configured');
+      return;
+    }
+    if (!publicFrontendBase) {
+      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+      return;
+    }
+    const redirectUri = `${publicFrontendBase}/oauth-callback`;
+    const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email&state=discord`;
+    res.writeHead(302, { Location: authUrl });
+    res.end();
     return;
   }
-  if (!publicFrontendBase) {
-    sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
-    return;
-  }
-  const redirectUri = `${publicFrontendBase}/oauth-callback.html`;
-  const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email&state=discord`;
-  res.writeHead(302, { Location: authUrl });
-  res.end();
-  return;
-}
 
   if (req.method === 'POST' && matchesRoute('/api/auth/discord/relay')) {
   let body = '';
@@ -1757,20 +1757,20 @@ if (req.method === 'GET' && matchesRoute('/auth/google')) {
 
   // GitHub OAuth
   if (req.method === 'GET' && matchesRoute('/auth/github')) {
-  if (!githubClientId) {
-    sendError(res, 500, 'GitHub OAuth not configured');
+    if (!githubClientId) {
+      sendError(res, 500, 'GitHub OAuth not configured');
+      return;
+    }
+    if (!publicFrontendBase) {
+      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+      return;
+    }
+    const redirectUri = `${publicFrontendBase}/oauth-callback`;
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(githubClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email&state=github`;
+    res.writeHead(302, { Location: authUrl });
+    res.end();
     return;
   }
-  if (!publicFrontendBase) {
-    sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
-    return;
-  }
-  const redirectUri = `${publicFrontendBase}/oauth-callback.html`;
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(githubClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email&state=github`;
-  res.writeHead(302, { Location: authUrl });
-  res.end();
-  return;
-}
 
   if (req.method === 'POST' && matchesRoute('/api/auth/github/relay')) {
   let body = '';
