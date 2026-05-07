@@ -43,6 +43,10 @@ function loadEnvFromFile(){
 loadEnvFromFile();
 googleClientId = String(process.env.GOOGLE_CLIENT_ID || googleClientId || '').trim();
 googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || googleClientSecret || '').trim();
+discordClientId = String(process.env.DISCORD_CLIENT_ID || discordClientId || '').trim();
+discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || discordClientSecret || '').trim();
+githubClientId = String(process.env.GITHUB_CLIENT_ID || githubClientId || '').trim();
+githubClientSecret = String(process.env.GITHUB_CLIENT_SECRET || githubClientSecret || '').trim();
 const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
 
  async function sendDiscordNotification(message) {
@@ -294,6 +298,12 @@ function getRequestProtocol(req) {
   if (protoHeader) {
     return protoHeader.split(',')[0].trim();
   }
+
+  const host = String(req.headers.host || '').toLowerCase();
+  if (host && !host.startsWith('localhost') && !host.startsWith('127.') && !host.startsWith('[::1]')) {
+    return 'https';
+  }
+
   return req.connection && req.connection.encrypted ? 'https' : 'http';
 }
 
