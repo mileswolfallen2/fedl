@@ -1,1 +1,4476 @@
-(function(_0x145c07,_0x24fdb3){const _0x439b1a=_0x2f07,_0x3e0244=_0x145c07();while(!![]){try{const _0x20f756=parseInt(_0x439b1a(0x41b))/0x1+parseInt(_0x439b1a(0x3e4))/0x2+parseInt(_0x439b1a(0x531))/0x3*(-parseInt(_0x439b1a(0x40b))/0x4)+-parseInt(_0x439b1a(0x441))/0x5+-parseInt(_0x439b1a(0x395))/0x6+-parseInt(_0x439b1a(0x28f))/0x7+-parseInt(_0x439b1a(0x3c2))/0x8*(-parseInt(_0x439b1a(0x1fe))/0x9);if(_0x20f756===_0x24fdb3)break;else _0x3e0244['push'](_0x3e0244['shift']());}catch(_0x1a9723){_0x3e0244['push'](_0x3e0244['shift']());}}}(_0x349a,0xe49c0),(function(){const _0x4db66a=_0x2f07;function _0xdc8485(_0x3a1bfc){const _0x2da361=_0x2f07;return document[_0x2da361(0x2ce)](_0x3a1bfc);}window['handleCredentialResponse']=window[_0x4db66a(0x546)]||function(_0x4f9e7d){const _0x271f54=_0x4db66a;try{const _0x71c669=_0x4f9e7d&&_0x4f9e7d[_0x271f54(0x3a2)]?_0x4f9e7d[_0x271f54(0x3a2)]:_0x4f9e7d;if(!_0x71c669)return;fetch(_0xd4ac54(_0x271f54(0x442)),{'method':_0x271f54(0x2a8),'headers':{'Content-Type':_0x271f54(0x2aa)},'body':JSON['stringify']({'id_token':_0x71c669})})[_0x271f54(0x2be)](_0x1d4cd5=>_0x1d4cd5[_0x271f54(0x284)]())[_0x271f54(0x2be)](_0x346340=>{const _0x168815=_0x271f54;if(_0x346340&&_0x346340[_0x168815(0x2cd)])_0x7c440c(_0x346340[_0x168815(0x2cd)]),window[_0x168815(0x403)]['reload']();else _0x346340&&_0x346340[_0x168815(0x337)]&&_0x372bb3(_0x346340);})[_0x271f54(0x461)](()=>{});}catch(_0x38a676){}},window['fedlTurnstileSuccess']=window['fedlTurnstileSuccess']||function(_0xadc4fa){const _0x370c27=_0x4db66a,_0x1ae956=_0xdc8485('turnstile-response');_0x1ae956&&(_0x1ae956[_0x370c27(0x51a)]=_0xadc4fa||'');},window['signinGoogle']=function(){const _0x505856=_0x4db66a;window[_0x505856(0x403)][_0x505856(0x20b)]=_0x4a1987+'/auth/google';},window['signinDiscord']=function(){const _0x1c1776=_0x4db66a;window[_0x1c1776(0x403)][_0x1c1776(0x20b)]=_0x4a1987+_0x1c1776(0x319);},window[_0x4db66a(0x49f)]=function(){const _0x710ff0=_0x4db66a;window[_0x710ff0(0x403)][_0x710ff0(0x20b)]=_0x4a1987+_0x710ff0(0x29a);};function _0x372bb3(_0x519a50){const _0x6ac576=_0x4db66a,_0x4e52c8=document[_0x6ac576(0x428)]['dataset'][_0x6ac576(0x324)],_0x64746f=_0x4e52c8===_0x6ac576(0x310)?_0x6ac576(0x50b):_0x6ac576(0x563);let _0x422b2c=document[_0x6ac576(0x2ce)](_0x64746f);if(!_0x422b2c){_0x422b2c=document['createElement'](_0x6ac576(0x2a1)),_0x422b2c['id']=_0x64746f,_0x422b2c[_0x6ac576(0x415)][_0x6ac576(0x487)]=_0x6ac576(0x42c),_0x422b2c[_0x6ac576(0x415)][_0x6ac576(0x57c)]=_0x6ac576(0x249);const _0x57dd44=document[_0x6ac576(0x350)](_0x6ac576(0x27b))||document[_0x6ac576(0x428)];_0x57dd44['appendChild'](_0x422b2c);}_0x422b2c['innerHTML']=_0x6ac576(0x538)+(_0x519a50[_0x6ac576(0x527)]||'')+_0x6ac576(0x233);const _0x13ef76=document['getElementById'](_0x6ac576(0x27e)),_0x23b611=document[_0x6ac576(0x2ce)](_0x6ac576(0x459)),_0x131f21=document[_0x6ac576(0x2ce)]('google-username-status');_0x13ef76['addEventListener'](_0x6ac576(0x1d2),()=>{const _0x7e5f21=_0x6ac576,_0xbf6313=String(_0x23b611&&_0x23b611[_0x7e5f21(0x51a)]||'')[_0x7e5f21(0x4b8)]();if(!/^[a-z0-9_]{3,24}$/[_0x7e5f21(0x444)](_0xbf6313)){_0x131f21[_0x7e5f21(0x26b)]=_0x7e5f21(0x230),_0x131f21['style'][_0x7e5f21(0x24e)]=_0x7e5f21(0x433);return;}fetch(_0xd4ac54(_0x7e5f21(0x50c)),{'method':'POST','headers':{'Content-Type':_0x7e5f21(0x2aa)},'body':JSON[_0x7e5f21(0x4ef)]({'googleId':_0x519a50[_0x7e5f21(0x4df)],'email':_0x519a50[_0x7e5f21(0x493)],'name':_0x519a50[_0x7e5f21(0x1f1)],'username':_0xbf6313})})[_0x7e5f21(0x2be)](_0x59fc2d=>_0x59fc2d[_0x7e5f21(0x284)]())[_0x7e5f21(0x2be)](_0x3ebba4=>{const _0x466cd4=_0x7e5f21;_0x3ebba4&&_0x3ebba4[_0x466cd4(0x2cd)]?(_0x7c440c(_0x3ebba4[_0x466cd4(0x2cd)]),window[_0x466cd4(0x403)][_0x466cd4(0x4ad)]()):(_0x131f21[_0x466cd4(0x26b)]=_0x3ebba4[_0x466cd4(0x4a4)]||_0x466cd4(0x481),_0x131f21[_0x466cd4(0x415)][_0x466cd4(0x24e)]='#e11d48');})[_0x7e5f21(0x461)](()=>{const _0x299d2b=_0x7e5f21;_0x131f21['textContent']=_0x299d2b(0x2ec),_0x131f21['style'][_0x299d2b(0x24e)]=_0x299d2b(0x433);});});}const _0xb41a12=document['body'][_0x4db66a(0x313)][_0x4db66a(0x324)],_0x19835a=window[_0x4db66a(0x403)][_0x4db66a(0x3b8)]===_0x4db66a(0x383),_0x5ae84c=![];console['log'](_0x4db66a(0x4e9),window[_0x4db66a(0x403)][_0x4db66a(0x57f)],_0x4db66a(0x4da),_0x19835a);const _0x4a1987=_0x5ae84c?_0x4db66a(0x44e):_0x4db66a(0x443),_0xfb20e2=!_0x19835a||!!_0x4a1987,_0x5872fc=_0x4a1987+_0x4db66a(0x2a5),_0x1db2fa=_0x4a1987+_0x4db66a(0x411),_0x148fd2=_0x4a1987+_0x4db66a(0x2e8),_0x332946=_0x4a1987+_0x4db66a(0x556),_0xd11b27=['wolf_reaper90',_0x4db66a(0x25c),'steve'],_0x3635cb=_0x4db66a(0x4d1);function _0xd4ac54(_0x37ac06){const _0x5c0f24=_0x4db66a,_0x5d60a5=String(_0x37ac06||'')[_0x5c0f24(0x579)]('/')?_0x37ac06:'/'+_0x37ac06;return''+_0x4a1987+_0x5d60a5;}const _0x58cbb9='offlineindex.html';function _0x1ce20c(){const _0x40c435=_0x4db66a;if(window[_0x40c435(0x403)][_0x40c435(0x574)][_0x40c435(0x544)]('/'+_0x58cbb9))return;window[_0x40c435(0x403)][_0x40c435(0x2d8)](_0x58cbb9);}function _0x19957f(_0x3fc478=0x1388){const _0x138a94=_0x4db66a,_0x284b67=new AbortController(),_0x4d9d32=setTimeout(()=>_0x284b67[_0x138a94(0x23d)](),_0x3fc478);return fetch(_0x4a1987,{'method':_0x138a94(0x543),'cache':'no-store','signal':_0x284b67['signal']})[_0x138a94(0x2be)](_0x2818a5=>{return clearTimeout(_0x4d9d32),_0x2818a5;})[_0x138a94(0x461)](_0x571344=>{clearTimeout(_0x4d9d32);throw _0x571344;});}const _0x31b357=new Set([_0x4db66a(0x4ea),_0x4db66a(0x241),_0x4db66a(0x41f),_0x4db66a(0x322),_0x4db66a(0x318),_0x4db66a(0x310),_0x4db66a(0x3cc),_0x4db66a(0x3ac),_0x4db66a(0x2d6)]);!_0x5ae84c&&_0x31b357[_0x4db66a(0x245)](_0xb41a12)&&!window['location'][_0x4db66a(0x574)][_0x4db66a(0x544)]('/'+_0x58cbb9)&&_0x19957f()[_0x4db66a(0x461)](()=>{_0x1ce20c();});let _0x343efa=null,_0x8f1b7a=null,_0x1e3427=null,_0x2ad0f0=![],_0x4092ff=[],_0xde3f47=[];function _0x15611d(_0x2159d9,_0x996cc3){const _0x10ea56=_0x4db66a;try{const _0x3086d9=localStorage[_0x10ea56(0x4bc)](_0x2159d9);return _0x3086d9?JSON[_0x10ea56(0x408)](_0x3086d9):_0x996cc3;}catch(_0x265a10){return _0x996cc3;}}function _0x5444da(_0x19f8b,_0x27e18b){const _0x2022d7=_0x4db66a;localStorage[_0x2022d7(0x3c1)](_0x19f8b,JSON[_0x2022d7(0x4ef)](_0x27e18b));}function _0x247802(){return new Promise((_0x9b22b2,_0x4d7e62)=>{const _0x4c3c86=_0x2f07;if(window[_0x4c3c86(0x239)]){_0x9b22b2(window['anime']);return;}const _0x4b2279=document['createElement'](_0x4c3c86(0x2d1));_0x4b2279[_0x4c3c86(0x4f0)]=_0x4c3c86(0x22e),_0x4b2279[_0x4c3c86(0x201)]=()=>_0x9b22b2(window['anime']),_0x4b2279[_0x4c3c86(0x36a)]=()=>_0x4d7e62(new Error('Failed\x20to\x20load\x20anime.js')),document[_0x4c3c86(0x523)]['appendChild'](_0x4b2279);});}function _0x4c5930(_0x25403e,_0x1c9b33){const _0x410a7a=_0x4db66a;if(!window[_0x410a7a(0x239)]||_0x555914()){_0x25403e[_0x410a7a(0x26b)]=String(_0x1c9b33);return;}const _0x4f348e={'val':0x0};window[_0x410a7a(0x239)]({'targets':_0x4f348e,'val':_0x1c9b33,'duration':0x7d0,'easing':_0x410a7a(0x522),'round':0x1,'update':()=>{const _0x2b6d52=_0x410a7a;_0x25403e[_0x2b6d52(0x26b)]=Math['floor'](_0x4f348e[_0x2b6d52(0x321)]);}});}const _0x1c8a71='IntersectionObserver'in window?new IntersectionObserver(_0x575db2=>{const _0x3662b8=_0x4db66a;_0x575db2[_0x3662b8(0x2bd)](_0x5e3e7b=>{const _0x115941=_0x3662b8;if(_0x5e3e7b[_0x115941(0x45a)]){const _0x14f87b=_0x5e3e7b[_0x115941(0x225)];if(_0x14f87b[_0x115941(0x313)][_0x115941(0x571)])return;_0x14f87b[_0x115941(0x313)][_0x115941(0x571)]=_0x115941(0x352);const _0x31c747=parseInt(_0x14f87b[_0x115941(0x313)][_0x115941(0x3cd)],0xa);if(!isNaN(_0x31c747))_0x4c5930(_0x14f87b,_0x31c747);_0x1c8a71[_0x115941(0x370)](_0x14f87b);}});},{'threshold':0.1}):null;function _0x3c2cf4(_0x37ba23){const _0x4b1730=_0x4db66a;if(!_0x1c8a71||!_0x37ba23)return;_0x1c8a71[_0x4b1730(0x39b)](_0x37ba23);}const _0x2c3802=_0x4db66a(0x535),_0x4c7291=_0x4db66a(0x3e5),_0x419502=_0x4db66a(0x2c8);function _0x555914(){const _0x4cc3b8=_0x4db66a,_0x4b6dc1=localStorage[_0x4cc3b8(0x4bc)](_0x2c3802);if(_0x4b6dc1===null)return![];return _0x4b6dc1==='true';}function _0x494704(_0xb8be06){const _0x39a8b5=_0x4db66a;localStorage[_0x39a8b5(0x3c1)](_0x2c3802,String(_0xb8be06));}function _0x51c7e7(){const _0x3a23c2=_0x4db66a;return localStorage[_0x3a23c2(0x4bc)](_0x4c7291)===_0x3a23c2(0x352);}function _0xc18bf6(){const _0x4d8dd8=_0x4db66a,_0x11adec=localStorage[_0x4d8dd8(0x4bc)](_0x419502);return _0x11adec?parseInt(_0x11adec,0xa):0xbb8;}_0x247802()[_0x4db66a(0x2be)](()=>{const _0x4c4201=_0x4db66a;window[_0x4c4201(0x239)]&&document[_0x4c4201(0x570)]('.btn')['forEach'](_0x12ed32=>{const _0x152b1f=_0x4c4201;_0x12ed32['addEventListener'](_0x152b1f(0x35f),()=>{if(!_0x555914())window['anime']({'targets':_0x12ed32,'scale':0.95,'duration':0x1f4,'easing':'easeInOutQuad'});}),_0x12ed32[_0x152b1f(0x4eb)]('mouseup',()=>{const _0x4b1321=_0x152b1f;if(!_0x555914())window[_0x4b1321(0x239)]({'targets':_0x12ed32,'scale':0x1,'duration':0x1f4,'easing':'easeInOutQuad'});}),_0x12ed32[_0x152b1f(0x4eb)](_0x152b1f(0x501),()=>{const _0x2f7dd9=_0x152b1f;if(!_0x555914())window['anime']({'targets':_0x12ed32,'scale':0x1,'duration':0x1f4,'easing':_0x2f7dd9(0x312)});});});})[_0x4db66a(0x461)](()=>{});function _0x240204(_0x3fb90f){const _0x69792b=_0x4db66a;if(_0x555914()||!window[_0x69792b(0x239)]){if(_0x3fb90f)_0x3fb90f();return;}let _0xf875f1=document[_0x69792b(0x2ce)]('page-transition-overlay');!_0xf875f1&&(_0xf875f1=document['createElement'](_0x69792b(0x2a1)),_0xf875f1['id']='page-transition-overlay',_0xf875f1['style'][_0x69792b(0x4d5)]='position:fixed;inset:0;z-index:99998;pointer-events:none;opacity:0;background:var(--accent);mix-blend-mode:screen;transition:opacity\x200.3s\x20ease',document[_0x69792b(0x428)][_0x69792b(0x3e6)](_0xf875f1)),_0xf875f1[_0x69792b(0x415)][_0x69792b(0x236)]='0',_0xf875f1[_0x69792b(0x415)][_0x69792b(0x4ee)]='block',window[_0x69792b(0x239)]({'targets':_0xf875f1,'opacity':[0x0,0.15,0x0],'duration':0x258,'easing':'easeInOutQuad','begin':()=>{const _0x57084=_0x69792b;_0xf875f1[_0x57084(0x415)][_0x57084(0x236)]='0';},'update':_0x353613=>{const _0x434da7=_0x69792b;_0x353613['progress']>0x14&&_0x353613[_0x434da7(0x35d)]<0x3c&&_0x3fb90f&&(_0x3fb90f(),_0x3fb90f=null);},'complete':()=>{const _0x40202a=_0x69792b;_0xf875f1['style'][_0x40202a(0x4ee)]=_0x40202a(0x46e);}});}function _0x457eb3(_0x24e5c0){const _0x47cd1c=_0x4db66a;if(_0x555914()||!window[_0x47cd1c(0x239)])return;const _0x2cae75=[_0x47cd1c(0x1db),_0x47cd1c(0x22a),_0x47cd1c(0x41e),_0x47cd1c(0x4a0),_0x47cd1c(0x2d7),_0x47cd1c(0x208),_0x47cd1c(0x229),'#e056fd'];for(let _0x41bf6b=0x0;_0x41bf6b<(_0x24e5c0||0x8);_0x41bf6b++){const _0x3fc820=document['createElement'](_0x47cd1c(0x2a1));_0x3fc820[_0x47cd1c(0x342)]=_0x47cd1c(0x354),_0x3fc820[_0x47cd1c(0x415)]['background']=_0x2cae75[Math[_0x47cd1c(0x54b)](Math['random']()*_0x2cae75[_0x47cd1c(0x375)])],_0x3fc820[_0x47cd1c(0x415)]['left']=0x1e+Math[_0x47cd1c(0x396)]()*0x28+'%',_0x3fc820[_0x47cd1c(0x415)][_0x47cd1c(0x54f)]=0x28+Math[_0x47cd1c(0x396)]()*0x1e+'%',document[_0x47cd1c(0x428)][_0x47cd1c(0x3e6)](_0x3fc820);const _0x5c2db7=Math['PI']*0x2*_0x41bf6b/_0x24e5c0,_0x17c819=0x28+Math[_0x47cd1c(0x396)]()*0x50;window[_0x47cd1c(0x239)]({'targets':_0x3fc820,'--px':[0x0,Math[_0x47cd1c(0x541)](_0x5c2db7)*_0x17c819+'px'],'--py':[0x0,Math['sin'](_0x5c2db7)*_0x17c819*-0x1+'px'],'opacity':[0x1,0x0],'scale':[0x1,0x0],'duration':0x320+Math[_0x47cd1c(0x396)]()*0x190,'easing':'easeOutQuad','complete':()=>_0x3fc820[_0x47cd1c(0x1cf)]()});}}(function _0x2d942f(){const _0x32cf2f=_0x4db66a;if(_0x555914())return;document[_0x32cf2f(0x570)](_0x32cf2f(0x2da))['forEach'](_0x4e4d40=>{const _0x4c5d51=_0x32cf2f;_0x4e4d40[_0x4c5d51(0x4eb)](_0x4c5d51(0x1d2),function(_0x14e68a){const _0x428d65=_0x4c5d51,_0x334836=this['getAttribute'](_0x428d65(0x20b));if(!_0x334836||_0x334836[_0x428d65(0x579)]('#')||_0x334836[_0x428d65(0x579)](_0x428d65(0x374)))return;_0x14e68a['preventDefault'](),_0x240204(()=>{const _0x7c6356=_0x428d65;window[_0x7c6356(0x403)]['href']=_0x334836;});});});}(),function _0x4acea1(){const _0x5210fc=_0x4db66a,_0x55571f=document['body'][_0x5210fc(0x313)][_0x5210fc(0x324)];if(!_0x55571f)return;const _0x48635a=document[_0x5210fc(0x350)](_0x5210fc(0x28b));if(_0x48635a&&window[_0x5210fc(0x239)]&&!_0x555914())_0x48635a[_0x5210fc(0x415)][_0x5210fc(0x236)]='0',_0x48635a[_0x5210fc(0x415)][_0x5210fc(0x204)]=_0x5210fc(0x219),window['anime']({'targets':_0x48635a,'opacity':[0x0,0x1],'translateY':[0xc,0x0],'duration':_0xc18bf6()*0.5,'easing':_0x5210fc(0x21d)});else _0x48635a&&(_0x48635a[_0x5210fc(0x415)][_0x5210fc(0x236)]='1',_0x48635a[_0x5210fc(0x415)][_0x5210fc(0x204)]=_0x5210fc(0x29f));window['anime']&&!_0x555914()&&document[_0x5210fc(0x570)]('input[type=\x22text\x22],\x20input[type=\x22number\x22],\x20input[type=\x22password\x22],\x20input[type=\x22url\x22],\x20textarea,\x20select')[_0x5210fc(0x2bd)](_0x144060=>{const _0x1fa6ff=_0x5210fc;_0x144060[_0x1fa6ff(0x4eb)](_0x1fa6ff(0x3bb),function(){const _0x457aee=_0x1fa6ff;window['anime']({'targets':this,'scale':[0x1,1.01,0x1],'duration':0x12c,'easing':_0x457aee(0x48b)});});});if(window[_0x5210fc(0x239)]&&!_0x555914()){const _0x42d7bc=document[_0x5210fc(0x570)](_0x5210fc(0x2da));_0x42d7bc[_0x5210fc(0x2bd)]((_0x247b75,_0x38f46a)=>{const _0x257740=_0x5210fc;_0x247b75['style']['opacity']='0',_0x247b75[_0x257740(0x415)][_0x257740(0x204)]='translateY(-8px)',window[_0x257740(0x239)]({'targets':_0x247b75,'opacity':[0x0,0x1],'translateY':[-0x8,0x0],'duration':0x190,'delay':0x3c*_0x38f46a,'easing':_0x257740(0x21d)});});}if(_0x55571f===_0x5210fc(0x4ea)&&window[_0x5210fc(0x239)]&&!_0x555914()&&_0x5210fc(0x45b)in window){const _0x4229e4=document[_0x5210fc(0x570)](_0x5210fc(0x35e));if(_0x4229e4[_0x5210fc(0x375)]){const _0x370e74=new IntersectionObserver(_0x414ec8=>{const _0x5df938=_0x5210fc;_0x414ec8[_0x5df938(0x2bd)]((_0x5e3333,_0x2cc2de)=>{const _0x1da1f9=_0x5df938;_0x5e3333[_0x1da1f9(0x45a)]&&(window['anime']({'targets':_0x5e3333['target'],'opacity':[0x0,0x1],'translateY':[0xf,0x0],'scale':[0.95,0x1],'duration':_0xc18bf6()*0.4,'delay':_0x2cc2de*0x50,'easing':_0x1da1f9(0x21d)}),_0x370e74[_0x1da1f9(0x370)](_0x5e3333[_0x1da1f9(0x225)]));});},{'threshold':0.1});_0x4229e4[_0x5210fc(0x2bd)](_0x2af453=>{const _0x1239fc=_0x5210fc;_0x2af453['style']['opacity']='0',_0x2af453['style'][_0x1239fc(0x204)]=_0x1239fc(0x3d0),_0x370e74[_0x1239fc(0x39b)](_0x2af453);});}const _0x37fc6e=document[_0x5210fc(0x570)](_0x5210fc(0x418));if(_0x37fc6e[_0x5210fc(0x375)]){const _0x2f278d=new IntersectionObserver(_0x7e37ef=>{_0x7e37ef['forEach'](_0x597400=>{const _0x4b1e61=_0x2f07;if(_0x597400['isIntersecting']){const _0x17556b=_0x597400['target'][_0x4b1e61(0x438)]['querySelectorAll'](_0x4b1e61(0x418));_0x17556b[_0x4b1e61(0x2bd)]((_0x1f8dce,_0x3aa32e)=>{const _0x556bf4=_0x4b1e61;_0x1f8dce[_0x556bf4(0x415)][_0x556bf4(0x236)]='0',_0x1f8dce[_0x556bf4(0x415)][_0x556bf4(0x204)]=_0x556bf4(0x219),window[_0x556bf4(0x239)]({'targets':_0x1f8dce,'opacity':[0x0,0x1],'translateY':[0xc,0x0],'duration':0x1f4,'delay':_0x3aa32e*0x64,'easing':'easeOutCubic'});}),_0x2f278d[_0x4b1e61(0x370)](_0x597400[_0x4b1e61(0x225)]);}});},{'threshold':0.1}),_0xa079be=document['querySelector']('.featured-list');if(_0xa079be)_0x2f278d[_0x5210fc(0x39b)](_0xa079be);}}}(),function _0x439f12(){const _0x19e663=_0x4db66a,_0x1253ca={'dark':{'--bg':_0x19e663(0x423),'--panel':_0x19e663(0x540),'--accent':'#5cc5ff','--muted':_0x19e663(0x3d1),'--text':_0x19e663(0x253),'--card':_0x19e663(0x20f),'--accent-warm':_0x19e663(0x22a)},'light':{'--bg':_0x19e663(0x2c2),'--panel':_0x19e663(0x4bb),'--accent':_0x19e663(0x210),'--muted':'#64748b','--text':'#1e293b','--card':_0x19e663(0x2af),'--accent-warm':'#f59e0b'},'blue':{'--bg':'#0d1b2a','--panel':_0x19e663(0x36e),'--accent':'#38bdf8','--muted':_0x19e663(0x203),'--text':_0x19e663(0x35b),'--card':'#142d4c','--accent-warm':_0x19e663(0x212)},'midnight':{'--bg':_0x19e663(0x4fe),'--panel':_0x19e663(0x489),'--accent':_0x19e663(0x4a0),'--muted':_0x19e663(0x26c),'--text':'#e5e7eb','--card':_0x19e663(0x542),'--accent-warm':_0x19e663(0x2d7)},'cyberpunk':{'--bg':_0x19e663(0x542),'--panel':_0x19e663(0x581),'--accent':_0x19e663(0x229),'--muted':_0x19e663(0x414),'--text':_0x19e663(0x24a),'--card':'#150f25','--accent-warm':_0x19e663(0x406)},'earth':{'--bg':_0x19e663(0x31a),'--panel':_0x19e663(0x22b),'--accent':_0x19e663(0x41e),'--muted':'#a3c9a3','--text':'#ecfccb','--card':_0x19e663(0x426),'--accent-warm':'#fbbf24'},'retro':{'--bg':'#1a1208','--panel':_0x19e663(0x26a),'--accent':'#ff9f1c','--muted':_0x19e663(0x21b),'--text':_0x19e663(0x4f4),'--card':'#241809','--accent-warm':_0x19e663(0x57e)},'matrix':{'--bg':_0x19e663(0x355),'--panel':_0x19e663(0x277),'--accent':'#00ff00','--muted':'#00aa00','--text':_0x19e663(0x332),'--card':_0x19e663(0x277),'--accent-warm':_0x19e663(0x3d4)},'synthwave':{'--bg':_0x19e663(0x581),'--panel':'#2d1b4e','--accent':_0x19e663(0x2b5),'--muted':_0x19e663(0x3cb),'--text':_0x19e663(0x34e),'--card':_0x19e663(0x44b),'--accent-warm':_0x19e663(0x516)},'fire':{'--bg':_0x19e663(0x311),'--panel':_0x19e663(0x43a),'--accent':_0x19e663(0x3c7),'--muted':_0x19e663(0x50e),'--text':_0x19e663(0x4b7),'--card':_0x19e663(0x4e8),'--accent-warm':_0x19e663(0x1da)},'galaxy':{'--bg':'#0a0612','--panel':_0x19e663(0x447),'--accent':_0x19e663(0x2a3),'--muted':_0x19e663(0x333),'--text':_0x19e663(0x2c5),'--card':_0x19e663(0x31d),'--accent-warm':_0x19e663(0x378)},'candy':{'--bg':_0x19e663(0x42f),'--panel':'#fce7f3','--accent':_0x19e663(0x2d7),'--muted':'#94a3b8','--text':'#831843','--card':_0x19e663(0x3b5),'--accent-warm':_0x19e663(0x453)},'highcontrast':{'--bg':_0x19e663(0x3f7),'--panel':_0x19e663(0x346),'--accent':_0x19e663(0x436),'--muted':_0x19e663(0x1d7),'--text':_0x19e663(0x436),'--card':_0x19e663(0x373),'--accent-warm':_0x19e663(0x377)},'original':{'--bg':_0x19e663(0x423),'--panel':_0x19e663(0x540),'--accent':_0x19e663(0x1db),'--muted':_0x19e663(0x3d1),'--text':'#e6eef8','--card':'#081220','--accent-warm':_0x19e663(0x22a)}},_0x1aefc0=localStorage[_0x19e663(0x4bc)](_0x19e663(0x483))||_0x19e663(0x264),_0x43b574=_0x1253ca[_0x1aefc0];if(_0x43b574){const _0x4a25a3=document[_0x19e663(0x3c9)];Object[_0x19e663(0x51d)](_0x43b574)[_0x19e663(0x2bd)](([_0x26b02d,_0x405803])=>_0x4a25a3[_0x19e663(0x415)]['setProperty'](_0x26b02d,_0x405803)),document[_0x19e663(0x428)][_0x19e663(0x313)][_0x19e663(0x56d)]=_0x1aefc0;}try{const _0x576174=localStorage[_0x19e663(0x4bc)](_0x19e663(0x3ce));if(_0x576174){const _0x5a519b=JSON[_0x19e663(0x408)](localStorage[_0x19e663(0x4bc)](_0x19e663(0x4fc)+_0x576174));if(_0x5a519b&&_0x5a519b['theme']){const _0x5d653f=_0x5a519b[_0x19e663(0x56d)],_0x44d5b6=_0x1253ca[_0x5d653f];_0x44d5b6&&(document[_0x19e663(0x3c9)]['style'][_0x19e663(0x4a5)](_0x19e663(0x2db),_0x44d5b6['--bg']),document[_0x19e663(0x3c9)][_0x19e663(0x415)]['setProperty'](_0x19e663(0x34a),_0x44d5b6[_0x19e663(0x34a)]),document[_0x19e663(0x3c9)][_0x19e663(0x415)][_0x19e663(0x4a5)]('--accent',_0x44d5b6[_0x19e663(0x39e)]),document['documentElement'][_0x19e663(0x415)][_0x19e663(0x4a5)](_0x19e663(0x1f0),_0x44d5b6[_0x19e663(0x1f0)]),document[_0x19e663(0x3c9)][_0x19e663(0x415)]['setProperty'](_0x19e663(0x51f),_0x44d5b6[_0x19e663(0x51f)]),document[_0x19e663(0x3c9)][_0x19e663(0x415)]['setProperty'](_0x19e663(0x1e9),_0x44d5b6['--card']),document[_0x19e663(0x3c9)]['style'][_0x19e663(0x4a5)]('--accent-warm',_0x44d5b6[_0x19e663(0x382)]),document[_0x19e663(0x428)][_0x19e663(0x313)][_0x19e663(0x56d)]=_0x5d653f,localStorage[_0x19e663(0x3c1)]('fedl_theme',_0x5d653f));}}}catch(_0x539a30){}}());function _0x296433(_0x51b014,_0x4c9df1){let _0x511cd3=null;return function(){const _0x26220b=this,_0x1181ee=arguments;clearTimeout(_0x511cd3),_0x511cd3=setTimeout(()=>_0x51b014['apply'](_0x26220b,_0x1181ee),_0x4c9df1);};}const _0x50073c=_0x4db66a(0x4a6),_0x3acb1c=_0x4db66a(0x3ce);function _0xdeb23f(){const _0x226b2b=_0x4db66a;try{return localStorage[_0x226b2b(0x4bc)](_0x3acb1c)||'';}catch(_0x59550e){return'';}}function _0x56d210(_0x2525ec){const _0x41100b=_0x4db66a;try{_0x2525ec?localStorage[_0x41100b(0x3c1)](_0x3acb1c,_0x2525ec):localStorage['removeItem'](_0x3acb1c);}catch(_0x236f8f){}}function _0x25d4c4(){return _0x15611d(_0x50073c,[]);}function _0x29d5d5(_0x35ab04){_0x5444da(_0x50073c,_0x35ab04);}function _0x453968(){const _0x4155f=_0x4db66a;return'u_'+Date[_0x4155f(0x55f)]()[_0x4155f(0x2b1)](0x24)+Math[_0x4155f(0x396)]()[_0x4155f(0x2b1)](0x24)[_0x4155f(0x4e3)](0x2,0x8);}function _0x49c9f0(){return{'1':null,'2':null,'3':null};}function _0x52dcdd(){const _0x401f37=_0x4db66a;return{'roulettePick':null,'levelPercents':{},'savedRuns':[],'rouletteSlots':_0x49c9f0(),'theme':_0x401f37(0x264)};}function _0x988d6f(_0x30ef8a){const _0x55a284=_0x4db66a,_0x51e88a=_0x15611d(_0x55a284(0x4fc)+_0x30ef8a,_0x52dcdd());return!Array[_0x55a284(0x222)](_0x51e88a[_0x55a284(0x25e)])&&(_0x51e88a['savedRuns']=[]),(!_0x51e88a[_0x55a284(0x226)]||typeof _0x51e88a[_0x55a284(0x226)]!=='object')&&(_0x51e88a[_0x55a284(0x226)]={}),(!_0x51e88a['rouletteSlots']||typeof _0x51e88a[_0x55a284(0x1e1)]!=='object')&&(_0x51e88a[_0x55a284(0x1e1)]=_0x49c9f0()),['1','2','3']['forEach'](_0x1d6c1b=>{const _0x5a19fe=_0x55a284;!Object['prototype'][_0x5a19fe(0x50f)][_0x5a19fe(0x37b)](_0x51e88a['rouletteSlots'],_0x1d6c1b)&&(_0x51e88a[_0x5a19fe(0x1e1)][_0x1d6c1b]=null);}),_0x51e88a;}function _0x2b4a3c(_0x39b868){const _0x54b9fc=_0x4db66a,_0x449ec0=String(_0x39b868||'')[_0x54b9fc(0x4b8)]()[_0x54b9fc(0x2d8)](',','.');if(!_0x449ec0)return{'kind':_0x54b9fc(0x363),'text':'Enter\x20your\x20current\x20best\x20%,\x20then\x20tap\x20Submit\x20%\x20to\x20save\x20and\x20see\x20the\x20next\x20%\x20to\x20aim\x20for\x20(+1%\x20roulette\x20step).'};const _0x43d7d3=parseFloat(_0x449ec0);if(!Number['isFinite'](_0x43d7d3)||_0x43d7d3<0x0||_0x43d7d3>0x64)return{'kind':'error','text':_0x54b9fc(0x46b)};if(_0x43d7d3>=0x64)return{'kind':_0x54b9fc(0x223),'text':'You\x20are\x20at\x20100%.\x20Beat\x20the\x20level,\x20then\x20spin\x20—\x20your\x20next\x20demon\x20usually\x20adds\x20+1%\x20to\x20your\x20roulette\x20target.'};const _0x3eb0a7=Math[_0x54b9fc(0x291)](0x64,Math['floor'](_0x43d7d3)+0x1);if(_0x3eb0a7>=0x64)return{'kind':_0x54b9fc(0x223),'text':_0x54b9fc(0x2a0)};return{'kind':'success','text':_0x54b9fc(0x44a)+_0x3eb0a7+'%\x20(classic\x20+1%\x20roulette\x20step).'};}async function _0x357e63(_0x19c143){const _0xc4b193=_0x4db66a,_0x527ec3=await _0x19c143[_0xc4b193(0x54a)]();let _0x22dfb5={};try{_0x22dfb5=_0x527ec3?JSON[_0xc4b193(0x408)](_0x527ec3):{};}catch(_0x58261b){_0x22dfb5={};}const _0x443d97=_0x22dfb5&&_0x22dfb5[_0xc4b193(0x4a4)]&&String(_0x22dfb5['error'])||_0x22dfb5&&_0x22dfb5['message']&&String(_0x22dfb5['message'])||'',_0x3ae06f=String(_0x527ec3||'')[_0xc4b193(0x4b8)]();return{'data':_0x22dfb5,'message':_0x443d97||_0x3ae06f||_0x19c143['statusText']||'Error\x20'+_0x19c143[_0xc4b193(0x448)]};}function _0x5d17f2(_0x27cd32,_0x3ac70c){const _0x16874e=_0x4db66a;if(!_0x27cd32||_0x27cd32!==_0x549aee)return{'ok':![],'error':'Sign\x20in\x20to\x20save\x20runs\x20to\x20your\x20account.'};const _0x18da5e=String(_0x3ac70c[_0x16874e(0x2c4)]||'')[_0x16874e(0x4b8)](),_0x258277=String(_0x3ac70c[_0x16874e(0x3fa)]||'')[_0x16874e(0x4b8)]();if(!_0x18da5e||!_0x258277)return{'ok':![],'error':'Player\x20name\x20and\x20level\x20are\x20required\x20to\x20save\x20a\x20run.'};const _0x34be83=_0x988d6f(_0x27cd32),_0x2da13e=_0x34be83[_0x16874e(0x25e)][_0x16874e(0x4e3)](),_0x5510a2=_0x16874e(0x520)+Date[_0x16874e(0x55f)]()[_0x16874e(0x2b1)](0x24)+Math[_0x16874e(0x396)]()['toString'](0x24)['slice'](0x2,0xa);return _0x2da13e[_0x16874e(0x29c)]({'id':_0x5510a2,'playerName':_0x18da5e,'levelTitle':_0x258277,'videoUrl':String(_0x3ac70c['videoUrl']||'')[_0x16874e(0x4b8)](),'percent':String(_0x3ac70c[_0x16874e(0x244)]!=null?_0x3ac70c[_0x16874e(0x244)]:_0x16874e(0x2f2))[_0x16874e(0x4b8)]()||'100','rawFootageUrl':String(_0x3ac70c[_0x16874e(0x4cf)]||'')[_0x16874e(0x4b8)](),'notes':String(_0x3ac70c[_0x16874e(0x4c0)]||'')[_0x16874e(0x4b8)](),'savedAt':new Date()[_0x16874e(0x369)]()}),_0x34be83[_0x16874e(0x25e)]=_0x2da13e[_0x16874e(0x4e3)](0x0,0x30),_0x49f20d(_0x27cd32,_0x34be83),{'ok':!![]};}function _0x7ffc9b(_0x18d207,_0x25daee){const _0xa79584=_0x4db66a;if(!_0x18d207||_0x18d207!==_0x549aee||!_0x25daee)return;const _0x284cc6=_0x988d6f(_0x18d207);_0x284cc6[_0xa79584(0x25e)]=(_0x284cc6[_0xa79584(0x25e)]||[])[_0xa79584(0x32f)](_0x5a2281=>_0x5a2281&&_0x5a2281['id']!==_0x25daee),_0x49f20d(_0x18d207,_0x284cc6);}function _0x49f20d(_0x2d9909,_0x3393ce){const _0x4a5623=_0x4db66a;_0x5444da(_0x4a5623(0x4fc)+_0x2d9909,_0x3393ce),_0x314eff(_0x2d9909);}let _0x549aee=null,_0x741b6c=null;const _0x4e276b=_0x4db66a(0x3d5);function _0x50fc9c(){const _0x1ab19f=_0x4db66a;try{return localStorage[_0x1ab19f(0x4bc)](_0x4e276b)||'';}catch(_0x413195){return'';}}function _0x7c440c(_0x54cb80){const _0x31fe47=_0x4db66a;try{_0x54cb80?localStorage['setItem'](_0x4e276b,_0x54cb80):localStorage[_0x31fe47(0x4be)](_0x4e276b);}catch(_0x2f2361){}}function _0x37a4b6(){const _0xd6b18d=_0x4db66a;try{const _0x1f1c85=new URLSearchParams(window[_0xd6b18d(0x403)][_0xd6b18d(0x287)]),_0x285276=String(_0x1f1c85[_0xd6b18d(0x380)]('token')||'')['trim']();if(_0x285276){_0x7c440c(_0x285276);if(window[_0xd6b18d(0x2f4)]&&window[_0xd6b18d(0x2f4)][_0xd6b18d(0x3d8)]){_0x1f1c85[_0xd6b18d(0x2c1)](_0xd6b18d(0x2cd));const _0x58eaa1=new URL(window[_0xd6b18d(0x403)][_0xd6b18d(0x20b)]);_0x58eaa1[_0xd6b18d(0x287)]=_0x1f1c85[_0xd6b18d(0x2b1)](),window['history']['replaceState']({},'',_0x58eaa1['pathname']+(_0x58eaa1[_0xd6b18d(0x287)]?'?'+_0x58eaa1[_0xd6b18d(0x287)]:'')+_0x58eaa1['hash']);}}}catch(_0xb21159){}}_0x37a4b6();function _0xc33f8c(){_0x549aee=null,_0x741b6c=null,_0x7c440c('');}function _0xf87f4d(){if(_0x549aee)return _0x549aee;return _0xdeb23f();}let _0x279e33=null;function _0x314eff(_0x1438ac){if(!_0x1438ac||!_0x50fc9c()||_0x1438ac!==_0x549aee||!_0xfb20e2)return;_0x279e33&&clearTimeout(_0x279e33),_0x279e33=setTimeout(()=>{const _0x45106c=_0x2f07,_0xf23ec8=_0x988d6f(_0x1438ac);fetch(_0x4a1987+_0x45106c(0x351),{'method':_0x45106c(0x278),'headers':{'Content-Type':_0x45106c(0x2aa),'Authorization':_0x45106c(0x1f6)+_0x50fc9c()},'body':JSON[_0x45106c(0x4ef)]({'data':_0xf23ec8})})['catch'](()=>{});},0x1c2);}function _0x16b62b(){const _0x3e42b5=_0x4db66a,_0x5e6371=_0x50fc9c();if(!_0x5e6371||!_0xfb20e2)return _0x549aee=null,_0x741b6c=null,Promise[_0x3e42b5(0x27f)](null);return fetch(_0x4a1987+'/api/auth/me',{'headers':{'Authorization':_0x3e42b5(0x1f6)+_0x5e6371},'cache':'no-store'})[_0x3e42b5(0x2be)](_0x89b740=>{const _0x4551e2=_0x3e42b5;if(!_0x89b740['ok'])throw new Error(_0x4551e2(0x398));return _0x89b740['json']();})['then'](_0x51fd59=>{const _0x9759ed=_0x3e42b5;return _0x549aee=_0x51fd59[_0x9759ed(0x240)],_0x741b6c=_0x51fd59[_0x9759ed(0x28c)],_0x51fd59;})['catch'](()=>{return _0xc33f8c(),null;});}function _0x33b506(_0x5bf5ad){const _0x4aabf5=_0x4db66a,_0x62f2f=_0x50fc9c();if(!_0x62f2f||!_0x5bf5ad||!_0xfb20e2)return Promise[_0x4aabf5(0x27f)]();return fetch(_0x4a1987+'/api/user/state',{'headers':{'Authorization':_0x4aabf5(0x1f6)+_0x62f2f},'cache':_0x4aabf5(0x55e)})[_0x4aabf5(0x2be)](_0x45a690=>{const _0x44dac5=_0x4aabf5;if(!_0x45a690['ok'])return null;return _0x45a690[_0x44dac5(0x284)]();})['then'](_0x358636=>{const _0x3ff5c4=_0x4aabf5;_0x358636&&_0x358636[_0x3ff5c4(0x580)]&&_0x5444da('fedl_user_data_'+_0x5bf5ad,_0x358636['data']);})[_0x4aabf5(0x461)](()=>{});}function _0x430c2f(){const _0x4cfd55=_0x4db66a,_0x35e0b1=document[_0x4cfd55(0x350)](_0x4cfd55(0x252));if(!_0x35e0b1||_0x35e0b1[_0x4cfd55(0x350)]('.fedl-auth-nav'))return;const _0xcf3598=document['createElement'](_0x4cfd55(0x30f));_0xcf3598[_0x4cfd55(0x342)]=_0x4cfd55(0x3a4),_0x35e0b1['appendChild'](_0xcf3598);}function _0x2dc50f(){const _0x14c270=_0x4db66a;if(!_0x741b6c)return Promise[_0x14c270(0x27f)](![]);return Promise['resolve'](_0xd11b27[_0x14c270(0x340)](_0x741b6c['toLowerCase']()));}function _0xdc8400(){const _0x40b977=_0x4db66a,_0x4edc43=document[_0x40b977(0x350)](_0x40b977(0x2ae));if(!_0x4edc43)return;_0x4edc43[_0x40b977(0x26b)]='';if(_0x741b6c)_0x2dc50f()[_0x40b977(0x2be)](_0x2d71be=>{const _0x9b72db=_0x40b977,_0x4112a0=document['createElement']('span');_0x4112a0[_0x9b72db(0x342)]=_0x9b72db(0x4ab),_0x4112a0[_0x9b72db(0x3e6)](document['createTextNode'](_0x9b72db(0x4b4)));const _0x158f08=document[_0x9b72db(0x56e)](_0x9b72db(0x42b));_0x158f08[_0x9b72db(0x26b)]=_0x741b6c,_0x4112a0[_0x9b72db(0x3e6)](_0x158f08),_0x4edc43[_0x9b72db(0x3e6)](_0x4112a0),_0x4edc43['appendChild'](document[_0x9b72db(0x33e)]('\x20'));if(_0x2d71be){const _0x344e24=document[_0x9b72db(0x56e)]('a');_0x344e24[_0x9b72db(0x20b)]=_0x9b72db(0x37d),_0x344e24[_0x9b72db(0x26b)]=_0x9b72db(0x45d),_0x4edc43[_0x9b72db(0x3e6)](_0x344e24),_0x4edc43[_0x9b72db(0x3e6)](document['createTextNode']('\x20'));}const _0xdf2b7e=document['createElement']('a');_0xdf2b7e['href']=_0x9b72db(0x3c6),_0xdf2b7e[_0x9b72db(0x26b)]=_0x9b72db(0x417),_0x4edc43[_0x9b72db(0x3e6)](_0xdf2b7e),_0x4edc43[_0x9b72db(0x3e6)](document['createTextNode']('\x20'));const _0x2a3d83=document[_0x9b72db(0x56e)]('button');_0x2a3d83['type']=_0x9b72db(0x353),_0x2a3d83['className']=_0x9b72db(0x575),_0x2a3d83[_0x9b72db(0x26b)]='Log\x20out',_0x2a3d83[_0x9b72db(0x4eb)](_0x9b72db(0x1d2),()=>{const _0x4b46d8=_0x9b72db,_0x31b02b=_0x50fc9c();_0x31b02b&&_0xfb20e2&&fetch(_0x4a1987+_0x4b46d8(0x218),{'method':_0x4b46d8(0x2a8),'headers':{'Authorization':'Bearer\x20'+_0x31b02b}})[_0x4b46d8(0x461)](()=>{}),_0xc33f8c(),_0xdc8400(),document[_0x4b46d8(0x387)](new CustomEvent('fedl-auth-updated')),window[_0x4b46d8(0x403)][_0x4b46d8(0x4ad)]();}),_0x4edc43[_0x9b72db(0x3e6)](_0x2a3d83);});else{const _0x1d2dc8=document['createElement']('a'),_0x57877f=encodeURIComponent(window['location']['href']);_0x1d2dc8['href']=_0x40b977(0x53b)+_0x57877f,_0x1d2dc8[_0x40b977(0x26b)]=_0x40b977(0x1dd),_0x4edc43[_0x40b977(0x3e6)](_0x1d2dc8),_0x4edc43[_0x40b977(0x3e6)](document['createTextNode']('\x20'));const _0x17eb6c=document[_0x40b977(0x56e)]('a');_0x17eb6c[_0x40b977(0x20b)]=_0x40b977(0x381),_0x17eb6c[_0x40b977(0x26b)]=_0x40b977(0x1d5),_0x4edc43[_0x40b977(0x3e6)](_0x17eb6c);}}function _0x205437(_0x2fcaf1){const _0x3dae77=_0x4db66a;return String(_0x2fcaf1||'')[_0x3dae77(0x4b8)]()['toLowerCase']();}function _0x2c1332(_0x553d7e,_0xd6dfc8){const _0x4823a9=_0x4db66a;if(!_0x553d7e)return'';const _0x51bb63=_0x988d6f(_0x553d7e),_0x42acf0=_0x205437(_0xd6dfc8);return _0x51bb63[_0x4823a9(0x226)]&&_0x51bb63[_0x4823a9(0x226)][_0x42acf0]?String(_0x51bb63[_0x4823a9(0x226)][_0x42acf0]):'';}function _0x4caeef(_0x453b8f,_0x505426,_0x53e2c1){const _0x440308=_0x4db66a;if(!_0x453b8f)return;const _0xa3edb7=_0x988d6f(_0x453b8f);!_0xa3edb7['levelPercents']&&(_0xa3edb7[_0x440308(0x226)]={});const _0x5db027=_0x205437(_0x505426),_0xfa424d=String(_0x53e2c1||'')[_0x440308(0x4b8)]();_0xfa424d?_0xa3edb7[_0x440308(0x226)][_0x5db027]=_0xfa424d:delete _0xa3edb7['levelPercents'][_0x5db027],_0xa3edb7[_0x440308(0x3a6)]&&_0x205437(_0xa3edb7[_0x440308(0x3a6)]['title'])===_0x5db027&&(_0xa3edb7[_0x440308(0x3a6)][_0x440308(0x244)]=_0xfa424d),_0x49f20d(_0x453b8f,_0xa3edb7);}function _0x2be631(_0x558570,_0x352aa6){const _0xb46f7f=_0x4db66a;if(!_0x558570||!_0x352aa6)return;const _0xacbe1=_0x988d6f(_0x558570);_0xacbe1[_0xb46f7f(0x3a6)]={'title':_0x352aa6[_0xb46f7f(0x2b8)],'position':_0x352aa6[_0xb46f7f(0x28e)],'level':_0x352aa6['level'],'url':_0x352aa6[_0xb46f7f(0x3d9)],'levelId':_0x352aa6['levelId'],'noteSource':_0x352aa6[_0xb46f7f(0x38d)],'percent':String(_0x352aa6['percent']||'')[_0xb46f7f(0x4b8)]()},_0xacbe1[_0xb46f7f(0x3a6)][_0xb46f7f(0x2b8)]&&_0xacbe1['roulettePick'][_0xb46f7f(0x244)]&&(!_0xacbe1[_0xb46f7f(0x226)]&&(_0xacbe1[_0xb46f7f(0x226)]={}),_0xacbe1['levelPercents'][_0x205437(_0xacbe1[_0xb46f7f(0x3a6)][_0xb46f7f(0x2b8)])]=_0xacbe1['roulettePick'][_0xb46f7f(0x244)]),_0x49f20d(_0x558570,_0xacbe1);}function _0x27a520(_0x5cda48){const _0x215580=_0x4db66a,_0x3ac906=String(_0x5cda48||'')[_0x215580(0x4b8)]();if(!_0x3ac906)return null;const _0x368b7f=_0x25d4c4(),_0x3bd341=_0x453968();return _0x368b7f[_0x215580(0x211)]({'id':_0x3bd341,'name':_0x3ac906,'createdAt':new Date()['toISOString']()}),_0x29d5d5(_0x368b7f),_0x56d210(_0x3bd341),_0x49f20d(_0x3bd341,_0x52dcdd()),{'id':_0x3bd341,'name':_0x3ac906};}function _0x15e0db(_0x40d904){const _0xa30bbd=_0x4db66a;return _0x40d904[_0xa30bbd(0x37f)](/\r?\n/)[_0xa30bbd(0x1ef)](_0xd9c99f=>_0xd9c99f[_0xa30bbd(0x4b8)]())[_0xa30bbd(0x32f)](Boolean)[_0xa30bbd(0x1ef)](_0x525482=>{const _0x236a89=_0xa30bbd,_0x27ee8f=_0x525482[_0x236a89(0x37f)]('|')[_0x236a89(0x1ef)](_0x32b048=>_0x32b048[_0x236a89(0x4b8)]());return{'level':_0x27ee8f[0x0]||'Unknown','position':_0x27ee8f[0x1]||'','title':_0x27ee8f[0x2]||_0x236a89(0x494),'url':_0x27ee8f[0x3]||''};});}function _0x4505aa(_0x3d743e){const _0x25b2e5=_0x4db66a;return _0x3d743e['map'](_0x287db3=>[_0x287db3['level']||'new',_0x287db3[_0x25b2e5(0x28e)]||'',_0x287db3['title']||'',_0x287db3[_0x25b2e5(0x3d9)]||''][_0x25b2e5(0x429)]('|'))[_0x25b2e5(0x429)]('\x0a');}function _0x5aad96(_0x507e48){const _0x20b928=_0x4db66a,_0x3e8f79={};return _0x507e48[_0x20b928(0x37f)](/\r?\n/)[_0x20b928(0x1ef)](_0x59a4c3=>_0x59a4c3['trim']())[_0x20b928(0x32f)](Boolean)[_0x20b928(0x2bd)](_0x56e69d=>{const _0x6a346a=_0x20b928;if(_0x56e69d[_0x6a346a(0x579)]('//'))return;const _0x4831b7=_0x56e69d[_0x6a346a(0x37f)]('|')[_0x6a346a(0x1ef)](_0x53505b=>_0x53505b[_0x6a346a(0x4b8)]()),_0x38ae28=_0x4831b7[0x0]||'';if(!_0x38ae28)return;_0x3e8f79[_0x38ae28]={'levelId':_0x4831b7[0x1]||_0x6a346a(0x3de),'percent':_0x4831b7[0x2]||_0x6a346a(0x2f2)};}),_0x3e8f79;}function _0x2a4102(){const _0x2d00d2=_0x4db66a;if(_0x343efa)return Promise[_0x2d00d2(0x27f)](_0x343efa);if(!_0xfb20e2)return fetch(_0x2d00d2(0x258),{'cache':_0x2d00d2(0x55e)})[_0x2d00d2(0x2be)](_0xde3c2a=>{if(!_0xde3c2a['ok'])throw new Error('static\x20data\x20unavailable');return _0xde3c2a['text']();})[_0x2d00d2(0x2be)](_0x3200b8=>{return _0x343efa=_0x15e0db(_0x3200b8),_0x343efa;});return fetch(_0x5872fc,{'cache':_0x2d00d2(0x55e)})[_0x2d00d2(0x2be)](_0xa60465=>{const _0x257a2a=_0x2d00d2;if(!_0xa60465['ok'])throw new Error(_0x257a2a(0x462));const _0x207c67=(_0xa60465[_0x257a2a(0x1e0)]['get']('content-type')||'')['toLowerCase']();if(_0x207c67[_0x257a2a(0x340)](_0x257a2a(0x2aa)))return _0xa60465['json']()[_0x257a2a(0x2be)](_0x25c5b6=>Array[_0x257a2a(0x222)](_0x25c5b6['items'])?_0x25c5b6[_0x257a2a(0x44c)]:[]);return _0xa60465[_0x257a2a(0x54a)]()[_0x257a2a(0x2be)](_0x18c454=>_0x15e0db(_0x18c454));})['then'](_0x4b7195=>{return _0x343efa=_0x4b7195,_0x343efa;})[_0x2d00d2(0x461)](()=>{const _0x4e389c=_0x2d00d2;return fetch(_0x332946,{'cache':_0x4e389c(0x55e)})[_0x4e389c(0x2be)](_0x4db856=>{const _0x48ebc7=_0x4e389c;if(!_0x4db856['ok'])throw new Error(_0x48ebc7(0x3b0));return _0x4db856[_0x48ebc7(0x54a)]();})[_0x4e389c(0x2be)](_0x4a6be5=>{return _0x343efa=_0x15e0db(_0x4a6be5),_0x343efa;})[_0x4e389c(0x461)](()=>{const _0x3e5062=_0x4e389c;return fetch(_0x3e5062(0x258),{'cache':'no-store'})[_0x3e5062(0x2be)](_0x3195d0=>{const _0x11ae88=_0x3e5062;if(!_0x3195d0['ok'])throw new Error('static\x20data\x20unavailable');return _0x3195d0[_0x11ae88(0x54a)]();})[_0x3e5062(0x2be)](_0x5da8df=>{return _0x343efa=_0x15e0db(_0x5da8df),_0x343efa;});});});}function _0x9082f5(){_0x343efa=null;}function _0x51d10a(){const _0x179621=_0x4db66a;if(_0x8f1b7a)return Promise[_0x179621(0x27f)](_0x8f1b7a);if(!_0xfb20e2)return _0x8f1b7a=[],Promise[_0x179621(0x27f)](_0x8f1b7a);return fetch(_0x1db2fa,{'cache':_0x179621(0x55e)})[_0x179621(0x2be)](_0x18c550=>{const _0x3b5197=_0x179621;if(!_0x18c550['ok'])throw new Error(_0x3b5197(0x30a));return _0x18c550[_0x3b5197(0x284)]();})['then'](_0x483471=>{const _0x1f1e23=_0x179621;return _0x8f1b7a=Array[_0x1f1e23(0x222)](_0x483471[_0x1f1e23(0x44c)])?_0x483471[_0x1f1e23(0x44c)]:[],_0x8f1b7a;});}function _0x328a40(){_0x8f1b7a=null;}function _0x1a993a(_0x35c0d7){const _0x135b30=_0x4db66a;_0x4092ff[_0x135b30(0x211)](_0x35c0d7);}function _0x40d416(_0x4defa2){const _0x3ac222=_0x4db66a;_0x4092ff[_0x3ac222(0x2bd)](_0x29566b=>_0x29566b(_0x4defa2));}function _0x32ba31(_0x2413d7){_0xde3f47['push'](_0x2413d7);}function _0x468bdd(_0x541286){const _0x216c7f=_0x4db66a;_0xde3f47[_0x216c7f(0x2bd)](_0x2ec309=>_0x2ec309(_0x541286));}function _0x47f5d9(){return _0x9082f5(),_0x2a4102()['then'](_0x1a2478=>{return _0x40d416(_0x1a2478),_0x1a2478;});}function _0x5a07fe(){const _0x23c58d=_0x4db66a;return _0x328a40(),_0x51d10a()[_0x23c58d(0x2be)](_0x1231ab=>{return _0x468bdd(_0x1231ab),_0x1231ab;});}function _0x1cb993(){const _0x49a424=_0x4db66a;if(_0x2ad0f0||!_0xfb20e2||typeof window[_0x49a424(0x525)]===_0x49a424(0x2eb))return;_0x2ad0f0=!![];const _0x4f6f1c=new EventSource(_0x148fd2);_0x4f6f1c[_0x49a424(0x4eb)](_0x49a424(0x26f),()=>{const _0x502f87=_0x49a424;_0x47f5d9()['catch'](_0x36113e=>console[_0x502f87(0x4a4)](_0x36113e));}),_0x4f6f1c['addEventListener'](_0x49a424(0x2a2),()=>{const _0x241fb8=_0x49a424;_0x5a07fe()['catch'](_0x3b7962=>console[_0x241fb8(0x4a4)](_0x3b7962));}),_0x4f6f1c['onerror']=function(){const _0x47abdd=_0x49a424;_0x4f6f1c[_0x47abdd(0x3c8)](),_0x2ad0f0=![],window[_0x47abdd(0x4f7)](_0x1cb993,0xbb8);};}function _0x44bda4(){const _0x5cb1bd=_0x4db66a;if(_0x1e3427)return Promise[_0x5cb1bd(0x27f)](_0x1e3427);return fetch('level-ids.txt')['then'](_0xb9745d=>_0xb9745d[_0x5cb1bd(0x54a)]())[_0x5cb1bd(0x2be)](_0x18f9ff=>{return _0x1e3427=_0x5aad96(_0x18f9ff),_0x1e3427;})[_0x5cb1bd(0x461)](()=>{return _0x1e3427={},_0x1e3427;});}function _0x1e6328(_0x373e72){const _0x17e801=_0x4db66a,_0x5258b1='https://gdbrowser.com/api/search/'+encodeURIComponent(_0x373e72)+_0x17e801(0x3df);return fetch(_0x5258b1)[_0x17e801(0x2be)](_0x55296c=>_0x55296c[_0x17e801(0x284)]())[_0x17e801(0x2be)](_0x21af51=>{const _0x3c6fc5=_0x17e801;if(!Array[_0x3c6fc5(0x222)](_0x21af51)||!_0x21af51[_0x3c6fc5(0x375)])return null;const _0x533306=_0x21af51[_0x3c6fc5(0x466)](_0x59b469=>String(_0x59b469[_0x3c6fc5(0x1f1)]||'')[_0x3c6fc5(0x3d6)]()===String(_0x373e72||'')[_0x3c6fc5(0x3d6)]()),_0x3899bb=_0x533306||_0x21af51[0x0];if(!_0x3899bb||!_0x3899bb['id'])return null;return String(_0x3899bb['id']);})[_0x17e801(0x461)](()=>null);}function _0x1632c8(_0x262676,_0x41e505){const _0x2b86fa=_0x4db66a;if(!_0x41e505)return;_0x41e505[_0x2b86fa(0x345)]=_0x2b86fa(0x52e),_0x51d10a()['then'](_0x163174=>{const _0xc23749=_0x2b86fa,_0x38a519=_0x163174[_0xc23749(0x32f)](_0x4fa666=>{const _0x31ac3b=_0xc23749;return String(_0x4fa666[_0x31ac3b(0x448)]||'')[_0x31ac3b(0x3d6)]()===_0x31ac3b(0x397)&&String(_0x4fa666[_0x31ac3b(0x3fa)]||'')[_0x31ac3b(0x3d6)]()===String(_0x262676[_0x31ac3b(0x2b8)]||'')[_0x31ac3b(0x3d6)]();});if(!_0x38a519[_0xc23749(0x375)]){_0x41e505['innerHTML']=_0xc23749(0x1fa);return;}_0x41e505['innerHTML']=_0x38a519[_0xc23749(0x1ef)](_0x31d8b1=>_0xc23749(0x29e)+_0x236e7b(_0x31d8b1[_0xc23749(0x2c4)]||_0xc23749(0x45c))+_0xc23749(0x4cc)+_0x236e7b(_0x31d8b1[_0xc23749(0x244)]||_0xc23749(0x2f2))+'%</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x20class=\x22text-link\x22\x20href=\x22'+_0x34f0a8(_0x31d8b1[_0xc23749(0x405)]||'#')+_0xc23749(0x431))[_0xc23749(0x429)]('');})['catch'](_0x32acb1=>{const _0x41d605=_0x2b86fa;console[_0x41d605(0x4a4)](_0x32acb1),_0x41e505[_0x41d605(0x345)]=_0x41d605(0x3bf);});}function _0x146f4b(_0x4972bd){const _0x5cbc17=_0x4db66a,_0x1335cd=String(_0x4972bd||'')[_0x5cbc17(0x3ff)](/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{6,})/);return _0x1335cd?_0x1335cd[0x1]:'';}function _0x232776(_0x127378,_0x166f8e){const _0x3e12aa=_0x4db66a;if(!_0x127378)return;const _0x1d0828=_0x127378[_0x3e12aa(0x350)](_0x3e12aa(0x32d));if(!_0x1d0828)return;let _0x38a6cd=_0x127378[_0x3e12aa(0x350)](_0x3e12aa(0x315));if(!_0x38a6cd){_0x38a6cd=document['createElement'](_0x3e12aa(0x2a1)),_0x38a6cd[_0x3e12aa(0x342)]=_0x3e12aa(0x32c);const _0x4f9230=_0x1d0828[_0x3e12aa(0x350)](_0x3e12aa(0x2a4));_0x4f9230?_0x1d0828[_0x3e12aa(0x55c)](_0x38a6cd,_0x4f9230):_0x1d0828[_0x3e12aa(0x3e6)](_0x38a6cd);}const _0x384d51=_0xf87f4d();if(!_0x384d51||!_0x166f8e||!_0x166f8e['title']){_0x38a6cd['hidden']=!![],_0x38a6cd[_0x3e12aa(0x345)]='';return;}_0x38a6cd[_0x3e12aa(0x3f8)]=![];const _0x5ae849=_0x2c1332(_0x384d51,_0x166f8e[_0x3e12aa(0x2b8)]),_0x2afb0f=_0x549aee?'Your\x20progress\x20(synced\x20to\x20your\x20account)':_0x3e12aa(0x3be);_0x38a6cd['innerHTML']=_0x3e12aa(0x2c9)+_0x2afb0f+_0x3e12aa(0x4d2)+_0x3e12aa(0x362)+_0x3e12aa(0x47a)+_0x3e12aa(0x323)+_0x3e12aa(0x562);const _0x39e496=_0x38a6cd[_0x3e12aa(0x350)]('.modal-account-pct-input');_0x39e496&&(_0x39e496[_0x3e12aa(0x51a)]=_0x5ae849,_0x39e496['addEventListener']('change',()=>{const _0x216ac1=_0x3e12aa;_0x4caeef(_0x384d51,_0x166f8e[_0x216ac1(0x2b8)],_0x39e496[_0x216ac1(0x51a)]);}));}function _0x18ba2b(_0x392f37){if(!_0x392f37||_0x392f37<0x1)return 0x0;if(_0x392f37<=0xc8)return 0x2710-(_0x392f37-0x1)*0x32;return 0x32;}function _0x424b91(_0x243552,_0x18e70e){const _0x224a08=_0x4db66a,_0x81ba2f=Object[_0x224a08(0x504)]({'showRuns':![]},_0x18e70e||{}),_0x891f22=_0x243552&&_0x243552[_0x224a08(0x3d9)];if(!_0x891f22)return;const _0x2f2714=_0x146f4b(_0x891f22);if(!_0x2f2714){window['open'](_0x891f22,_0x224a08(0x4c7));return;}const _0x5b491b=Number(_0x243552['position'])||0x0,_0x2fe83f=_0x18ba2b(_0x5b491b);let _0x1c861c=document[_0x224a08(0x350)](_0x224a08(0x3ca));if(!_0x1c861c){_0x1c861c=document[_0x224a08(0x56e)](_0x224a08(0x2a1)),_0x1c861c[_0x224a08(0x342)]=_0x224a08(0x4d3);const _0x40b4ee=document['createElement']('div');_0x40b4ee[_0x224a08(0x342)]=_0x224a08(0x3ea);const _0x19869c=document[_0x224a08(0x56e)](_0x224a08(0x353));_0x19869c[_0x224a08(0x26b)]=_0x224a08(0x52f),_0x19869c['className']='btn',_0x19869c[_0x224a08(0x415)][_0x224a08(0x42a)]=_0x224a08(0x552),_0x19869c[_0x224a08(0x2cf)]=()=>_0x1c861c[_0x224a08(0x1cf)](),_0x40b4ee[_0x224a08(0x3e6)](_0x19869c);const _0x30b613=document[_0x224a08(0x56e)](_0x224a08(0x421));_0x30b613[_0x224a08(0x47d)]=_0x224a08(0x256),_0x30b613[_0x224a08(0x2ab)]=!![],_0x40b4ee[_0x224a08(0x3e6)](_0x30b613),_0x1c861c['appendChild'](_0x40b4ee),document['body'][_0x224a08(0x3e6)](_0x1c861c);const _0x364c9d=document['createElement'](_0x224a08(0x2a1));_0x364c9d['className']=_0x224a08(0x43c),_0x364c9d[_0x224a08(0x345)]=_0x224a08(0x386),_0x40b4ee[_0x224a08(0x3e6)](_0x364c9d);}_0x1c861c['querySelector']('iframe')[_0x224a08(0x4f0)]=_0x224a08(0x24f)+_0x2f2714;let _0x51a5c4=_0x1c861c['querySelector'](_0x224a08(0x43d));if(!_0x51a5c4){_0x51a5c4=document[_0x224a08(0x56e)](_0x224a08(0x2a1)),_0x51a5c4[_0x224a08(0x342)]=_0x224a08(0x40f),_0x51a5c4['style'][_0x224a08(0x4d5)]='font-size:1.5em;font-weight:bold;margin-bottom:10px;color:var(--accent-color,#00aaff);';const _0x13ff3b=_0x1c861c[_0x224a08(0x350)]('.inner');_0x13ff3b['insertBefore'](_0x51a5c4,_0x13ff3b[_0x224a08(0x350)](_0x224a08(0x421)));}_0x51a5c4[_0x224a08(0x26b)]=_0x5b491b>0x0?_0x224a08(0x4ff)+_0x5b491b+_0x224a08(0x434)+_0x2fe83f+_0x224a08(0x446):'';const _0x44e16e=_0x1c861c['querySelector'](_0x224a08(0x2a4)),_0x3e939c=_0x1c861c[_0x224a08(0x350)](_0x224a08(0x450));if(_0x44e16e)_0x44e16e[_0x224a08(0x3f8)]=!_0x81ba2f[_0x224a08(0x4ce)];_0x81ba2f[_0x224a08(0x4ce)]&&_0x3e939c&&_0x1632c8(_0x243552,_0x3e939c),_0x232776(_0x1c861c,_0x243552),!_0x555914()&&window[_0x224a08(0x239)]?(_0x1c861c[_0x224a08(0x415)][_0x224a08(0x236)]='0',_0x1c861c[_0x224a08(0x415)][_0x224a08(0x204)]='scale(0.95)',_0x1c861c[_0x224a08(0x415)][_0x224a08(0x4ee)]=_0x224a08(0x23c),window['anime']({'targets':_0x1c861c,'opacity':[0x0,0x1],'scale':[0.95,0x1],'duration':0xbb8,'easing':_0x224a08(0x3e3)})):(_0x1c861c[_0x224a08(0x415)][_0x224a08(0x236)]='1',_0x1c861c[_0x224a08(0x415)][_0x224a08(0x204)]=_0x224a08(0x2fb),_0x1c861c[_0x224a08(0x415)]['display']='flex');}function _0x19845a(_0x1f480d){const _0x181809=_0x4db66a,_0x45e52b=_0xdc8485(_0x181809(0x549)),_0x3afd2b=_0xdc8485(_0x181809(0x393)),_0x26761a=_0xdc8485(_0x181809(0x577)),_0x3726af=_0xdc8485(_0x181809(0x4c5)),_0x7d3a27=_0xdc8485(_0x181809(0x1ec)),_0x1123d2=_0xdc8485(_0x181809(0x331)),_0x5f07f8=_0xdc8485('featured-list'),_0x41d43e=_0xdc8485(_0x181809(0x53f));function _0x2ef395(_0x3b9bfd){const _0x56b137=_0x181809;if(!_0x5f07f8)return;const _0x341377=_0x3b9bfd['slice']()[_0x56b137(0x2f6)]((_0x539771,_0x3dd526)=>(Number(_0x539771[_0x56b137(0x28e)])||0x0)-(Number(_0x3dd526['position'])||0x0)),_0x4a31a8=_0x341377['slice'](0x0,0xa);if(!_0x4a31a8[_0x56b137(0x375)]){_0x5f07f8['innerHTML']='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<article\x20class=\x22featured-card\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22featured-rank\x22>#--</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>No\x20list\x20data\x20found</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>The\x20homepage\x20preview\x20could\x20not\x20load\x20any\x20FEDL\x20entries\x20yet.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</article>\x0a\x20\x20\x20\x20\x20\x20\x20\x20';return;}_0x5f07f8[_0x56b137(0x345)]=_0x4a31a8['map'](_0x28f479=>_0x56b137(0x4c8)+_0x236e7b(_0x28f479[_0x56b137(0x28e)]||'--')+_0x56b137(0x472)+_0x236e7b(_0x28f479['title']||_0x56b137(0x494))+_0x56b137(0x2f5)+(_0x28f479[_0x56b137(0x3d9)]?_0x56b137(0x48d):_0x56b137(0x41c))+_0x56b137(0x430))['join'](''),document[_0x56b137(0x570)](_0x56b137(0x394))[_0x56b137(0x2bd)](_0x4bf9be=>_0x4bf9be[_0x56b137(0x1cf)]());}function _0x3b96dd(_0x1506a7){const _0x3bede2=_0x181809,_0x24afed=_0x1506a7['slice']()['sort']((_0xe0e1e3,_0x3b7d79)=>(Number(_0xe0e1e3['position'])||0x0)-(Number(_0x3b7d79[_0x3bede2(0x28e)])||0x0)),_0x5f8f04=_0x24afed[0x0];_0x45e52b&&(_0x45e52b['dataset'][_0x3bede2(0x3cd)]=_0x24afed[_0x3bede2(0x375)]||0x0,_0x45e52b[_0x3bede2(0x26b)]='0',_0x3c2cf4(_0x45e52b));if(_0x3afd2b)_0x3afd2b[_0x3bede2(0x26b)]=_0x5f8f04?_0x5f8f04[_0x3bede2(0x2b8)]:_0x3bede2(0x265);_0x2ef395(_0x24afed);if(_0x41d43e){const _0xcb6d23=_0x24afed[_0x3bede2(0x4e3)](0x0,0xa);_0x41d43e[_0x3bede2(0x345)]=_0xcb6d23['length']?_0xcb6d23[_0x3bede2(0x1ef)](_0x5af533=>_0x3bede2(0x4ae)+_0x236e7b(_0x5af533[_0x3bede2(0x28e)]||'--')+_0x3bede2(0x260)+_0x236e7b(_0x5af533[_0x3bede2(0x2b8)]||_0x3bede2(0x494))+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20')['join'](''):'<tr><td\x20colspan=\x222\x22\x20class=\x22muted\x22>No\x20local\x20list\x20data\x20found.</td></tr>';}}function _0x48d7cd(_0x834909,_0x48b0c5){const _0x9fd160=_0x181809,_0x53b121=new Map((_0x48b0c5||[])['map'](_0x172fa0=>[String(_0x172fa0[_0x9fd160(0x2b8)]||'')[_0x9fd160(0x3d6)](),Number(_0x172fa0[_0x9fd160(0x28e)])||0x270f])),_0x586cd4=new Map();_0x834909[_0x9fd160(0x2bd)](_0x4614b4=>{const _0x3c0460=_0x9fd160;if(String(_0x4614b4['status']||'')[_0x3c0460(0x3d6)]()!==_0x3c0460(0x397))return;const _0x314174=String(_0x4614b4[_0x3c0460(0x2c4)]||'')['trim']();if(!_0x314174)return;const _0x3a2cf1=_0x314174[_0x3c0460(0x3d6)]();let _0x19919e=_0x586cd4[_0x3c0460(0x380)](_0x3a2cf1);!_0x19919e&&(_0x19919e={'name':_0x314174,'runs':0x0,'bestRank':0x270f,'points':0x0},_0x586cd4[_0x3c0460(0x507)](_0x3a2cf1,_0x19919e));_0x19919e[_0x3c0460(0x1d1)]+=0x1;const _0x447f0b=_0x53b121['get'](String(_0x4614b4[_0x3c0460(0x3fa)]||'')['toLowerCase']())||0x270f;if(_0x447f0b>0x0&&_0x447f0b<_0x19919e[_0x3c0460(0x2ff)])_0x19919e[_0x3c0460(0x2ff)]=_0x447f0b;if(_0x447f0b>0x0&&_0x447f0b<0x3e8)_0x19919e[_0x3c0460(0x2dd)]+=_0x18ba2b(_0x447f0b);});const _0x2d0964=Array['from'](_0x586cd4[_0x9fd160(0x4a2)]())[_0x9fd160(0x2f6)]((_0x4ba30e,_0x3615f0)=>{const _0x28b11e=_0x9fd160;if(_0x3615f0[_0x28b11e(0x2dd)]!==_0x4ba30e[_0x28b11e(0x2dd)])return _0x3615f0['points']-_0x4ba30e[_0x28b11e(0x2dd)];const _0x3e0e74=_0x4ba30e[_0x28b11e(0x2ff)]===0x270f?0x270f:_0x4ba30e[_0x28b11e(0x2ff)],_0x46d6a5=_0x3615f0[_0x28b11e(0x2ff)]===0x270f?0x270f:_0x3615f0[_0x28b11e(0x2ff)];if(_0x3e0e74!==_0x46d6a5)return _0x3e0e74-_0x46d6a5;return _0x4ba30e[_0x28b11e(0x1f1)][_0x28b11e(0x3b6)](_0x3615f0[_0x28b11e(0x1f1)]);}),_0x562e79=_0x2d0964[0x0]?.[_0x9fd160(0x1f1)]||'None';if(_0x3726af)_0x3726af[_0x9fd160(0x26b)]=_0x562e79;const _0xbfd12=Date[_0x9fd160(0x55f)]()-0x7*0x18*0x3c*0x3c*0x3e8,_0x591a2f=_0x834909[_0x9fd160(0x32f)](_0x36d625=>{const _0x1552a2=_0x9fd160;if(String(_0x36d625[_0x1552a2(0x448)]||'')[_0x1552a2(0x3d6)]()!==_0x1552a2(0x397))return![];const _0x40db97=_0x36d625[_0x1552a2(0x4c3)]?new Date(_0x36d625[_0x1552a2(0x4c3)])['getTime']():0x0;return _0x40db97>=_0xbfd12;})[_0x9fd160(0x375)];_0x7d3a27&&(_0x7d3a27[_0x9fd160(0x313)][_0x9fd160(0x3cd)]=_0x591a2f,_0x7d3a27[_0x9fd160(0x26b)]='0',_0x3c2cf4(_0x7d3a27));const _0x3a97ba=_0x834909['slice']()[_0x9fd160(0x2f6)]((_0x577518,_0x298714)=>new Date(_0x298714['submittedAt']||0x0)-new Date(_0x577518['submittedAt']||0x0)),_0x277f0c=_0x3a97ba['find'](_0xe66a37=>_0xe66a37[_0x9fd160(0x4c3)]);if(_0x1123d2)_0x1123d2['textContent']=_0x277f0c?new Date(_0x277f0c[_0x9fd160(0x4c3)])['toLocaleDateString']('en-US',{'month':_0x9fd160(0x3f6),'day':_0x9fd160(0x4aa)}):'N/A';}function _0xdbca08(_0x2964bf){const _0x527e9d=_0x181809;if(!_0x26761a)return;const _0x13e44c=_0x2964bf[_0x527e9d(0x32f)](_0x530428=>String(_0x530428[_0x527e9d(0x448)]||'')[_0x527e9d(0x3d6)]()==='approved')[_0x527e9d(0x375)];_0x26761a[_0x527e9d(0x313)][_0x527e9d(0x3cd)]=_0x13e44c,_0x26761a[_0x527e9d(0x26b)]='0',_0x3c2cf4(_0x26761a);}_0x2a4102()[_0x181809(0x2be)](_0x597657=>{const _0xbdf8c4=_0x181809;_0x3b96dd(_0x597657),_0x1f480d&&(_0x51d10a()[_0xbdf8c4(0x2be)](_0x43e57a=>{_0xdbca08(_0x43e57a),_0x48d7cd(_0x43e57a,_0x597657);})['catch'](()=>{_0xdbca08([]),_0x48d7cd([],_0x597657);}),_0x32ba31(_0x497738=>{_0xdbca08(_0x497738),_0x48d7cd(_0x497738,_0x597657);}));})[_0x181809(0x461)](()=>{_0x3b96dd([]);}),_0x1a993a(_0x3b96dd);}_0xb41a12===_0x4db66a(0x4ea)&&(_0x19845a(!![]),_0x1cb993());if(_0xb41a12===_0x3635cb){const _0x1720d5=window[_0x4db66a(0x403)]['hash'][_0x4db66a(0x4e3)](0x1)||'home';if(_0x1720d5===_0x4db66a(0x280)||_0x1720d5===_0x4db66a(0x51e)){_0x19845a(!![]),_0x1cb993();const _0x22a036=_0xdc8485('list-body');if(_0x22a036){const _0x478f54=_0x59309a();_0x1a993a(function(_0x1c3deb){_0x478f54['applyItems'](_0x1c3deb);});}}if(_0x1720d5===_0x4db66a(0x455)){const _0x4e8279=_0xdc8485(_0x4db66a(0x261)),_0x402f53=_0xdc8485(_0x4db66a(0x3ae));if(_0x4e8279&&_0x402f53){let _0x4636c5=[];Promise['all']([_0x51d10a(),_0x2a4102()])['then'](([_0x3497c4,_0x317221])=>{const _0x3a21a8=_0x4db66a,_0x57202f=new Map(_0x317221[_0x3a21a8(0x1ef)](_0x499164=>[String(_0x499164['title']||'')[_0x3a21a8(0x3d6)](),Number(_0x499164['position'])||0x270f])),_0x24f872=new Map();_0x3497c4[_0x3a21a8(0x32f)](_0x1c5669=>String(_0x1c5669[_0x3a21a8(0x448)]||'')[_0x3a21a8(0x3d6)]()===_0x3a21a8(0x397))[_0x3a21a8(0x2bd)](_0x5b9655=>{const _0x5585d8=_0x3a21a8,_0xaddf66=String(_0x5b9655[_0x5585d8(0x2c4)]||'')['trim']();if(!_0xaddf66)return;const _0x27d3ac=_0xaddf66['toLowerCase']();let _0x35fbc4=_0x24f872['get'](_0x27d3ac);!_0x35fbc4&&(_0x35fbc4={'name':_0xaddf66,'runs':0x0,'bestRank':0x270f,'points':0x0,'topLevels':new Set()},_0x24f872['set'](_0x27d3ac,_0x35fbc4));_0x35fbc4[_0x5585d8(0x1d1)]+=0x1;const _0x21447f=_0x57202f[_0x5585d8(0x380)](String(_0x5b9655[_0x5585d8(0x3fa)]||'')[_0x5585d8(0x3d6)]())||0x270f;if(_0x21447f>0x0&&_0x21447f<_0x35fbc4['bestRank'])_0x35fbc4[_0x5585d8(0x2ff)]=_0x21447f;if(_0x21447f>0x0&&_0x21447f<0x3e8)_0x35fbc4['points']+=_0x18ba2b(_0x21447f);if(_0x5b9655[_0x5585d8(0x3fa)])_0x35fbc4[_0x5585d8(0x26e)][_0x5585d8(0x1ed)](String(_0x5b9655[_0x5585d8(0x3fa)])[_0x5585d8(0x4b8)]());}),_0x4636c5=Array[_0x3a21a8(0x4f6)](_0x24f872[_0x3a21a8(0x4a2)]())[_0x3a21a8(0x1ef)](_0x4c79f8=>({'name':_0x4c79f8['name'],'runs':_0x4c79f8[_0x3a21a8(0x1d1)],'bestRank':_0x4c79f8[_0x3a21a8(0x2ff)]===0x270f?'—':'#'+_0x4c79f8[_0x3a21a8(0x2ff)],'points':_0x4c79f8[_0x3a21a8(0x2dd)],'topLevels':Array[_0x3a21a8(0x4f6)](_0x4c79f8[_0x3a21a8(0x26e)])[_0x3a21a8(0x4e3)](0x0,0x3)[_0x3a21a8(0x429)](',\x20')}))[_0x3a21a8(0x2f6)]((_0x5070cf,_0x425503)=>_0x425503[_0x3a21a8(0x2dd)]-_0x5070cf[_0x3a21a8(0x2dd)]||_0x5070cf['name']['localeCompare'](_0x425503[_0x3a21a8(0x1f1)]));function _0x10e9e3(){const _0x3f71b8=_0x3a21a8,_0x4e3702=(_0x402f53['value']||'')[_0x3f71b8(0x3d6)](),_0xb869f2=_0x4636c5[_0x3f71b8(0x32f)](_0x4b9b2f=>!_0x4e3702||_0x4b9b2f[_0x3f71b8(0x1f1)][_0x3f71b8(0x3d6)]()[_0x3f71b8(0x340)](_0x4e3702));if(!_0xb869f2[_0x3f71b8(0x375)]){_0x4e8279[_0x3f71b8(0x345)]=_0x3f71b8(0x491);return;}_0x4e8279[_0x3f71b8(0x345)]=_0xb869f2[_0x3f71b8(0x4e3)](0x0,0x64)['map'](_0x511dcc=>'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><strong>'+_0x236e7b(_0x511dcc[_0x3f71b8(0x1f1)])+_0x3f71b8(0x49c)+_0x511dcc[_0x3f71b8(0x1d1)]+_0x3f71b8(0x2e3)+_0x511dcc[_0x3f71b8(0x2ff)]+_0x3f71b8(0x2e3)+_0x511dcc[_0x3f71b8(0x2dd)]+_0x3f71b8(0x2e3)+_0x236e7b(_0x511dcc[_0x3f71b8(0x26e)])+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20')['join']('');}_0x402f53['addEventListener']('input',_0x10e9e3),_0x10e9e3();});}}if(_0x1720d5==='run'){const _0x44de37=_0xdc8485('run-form');if(_0x44de37){const _0x42dd85=_0xdc8485(_0x4db66a(0x555)),_0x1d8481=_0xdc8485(_0x4db66a(0x425));_0x44de37[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),function(_0x28637f){const _0x16556e=_0x4db66a;_0x28637f['preventDefault']();const _0x1a5916=_0x42dd85[_0x16556e(0x51a)][_0x16556e(0x4b8)](),_0x75b3c6=_0xdc8485(_0x16556e(0x4a8))[_0x16556e(0x51a)][_0x16556e(0x4b8)](),_0x16d613=_0xdc8485(_0x16556e(0x474))[_0x16556e(0x51a)][_0x16556e(0x4b8)](),_0x5d2229=_0xdc8485(_0x16556e(0x359))[_0x16556e(0x51a)][_0x16556e(0x4b8)](),_0x53b17f=_0xdc8485(_0x16556e(0x4a3))['value']['trim'](),_0xe26333=_0xdc8485(_0x16556e(0x45e))[_0x16556e(0x51a)][_0x16556e(0x4b8)]();if(!_0x1a5916||!_0x75b3c6||!_0x16d613||!_0x5d2229){_0x1d8481['textContent']='Please\x20fill\x20in\x20all\x20required\x20fields.';return;}_0x1d8481[_0x16556e(0x26b)]=_0x16556e(0x1e5),fetch(_0x1db2fa,{'method':_0x16556e(0x2a8),'headers':{'Content-Type':_0x16556e(0x2aa)},'body':JSON['stringify']({'playerName':_0x1a5916,'levelTitle':_0x75b3c6,'videoUrl':_0x16d613,'percent':_0x5d2229,'rawFootageUrl':_0x53b17f,'notes':_0xe26333})})['then'](_0x170aa9=>{const _0x5dfe8a=_0x16556e;if(!_0x170aa9['ok'])throw new Error(_0x5dfe8a(0x3bc));_0x1d8481[_0x5dfe8a(0x26b)]='Run\x20submitted\x20successfully!',_0x44de37['reset']();})['catch'](()=>{const _0x47a94c=_0x16556e;_0x1d8481[_0x47a94c(0x26b)]=_0x47a94c(0x529);});});}}if(_0x1720d5===_0x4db66a(0x4f2)){const _0xe674a9=_0xdc8485('roulette-spin'),_0x28f3a2=_0xdc8485(_0x4db66a(0x42e));_0xe674a9&&_0x28f3a2&&_0xe674a9[_0x4db66a(0x4eb)]('click',function(){const _0x3cd186=_0x4db66a;_0x2a4102()[_0x3cd186(0x2be)](_0x549733=>{const _0x1e53d5=_0x3cd186;if(!_0x549733[_0x1e53d5(0x375)]){_0x28f3a2['innerHTML']='<p\x20class=\x22muted\x22>No\x20levels\x20loaded.</p>';return;}const _0x353897=_0x549733[Math['floor'](Math['random']()*_0x549733[_0x1e53d5(0x375)])];_0x28f3a2[_0x1e53d5(0x345)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>'+_0x236e7b(_0x353897[_0x1e53d5(0x2b8)]||_0x1e53d5(0x494))+_0x1e53d5(0x2c6)+(_0x353897[_0x1e53d5(0x28e)]||'?')+_0x1e53d5(0x21a)+(_0x353897[_0x1e53d5(0x4dd)]||'')+'</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20';});});}if(_0x1720d5==='guess'){const _0x58ed64=_0xdc8485(_0x4db66a(0x39a)),_0x129946=_0xdc8485('guess-lower'),_0x3ec06d=_0xdc8485(_0x4db66a(0x23f)),_0x380586=_0xdc8485('guess-result'),_0x3aed4e=_0xdc8485('guess-score');if(_0x58ed64&&_0x129946&&_0x3ec06d){let _0x377057=null,_0x246d28=0x0,_0x3ac001=![];function _0x1cac75(){const _0x40a73b=_0x4db66a;_0x2a4102()[_0x40a73b(0x2be)](_0x656c07=>{const _0x494ac9=_0x40a73b;if(!_0x656c07[_0x494ac9(0x375)])return;_0x377057=_0x656c07[Math[_0x494ac9(0x54b)](Math['random']()*_0x656c07[_0x494ac9(0x375)])],_0x3ec06d[_0x494ac9(0x26b)]=_0x377057[_0x494ac9(0x2b8)]||_0x494ac9(0x243),_0x380586[_0x494ac9(0x26b)]='',_0x3ac001=![];});}_0x58ed64[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),function(){const _0x34d88b=_0x4db66a;if(_0x3ac001||!_0x377057)return;_0x3ac001=!![];const _0xb8bd45=Number(_0x377057[_0x34d88b(0x28e)])||0x270f,_0xea56df=Math['random']()*0x64;_0xea56df>0x32?(_0x246d28++,_0x380586['textContent']=_0x34d88b(0x48a)+_0xb8bd45):_0x380586[_0x34d88b(0x26b)]=_0x34d88b(0x21f)+_0xb8bd45,_0x3aed4e[_0x34d88b(0x26b)]=_0x34d88b(0x409)+_0x246d28,setTimeout(_0x1cac75,0x7d0);}),_0x129946[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),function(){const _0x5495f6=_0x4db66a;if(_0x3ac001||!_0x377057)return;_0x3ac001=!![];const _0x174aca=Number(_0x377057[_0x5495f6(0x28e)])||0x270f,_0x364065=Math[_0x5495f6(0x396)]()*0x64;_0x364065<0x32?(_0x246d28++,_0x380586[_0x5495f6(0x26b)]=_0x5495f6(0x48a)+_0x174aca):_0x380586[_0x5495f6(0x26b)]=_0x5495f6(0x21f)+_0x174aca,_0x3aed4e[_0x5495f6(0x26b)]=_0x5495f6(0x409)+_0x246d28,setTimeout(_0x1cac75,0x7d0);}),_0x1cac75();}}}_0xb41a12===_0x4db66a(0x1e4)&&_0x19845a(![]);if(_0xb41a12===_0x4db66a(0x4f2)){const _0x4c60a0=_0xdc8485(_0x4db66a(0x4e6)),_0x2f19ee=_0xdc8485(_0x4db66a(0x3b3)),_0x277b2f=_0xdc8485(_0x4db66a(0x495)),_0x4acabb=_0xdc8485('roulette-rank'),_0x2b880d=_0xdc8485(_0x4db66a(0x292)),_0x3e6784=_0xdc8485(_0x4db66a(0x482)),_0xe4545d=_0xdc8485(_0x4db66a(0x3f2)),_0x35ea52=_0xdc8485('roulette-percent'),_0x4c8665=_0xdc8485(_0x4db66a(0x548)),_0x22fe03=_0xdc8485(_0x4db66a(0x2fe)),_0x145cc1=_0xdc8485(_0x4db66a(0x309)),_0x22ec3b=_0xdc8485(_0x4db66a(0x4ed)),_0x3a964f=_0xdc8485('roulette-restore'),_0x4f2697=_0xdc8485(_0x4db66a(0x37c)),_0x3c2fcb=_0xdc8485(_0x4db66a(0x3f3)),_0x2ccecc=_0xdc8485(_0x4db66a(0x372)),_0x437a8e=_0xdc8485(_0x4db66a(0x1fd));let _0x68015d={'item':null,'meta':null};function _0x1eb1ab(_0xdca739,_0x4332aa){const _0x2ea1e3=_0x4db66a;if(!_0x4f2697)return;_0x4f2697[_0x2ea1e3(0x26b)]=_0xdca739||'',_0x4f2697[_0x2ea1e3(0x342)]='small\x20roulette-percent-hint\x20'+(_0x4332aa===_0x2ea1e3(0x4a4)?_0x2ea1e3(0x537):_0x4332aa===_0x2ea1e3(0x223)?_0x2ea1e3(0x456):'muted');}function _0x213269(){const _0x4a4957=_0x4db66a,_0x2fe07b=_0x2b4a3c('');_0x1eb1ab(_0x2fe07b['text'],_0x2fe07b[_0x4a4957(0x368)]);}function _0x26a5d1(){const _0x50c4bc=_0x4db66a,_0x577d0f=_0xf87f4d();['1','2','3'][_0x50c4bc(0x2bd)](_0x22bc6a=>{const _0x3c548e=_0x50c4bc,_0x2493e2=_0xdc8485('roulette-slot-save-'+_0x22bc6a),_0x3cebf6=_0xdc8485(_0x3c548e(0x4fa)+_0x22bc6a),_0xd819df=_0xdc8485(_0x3c548e(0x339)+_0x22bc6a);if(_0x2493e2)_0x2493e2[_0x3c548e(0x1f9)]=!_0x577d0f;if(_0x3cebf6)_0x3cebf6[_0x3c548e(0x1f9)]=!_0x577d0f;if(_0xd819df){if(!_0x577d0f)_0xd819df[_0x3c548e(0x26b)]='—';else{const _0x2d991b=_0x988d6f(_0x577d0f)[_0x3c548e(0x1e1)][_0x22bc6a];if(_0x2d991b&&_0x2d991b[_0x3c548e(0x2b8)]){const _0x2b4a15=_0x2d991b[_0x3c548e(0x244)]?_0x3c548e(0x56c)+_0x2d991b[_0x3c548e(0x244)]+'%':'',_0xbcf35e=String(_0x2d991b['title']),_0x28ad2a=_0xbcf35e[_0x3c548e(0x375)]>0x24?_0xbcf35e[_0x3c548e(0x4e3)](0x0,0x22)+'…':_0xbcf35e;_0xd819df['textContent']=_0x28ad2a+_0x2b4a15;}else _0xd819df[_0x3c548e(0x26b)]='Empty';}}}),_0x2ccecc&&(!_0x577d0f?_0x2ccecc[_0x50c4bc(0x26b)]=_0x50c4bc(0x246):_0x2ccecc[_0x50c4bc(0x26b)]=_0x50c4bc(0x305));}function _0x29a5f7(){const _0xdaea0f=_0x4db66a;if(!_0x4c8665)return;const _0x1d7d31=_0xf87f4d();if(!_0x1d7d31||!_0x68015d['item']){_0x4c8665[_0xdaea0f(0x3f8)]=!![];if(_0x35ea52)_0x35ea52[_0xdaea0f(0x51a)]='';if(_0x4f2697)_0x4f2697['textContent']='';return;}_0x4c8665[_0xdaea0f(0x3f8)]=![],_0x35ea52&&(_0x35ea52[_0xdaea0f(0x51a)]=_0x2c1332(_0x1d7d31,_0x68015d[_0xdaea0f(0x338)]['title'])||''),_0x213269();}function _0x150ae2(){const _0x2f5121=_0x4db66a,_0x1263b4=document['querySelector'](_0x2f5121(0x273)),_0x3a215b=!!_0x741b6c;_0x3c2fcb&&(_0x3c2fcb[_0x2f5121(0x3f8)]=!!_0x549aee);if(_0x1263b4){const _0x2baf37=_0x1263b4[_0x2f5121(0x350)](_0x2f5121(0x485)),_0x21a308=_0x1263b4[_0x2f5121(0x350)](_0x2f5121(0x578)),_0x1738ad=_0x1263b4[_0x2f5121(0x350)](_0x2f5121(0x328));let _0x133222=_0x1263b4[_0x2f5121(0x350)]('.fedl-server-account-note');if(_0x3a215b){if(_0x2baf37)_0x2baf37[_0x2f5121(0x415)]['display']=_0x2f5121(0x46e);if(_0x21a308)_0x21a308[_0x2f5121(0x415)]['display']='none';if(_0x1738ad)_0x1738ad[_0x2f5121(0x415)]['display']=_0x2f5121(0x46e);if(!_0x133222){_0x133222=document[_0x2f5121(0x56e)]('p'),_0x133222[_0x2f5121(0x342)]=_0x2f5121(0x213);const _0x2267a0=_0x1263b4[_0x2f5121(0x350)]('.roulette-account-heading');_0x2267a0?_0x2267a0['insertAdjacentElement']('afterend',_0x133222):_0x1263b4[_0x2f5121(0x3e6)](_0x133222);}_0x133222[_0x2f5121(0x26b)]=_0x2f5121(0x2e1)+_0x741b6c+'.\x20Progress\x20syncs\x20online\x20and\x20this\x20browser\x20keeps\x20a\x20copy.',_0x133222['style']['display']='';}else{if(_0x2baf37)_0x2baf37[_0x2f5121(0x415)][_0x2f5121(0x4ee)]='';if(_0x21a308)_0x21a308['style']['display']='';if(_0x1738ad)_0x1738ad[_0x2f5121(0x415)]['display']='';if(_0x133222)_0x133222[_0x2f5121(0x415)][_0x2f5121(0x4ee)]=_0x2f5121(0x46e);}}if(!_0x22fe03||_0x3a215b){if(_0x3a964f){const _0x46d71b=_0xf87f4d(),_0x435e35=_0x46d71b?_0x988d6f(_0x46d71b)[_0x2f5121(0x3a6)]:null;_0x3a964f[_0x2f5121(0x3f8)]=!_0x435e35||!_0x435e35[_0x2f5121(0x2b8)];}_0x26a5d1(),_0x29a5f7();return;}const _0x28eca4=_0x25d4c4(),_0xe0c829=_0xdeb23f();_0x22fe03[_0x2f5121(0x345)]=_0x2f5121(0x36b),_0x28eca4[_0x2f5121(0x2bd)](_0x22def5=>{const _0x53693b=_0x2f5121,_0x2a20ba=document[_0x53693b(0x56e)]('option');_0x2a20ba[_0x53693b(0x51a)]=_0x22def5['id'],_0x2a20ba[_0x53693b(0x26b)]=_0x22def5['name'];if(_0x22def5['id']===_0xe0c829)_0x2a20ba['selected']=!![];_0x22fe03['appendChild'](_0x2a20ba);});if(_0x3a964f){const _0x5dff0d=_0xe0c829?_0x988d6f(_0xe0c829)['roulettePick']:null;_0x3a964f[_0x2f5121(0x3f8)]=!_0x5dff0d||!_0x5dff0d[_0x2f5121(0x2b8)];}_0x26a5d1(),_0x29a5f7();}function _0x3ebe44(_0x4c4f9d,_0x50d2ea){const _0x12fadf=_0x4db66a;_0x68015d={'item':_0x4c4f9d,'meta':_0x50d2ea};const _0x37f195=_0xdc8485('roulette-card');_0x37f195&&window['anime']&&!_0x555914()&&(_0x37f195[_0x12fadf(0x415)]['opacity']='0',_0x37f195['style'][_0x12fadf(0x204)]=_0x12fadf(0x3a0));_0x2f19ee[_0x12fadf(0x26b)]='Your\x20demon\x20is:',_0x277b2f[_0x12fadf(0x26b)]=_0x4c4f9d[_0x12fadf(0x2b8)],_0x4acabb[_0x12fadf(0x26b)]='Rank:\x20#'+_0x4c4f9d['position'],_0x2b880d[_0x12fadf(0x26b)]=_0x12fadf(0x2ed)+(_0x50d2ea[_0x12fadf(0x4b1)]||_0x12fadf(0x3de)),_0x3e6784[_0x12fadf(0x26b)]=_0x50d2ea['source']===_0x12fadf(0x473)?_0x12fadf(0x4de):_0x12fadf(0x49b);_0x4c4f9d['url']?(_0xe4545d[_0x12fadf(0x3f8)]=![],_0xe4545d[_0x12fadf(0x20b)]='#',_0xe4545d[_0x12fadf(0x2cf)]=function(_0x5753b0){const _0x3c6a07=_0x12fadf;_0x5753b0[_0x3c6a07(0x46d)](),_0x424b91(_0x4c4f9d,{'showRuns':![]});}):(_0xe4545d[_0x12fadf(0x3f8)]=!![],_0xe4545d[_0x12fadf(0x2cf)]=null);const _0x2b69f7=_0xf87f4d();if(_0x2b69f7){const _0x1bdaba=_0x2c1332(_0x2b69f7,_0x4c4f9d[_0x12fadf(0x2b8)])||'';_0x2be631(_0x2b69f7,{'title':_0x4c4f9d[_0x12fadf(0x2b8)],'position':_0x4c4f9d[_0x12fadf(0x28e)],'level':_0x4c4f9d[_0x12fadf(0x4dd)],'url':_0x4c4f9d[_0x12fadf(0x3d9)],'levelId':_0x50d2ea['levelId'],'noteSource':_0x50d2ea['source'],'percent':_0x1bdaba}),_0x150ae2();}_0x29a5f7();if(_0x37f195&&window[_0x12fadf(0x239)]&&!_0x555914()){const _0x3511a1=_0xc18bf6();window[_0x12fadf(0x239)]({'targets':_0x37f195,'opacity':[0x0,0x1],'scale':[0.9,1.02,0x1],'translateY':[0xc,-0x2,0x0],'duration':_0x3511a1,'easing':_0x12fadf(0x21d)});}}function _0x533771(_0x439c57){const _0x2accf2=_0x4db66a,_0x19d875=_0xf87f4d();if(!_0x19d875||!_0x68015d['item']){if(_0x2ccecc)_0x2ccecc['textContent']=_0x2accf2(0x314);return;}const _0x390035=_0x988d6f(_0x19d875),_0x35fe20=_0x35ea52?String(_0x35ea52[_0x2accf2(0x51a)]||'')[_0x2accf2(0x4b8)]():'';_0x390035[_0x2accf2(0x1e1)][_0x439c57]={'title':_0x68015d[_0x2accf2(0x338)][_0x2accf2(0x2b8)],'position':_0x68015d['item'][_0x2accf2(0x28e)],'level':_0x68015d[_0x2accf2(0x338)][_0x2accf2(0x4dd)],'url':_0x68015d[_0x2accf2(0x338)][_0x2accf2(0x3d9)],'levelId':_0x68015d[_0x2accf2(0x392)]&&_0x68015d['meta'][_0x2accf2(0x4b1)],'noteSource':_0x68015d[_0x2accf2(0x392)]&&_0x68015d[_0x2accf2(0x392)]['source'],'percent':_0x35fe20,'savedAt':new Date()['toISOString']()},_0x49f20d(_0x19d875,_0x390035);_0x35fe20&&_0x4caeef(_0x19d875,_0x68015d[_0x2accf2(0x338)][_0x2accf2(0x2b8)],_0x35fe20);_0x26a5d1();const _0xb8e1e6=document['querySelector'](_0x2accf2(0x3db)+_0x439c57+')');_0xb8e1e6&&window[_0x2accf2(0x239)]&&!_0x555914()&&(_0xb8e1e6[_0x2accf2(0x30b)][_0x2accf2(0x1ed)]('slot-active'),window['anime']({'targets':_0xb8e1e6,'backgroundColor':[_0x2accf2(0x23e),_0x2accf2(0x24b)],'duration':0x1f4,'easing':_0x2accf2(0x48b),'complete':()=>_0xb8e1e6[_0x2accf2(0x30b)][_0x2accf2(0x1cf)]('slot-active')}));}function _0x2a4e4c(_0x418442){const _0x5958f7=_0x4db66a,_0x353daf=_0xf87f4d();if(!_0x353daf)return;const _0x1af54f=_0x988d6f(_0x353daf)['rouletteSlots'][_0x418442];if(!_0x1af54f||!_0x1af54f[_0x5958f7(0x2b8)]){if(_0x2ccecc)_0x2ccecc[_0x5958f7(0x26b)]=_0x5958f7(0x480);return;}const _0x199676=String(_0x1af54f['percent']!=null?_0x1af54f[_0x5958f7(0x244)]:'')[_0x5958f7(0x4b8)]();_0x199676&&_0x4caeef(_0x353daf,_0x1af54f[_0x5958f7(0x2b8)],_0x199676);const _0x2f7c45={'title':_0x1af54f['title'],'position':_0x1af54f[_0x5958f7(0x28e)],'level':_0x1af54f[_0x5958f7(0x4dd)],'url':_0x1af54f['url']},_0x58b043={'levelId':_0x1af54f['levelId'],'source':_0x1af54f[_0x5958f7(0x38d)]===_0x5958f7(0x473)?'api':_0x5958f7(0x259)};_0x3ebe44(_0x2f7c45,_0x58b043),_0x35ea52&&(_0x35ea52[_0x5958f7(0x51a)]=_0x199676||_0x2c1332(_0x353daf,_0x1af54f['title'])||''),_0x213269(),_0x26a5d1();}_0x35ea52&&_0x35ea52[_0x4db66a(0x4eb)](_0x4db66a(0x200),()=>{const _0x5a520e=_0x4db66a,_0x2b4b58=_0xf87f4d();if(!_0x2b4b58||!_0x68015d['item'])return;_0x4caeef(_0x2b4b58,_0x68015d['item'][_0x5a520e(0x2b8)],_0x35ea52[_0x5a520e(0x51a)]);});_0x437a8e&&_0x437a8e[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),()=>{const _0xf9e97f=_0x4db66a,_0x1fc357=_0xf87f4d();if(!_0x1fc357||!_0x68015d[_0xf9e97f(0x338)]){_0x1eb1ab(_0xf9e97f(0x389),'error');return;}_0x4caeef(_0x1fc357,_0x68015d[_0xf9e97f(0x338)][_0xf9e97f(0x2b8)],_0x35ea52?_0x35ea52[_0xf9e97f(0x51a)]:'');const _0x59b2ac=_0x2b4a3c(_0x35ea52?_0x35ea52['value']:'');_0x1eb1ab(_0x59b2ac[_0xf9e97f(0x54a)],_0x59b2ac[_0xf9e97f(0x368)]);});['1','2','3']['forEach'](_0x2b1ea4=>{const _0x34860d=_0x4db66a,_0xd40b48=_0xdc8485(_0x34860d(0x1d4)+_0x2b1ea4),_0x2d947d=_0xdc8485('roulette-slot-load-'+_0x2b1ea4);if(_0xd40b48)_0xd40b48[_0x34860d(0x4eb)](_0x34860d(0x1d2),()=>_0x533771(_0x2b1ea4));if(_0x2d947d)_0x2d947d[_0x34860d(0x4eb)](_0x34860d(0x1d2),()=>_0x2a4e4c(_0x2b1ea4));});_0x22fe03&&_0x22fe03[_0x4db66a(0x4eb)](_0x4db66a(0x200),()=>{const _0x435e46=_0x4db66a;_0x56d210(_0x22fe03[_0x435e46(0x51a)]||''),_0x150ae2();});_0x22ec3b&&_0x145cc1&&_0x22ec3b[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),()=>{const _0xe254da=_0x4db66a,_0x279a6a=String(_0x145cc1[_0xe254da(0x51a)]||'')[_0xe254da(0x4b8)]();if(!_0x279a6a)return;_0x27a520(_0x279a6a),_0x145cc1[_0xe254da(0x51a)]='',_0x150ae2();});_0x3a964f&&_0x3a964f[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),()=>{const _0x74454d=_0x4db66a,_0x39aa64=_0xf87f4d();if(!_0x39aa64)return;const _0x17d50f=_0x988d6f(_0x39aa64)[_0x74454d(0x3a6)];if(!_0x17d50f||!_0x17d50f[_0x74454d(0x2b8)])return;const _0x63086b={'title':_0x17d50f['title'],'position':_0x17d50f['position'],'level':_0x17d50f[_0x74454d(0x4dd)],'url':_0x17d50f[_0x74454d(0x3d9)]},_0x37f0a5={'levelId':_0x17d50f[_0x74454d(0x4b1)],'source':_0x17d50f['noteSource']==='api'?_0x74454d(0x473):'file'};_0x3ebe44(_0x63086b,_0x37f0a5);});document[_0x4db66a(0x4eb)](_0x4db66a(0x3a3),()=>{_0x150ae2();}),_0x16b62b()[_0x4db66a(0x2be)](()=>_0x33b506(_0x549aee))['finally'](()=>{_0x150ae2(),_0xdc8400();});const _0x5b175a=document['getElementById']('roulette-wheel-wrap'),_0x3d582c=document[_0x4db66a(0x2ce)](_0x4db66a(0x301));function _0x450a8f(_0x1e390a){const _0x14d7ee=_0x4db66a;if(!_0x3d582c||!_0x1e390a[_0x14d7ee(0x375)])return;_0x3d582c['innerHTML']='';const _0x5a01be=0x168/Math[_0x14d7ee(0x291)](_0x1e390a[_0x14d7ee(0x375)],0x14),_0x1e72d2=[_0x14d7ee(0x1db),_0x14d7ee(0x57e),_0x14d7ee(0x41e),_0x14d7ee(0x4a0),'#f472b6',_0x14d7ee(0x208),_0x14d7ee(0x229),_0x14d7ee(0x2a3),_0x14d7ee(0x38f),_0x14d7ee(0x3c7),'#34d399','#ffb84d',_0x14d7ee(0x3cb),'#5cc5ff',_0x14d7ee(0x212),'#ff2a6d',_0x14d7ee(0x3d4),_0x14d7ee(0x3c3),_0x14d7ee(0x36c),'#f0abfc'],_0x8dbba1=Math[_0x14d7ee(0x291)](_0x1e390a[_0x14d7ee(0x375)],0x14);for(let _0x4ce32b=0x0;_0x4ce32b<_0x8dbba1;_0x4ce32b++){const _0x3f0bca=document[_0x14d7ee(0x56e)](_0x14d7ee(0x2a1));_0x3f0bca[_0x14d7ee(0x342)]=_0x14d7ee(0x1ee),_0x3f0bca['style'][_0x14d7ee(0x204)]=_0x14d7ee(0x3a5)+_0x4ce32b*_0x5a01be+_0x14d7ee(0x476),_0x3f0bca[_0x14d7ee(0x415)]['background']=_0x1e72d2[_0x4ce32b%_0x1e72d2[_0x14d7ee(0x375)]],_0x3f0bca['style'][_0x14d7ee(0x410)]='polygon(0\x200,\x20100%\x200,\x20100%\x20'+(0x32+0x32*Math[_0x14d7ee(0x541)](_0x5a01be/0x2*Math['PI']/0xb4))+_0x14d7ee(0x4e4)+(0x32-0x32*Math[_0x14d7ee(0x4bf)](_0x5a01be/0x2*Math['PI']/0xb4))+'%)',_0x3f0bca[_0x14d7ee(0x26b)]=_0x1e390a[_0x4ce32b][_0x14d7ee(0x2b8)]['substring'](0x0,0x8),_0x3d582c[_0x14d7ee(0x3e6)](_0x3f0bca);}}function _0x3a0ce6(_0x1156f1,_0x1dd538,_0x4e9dcb){const _0x1fba1c=_0x4db66a;if(!_0x3d582c||_0x555914())return Promise[_0x1fba1c(0x27f)]();const _0x45c6f4=0x168/Math[_0x1fba1c(0x291)](_0x1dd538,0x14),_0x1f718c=0x5,_0x22c3b1=_0x1f718c*0x168-_0x1156f1*_0x45c6f4;return _0x3d582c[_0x1fba1c(0x415)][_0x1fba1c(0x55a)]=_0x1fba1c(0x46e),_0x3d582c[_0x1fba1c(0x415)][_0x1fba1c(0x204)]=_0x1fba1c(0x416),new Promise(_0x5bec5f=>{const _0x4b11d4=_0x1fba1c;window[_0x4b11d4(0x4f7)](()=>{const _0xc7e7d4=_0x4b11d4;window[_0xc7e7d4(0x239)]?window[_0xc7e7d4(0x239)]({'targets':_0x3d582c,'rotate':[0x0,_0x22c3b1],'duration':_0x4e9dcb,'easing':_0xc7e7d4(0x21d),'update':()=>{const _0x2f41ff=_0xc7e7d4;_0x3d582c[_0x2f41ff(0x415)]['transition']=_0x2f41ff(0x46e);},'complete':_0x5bec5f}):(_0x3d582c[_0xc7e7d4(0x415)][_0xc7e7d4(0x55a)]=_0xc7e7d4(0x437)+_0x4e9dcb+'ms\x20ease-out',_0x3d582c['style']['transform']=_0xc7e7d4(0x3a5)+_0x22c3b1+'deg)',window['setTimeout'](_0x5bec5f,_0x4e9dcb));},0x32);});}_0x4c60a0[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),()=>{const _0x3694bf=_0x4db66a;_0x2f19ee['textContent']=_0x3694bf(0x289),_0x277b2f[_0x3694bf(0x26b)]='Choosing\x20a\x20demon',_0x4acabb[_0x3694bf(0x26b)]=_0x3694bf(0x238),_0x2b880d[_0x3694bf(0x26b)]='Level\x20ID:\x20-',_0x3e6784['textContent']=_0x3694bf(0x477),_0xe4545d[_0x3694bf(0x3f8)]=!![];if(_0x4c8665)_0x4c8665[_0x3694bf(0x3f8)]=!![];if(_0x4f2697)_0x4f2697[_0x3694bf(0x26b)]='';_0x4c60a0[_0x3694bf(0x30b)]['add'](_0x3694bf(0x4b0)),_0x4c60a0['disabled']=!![],window[_0x3694bf(0x239)]&&!_0x555914()&&window[_0x3694bf(0x239)]({'targets':_0x4c60a0,'scale':[0x1,1.05,0x1],'duration':0x258,'easing':'easeInOutSine','loop':!![]}),Promise[_0x3694bf(0x43b)]([_0x2a4102(),_0x44bda4()])[_0x3694bf(0x2be)](([_0x4dd05c,_0xf8b56b])=>{const _0x121c71=_0x3694bf;if(!_0x4dd05c[_0x121c71(0x375)]){_0x2f19ee['textContent']=_0x121c71(0x435),_0x277b2f[_0x121c71(0x26b)]=_0x121c71(0x510),_0x2b880d[_0x121c71(0x26b)]=_0x121c71(0x4f9),_0x3e6784[_0x121c71(0x26b)]=_0x121c71(0x3d2);return;}_0x450a8f(_0x4dd05c);const _0x5c8475=Math[_0x121c71(0x54b)](Math['random']()*Math['min'](_0x4dd05c[_0x121c71(0x375)],0x14)),_0xa3f112=_0x4dd05c[_0x5c8475]||_0x4dd05c[Math['floor'](Math[_0x121c71(0x396)]()*_0x4dd05c[_0x121c71(0x375)])],_0x5940d8=_0xc18bf6();_0x3a0ce6(_0x5c8475,_0x4dd05c[_0x121c71(0x375)],_0x5940d8)[_0x121c71(0x2be)](()=>{const _0xd46edd=_0x121c71;_0x4c60a0['classList'][_0xd46edd(0x1cf)]('btn-loading'),_0x4c60a0[_0xd46edd(0x1f9)]=![];window[_0xd46edd(0x239)]&&!_0x555914()&&window[_0xd46edd(0x239)]({'targets':_0x4c60a0,'scale':[1.05,0x1],'duration':0x12c,'easing':_0xd46edd(0x334)});const _0x14e6a6=_0xf8b56b[_0xa3f112[_0xd46edd(0x2b8)]]||{'levelId':_0xd46edd(0x3de),'percent':_0xd46edd(0x2f2)};if(_0x14e6a6[_0xd46edd(0x4b1)]&&_0x14e6a6[_0xd46edd(0x4b1)]!==_0xd46edd(0x3de)){_0x3ebe44(_0xa3f112,{'levelId':_0x14e6a6['levelId'],'percent':_0x14e6a6[_0xd46edd(0x244)],'source':'file'});return;}_0x1e6328(_0xa3f112[_0xd46edd(0x2b8)])['then'](_0x4eb625=>{const _0x43fbdb=_0xd46edd,_0x22a2ec={'levelId':_0x4eb625||_0x43fbdb(0x3de),'percent':_0x14e6a6[_0x43fbdb(0x244)]||_0x43fbdb(0x2f2),'source':_0x4eb625?'api':_0x43fbdb(0x259)};_0x3ebe44(_0xa3f112,_0x22a2ec);});});})[_0x3694bf(0x461)](_0x1e809a=>{const _0x47c2d4=_0x3694bf;_0x2f19ee[_0x47c2d4(0x26b)]=_0x47c2d4(0x53c),_0x277b2f['textContent']=_0x47c2d4(0x29b),_0x4acabb[_0x47c2d4(0x26b)]=_0x47c2d4(0x238),_0x2b880d[_0x47c2d4(0x26b)]=_0x47c2d4(0x4f9),_0x3e6784[_0x47c2d4(0x26b)]='The\x20list\x20or\x20lookup\x20failed.',console[_0x47c2d4(0x4a4)](_0x1e809a);});});}if(_0xb41a12===_0x4db66a(0x533)){const _0x1b19bd=_0xdc8485('guess-mode'),_0x146056=_0xdc8485(_0x4db66a(0x3a8)),_0x17e08f=_0xdc8485(_0x4db66a(0x3af)),_0x525cf9=_0xdc8485(_0x4db66a(0x281)),_0x538d1a=_0xdc8485('guess-status'),_0x28abf0=_0xdc8485(_0x4db66a(0x445)),_0xda951d=_0xdc8485(_0x4db66a(0x3b1)),_0x1a37ff=_0xdc8485('guess-feedback'),_0xfe2e03=_0xdc8485(_0x4db66a(0x242)),_0x1bce5f=_0xdc8485('guess-open'),_0x27435f={'casual':{'label':_0x4db66a(0x490),'tries':0x6},'standard':{'label':_0x4db66a(0x3b9),'tries':0x4},'hard':{'label':_0x4db66a(0x308),'tries':0x3},'marathon':{'label':_0x4db66a(0x573),'tries':0x8}},_0x14b67c={'active':![],'triesLeft':_0x27435f[_0x4db66a(0x55d)][_0x4db66a(0x2e5)],'answer':null,'item':null};function _0x13f642(_0x3db7e2){const _0x3d5b68=_0x4db66a;return _0x3db7e2[_0x3d5b68(0x4e3)]()[_0x3d5b68(0x32f)](_0x2537bc=>Number(_0x2537bc[_0x3d5b68(0x28e)])>0x0)[_0x3d5b68(0x2f6)]((_0x2de048,_0x1210ff)=>(Number(_0x2de048[_0x3d5b68(0x28e)])||0x0)-(Number(_0x1210ff[_0x3d5b68(0x28e)])||0x0));}function _0x1badff(){const _0x1a3762=_0x4db66a;return _0x27435f[_0x1b19bd&&_0x1b19bd[_0x1a3762(0x51a)]||_0x1a3762(0x55d)]||_0x27435f['standard'];}function _0x29fb7a(_0x23be4f){const _0x4f6fc8=_0x4db66a,_0x1bef30=_0x1badff();_0x14b67c[_0x4f6fc8(0x2b4)]=![],_0x14b67c['triesLeft']=_0x1bef30[_0x4f6fc8(0x2e5)],_0x14b67c['answer']=null,_0x14b67c[_0x4f6fc8(0x338)]=null,_0x538d1a['textContent']=_0x23be4f,_0x28abf0[_0x4f6fc8(0x26b)]=_0x4f6fc8(0x357),_0xda951d[_0x4f6fc8(0x26b)]='Tries\x20left:\x20'+_0x1bef30[_0x4f6fc8(0x2e5)],_0x1a37ff['textContent']=_0x4f6fc8(0x554)+_0x1bef30[_0x4f6fc8(0x360)]+_0x4f6fc8(0x463),_0xfe2e03[_0x4f6fc8(0x26b)]=_0x4f6fc8(0x4b5),_0x1bce5f[_0x4f6fc8(0x3f8)]=!![],_0x1bce5f[_0x4f6fc8(0x20b)]='#',_0x1bce5f[_0x4f6fc8(0x2cf)]=null,_0x525cf9[_0x4f6fc8(0x51a)]='';}function _0x883a3d(_0x54f05b,_0x5252eb){const _0x138af9=_0x4db66a;_0x14b67c[_0x138af9(0x2b4)]=![],_0x538d1a['textContent']=_0x54f05b,_0xda951d[_0x138af9(0x26b)]='Tries\x20left:\x20'+_0x14b67c[_0x138af9(0x25f)],_0xfe2e03[_0x138af9(0x26b)]=_0x5252eb?_0x14b67c[_0x138af9(0x338)][_0x138af9(0x2b8)]+'\x20is\x20ranked\x20#'+_0x14b67c[_0x138af9(0x550)]+'.':_0x138af9(0x34f);_0x14b67c[_0x138af9(0x338)]&&_0x14b67c[_0x138af9(0x338)][_0x138af9(0x3d9)]&&(_0x1bce5f[_0x138af9(0x3f8)]=![],_0x1bce5f[_0x138af9(0x20b)]='#',_0x1bce5f[_0x138af9(0x2cf)]=function(_0x1fd99b){const _0x1ff1db=_0x138af9;_0x1fd99b[_0x1ff1db(0x46d)](),_0x424b91(_0x14b67c[_0x1ff1db(0x338)],{'showRuns':![]});});if(window[_0x138af9(0x239)]&&!_0x555914()){const _0x47f2eb=_0xc18bf6();window['anime']({'targets':_0xfe2e03,'opacity':[0x0,0x1],'translateY':[0x8,0x0],'duration':_0x47f2eb*0.5,'easing':_0x138af9(0x21d)});}}function _0x429859(){const _0x3557ae=_0x4db66a,_0x541035=_0x1badff();_0x538d1a[_0x3557ae(0x26b)]=_0x3557ae(0x276),_0xda951d[_0x3557ae(0x26b)]='Tries\x20left:\x20'+_0x541035[_0x3557ae(0x2e5)],_0x1a37ff[_0x3557ae(0x26b)]=_0x3557ae(0x399)+_0x541035[_0x3557ae(0x360)][_0x3557ae(0x3d6)]()+_0x3557ae(0x427),_0xfe2e03[_0x3557ae(0x26b)]=_0x3557ae(0x451),_0x1bce5f[_0x3557ae(0x3f8)]=!![],_0x1bce5f[_0x3557ae(0x2cf)]=null,_0x525cf9[_0x3557ae(0x51a)]='',_0x2a4102()['then'](_0x50c2ef=>{const _0x1c5368=_0x3557ae,_0x54d623=_0x13f642(_0x50c2ef);if(!_0x54d623[_0x1c5368(0x375)]){_0x29fb7a(_0x1c5368(0x569)),_0x1a37ff[_0x1c5368(0x26b)]=_0x1c5368(0x44d);return;}const _0x5c0816=_0x54d623[Math[_0x1c5368(0x54b)](Math[_0x1c5368(0x396)]()*_0x54d623[_0x1c5368(0x375)])];_0x14b67c['active']=!![],_0x14b67c[_0x1c5368(0x25f)]=_0x541035['tries'],_0x14b67c[_0x1c5368(0x550)]=Number(_0x5c0816['position']),_0x14b67c[_0x1c5368(0x338)]=_0x5c0816,_0x538d1a[_0x1c5368(0x26b)]=_0x1c5368(0x514),_0x28abf0[_0x1c5368(0x26b)]=_0x5c0816[_0x1c5368(0x2b8)],_0xda951d['textContent']='Tries\x20left:\x20'+_0x541035[_0x1c5368(0x2e5)],_0x1a37ff['textContent']=_0x1c5368(0x554)+_0x541035[_0x1c5368(0x360)]+'.\x20Guess\x20the\x20rank\x20and\x20I\x20will\x20tell\x20you\x20higher\x20or\x20lower.',_0xfe2e03['textContent']=_0x1c5368(0x4b5),_0x525cf9[_0x1c5368(0x51a)]='',_0x525cf9['focus']();})[_0x3557ae(0x461)](_0x57fc3f=>{const _0x2a66ce=_0x3557ae;console[_0x2a66ce(0x4a4)](_0x57fc3f),_0x29fb7a(_0x2a66ce(0x3d7)),_0x1a37ff[_0x2a66ce(0x26b)]=_0x2a66ce(0x56f);});}function _0x5f25e7(){const _0x60c4af=_0x4db66a;if(!_0x14b67c[_0x60c4af(0x2b4)]||!_0x14b67c['item']){_0x1a37ff[_0x60c4af(0x26b)]=_0x60c4af(0x367);return;}const _0x392636=_0x525cf9['value'][_0x60c4af(0x4b8)](),_0x50ade9=Number(_0x392636);if(!_0x392636||!Number['isInteger'](_0x50ade9)||_0x50ade9<0x1){_0x1a37ff[_0x60c4af(0x26b)]=_0x60c4af(0x553);return;}if(_0x50ade9===_0x14b67c[_0x60c4af(0x550)]){_0x1a37ff['textContent']='Correct.\x20'+_0x14b67c['item'][_0x60c4af(0x2b8)]+_0x60c4af(0x365)+_0x14b67c[_0x60c4af(0x550)]+'.',_0x1a37ff[_0x60c4af(0x342)]=_0x60c4af(0x371);window['anime']&&!_0x555914()&&window[_0x60c4af(0x239)]({'targets':_0x1a37ff,'scale':[0x1,1.05,0x1],'duration':0x258,'easing':_0x60c4af(0x334)});_0x457eb3(0xa),_0x883a3d(_0x60c4af(0x1e3),![]);return;}_0x14b67c[_0x60c4af(0x25f)]-=0x1,_0xda951d[_0x60c4af(0x26b)]=_0x60c4af(0x4af)+_0x14b67c['triesLeft'];const _0x5b266e=_0x50ade9<_0x14b67c[_0x60c4af(0x550)]?_0x60c4af(0x576):'Lower';if(_0x14b67c[_0x60c4af(0x25f)]>0x0){_0x1a37ff[_0x60c4af(0x26b)]=_0x5b266e+_0x60c4af(0x296)+_0x50ade9+_0x60c4af(0x257),_0x1a37ff[_0x60c4af(0x342)]=_0x60c4af(0x27c);window[_0x60c4af(0x239)]&&!_0x555914()&&window['anime']({'targets':_0x1a37ff,'translateX':[-0x6,0x6,-0x6,0x6,0x0],'duration':0x190,'easing':_0x60c4af(0x312)});return;}_0x1a37ff['textContent']=_0x5b266e+_0x60c4af(0x4ba),_0x1a37ff[_0x60c4af(0x342)]='roulette-note\x20muted\x20guess-wrong',_0x883a3d('Round\x20over.',!![]);}_0x29fb7a(_0x4db66a(0x4e0)),_0x1b19bd&&_0x1b19bd[_0x4db66a(0x4eb)](_0x4db66a(0x200),()=>{const _0x5be9c6=_0x4db66a;if(!_0x14b67c[_0x5be9c6(0x2b4)])_0x29fb7a(_0x5be9c6(0x4e0));const _0x1d5245=_0xdc8485(_0x5be9c6(0x50d));_0x1d5245&&window[_0x5be9c6(0x239)]&&!_0x555914()&&(_0x1d5245[_0x5be9c6(0x30b)]['add']('mode-switching'),window['anime']({'targets':_0x1d5245,'opacity':[0.5,0x1],'duration':0x12c,'easing':'easeOutQuad','complete':()=>{const _0x1bb867=_0x5be9c6;_0x1d5245['classList'][_0x1bb867(0x1cf)](_0x1bb867(0x3b7));}}));}),_0x146056[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),_0x429859),_0x17e08f[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),function(_0x49174e){const _0x4525d=_0x4db66a;_0x49174e[_0x4525d(0x46d)](),_0x5f25e7();});}if(_0xb41a12===_0x4db66a(0x455)){const _0x2ca986=_0xdc8485('players-area'),_0x13126d=_0xdc8485(_0x4db66a(0x287)),_0x354dc2=_0xdc8485('group-filter'),_0x43a29d=_0xdc8485('player-groups');if(!_0x2ca986||!_0x13126d||!_0x354dc2||!_0x43a29d)return;let _0x499902=[];function _0x59df96(_0x316727){const _0x36db21=_0x4db66a,_0x509989=String(_0x316727||'')[_0x36db21(0x4b8)]()['charAt'](0x0)[_0x36db21(0x267)]();return _0x509989[_0x36db21(0x3ff)](/[A-Z0-9]/)?_0x509989:'#';}function _0x58df23(_0x4cf833){const _0x19793d=_0x4db66a,_0x46bacf=new Set();return _0x4cf833[_0x19793d(0x2bd)](_0x7d5bd0=>_0x46bacf['add'](_0x59df96(_0x7d5bd0[_0x19793d(0x1f1)]))),Array[_0x19793d(0x4f6)](_0x46bacf)[_0x19793d(0x2f6)]((_0x1d665a,_0x3fae42)=>_0x1d665a==='#'?0x1:_0x3fae42==='#'?-0x1:_0x1d665a['localeCompare'](_0x3fae42));}function _0x3fd7a9(_0x171b6a){const _0xcda061=_0x4db66a,_0x436014=_0x58df23(_0x171b6a);_0x43a29d[_0xcda061(0x345)]='',_0x354dc2[_0xcda061(0x345)]=_0xcda061(0x254),_0x436014['forEach'](_0x4f000a=>{const _0x4e5c2a=_0xcda061,_0x5bc1d8=document[_0x4e5c2a(0x56e)]('li'),_0x3c223b=document[_0x4e5c2a(0x56e)]('button');_0x3c223b[_0x4e5c2a(0x30c)]=_0x4e5c2a(0x353),_0x3c223b[_0x4e5c2a(0x26b)]=_0x4f000a,_0x3c223b[_0x4e5c2a(0x342)]='level-link',_0x3c223b['addEventListener'](_0x4e5c2a(0x1d2),()=>{const _0x47b130=_0x4e5c2a;_0x354dc2[_0x47b130(0x51a)]=_0x4f000a,_0x134f68(),_0x43a29d[_0x47b130(0x570)](_0x47b130(0x366))[_0x47b130(0x2bd)](_0x3a3756=>_0x3a3756[_0x47b130(0x30b)][_0x47b130(0x1cf)](_0x47b130(0x2b4))),_0x3c223b[_0x47b130(0x30b)]['add']('active');}),_0x5bc1d8['appendChild'](_0x3c223b),_0x43a29d[_0x4e5c2a(0x3e6)](_0x5bc1d8);const _0x38ac7c=document[_0x4e5c2a(0x56e)](_0x4e5c2a(0x2f0));_0x38ac7c[_0x4e5c2a(0x51a)]=_0x4f000a,_0x38ac7c[_0x4e5c2a(0x26b)]=_0x4f000a,_0x354dc2[_0x4e5c2a(0x3e6)](_0x38ac7c);});}function _0x573c2a(_0x4f3708,_0x57deec){const _0x2bf800=_0x4db66a,_0x1872e8=new Map(_0x57deec[_0x2bf800(0x1ef)](_0x247272=>[String(_0x247272[_0x2bf800(0x2b8)]||'')[_0x2bf800(0x3d6)](),Number(_0x247272[_0x2bf800(0x28e)])||0x270f])),_0x262633=new Map();return _0x4f3708[_0x2bf800(0x32f)](_0x473db5=>String(_0x473db5['status']||'')[_0x2bf800(0x3d6)]()==='approved')['forEach'](_0x33daa0=>{const _0x3f7209=_0x2bf800,_0x56419c=String(_0x33daa0[_0x3f7209(0x2c4)]||'')[_0x3f7209(0x4b8)]();if(!_0x56419c)return;const _0x4094e9=_0x56419c[_0x3f7209(0x3d6)]();let _0x22da8b=_0x262633[_0x3f7209(0x380)](_0x4094e9);!_0x22da8b&&(_0x22da8b={'name':_0x56419c,'runs':0x0,'bestRank':0x270f,'points':0x0,'topLevels':new Set()},_0x262633[_0x3f7209(0x507)](_0x4094e9,_0x22da8b));_0x22da8b['runs']+=0x1;const _0x1d47f9=_0x1872e8['get'](String(_0x33daa0[_0x3f7209(0x3fa)]||'')[_0x3f7209(0x3d6)]())||0x270f;if(_0x1d47f9>0x0&&_0x1d47f9<_0x22da8b[_0x3f7209(0x2ff)])_0x22da8b[_0x3f7209(0x2ff)]=_0x1d47f9;if(_0x1d47f9>0x0&&_0x1d47f9<0x3e8)_0x22da8b['points']+=_0x18ba2b(_0x1d47f9);if(_0x33daa0[_0x3f7209(0x3fa)])_0x22da8b[_0x3f7209(0x26e)][_0x3f7209(0x1ed)](String(_0x33daa0['levelTitle'])[_0x3f7209(0x4b8)]());}),Array['from'](_0x262633[_0x2bf800(0x4a2)]())[_0x2bf800(0x1ef)](_0x458298=>({'name':_0x458298[_0x2bf800(0x1f1)],'runs':_0x458298[_0x2bf800(0x1d1)],'bestRank':_0x458298[_0x2bf800(0x2ff)]===0x270f?'—':'#'+_0x458298[_0x2bf800(0x2ff)],'points':_0x458298[_0x2bf800(0x2dd)],'topLevels':Array[_0x2bf800(0x4f6)](_0x458298[_0x2bf800(0x26e)])['slice'](0x0,0x3)[_0x2bf800(0x429)](',\x20')}))[_0x2bf800(0x2f6)]((_0x590536,_0x12218d)=>{const _0x2a7671=_0x2bf800;if(_0x12218d['points']!==_0x590536['points'])return _0x12218d[_0x2a7671(0x2dd)]-_0x590536['points'];const _0xe68792=typeof _0x590536['bestRank']===_0x2a7671(0x234)?Number(_0x590536[_0x2a7671(0x2ff)][_0x2a7671(0x4e3)](0x1))||0x270f:_0x590536[_0x2a7671(0x2ff)],_0x1e737d=typeof _0x12218d['bestRank']===_0x2a7671(0x234)?Number(_0x12218d[_0x2a7671(0x2ff)][_0x2a7671(0x4e3)](0x1))||0x270f:_0x12218d[_0x2a7671(0x2ff)];if(_0xe68792!==_0x1e737d)return _0xe68792-_0x1e737d;return _0x590536[_0x2a7671(0x1f1)]['localeCompare'](_0x12218d[_0x2a7671(0x1f1)]);});}function _0x134f68(){const _0x4518d0=_0x4db66a,_0x374825=String(_0x13126d[_0x4518d0(0x51a)]||'')[_0x4518d0(0x3d6)]()['trim'](),_0x145846=_0x354dc2[_0x4518d0(0x51a)]||'all',_0x2b5917=_0x499902[_0x4518d0(0x32f)](_0x23f863=>{const _0x57bc39=_0x4518d0;if(_0x145846!==_0x57bc39(0x43b)&&_0x59df96(_0x23f863[_0x57bc39(0x1f1)])!==_0x145846)return![];if(!_0x374825)return!![];return _0x23f863[_0x57bc39(0x1f1)]['toLowerCase']()[_0x57bc39(0x340)](_0x374825);});_0x2ca986['innerHTML']='';if(!_0x2b5917[_0x4518d0(0x375)]){_0x2ca986[_0x4518d0(0x345)]=_0x4518d0(0x491);return;}const _0x46813f=document[_0x4518d0(0x247)]();_0x2b5917[_0x4518d0(0x2bd)](_0x2251cd=>{const _0x1b2524=_0x4518d0,_0x4a96a1=document[_0x1b2524(0x56e)]('tr'),_0x503995=document[_0x1b2524(0x56e)]('td');_0x503995[_0x1b2524(0x26b)]=_0x2251cd[_0x1b2524(0x1f1)];const _0x1d4267=document[_0x1b2524(0x56e)]('td');_0x1d4267[_0x1b2524(0x26b)]=String(_0x2251cd[_0x1b2524(0x1d1)]);const _0x569f6d=document[_0x1b2524(0x56e)]('td');_0x569f6d[_0x1b2524(0x26b)]=String(_0x2251cd[_0x1b2524(0x2dd)]);const _0x2debf6=document['createElement']('td');_0x2debf6[_0x1b2524(0x26b)]=_0x2251cd[_0x1b2524(0x2ff)];const _0x25d5c1=document['createElement']('td');_0x25d5c1['textContent']=_0x2251cd[_0x1b2524(0x26e)],_0x4a96a1['appendChild'](_0x503995),_0x4a96a1[_0x1b2524(0x3e6)](_0x1d4267),_0x4a96a1['appendChild'](_0x569f6d),_0x4a96a1[_0x1b2524(0x3e6)](_0x2debf6),_0x4a96a1['appendChild'](_0x25d5c1),_0x46813f['appendChild'](_0x4a96a1);}),_0x2ca986[_0x4518d0(0x3e6)](_0x46813f);}function _0x1ef38e(){const _0x46a2b4=_0x4db66a;_0x2ca986[_0x46a2b4(0x345)]=_0x46a2b4(0x1fb);}function _0x44ff6(_0x5806f3){_0x499902=_0x5806f3,_0x3fd7a9(_0x499902),_0x134f68();}function _0x42ec8f(){const _0x5f1ff4=_0x4db66a;return _0x1ef38e(),Promise[_0x5f1ff4(0x43b)]([_0x51d10a(),_0x2a4102()])[_0x5f1ff4(0x2be)](([_0x3229da,_0x55d52b])=>{const _0x1c8fdc=_0x573c2a(_0x3229da,_0x55d52b);_0x44ff6(_0x1c8fdc);})[_0x5f1ff4(0x461)](_0x3d893d=>{const _0x4f7de4=_0x5f1ff4;console[_0x4f7de4(0x4a4)](_0x3d893d),_0x2ca986['innerHTML']=_0x4f7de4(0x35c);});}_0x13126d[_0x4db66a(0x4eb)](_0x4db66a(0x47b),_0x296433(_0x134f68,0x78)),_0x354dc2[_0x4db66a(0x4eb)](_0x4db66a(0x200),()=>{const _0x58a792=_0x4db66a,_0x4df047=Array[_0x58a792(0x4f6)](_0x43a29d[_0x58a792(0x570)](_0x58a792(0x366)))['find'](_0x250ca7=>_0x250ca7['textContent']===_0x354dc2[_0x58a792(0x51a)]);_0x43a29d[_0x58a792(0x570)](_0x58a792(0x366))['forEach'](_0x2fe4bc=>_0x2fe4bc[_0x58a792(0x30b)][_0x58a792(0x348)](_0x58a792(0x2b4),_0x2fe4bc===_0x4df047)),_0x134f68();}),_0x42ec8f(),_0x1cb993(),_0x32ba31(()=>{_0x42ec8f();}),_0x1a993a(()=>{_0x42ec8f();});}function _0x59309a(){const _0x1cfc3f=_0x4db66a,_0x15b4e4=_0xdc8485(_0x1cfc3f(0x3fc)),_0x46f70a=_0xdc8485(_0x1cfc3f(0x300)),_0x25f4b6=_0xdc8485(_0x1cfc3f(0x3dc)),_0xc123a3=_0xdc8485(_0x1cfc3f(0x287)),_0x1705ce=_0xdc8485(_0x1cfc3f(0x2b9));let _0x14401c=[],_0x3aea4d=![];function _0x69cc8b(){const _0x58606b=_0x1cfc3f,_0x425ae9=()=>{const _0x4f44a5=_0x2f07;_0x2a4102()[_0x4f44a5(0x2be)](_0xb752a7=>{_0x421dae(_0xb752a7);})[_0x4f44a5(0x461)](_0x418525=>{const _0x51aaaa=_0x4f44a5;_0x46f70a[_0x51aaaa(0x345)]=_0x51aaaa(0x33c),console[_0x51aaaa(0x4a4)](_0x418525);});};_0x16b62b()[_0x58606b(0x2be)](()=>_0x33b506(_0x549aee))['finally'](_0x425ae9);}function _0x53ace3(_0x97ec68){const _0x4da378=_0x1cfc3f,_0x5513d9=_0x97ec68[_0x4da378(0x2a6)]((_0x1fabc3,_0x331c2d)=>Math['max'](_0x1fabc3,Number(_0x331c2d[_0x4da378(0x28e)])||0x0),0x0),_0x1d6fa9=[_0x4da378(0x3f9)];for(let _0x4cca2a=0x1;_0x4cca2a<=_0x5513d9;_0x4cca2a+=0xa){const _0x47b077=_0x4cca2a,_0x33750f=Math[_0x4da378(0x291)](_0x4cca2a+0x9,_0x5513d9);_0x1d6fa9[_0x4da378(0x211)](_0x4da378(0x479)+_0x47b077+'-'+_0x33750f);}return _0x1d6fa9;}function _0x40f805(_0x370916){const _0x5c3667=_0x1cfc3f,_0xce49d2=_0x53ace3(_0x370916);_0x15b4e4[_0x5c3667(0x345)]='',_0x1705ce[_0x5c3667(0x345)]=_0x5c3667(0x470),_0xce49d2[_0x5c3667(0x2bd)](_0x9a9269=>{const _0x23b023=_0x5c3667,_0x284083=document[_0x23b023(0x56e)]('li'),_0x3ca5be=document[_0x23b023(0x56e)](_0x23b023(0x353));_0x3ca5be[_0x23b023(0x30c)]=_0x23b023(0x353),_0x3ca5be['textContent']=_0x9a9269,_0x3ca5be[_0x23b023(0x342)]=_0x23b023(0x384),_0x3ca5be['addEventListener'](_0x23b023(0x1d2),()=>{const _0x5595d8=_0x23b023;_0x377614(_0x9a9269,_0x370916,_0x3ca5be),_0x1705ce[_0x5595d8(0x51a)]=_0x9a9269;}),_0x284083[_0x23b023(0x3e6)](_0x3ca5be),_0x15b4e4[_0x23b023(0x3e6)](_0x284083);const _0x2b6e32=document[_0x23b023(0x56e)](_0x23b023(0x2f0));_0x2b6e32[_0x23b023(0x51a)]=_0x9a9269,_0x2b6e32[_0x23b023(0x26b)]=_0x9a9269,_0x1705ce['appendChild'](_0x2b6e32);}),!_0x3aea4d&&(_0xc123a3[_0x5c3667(0x4eb)](_0x5c3667(0x47b),_0x296433(()=>_0x49c6c3(_0x14401c),0x78)),_0x1705ce[_0x5c3667(0x4eb)](_0x5c3667(0x200),()=>_0x49c6c3(_0x14401c)),_0x3aea4d=!![]);}function _0x377614(_0x368dfe,_0x254b65,_0x14c8fd){const _0x35035f=_0x1cfc3f;_0x15b4e4[_0x35035f(0x570)]('.level-link')[_0x35035f(0x2bd)](_0x2dabc8=>_0x2dabc8[_0x35035f(0x30b)][_0x35035f(0x1cf)]('active'));if(_0x14c8fd)_0x14c8fd[_0x35035f(0x30b)][_0x35035f(0x1ed)](_0x35035f(0x2b4));_0xdc8485(_0x35035f(0x2b9))['value']=_0x368dfe,_0x49c6c3(_0x254b65);if(window['anime']&&!_0x555914()&&!_0x51c7e7()){const _0x3be924=document[_0x35035f(0x350)](_0x35035f(0x3eb));_0x3be924&&window['anime']({'targets':_0x3be924,'translateY':[0x8,0x0],'opacity':[0.7,0x1],'duration':0x190,'easing':_0x35035f(0x48b)});}}function _0x49c6c3(_0x3644ac){const _0x3b839f=_0x1cfc3f,_0x2e557f=(_0xc123a3&&_0xc123a3['value']||'')[_0x3b839f(0x3d6)](),_0x20e12b=_0x1705ce&&_0x1705ce[_0x3b839f(0x51a)]||_0x3b839f(0x43b),_0x253f8c=_0x3644ac['filter'](_0x42f728=>{const _0x357974=_0x3b839f;if(_0x20e12b&&_0x20e12b!==_0x357974(0x43b)&&_0x20e12b!==_0x357974(0x3f9)){const _0x180607=_0x20e12b['match'](/Top\s*(\d+)-(\d+)/i);if(_0x180607){const _0x5173aa=Number(_0x180607[0x1]),_0x2c7c4e=Number(_0x180607[0x2]),_0x1ae51f=Number(_0x42f728[_0x357974(0x28e)])||0x0;if(_0x1ae51f<_0x5173aa||_0x1ae51f>_0x2c7c4e)return![];}}if(!_0x2e557f)return!![];return(_0x42f728[_0x357974(0x2b8)]||'')[_0x357974(0x3d6)]()['includes'](_0x2e557f)||(_0x42f728['level']||'')[_0x357974(0x3d6)]()[_0x357974(0x340)](_0x2e557f);})[_0x3b839f(0x2f6)]((_0x610ca3,_0x3fe40d)=>(Number(_0x610ca3[_0x3b839f(0x28e)])||0x0)-(Number(_0x3fe40d[_0x3b839f(0x28e)])||0x0)),_0x4a74e0=_0xdc8485(_0x3b839f(0x300));_0x4a74e0[_0x3b839f(0x345)]='';if((_0x2e557f||_0x20e12b!==_0x3b839f(0x43b)&&_0x20e12b!=='Full\x20List')&&window[_0x3b839f(0x239)]&&!_0x555914()){const _0x53e295=document[_0x3b839f(0x350)](_0x3b839f(0x3eb));_0x53e295&&window['anime']({'targets':_0x53e295,'scale':[0.99,0x1],'duration':0x12c,'easing':_0x3b839f(0x48b)});}if(!_0x253f8c[_0x3b839f(0x375)]){_0x4a74e0[_0x3b839f(0x345)]=_0x3b839f(0x2f7);return;}_0x14401c=_0x253f8c;const _0x1049fd=_0xf87f4d(),_0x2057df=document[_0x3b839f(0x247)](),_0x1c7739=[];_0x253f8c['forEach'](_0x42fcad=>{const _0x578a36=_0x3b839f,_0x3f2c56=document['createElement']('tr');window[_0x578a36(0x239)]&&!_0x555914()&&(_0x3f2c56['style']['opacity']='0',_0x3f2c56['style'][_0x578a36(0x204)]='translateX(-20px)\x20translateY(10px)');const _0x37fd8f=document[_0x578a36(0x56e)]('td');_0x37fd8f[_0x578a36(0x26b)]=_0x42fcad[_0x578a36(0x28e)];const _0x41dcb8=document[_0x578a36(0x56e)]('td');_0x41dcb8['textContent']=_0x42fcad[_0x578a36(0x2b8)];const _0x511101=document[_0x578a36(0x56e)]('td');_0x511101[_0x578a36(0x342)]=_0x578a36(0x534);if(_0x1049fd){const _0x298ab9=document[_0x578a36(0x56e)](_0x578a36(0x47b));_0x298ab9['type']=_0x578a36(0x54a),_0x298ab9[_0x578a36(0x342)]=_0x578a36(0x38c),_0x298ab9[_0x578a36(0x51a)]=_0x2c1332(_0x1049fd,_0x42fcad[_0x578a36(0x2b8)])||'',_0x298ab9['placeholder']='%',_0x298ab9[_0x578a36(0x2b8)]=_0x578a36(0x33d),_0x298ab9[_0x578a36(0x4eb)](_0x578a36(0x200),()=>{const _0x14afc6=_0x578a36;_0x4caeef(_0x1049fd,_0x42fcad[_0x14afc6(0x2b8)],_0x298ab9['value']),window[_0x14afc6(0x239)]&&!_0x555914()&&!_0x51c7e7()&&window[_0x14afc6(0x239)]({'targets':_0x298ab9,'scale':[0x1,1.08,0x1],'duration':0x190,'easing':_0x14afc6(0x334)});}),_0x511101['appendChild'](_0x298ab9);}else{const _0x36e430=document[_0x578a36(0x56e)](_0x578a36(0x30f));_0x36e430[_0x578a36(0x342)]='muted',_0x36e430['textContent']='—',_0x36e430[_0x578a36(0x2b8)]=_0x578a36(0x22d),_0x511101[_0x578a36(0x3e6)](_0x36e430);}const _0x184a30=document[_0x578a36(0x56e)]('td'),_0x479e11=document[_0x578a36(0x56e)]('a');_0x479e11[_0x578a36(0x26b)]=_0x578a36(0x20d),_0x479e11[_0x578a36(0x20b)]='#',_0x479e11[_0x578a36(0x342)]='btn',_0x479e11[_0x578a36(0x4eb)](_0x578a36(0x1d2),_0x2b17ca=>{_0x2b17ca['preventDefault'](),_0x424b91(_0x42fcad,{'showRuns':!![]});}),_0x184a30[_0x578a36(0x3e6)](_0x479e11),_0x3f2c56['appendChild'](_0x37fd8f),_0x3f2c56['appendChild'](_0x41dcb8),_0x3f2c56[_0x578a36(0x3e6)](_0x511101),_0x3f2c56[_0x578a36(0x3e6)](_0x184a30),_0x1c7739[_0x578a36(0x211)](_0x3f2c56),_0x2057df[_0x578a36(0x3e6)](_0x3f2c56);}),_0x4a74e0[_0x3b839f(0x3e6)](_0x2057df);if(window['anime']&&!_0x555914()&&!_0x51c7e7()){const _0x43dfc5=_0xc18bf6(),_0x1f8424=new IntersectionObserver(_0x45afd5=>{_0x45afd5['forEach'](_0x560dba=>{const _0x183af6=_0x2f07;if(_0x560dba['isIntersecting']){const _0x4e37f8=_0x560dba[_0x183af6(0x225)];window['anime']({'targets':_0x4e37f8,'opacity':[0x0,0x1],'translateX':[-0x14,0x0],'translateY':[0xa,0x0],'duration':_0x43dfc5,'easing':'easeOutCubic'}),_0x1f8424[_0x183af6(0x370)](_0x4e37f8);}});},{'threshold':0.1});_0x1c7739['forEach'](_0x3ae782=>_0x1f8424[_0x3b839f(0x39b)](_0x3ae782));}else _0x1c7739['forEach'](_0x1b1d64=>{const _0x1045a0=_0x3b839f;_0x1b1d64[_0x1045a0(0x415)][_0x1045a0(0x236)]='1',_0x1b1d64[_0x1045a0(0x415)][_0x1045a0(0x204)]=_0x1045a0(0x2e7);});}function _0x421dae(_0x508289){const _0x5cdbf4=_0x1cfc3f,_0x3accba=_0x1705ce[_0x5cdbf4(0x51a)]||'all';_0x14401c=_0x508289[_0x5cdbf4(0x4e3)](),_0x40f805(_0x14401c);const _0x516aa0=Array[_0x5cdbf4(0x4f6)](_0x1705ce['options'])['map'](_0x4f9bc2=>_0x4f9bc2['value']);_0x1705ce['value']=_0x516aa0[_0x5cdbf4(0x340)](_0x3accba)?_0x3accba:_0x5cdbf4(0x43b);const _0x15c59b=_0x1705ce[_0x5cdbf4(0x51a)]===_0x5cdbf4(0x43b)?_0x5cdbf4(0x3f9):_0x1705ce[_0x5cdbf4(0x51a)];_0x15b4e4[_0x5cdbf4(0x570)]('.level-link')[_0x5cdbf4(0x2bd)](_0x383412=>{const _0xc1a85f=_0x5cdbf4;_0x383412[_0xc1a85f(0x30b)]['toggle'](_0xc1a85f(0x2b4),_0x383412[_0xc1a85f(0x26b)]===_0x15c59b);}),_0x49c6c3(_0x14401c);}return _0x69cc8b(),{'applyItems':_0x421dae};}if(_0xb41a12===_0x4db66a(0x280)){const _0x43f9a7=_0x59309a();document['addEventListener'](_0x4db66a(0x3a3),()=>{const _0x50dcd8=_0x4db66a;_0x2a4102()[_0x50dcd8(0x2be)](_0xc6488e=>_0x43f9a7['applyItems'](_0xc6488e))[_0x50dcd8(0x461)](()=>{});}),_0x1cb993(),_0x1a993a(function(_0x3a0835){const _0x3e8f85=_0x4db66a;_0x43f9a7[_0x3e8f85(0x326)](_0x3a0835);});}if(_0xb41a12===_0x4db66a(0x2d6)){_0x16b62b()[_0x4db66a(0x2be)](_0x33297e=>{const _0x519caf=_0x4db66a;if(!_0x33297e)return;const _0xe4f217=(_0x33297e[_0x519caf(0x28c)]||'')[_0x519caf(0x3d6)]();(!_0xe4f217||!_0xd11b27[_0x519caf(0x1ef)](_0x19fbf2=>_0x19fbf2['toLowerCase']())[_0x519caf(0x340)](_0xe4f217))&&(window[_0x519caf(0x403)][_0x519caf(0x20b)]=_0x519caf(0x4bd));});const _0x57f086=_0xdc8485('admin-login-screen'),_0x130b4b=_0xdc8485(_0x4db66a(0x2b3)),_0x75fe8c=_0xdc8485(_0x4db66a(0x25b)),_0x1fdebb=_0xdc8485(_0x4db66a(0x1e2)),_0xbae820=_0xdc8485('admin-auth-status'),_0x4a9e07=_0xdc8485('admin-status'),_0x31376b=_0xdc8485(_0x4db66a(0x3ef)),_0x3b66cd=_0xdc8485(_0x4db66a(0x32b)),_0x20c9df=_0xdc8485('add-row-bottom'),_0x3a5771=_0xdc8485('save-list'),_0x117415=_0xdc8485(_0x4db66a(0x53d)),_0x2f8d0b=_0xdc8485(_0x4db66a(0x484)),_0x5cbdb7=_0xdc8485(_0x4db66a(0x207)),_0x10da1e=_0xdc8485('run-search'),_0x2ada2d=_0xdc8485(_0x4db66a(0x3ba)),_0x34085e=_0xdc8485(_0x4db66a(0x1f7)),_0x471c3b=_0xdc8485('import-aredl'),_0x1c07e5=_0xdc8485(_0x4db66a(0x40a)),_0x4dcef0=_0xdc8485(_0x4db66a(0x214)),_0x39600b=_0xdc8485(_0x4db66a(0x547)),_0x3172dd=_0xdc8485(_0x4db66a(0x4e5)),_0x814f8a=_0xdc8485('import-targeted-query'),_0x4b20f4=_0xdc8485('import-targeted-query-label'),_0x5a2240=_0xdc8485(_0x4db66a(0x33a)),_0x46d259=_0xdc8485(_0x4db66a(0x4e2)),_0x5d6ea6=_0xdc8485(_0x4db66a(0x3f5)),_0x134f35=_0xdc8485(_0x4db66a(0x39d)),_0x4bf914=_0xdc8485(_0x4db66a(0x293)),_0x2cf34d=_0xdc8485(_0x4db66a(0x2d3)),_0x55297b=_0xdc8485(_0x4db66a(0x47c)),_0x5a88a7=_0xdc8485(_0x4db66a(0x1e6)),_0x8e63ca=_0xdc8485(_0x4db66a(0x270)),_0x5a7d92=_0xdc8485(_0x4db66a(0x217));let _0x2615d2=[],_0x15b678=[];const _0x17c0e8='fedl_admin_password';function _0x3aa56f(){const _0x896d3a=_0x4db66a;try{return sessionStorage[_0x896d3a(0x4bc)](_0x17c0e8)||'';}catch(_0x4da83f){return'';}}function _0x1b0afd(_0x4e0ea4){const _0x5d4a97=_0x4db66a;try{if(_0x4e0ea4)sessionStorage['setItem'](_0x17c0e8,_0x4e0ea4);else sessionStorage[_0x5d4a97(0x4be)](_0x17c0e8);}catch(_0x2ef36b){}if(_0x1fdebb)_0x1fdebb['value']=_0x4e0ea4;if(_0xbae820){_0xbae820['textContent']=_0x4e0ea4?_0x5d4a97(0x32e):'Saved\x20only\x20in\x20this\x20browser\x20session.';if(_0x4e0ea4)_0xbae820[_0x5d4a97(0x30b)]['remove'](_0x5d4a97(0x537));}}function _0x27b399(_0x224b75){const _0x4582b5=_0x4db66a,_0x42cf4c=Object[_0x4582b5(0x504)]({},_0x224b75||{}),_0x49c3b6=_0x3aa56f();return _0x49c3b6&&(_0x42cf4c[_0x4582b5(0x30e)]=_0x4582b5(0x41d)+btoa(_0x4582b5(0x551)+_0x49c3b6)),_0x42cf4c;}function _0x335268(_0x3bfcfe){const _0x18cd3d=_0x4db66a;_0x1b0afd(''),document[_0x18cd3d(0x428)][_0x18cd3d(0x30b)][_0x18cd3d(0x1ed)](_0x18cd3d(0x298));if(_0x130b4b)_0x130b4b['hidden']=!![];if(_0x57f086)_0x57f086[_0x18cd3d(0x3f8)]=![];_0xbae820&&(_0xbae820['textContent']=_0x3bfcfe||_0x18cd3d(0x517),_0xbae820[_0x18cd3d(0x30b)][_0x18cd3d(0x1ed)](_0x18cd3d(0x537)));}function _0x689cbb(){const _0x5ca6ea=_0x4db66a;document[_0x5ca6ea(0x428)][_0x5ca6ea(0x30b)][_0x5ca6ea(0x1cf)]('admin-locked');if(_0x57f086)_0x57f086[_0x5ca6ea(0x3f8)]=!![];if(_0x130b4b)_0x130b4b[_0x5ca6ea(0x3f8)]=![];}function _0x31de0d(){const _0x3422ae=_0x4db66a;if(!_0x3aa56f())return _0x335268('Enter\x20the\x20admin\x20password\x20to\x20continue.'),Promise[_0x3422ae(0x27f)](![]);return fetch(_0x1db2fa+_0x3422ae(0x290),{'method':_0x3422ae(0x220),'headers':_0x27b399()})[_0x3422ae(0x2be)](_0x122b0d=>{const _0x3e8141=_0x3422ae;if(_0x122b0d[_0x3e8141(0x448)]===0x191)throw new Error('Admin\x20auth\x20failed');if(_0x122b0d[_0x3e8141(0x448)]!==0x194&&_0x122b0d['status']!==0xcc)throw new Error(_0x3e8141(0x38b));return!![];})[_0x3422ae(0x2be)](_0x49101d=>{return _0x689cbb(),_0x3a802e(),_0x46f642(),_0x49101d;})['catch'](_0x243401=>{const _0x1d9131=_0x3422ae;return console[_0x1d9131(0x4a4)](_0x243401),_0x335268(_0x1d9131(0x401)),![];});}_0x75fe8c&&_0x75fe8c[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),function(_0x34952f){const _0x134619=_0x4db66a;_0x34952f['preventDefault'](),_0x1b0afd((_0x1fdebb&&_0x1fdebb[_0x134619(0x51a)]||'')[_0x134619(0x4b8)]()),_0xbae820&&(_0xbae820[_0x134619(0x26b)]=_0x134619(0x202),_0xbae820['classList'][_0x134619(0x1cf)](_0x134619(0x537))),_0x31de0d();});_0x3aa56f()&&_0x31de0d();function _0x3fc410(_0x13e695,_0x5e0f57){const _0x5be2c7=_0x4db66a;if(!_0x4a9e07)return;_0x4a9e07[_0x5be2c7(0x26b)]=_0x13e695,_0x4a9e07[_0x5be2c7(0x30b)][_0x5be2c7(0x348)](_0x5be2c7(0x537),!!_0x5e0f57);}function _0x5af7fe(_0xc434d3,_0x45c294){const _0x45eb60=_0x4db66a;if(!_0x2f8d0b)return;_0x2f8d0b['textContent']=_0xc434d3,_0x2f8d0b['classList']['toggle'](_0x45eb60(0x537),!!_0x45c294);}function _0x1c5f53(){const _0x5688fb=_0x4db66a,_0x66ee50=(_0x117415&&_0x117415[_0x5688fb(0x51a)]||'')['trim']()[_0x5688fb(0x3d6)]();if(!_0x66ee50)return _0x2615d2;return _0x2615d2['filter'](_0x36d8f7=>{const _0x303db9=_0x5688fb;return[_0x36d8f7['level'],_0x36d8f7[_0x303db9(0x28e)],_0x36d8f7['title'],_0x36d8f7['url']][_0x303db9(0x53e)](_0x1d654f=>String(_0x1d654f||'')[_0x303db9(0x3d6)]()[_0x303db9(0x340)](_0x66ee50));});}function _0x37f7a3(){const _0x117762=_0x4db66a;let _0xc67840=0x1;_0x2615d2[_0x117762(0x2bd)](_0x1157e=>{const _0x3ab436=_0x117762;if(_0x1157e[_0x3ab436(0x4b6)]){_0x1157e[_0x3ab436(0x28e)]='';return;}_0x1157e[_0x3ab436(0x28e)]=String(_0xc67840),_0xc67840+=0x1;});}function _0x55371b(_0x123abf,_0x1f7dac){const _0x1750f0=_0x4db66a;if(!_0x2615d2[_0x123abf])return;const _0x42d294=Number(_0x1f7dac);if(!Number['isFinite'](_0x42d294)||_0x42d294<0x1)return;const _0x5d3c33=Math['max'](0x1,_0x42d294),[_0x856bf0]=_0x2615d2[_0x1750f0(0x31e)](_0x123abf,0x1);_0x856bf0['_isDraft']=![];const _0x70ae3=_0x2615d2[_0x1750f0(0x32f)](_0x484282=>_0x484282[_0x1750f0(0x4b6)]),_0x1b9bd5=_0x2615d2[_0x1750f0(0x32f)](_0x53af39=>!_0x53af39['_isDraft']),_0x14f487=Math[_0x1750f0(0x291)](_0x1b9bd5[_0x1750f0(0x375)],_0x5d3c33-0x1);_0x1b9bd5[_0x1750f0(0x31e)](_0x14f487,0x0,_0x856bf0),_0x2615d2=_0x70ae3[_0x1750f0(0x48f)](_0x1b9bd5),_0x37f7a3();}function _0x112cb5(){const _0x289655=_0x4db66a,_0x27ae0b=_0x1c5f53();_0x31376b[_0x289655(0x345)]='',_0x27ae0b[_0x289655(0x2bd)](_0x469142=>{const _0x148cd=_0x289655,_0x19033f=_0x2615d2[_0x148cd(0x3ed)](_0x469142),_0x32556e=document['createElement']('tr');_0x32556e[_0x148cd(0x345)]=_0x148cd(0x2ef)+_0x19033f+_0x148cd(0x52b)+_0x34f0a8(_0x469142[_0x148cd(0x28e)])+_0x148cd(0x3a9)+_0x19033f+_0x148cd(0x237)+_0x34f0a8(_0x469142[_0x148cd(0x4dd)])+_0x148cd(0x478)+_0x19033f+'\x22\x20type=\x22text\x22\x20value=\x22'+_0x34f0a8(_0x469142[_0x148cd(0x2b8)])+_0x148cd(0x1ea)+_0x19033f+_0x148cd(0x449)+_0x34f0a8(_0x469142['url'])+_0x148cd(0x30d)+_0x19033f+_0x148cd(0x412),_0x31376b[_0x148cd(0x3e6)](_0x32556e);});if(!_0x27ae0b[_0x289655(0x375)]){const _0x498187=document['createElement']('tr');_0x498187[_0x289655(0x345)]=_0x289655(0x283),_0x31376b[_0x289655(0x3e6)](_0x498187);}}function _0x3fd36e(){const _0x2cd13f=_0x4db66a,_0x176258=(_0x10da1e&&_0x10da1e[_0x2cd13f(0x51a)]||'')[_0x2cd13f(0x4b8)]()['toLowerCase']();if(!_0x176258)return _0x15b678;return _0x15b678[_0x2cd13f(0x32f)](_0x39cfb1=>{const _0x406fe6=_0x2cd13f;return[_0x39cfb1[_0x406fe6(0x448)],_0x39cfb1[_0x406fe6(0x2c4)],_0x39cfb1[_0x406fe6(0x3fa)],_0x39cfb1['videoUrl'],_0x39cfb1[_0x406fe6(0x4cf)],_0x39cfb1[_0x406fe6(0x4c0)],_0x39cfb1['reviewNotes']][_0x406fe6(0x53e)](_0x49f890=>String(_0x49f890||'')['toLowerCase']()[_0x406fe6(0x340)](_0x176258));});}function _0x9e33a4(_0x700ae2){const _0x52ee58=_0x4db66a;if(!_0x700ae2)return _0x52ee58(0x457);const _0x3bb1e7=new Date(_0x700ae2);if(Number[_0x52ee58(0x34c)](_0x3bb1e7[_0x52ee58(0x486)]()))return _0x52ee58(0x457);return _0x3bb1e7[_0x52ee58(0x4d9)]();}function _0x167767(){const _0x3d326d=_0x4db66a,_0x259dc5=_0x3fd36e();_0x5cbdb7[_0x3d326d(0x345)]='',_0x259dc5[_0x3d326d(0x2bd)](_0x2762b2=>{const _0x271376=_0x3d326d,_0x37abd2=document[_0x271376(0x56e)]('tr');_0x37abd2['innerHTML']=_0x271376(0x288)+_0x34f0a8(_0x2762b2[_0x271376(0x448)]||_0x271376(0x2e6))+'\x22>'+_0x236e7b(_0x2762b2[_0x271376(0x448)]||'pending')+_0x271376(0x2de)+_0x236e7b(_0x2762b2[_0x271376(0x2c4)]||_0x271376(0x457))+'</strong></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><strong>'+_0x236e7b(_0x2762b2[_0x271376(0x244)]||'100')+_0x271376(0x279)+_0x236e7b(_0x2762b2[_0x271376(0x3fa)]||'Untitled')+_0x271376(0x452)+_0x236e7b(_0x2762b2['notes']||_0x271376(0x4b9))+_0x271376(0x3e2)+_0x236e7b(_0x9e33a4(_0x2762b2[_0x271376(0x4c3)]))+_0x271376(0x2ca)+_0x34f0a8(_0x2762b2[_0x271376(0x405)]||'#')+_0x271376(0x2fc)+_0x34f0a8(_0x2762b2['id'])+_0x271376(0x3c0)+_0x34f0a8(_0x2762b2['id'])+_0x271376(0x1d0)+_0x34f0a8(_0x2762b2['id'])+_0x271376(0x285),_0x5cbdb7['appendChild'](_0x37abd2);const _0x1f844c=document['createElement']('tr');_0x1f844c[_0x271376(0x342)]='run-admin-detail-row',_0x1f844c['innerHTML']=_0x271376(0x215)+(_0x2762b2[_0x271376(0x4cf)]?_0x271376(0x420)+_0x34f0a8(_0x2762b2[_0x271376(0x4cf)])+_0x271376(0x502)+_0x236e7b(_0x2762b2[_0x271376(0x4cf)])+_0x271376(0x400):_0x271376(0x22c))+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span><strong>Percent:</strong>\x20'+_0x236e7b(_0x2762b2[_0x271376(0x244)]||'100')+_0x271376(0x422)+_0x236e7b(_0x2762b2[_0x271376(0x271)]||'Unassigned')+_0x271376(0x505)+_0x236e7b(_0x2762b2[_0x271376(0x458)]||_0x271376(0x248))+_0x271376(0x497),_0x5cbdb7[_0x271376(0x3e6)](_0x1f844c);});if(!_0x259dc5[_0x3d326d(0x375)]){const _0x3d0094=document['createElement']('tr');_0x3d0094[_0x3d326d(0x345)]=_0x3d326d(0x317),_0x5cbdb7[_0x3d326d(0x3e6)](_0x3d0094);}}function _0xf89b23(){const _0x2d94e0=_0x4db66a;if(!_0xfb20e2)return _0x3fc410(_0x2d94e0(0x56a),!![]),Promise[_0x2d94e0(0x27f)]();const _0x3e932e=_0x2615d2[_0x2d94e0(0x53e)](_0x1a505b=>{const _0x5c3fc6=_0x2d94e0,_0x245db0=String(_0x1a505b[_0x5c3fc6(0x2b8)]||'')['trim']()||String(_0x1a505b[_0x5c3fc6(0x3d9)]||'')[_0x5c3fc6(0x4b8)]()||String(_0x1a505b[_0x5c3fc6(0x4dd)]||'')[_0x5c3fc6(0x4b8)]();return _0x1a505b[_0x5c3fc6(0x4b6)]&&_0x245db0;});if(_0x3e932e)return _0x3fc410(_0x2d94e0(0x37a),!![]),Promise['resolve']();return _0x2615d2=_0x2615d2['map'](_0x26f1df=>({'level':String(_0x26f1df['level']||'')['trim']()||_0x2d94e0(0x23b),'position':String(_0x26f1df[_0x2d94e0(0x28e)]||'')['trim'](),'title':String(_0x26f1df[_0x2d94e0(0x2b8)]||'')[_0x2d94e0(0x4b8)](),'url':String(_0x26f1df[_0x2d94e0(0x3d9)]||'')['trim']()}))[_0x2d94e0(0x32f)](_0x4f418c=>_0x4f418c[_0x2d94e0(0x2b8)]),_0x37f7a3(),fetch(_0x5872fc,{'method':_0x2d94e0(0x278),'headers':_0x27b399({'Content-Type':_0x2d94e0(0x2aa)}),'body':JSON['stringify']({'text':_0x4505aa(_0x2615d2)})})[_0x2d94e0(0x2be)](_0x535cfa=>{const _0x3c83cc=_0x2d94e0;if(_0x535cfa['status']===0x191)throw new Error(_0x3c83cc(0x45f));if(!_0x535cfa['ok'])throw new Error(_0x3c83cc(0x559));_0x9082f5(),_0x112cb5(),_0x3fc410(_0x3c83cc(0x519));})[_0x2d94e0(0x461)](_0x37abaa=>{const _0x4d00b8=_0x2d94e0;console[_0x4d00b8(0x4a4)](_0x37abaa);if(String(_0x37abaa&&_0x37abaa[_0x4d00b8(0x3f0)]||'')===_0x4d00b8(0x45f)){_0x335268(_0x4d00b8(0x4fb),_0x3fc410);return;}_0x3fc410('Could\x20not\x20save.\x20Check\x20the\x20live\x20server\x20endpoint.',!![]);});}function _0x3a802e(){const _0x249e90=_0x4db66a;_0x2a4102()['then'](_0x5ceed2=>{const _0x506789=_0x2f07;_0x2615d2=_0x5ceed2['slice']()[_0x506789(0x2f6)]((_0x1ab907,_0x6af688)=>(Number(_0x1ab907[_0x506789(0x28e)])||0x0)-(Number(_0x6af688[_0x506789(0x28e)])||0x0))[_0x506789(0x1ef)](_0x3d1478=>({'level':_0x3d1478['level'],'position':_0x3d1478['position'],'title':_0x3d1478[_0x506789(0x2b8)],'url':_0x3d1478[_0x506789(0x3d9)],'_isDraft':![]})),_0x37f7a3(),_0x112cb5(),_0x3fc410(_0x506789(0x221)),_0x4d625f();})[_0x249e90(0x461)](_0x390993=>{const _0x382946=_0x249e90;console[_0x382946(0x4a4)](_0x390993),_0x3fc410(_0x382946(0x2bb),!![]);});}function _0x46f642(){const _0x5b5daf=_0x4db66a;_0x51d10a()['then'](_0x5762da=>{const _0x1e9c8c=_0x2f07;_0x15b678=_0x5762da[_0x1e9c8c(0x4e3)]()[_0x1e9c8c(0x2f6)]((_0x1328fe,_0x527309)=>new Date(_0x527309[_0x1e9c8c(0x4c3)])-new Date(_0x1328fe['submittedAt'])),_0x167767(),_0x5af7fe('Connected\x20to\x20live\x20run\x20submissions.'),_0x4d625f();})[_0x5b5daf(0x461)](_0xcac046=>{const _0x5e8e3d=_0x5b5daf;console['error'](_0xcac046),_0x5af7fe(_0x5e8e3d(0x3dd),!![]);});}function _0x1afe8c(_0x314ba4,_0xa92548){const _0x1d1869=_0x4db66a;if(!_0xfb20e2){_0x5af7fe(_0x1d1869(0x1d3),!![]);return;}const _0xb597e0=_0x15b678[_0x1d1869(0x466)](_0x28ac37=>_0x28ac37['id']===_0x314ba4);if(!_0xb597e0)return;const _0x8334ef=window[_0x1d1869(0x255)](_0x1d1869(0x1f4)+_0xb597e0[_0x1d1869(0x3fa)]+'\x20('+_0xa92548+')',_0xb597e0['reviewNotes']||'');if(_0x8334ef===null)return;fetch(_0x1db2fa+'/'+encodeURIComponent(_0x314ba4),{'method':_0x1d1869(0x278),'headers':_0x27b399({'Content-Type':_0x1d1869(0x2aa)}),'body':JSON[_0x1d1869(0x4ef)]({..._0xb597e0,'status':_0xa92548,'reviewNotes':_0x8334ef,'reviewedBy':_0x741b6c||_0x1d1869(0x4cb)})})[_0x1d1869(0x2be)](_0x5bb916=>{const _0x34067f=_0x1d1869;if(_0x5bb916[_0x34067f(0x448)]===0x191)throw new Error(_0x34067f(0x45f));if(!_0x5bb916['ok'])throw new Error(_0x34067f(0x3ad));return _0x328a40(),_0x5af7fe('Run\x20marked\x20'+_0xa92548+'.'),_0x5a07fe();})['catch'](_0x4967b9=>{const _0x2c2868=_0x1d1869;console[_0x2c2868(0x4a4)](_0x4967b9);if(String(_0x4967b9&&_0x4967b9[_0x2c2868(0x3f0)]||'')===_0x2c2868(0x45f)){_0x335268('Wrong\x20admin\x20password.\x20Enter\x20it\x20above\x20to\x20review\x20runs.',_0x5af7fe);return;}_0x5af7fe(_0x2c2868(0x4d4),!![]);});}function _0x807a5a(_0x4af3e4){const _0x4cedaa=_0x4db66a;if(!_0xfb20e2){_0x5af7fe(_0x4cedaa(0x2c0),!![]);return;}fetch(_0x1db2fa+'/'+encodeURIComponent(_0x4af3e4),{'method':_0x4cedaa(0x220),'headers':_0x27b399()})['then'](_0x56ba83=>{const _0x141016=_0x4cedaa;if(_0x56ba83[_0x141016(0x448)]===0x191)throw new Error('Admin\x20auth\x20failed');if(!_0x56ba83['ok'])throw new Error(_0x141016(0x57b));return _0x328a40(),_0x5af7fe(_0x141016(0x48c)),_0x5a07fe();})[_0x4cedaa(0x461)](_0xb9a41=>{const _0x4690db=_0x4cedaa;console[_0x4690db(0x4a4)](_0xb9a41);if(String(_0xb9a41&&_0xb9a41[_0x4690db(0x3f0)]||'')===_0x4690db(0x45f)){_0x335268(_0x4690db(0x49e),_0x5af7fe);return;}_0x5af7fe(_0x4690db(0x439),!![]);});}_0x31376b['addEventListener'](_0x4db66a(0x47b),function(_0x3b14ff){const _0x4d4060=_0x4db66a,_0x2d2ec7=_0x3b14ff['target'],_0x35c115=_0x2d2ec7[_0x4d4060(0x561)]('data-field'),_0x2868fd=Number(_0x2d2ec7[_0x4d4060(0x561)](_0x4d4060(0x2c3)));if(!_0x35c115||Number['isNaN'](_0x2868fd)||!_0x2615d2[_0x2868fd])return;if(_0x35c115===_0x4d4060(0x28e))return;_0x2615d2[_0x2868fd][_0x35c115]=_0x2d2ec7[_0x4d4060(0x51a)],_0x3fc410(_0x4d4060(0x388));}),_0x31376b[_0x4db66a(0x4eb)]('focusout',function(_0xce6250){const _0xaccbca=_0x4db66a,_0x10a0ae=_0xce6250[_0xaccbca(0x225)];if(!(_0x10a0ae instanceof HTMLElement))return;const _0x39f606=_0x10a0ae[_0xaccbca(0x561)](_0xaccbca(0x469)),_0x1a6340=Number(_0x10a0ae[_0xaccbca(0x561)](_0xaccbca(0x2c3)));if(_0x39f606!==_0xaccbca(0x28e)||Number['isNaN'](_0x1a6340)||!_0x2615d2[_0x1a6340])return;_0x55371b(_0x1a6340,_0x10a0ae['value']),_0x112cb5(),_0x3fc410(_0xaccbca(0x388));}),_0x31376b['addEventListener'](_0x4db66a(0x1d2),function(_0x52547d){const _0x5cf0f0=_0x4db66a,_0x566b90=_0x52547d['target']['closest'](_0x5cf0f0(0x3a1));if(_0x566b90){const _0x153e71=_0x566b90[_0x5cf0f0(0x561)]('data-delete');if(_0x153e71==null)return;const _0x5cf439=Number(_0x153e71);if(Number['isNaN'](_0x5cf439))return;_0x2615d2[_0x5cf0f0(0x31e)](_0x5cf439,0x1),_0x37f7a3(),_0x112cb5(),_0x3fc410('Row\x20removed.\x20Save\x20when\x20ready.');}}),_0x5cbdb7['addEventListener']('click',function(_0x2ac231){const _0x4b8374=_0x4db66a,_0x3bafe7=_0x2ac231[_0x4b8374(0x225)]['closest'](_0x4b8374(0x47e));if(_0x3bafe7){_0x1afe8c(_0x3bafe7[_0x4b8374(0x561)]('data-run-id'),_0x3bafe7[_0x4b8374(0x561)](_0x4b8374(0x2b2)));return;}const _0x478d79=_0x2ac231[_0x4b8374(0x225)][_0x4b8374(0x57d)]('[data-run-delete]');if(_0x478d79){const _0x78ad52=_0x478d79[_0x4b8374(0x561)](_0x4b8374(0x46c));_0x78ad52&&window[_0x4b8374(0x492)]('Delete\x20this\x20run\x20submission?')&&_0x807a5a(_0x78ad52);}}),_0x3b66cd[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),function(){const _0x1f4b76=_0x4db66a;_0x2615d2[_0x1f4b76(0x29c)]({'level':_0x1f4b76(0x23b),'position':'','title':'','url':'','_isDraft':!![]}),_0x37f7a3(),_0x112cb5(),_0x3fc410(_0x1f4b76(0x232));});_0x20c9df&&_0x20c9df[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),function(){const _0x556128=_0x4db66a;_0x2615d2[_0x556128(0x211)]({'level':_0x556128(0x23b),'position':'','title':'','url':'','_isDraft':!![]}),_0x37f7a3(),_0x112cb5(),_0x3fc410(_0x556128(0x272));});_0x3a5771['addEventListener']('click',function(){_0xf89b23();});_0x117415&&(_0x117415['addEventListener'](_0x4db66a(0x47b),_0x296433(()=>_0x112cb5(),0x78)),_0x117415['addEventListener'](_0x4db66a(0x47b),function(){const _0x538500=_0x4db66a;window[_0x538500(0x239)]&&!_0x555914()&&window[_0x538500(0x239)]({'targets':this,'scale':[0x1,1.02,0x1],'duration':0x190,'easing':_0x538500(0x48b)});}));_0x10da1e&&_0x10da1e[_0x4db66a(0x4eb)](_0x4db66a(0x47b),_0x167767);_0x1fdebb&&_0x1b0afd(_0x3aa56f());function _0x429469(_0x1c275f,_0x127d59){const _0x5420a2=_0x4db66a;if(!_0x2ada2d)return;_0x2ada2d[_0x5420a2(0x26b)]=_0x1c275f,_0x2ada2d[_0x5420a2(0x30b)][_0x5420a2(0x348)](_0x5420a2(0x537),!!_0x127d59);}function _0x581f57(_0x48c563){[_0x34085e,_0x471c3b,_0x1c07e5,_0x5d6ea6]['forEach'](_0x3e7b24=>{const _0x553f1d=_0x2f07;if(_0x3e7b24)_0x3e7b24[_0x553f1d(0x1f9)]=!_0x48c563;});}function _0x4810b6(){const _0xa6df76=_0x4db66a;if(!_0x4b20f4)return;const _0x5845cc=document['querySelector'](_0xa6df76(0x2d9)),_0x4dad2a=_0x5845cc&&_0x5845cc[_0xa6df76(0x2dc)];_0x4b20f4['textContent']=_0x4dad2a?_0xa6df76(0x28d):_0xa6df76(0x336),_0x814f8a&&(_0x814f8a[_0xa6df76(0x2f3)]=_0x4dad2a?_0xa6df76(0x36d):_0xa6df76(0x39f));}function _0x42ddf1(){const _0x129984=_0x4db66a;if(!_0x4dcef0)return;_0x4dcef0[_0x129984(0x3f8)]=![];if(_0x39600b)_0x39600b[_0x129984(0x1f8)]();const _0x1c475e=document[_0x129984(0x350)](_0x129984(0x4a7));if(_0x1c475e)_0x1c475e[_0x129984(0x2dc)]=!![];_0x4810b6();if(_0x814f8a)_0x814f8a[_0x129984(0x3bb)]();}function _0x3640e9(){const _0x33a461=_0x4db66a;if(_0x4dcef0)_0x4dcef0[_0x33a461(0x3f8)]=!![];}function _0x1340ac(_0x244111){const _0x2b41a0=_0x4db66a;_0x244111['preventDefault']();if(!_0xfb20e2){_0x429469(_0x2b41a0(0x2f8),!![]);return;}const _0x3099fe=_0x3172dd&&String(_0x3172dd[_0x2b41a0(0x51a)]||'')[_0x2b41a0(0x4b8)](),_0x4c7def=document[_0x2b41a0(0x350)](_0x2b41a0(0x20e)),_0x3fb152=_0x4c7def&&String(_0x4c7def[_0x2b41a0(0x51a)]||'')[_0x2b41a0(0x4b8)](),_0x1b1c5b=_0x814f8a&&String(_0x814f8a[_0x2b41a0(0x51a)]||'')['trim']();if(!_0x3099fe||!_0x3fb152||!_0x1b1c5b)return;if(_0x5a2240)_0x5a2240[_0x2b41a0(0x1f9)]=!![];_0x429469(_0x2b41a0(0x4db)+_0x3099fe+_0x2b41a0(0x344)),_0x581f57(![]),fetch(_0xd4ac54(_0x2b41a0(0x306)),{'method':_0x2b41a0(0x2a8),'headers':_0x27b399({'Content-Type':_0x2b41a0(0x2aa)}),'body':JSON[_0x2b41a0(0x4ef)]({'source':_0x3099fe,'filter':_0x3fb152,'query':_0x1b1c5b})})[_0x2b41a0(0x2be)](async _0x3f2e4e=>{const _0x3a3696=_0x2b41a0,_0x223ab2=await _0x3f2e4e[_0x3a3696(0x284)]()[_0x3a3696(0x461)](()=>({}));if(_0x3f2e4e[_0x3a3696(0x448)]===0x191)throw new Error(_0x3a3696(0x45f));if(!_0x3f2e4e['ok'])throw new Error(_0x223ab2[_0x3a3696(0x4a4)]||'Import\x20failed\x20('+_0x3f2e4e[_0x3a3696(0x448)]+')');return _0x223ab2;})[_0x2b41a0(0x2be)](_0xcbc0e5=>{const _0x43ed5f=_0x2b41a0;_0x328a40();const _0x45e38f=Number(_0xcbc0e5[_0x43ed5f(0x539)])||0x0,_0x248ff3=Number(_0xcbc0e5[_0x43ed5f(0x209)])||0x0,_0x4a2fee=Number(_0xcbc0e5['skipped'])||0x0;return _0x429469(_0x43ed5f(0x48e)+_0x45e38f+'\x20API\x20record'+(_0x45e38f===0x1?'':'s')+_0x43ed5f(0x49d)+_0x248ff3+_0x43ed5f(0x27a)+_0x4a2fee+_0x43ed5f(0x566)),_0x3640e9(),_0x5a07fe();})[_0x2b41a0(0x461)](_0x27e35e=>{const _0x9f0dba=_0x2b41a0;console[_0x9f0dba(0x4a4)](_0x27e35e);if(String(_0x27e35e&&_0x27e35e[_0x9f0dba(0x3f0)]||'')===_0x9f0dba(0x45f)){_0x335268(_0x9f0dba(0x4fb),_0x429469),_0x3640e9();return;}_0x429469(_0x27e35e['message']||_0x9f0dba(0x2c7),!![]);})[_0x2b41a0(0x3b4)](()=>{const _0x15bc30=_0x2b41a0;if(_0x5a2240)_0x5a2240[_0x15bc30(0x1f9)]=![];_0x581f57(!![]);});}let _0x588bb7=null;function _0x50ab26(_0x4f8925){const _0x436f89=_0x4db66a,_0x3d35d8=String(_0x4f8925||'')['trim']()['toLowerCase']();if(!_0x3d35d8)return 0x0;return _0x15b678[_0x436f89(0x32f)](_0x3e4c20=>{const _0x4aba3e=_0x436f89,_0x571615=String(_0x3e4c20[_0x4aba3e(0x448)]||_0x4aba3e(0x2e6))[_0x4aba3e(0x3d6)](),_0x174ca0=String(_0x3e4c20[_0x4aba3e(0x2c4)]||'')[_0x4aba3e(0x4b8)]()[_0x4aba3e(0x3d6)]();return _0x571615===_0x4aba3e(0x2e6)&&_0x174ca0===_0x3d35d8;})['length'];}function _0x46f2a7(){const _0x478a3a=_0x4db66a;if(!_0x5a88a7||!_0x2cf34d)return;const _0x2f5340=_0x50ab26(_0x2cf34d[_0x478a3a(0x51a)]),_0x252c0a=String(_0x2cf34d['value']||'')[_0x478a3a(0x4b8)]();if(!_0x252c0a){_0x5a88a7['textContent']='';return;}_0x5a88a7[_0x478a3a(0x26b)]=_0x2f5340?_0x2f5340+_0x478a3a(0x499)+(_0x2f5340===0x1?'':'s')+_0x478a3a(0x43e):'No\x20pending\x20runs\x20match\x20this\x20name\x20in\x20the\x20current\x20queue.';}function _0xf9aeff(){const _0x4d1ee8=_0x4db66a;if(!_0x134f35)return;_0x134f35[_0x4d1ee8(0x3f8)]=![];if(_0x4bf914)_0x4bf914['reset']();_0x46f2a7(),_0x2cf34d&&_0x2cf34d[_0x4d1ee8(0x3bb)]();}function _0x1b5a0b(){if(_0x134f35)_0x134f35['hidden']=!![];_0x588bb7&&(clearTimeout(_0x588bb7),_0x588bb7=null);}function _0x51a8b0(_0x3e41e5){const _0x307588=_0x4db66a;_0x3e41e5[_0x307588(0x46d)]();if(!_0xfb20e2){_0x429469(_0x307588(0x2f8),!![]);return;}const _0x570c27=_0x2cf34d&&String(_0x2cf34d['value']||'')[_0x307588(0x4b8)]();if(!_0x570c27)return;const _0x49c2cb=_0x55297b&&String(_0x55297b[_0x307588(0x51a)]||'')[_0x307588(0x4b8)](),_0x224067={'playerName':_0x570c27};if(_0x49c2cb)_0x224067[_0x307588(0x458)]=_0x49c2cb;if(_0x5a7d92)_0x5a7d92[_0x307588(0x1f9)]=!![];_0x429469(_0x307588(0x3f1)),fetch(_0x1db2fa+'/bulk-approve',{'method':_0x307588(0x2a8),'headers':_0x27b399({'Content-Type':_0x307588(0x2aa)}),'body':JSON[_0x307588(0x4ef)](_0x224067)})[_0x307588(0x2be)](async _0xa17214=>{const _0x27c37c=_0x307588,_0x5c4d2e=await _0xa17214[_0x27c37c(0x284)]()[_0x27c37c(0x461)](()=>({}));if(_0xa17214['status']===0x191)throw new Error('Admin\x20auth\x20failed');if(!_0xa17214['ok'])throw new Error(_0x5c4d2e[_0x27c37c(0x4a4)]||_0x27c37c(0x31f)+_0xa17214[_0x27c37c(0x448)]+')');return _0x5c4d2e;})[_0x307588(0x2be)](_0x460f35=>{const _0x20dac4=_0x307588;_0x328a40();const _0x236b1b=Number(_0x460f35[_0x20dac4(0x397)])||0x0;return _0x429469(_0x236b1b?_0x20dac4(0x1ff)+_0x236b1b+_0x20dac4(0x499)+(_0x236b1b===0x1?'':'s')+_0x20dac4(0x1d8)+_0x570c27+'.':_0x20dac4(0x274)+_0x570c27+'.'),_0x1b5a0b(),_0x5a07fe();})[_0x307588(0x461)](_0x3a31a7=>{const _0x26ea4d=_0x307588;console[_0x26ea4d(0x4a4)](_0x3a31a7);if(String(_0x3a31a7&&_0x3a31a7[_0x26ea4d(0x3f0)]||'')===_0x26ea4d(0x45f)){_0x335268(_0x26ea4d(0x4fb),_0x429469),_0x1b5a0b();return;}_0x429469(_0x3a31a7['message']||_0x26ea4d(0x560),!![]);})['finally'](()=>{if(_0x5a7d92)_0x5a7d92['disabled']=![];});}function _0x3554ff(_0x16e1a6,_0x1b3dab){const _0x559152=_0x4db66a;return _0x429469(_0x559152(0x266)+_0x1b3dab+_0x559152(0x3da)),_0x581f57(![]),fetch(_0xd4ac54(_0x16e1a6),{'method':'POST','headers':_0x27b399({'Content-Type':_0x559152(0x2aa)})})[_0x559152(0x2be)](async _0x218636=>{const _0x388d56=_0x559152,_0x5bbfec=await _0x218636[_0x388d56(0x284)]()[_0x388d56(0x461)](()=>({}));if(_0x218636['status']===0x191)throw new Error(_0x388d56(0x45f));if(!_0x218636['ok'])throw new Error(_0x5bbfec[_0x388d56(0x4a4)]||_0x388d56(0x2b0)+_0x218636[_0x388d56(0x448)]);return _0x5bbfec;})['then'](_0x1426c6=>{const _0x123e7b=_0x559152;_0x429469(_0x1b3dab+'\x20import\x20complete.\x20Added\x20'+(_0x1426c6[_0x123e7b(0x209)]||0x0)+_0x123e7b(0x54c)+(_0x1426c6[_0x123e7b(0x35a)]||0x0)+'.'),_0x5a07fe()[_0x123e7b(0x461)](()=>{});})[_0x559152(0x461)](_0x273831=>{const _0x49d28b=_0x559152;console['error'](_0x273831);if(_0x273831[_0x49d28b(0x3f0)]===_0x49d28b(0x45f)){_0x335268('Wrong\x20admin\x20password.\x20Enter\x20it\x20above,\x20then\x20try\x20again.',_0x429469);return;}_0x429469(_0x273831['message']||_0x49d28b(0x54d),!![]);})['finally'](()=>{_0x581f57(!![]);});}_0x34085e&&_0x34085e[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),()=>_0x3554ff(_0x4db66a(0x521),_0x4db66a(0x46a)));_0x471c3b&&_0x471c3b['addEventListener']('click',()=>_0x3554ff(_0x4db66a(0x47f),'AREDL'));_0x1c07e5&&_0x1c07e5['addEventListener'](_0x4db66a(0x1d2),()=>_0x42ddf1());_0x46d259&&_0x46d259[_0x4db66a(0x4eb)]('click',()=>_0x3640e9());_0x4dcef0&&_0x4dcef0['addEventListener']('click',_0x34a4b4=>{if(_0x34a4b4['target']===_0x4dcef0)_0x3640e9();});_0x39600b&&(_0x39600b[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),_0x1340ac),_0x39600b[_0x4db66a(0x570)](_0x4db66a(0x21e))[_0x4db66a(0x2bd)](_0x5b9f22=>{_0x5b9f22['addEventListener']('change',_0x4810b6);}));_0x5d6ea6&&_0x5d6ea6[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),()=>_0xf9aeff());_0x8e63ca&&_0x8e63ca[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),()=>_0x1b5a0b());_0x134f35&&_0x134f35[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),_0x425667=>{const _0x2104bf=_0x4db66a;if(_0x425667[_0x2104bf(0x225)]===_0x134f35)_0x1b5a0b();});_0x4bf914&&_0x4bf914[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),_0x51a8b0);_0x2cf34d&&_0x2cf34d['addEventListener'](_0x4db66a(0x47b),()=>{if(_0x588bb7)clearTimeout(_0x588bb7);_0x588bb7=setTimeout(_0x46f2a7,0xc8);});document[_0x4db66a(0x4eb)]('keydown',_0x174960=>{const _0x359e5c=_0x4db66a;if(_0x174960[_0x359e5c(0x34d)]!==_0x359e5c(0x343))return;if(_0x4dcef0&&!_0x4dcef0[_0x359e5c(0x3f8)]){_0x3640e9();return;}if(_0x134f35&&!_0x134f35[_0x359e5c(0x3f8)])_0x1b5a0b();}),document[_0x4db66a(0x4eb)](_0x4db66a(0x3ec),_0x22318e=>{const _0x37905d=_0x4db66a;if(_0x22318e['target'][_0x37905d(0x31c)]===_0x37905d(0x407)||_0x22318e[_0x37905d(0x225)][_0x37905d(0x31c)]===_0x37905d(0x335))return;const _0x1ac346=_0x22318e['key'][_0x37905d(0x3d6)]();if(_0x1ac346==='/'&&!_0x22318e[_0x37905d(0x34b)]&&!_0x22318e['metaKey']){_0x22318e['preventDefault']();const _0x3d8600=document[_0x37905d(0x350)](_0x37905d(0x1df));if(_0x3d8600)_0x3d8600[_0x37905d(0x3bb)]();}_0x1ac346==='h'&&!_0x22318e[_0x37905d(0x34b)]&&!_0x22318e[_0x37905d(0x307)]&&(window[_0x37905d(0x403)]['href']=_0x37905d(0x4bd)),_0x1ac346==='l'&&!_0x22318e[_0x37905d(0x34b)]&&!_0x22318e[_0x37905d(0x307)]&&(window[_0x37905d(0x403)][_0x37905d(0x20b)]=_0x37905d(0x52d)),_0x1ac346==='r'&&!_0x22318e[_0x37905d(0x34b)]&&!_0x22318e[_0x37905d(0x307)]&&(window[_0x37905d(0x403)]['href']='run.html'),_0x1ac346==='?'&&!_0x22318e['ctrlKey']&&!_0x22318e[_0x37905d(0x307)]&&(window[_0x37905d(0x403)][_0x37905d(0x20b)]='rules.html');}),_0x1cb993(),_0x1a993a(function(_0x41714b){const _0x21b8d4=_0x4db66a;_0x2615d2=_0x41714b[_0x21b8d4(0x4e3)]()[_0x21b8d4(0x2f6)]((_0x261e14,_0x5499a7)=>(Number(_0x261e14[_0x21b8d4(0x28e)])||0x0)-(Number(_0x5499a7[_0x21b8d4(0x28e)])||0x0))[_0x21b8d4(0x1ef)](_0x2cfacb=>({'level':_0x2cfacb[_0x21b8d4(0x4dd)],'position':_0x2cfacb[_0x21b8d4(0x28e)],'title':_0x2cfacb['title'],'url':_0x2cfacb[_0x21b8d4(0x3d9)],'_isDraft':![]})),_0x37f7a3(),_0x112cb5(),_0x3fc410(_0x21b8d4(0x325));}),_0x32ba31(function(_0x372b76){const _0x22d92e=_0x4db66a;_0x15b678=_0x372b76[_0x22d92e(0x4e3)]()[_0x22d92e(0x2f6)]((_0x2ebb0d,_0x9f62e3)=>new Date(_0x9f62e3['submittedAt'])-new Date(_0x2ebb0d['submittedAt'])),_0x167767(),_0x5af7fe('Run\x20queue\x20reloaded\x20from\x20the\x20live\x20server.');}),_0x3a802e(),_0x46f642();const _0x4c9300=_0xdc8485('bug-reports-body'),_0x573681=_0xdc8485(_0x4db66a(0x558)),_0x2d0ebd=_0xdc8485(_0x4db66a(0x4dc));let _0x385453=[];function _0x3bd858(_0x1d2841,_0x14db47){const _0x3716e0=_0x4db66a;if(!_0x2d0ebd)return;_0x2d0ebd[_0x3716e0(0x26b)]=_0x1d2841,_0x2d0ebd['classList'][_0x3716e0(0x348)](_0x3716e0(0x537),!!_0x14db47);}function _0x1e9042(){const _0xc3e9d6=_0x4db66a;if(!_0xfb20e2)return _0x3bd858(_0xc3e9d6(0x38a),!![]),Promise[_0xc3e9d6(0x27f)]([]);return fetch(_0x4a1987+_0xc3e9d6(0x364),{'method':_0xc3e9d6(0x341),'headers':_0x27b399()})[_0xc3e9d6(0x2be)](_0x41f19c=>{const _0x3389bf=_0xc3e9d6;if(_0x41f19c[_0x3389bf(0x448)]===0x191)throw new Error(_0x3389bf(0x45f));if(!_0x41f19c['ok'])throw new Error(_0x3389bf(0x528));return _0x41f19c[_0x3389bf(0x284)]();})['then'](_0x240744=>{const _0x308d22=_0xc3e9d6;return Array[_0x308d22(0x222)](_0x240744[_0x308d22(0x44c)])?_0x240744[_0x308d22(0x44c)]:[];})[_0xc3e9d6(0x461)](_0x23af11=>{const _0x248721=_0xc3e9d6;return console['error'](_0x23af11),_0x3bd858(_0x248721(0x361),!![]),[];});}function _0x3e2c82(){const _0xf7b784=_0x4db66a;return _0x1e9042()[_0xf7b784(0x2be)](_0x25cd01=>{const _0x7cc749=_0xf7b784;_0x385453=_0x25cd01[_0x7cc749(0x4e3)]()['sort']((_0x4555a1,_0x59b55c)=>new Date(_0x59b55c[_0x7cc749(0x4c3)])-new Date(_0x4555a1[_0x7cc749(0x4c3)])),_0x2b3f62(),_0x4d625f();});}function _0xf982aa(){const _0x14f11a=_0x4db66a,_0x25da93=(_0x573681&&_0x573681[_0x14f11a(0x51a)]||'')[_0x14f11a(0x4b8)]()[_0x14f11a(0x3d6)]();if(!_0x25da93)return _0x385453;return _0x385453[_0x14f11a(0x32f)](_0x2ec342=>{const _0x3166b2=_0x14f11a;return[_0x2ec342[_0x3166b2(0x286)],_0x2ec342[_0x3166b2(0x448)],_0x2ec342[_0x3166b2(0x2f9)],_0x2ec342[_0x3166b2(0x251)],_0x2ec342[_0x3166b2(0x2fa)]]['some'](_0x10410e=>String(_0x10410e||'')[_0x3166b2(0x3d6)]()[_0x3166b2(0x340)](_0x25da93));});}function _0x2b3f62(){const _0x3cdbad=_0x4db66a,_0x5b1e0b=_0xf982aa();if(!_0x4c9300)return;_0x4c9300[_0x3cdbad(0x345)]='',_0x5b1e0b[_0x3cdbad(0x2bd)](_0x5b9a6a=>{const _0x2ed5bc=_0x3cdbad,_0x63c824=document[_0x2ed5bc(0x56e)]('tr');_0x63c824[_0x2ed5bc(0x345)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><span\x20class=\x22status-pill\x20status-'+_0x34f0a8(_0x5b9a6a['category']||_0x2ed5bc(0x508))+'\x22>'+_0x236e7b(_0x5b9a6a['category']||_0x2ed5bc(0x508))+'</span></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><span\x20class=\x22status-pill\x20status-'+_0x34f0a8(_0x5b9a6a[_0x2ed5bc(0x448)]||_0x2ed5bc(0x329))+'\x22>'+_0x236e7b(_0x5b9a6a[_0x2ed5bc(0x448)]||_0x2ed5bc(0x329))+'</span></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><strong>'+_0x236e7b(_0x5b9a6a['accountUsername']||'Anonymous')+_0x2ed5bc(0x3e9)+_0x236e7b(_0x5b9a6a[_0x2ed5bc(0x2f9)]||_0x2ed5bc(0x494))+_0x2ed5bc(0x452)+_0x236e7b((_0x5b9a6a['description']||'')[_0x2ed5bc(0x4e3)](0x0,0x64))+(_0x5b9a6a[_0x2ed5bc(0x251)]&&_0x5b9a6a[_0x2ed5bc(0x251)][_0x2ed5bc(0x375)]>0x64?'...':'')+_0x2ed5bc(0x3e2)+_0x236e7b(_0x9e33a4(_0x5b9a6a['submittedAt']))+_0x2ed5bc(0x55b)+_0x34f0a8(_0x5b9a6a['id'])+'\x22>Resolve</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20danger-btn\x20small-btn\x22\x20data-bug-delete=\x22'+_0x34f0a8(_0x5b9a6a['id'])+'\x22>Delete</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20',_0x4c9300[_0x2ed5bc(0x3e6)](_0x63c824);const _0x3fa0ba=document[_0x2ed5bc(0x56e)]('tr');_0x3fa0ba['className']=_0x2ed5bc(0x227),_0x3fa0ba['innerHTML']='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20colspan=\x226\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bug-report-detail\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span><strong>Email:</strong>\x20'+(_0x5b9a6a[_0x2ed5bc(0x493)]?_0x236e7b(_0x5b9a6a[_0x2ed5bc(0x493)]):_0x2ed5bc(0x500))+_0x2ed5bc(0x2ba)+_0x236e7b(_0x5b9a6a[_0x2ed5bc(0x251)]||'No\x20description')+_0x2ed5bc(0x497),_0x4c9300[_0x2ed5bc(0x3e6)](_0x3fa0ba);});if(!_0x5b1e0b[_0x3cdbad(0x375)]){const _0x34ce84=document['createElement']('tr');_0x34ce84[_0x3cdbad(0x345)]=_0x3cdbad(0x2d0),_0x4c9300['appendChild'](_0x34ce84);}}function _0x2dd0a4(_0x36d15a,_0x4aa8ba){const _0x50c9ee=_0x4db66a;if(!_0xfb20e2){_0x3bd858(_0x50c9ee(0x46f),!![]);return;}const _0x1b4d32=_0x385453[_0x50c9ee(0x466)](_0x6be093=>_0x6be093['id']===_0x36d15a);if(!_0x1b4d32)return;fetch(_0x4a1987+_0x50c9ee(0x460)+encodeURIComponent(_0x36d15a),{'method':'PUT','headers':_0x27b399({'Content-Type':_0x50c9ee(0x2aa)}),'body':JSON['stringify']({..._0x1b4d32,'status':_0x4aa8ba})})[_0x50c9ee(0x2be)](_0x5529e5=>{const _0x2cdfcb=_0x50c9ee;if(_0x5529e5[_0x2cdfcb(0x448)]===0x191)throw new Error(_0x2cdfcb(0x45f));if(!_0x5529e5['ok'])throw new Error(_0x2cdfcb(0x1e7));return _0x3e2c82();})[_0x50c9ee(0x2be)](()=>{const _0x28cf1d=_0x50c9ee;_0x3bd858(_0x28cf1d(0x268)+_0x4aa8ba+'.');})[_0x50c9ee(0x461)](_0x40eb01=>{const _0x17832c=_0x50c9ee;console[_0x17832c(0x4a4)](_0x40eb01);if(String(_0x40eb01&&_0x40eb01[_0x17832c(0x3f0)]||'')===_0x17832c(0x45f)){_0x335268('Wrong\x20admin\x20password.\x20Enter\x20it\x20above\x20to\x20update\x20bug\x20reports.',_0x3bd858);return;}_0x3bd858('Could\x20not\x20update\x20that\x20bug\x20report.',!![]);});}function _0x3fea75(_0x8dea37){const _0x25670b=_0x4db66a;if(!_0xfb20e2){_0x3bd858(_0x25670b(0x3d3),!![]);return;}fetch(_0x4a1987+'/api/bugreports/'+encodeURIComponent(_0x8dea37),{'method':_0x25670b(0x220),'headers':_0x27b399()})['then'](_0x59344e=>{const _0x45b3c2=_0x25670b;if(_0x59344e['status']===0x191)throw new Error('Admin\x20auth\x20failed');if(!_0x59344e['ok'])throw new Error(_0x45b3c2(0x51b));return _0x3e2c82();})[_0x25670b(0x2be)](()=>{const _0x48afc2=_0x25670b;_0x3bd858(_0x48afc2(0x2b6));})[_0x25670b(0x461)](_0x5bf7b9=>{const _0x484257=_0x25670b;console[_0x484257(0x4a4)](_0x5bf7b9);if(String(_0x5bf7b9&&_0x5bf7b9[_0x484257(0x3f0)]||'')==='Admin\x20auth\x20failed'){_0x335268(_0x484257(0x216),_0x3bd858);return;}_0x3bd858(_0x484257(0x526),!![]);});}_0x4c9300&&_0x4c9300[_0x4db66a(0x4eb)]('click',function(_0x43e6c7){const _0x2ec2b6=_0x4db66a,_0x4d7da0=_0x43e6c7[_0x2ec2b6(0x225)][_0x2ec2b6(0x57d)](_0x2ec2b6(0x4b3));if(_0x4d7da0){_0x2dd0a4(_0x4d7da0[_0x2ec2b6(0x561)](_0x2ec2b6(0x25d)),_0x4d7da0[_0x2ec2b6(0x561)](_0x2ec2b6(0x506)));return;}const _0x1e3c45=_0x43e6c7[_0x2ec2b6(0x225)][_0x2ec2b6(0x57d)]('[data-bug-delete]');if(_0x1e3c45){const _0x49ac03=_0x1e3c45[_0x2ec2b6(0x561)](_0x2ec2b6(0x564));_0x49ac03&&window['confirm'](_0x2ec2b6(0x320))&&_0x3fea75(_0x49ac03);}});_0x573681&&_0x573681['addEventListener'](_0x4db66a(0x47b),_0x2b3f62);function _0x4d625f(){const _0x255488=_0x4db66a,_0x9263a6=Array[_0x255488(0x222)](_0x15b678)?_0x15b678[_0x255488(0x375)]:0x0,_0x3c00a9=Array['isArray'](_0x15b678)?_0x15b678[_0x255488(0x32f)](_0x5cfc08=>String(_0x5cfc08[_0x255488(0x448)]||'')['toLowerCase']()==='pending')[_0x255488(0x375)]:0x0,_0x56b0ad=_0x2615d2?_0x2615d2[_0x255488(0x32f)](_0x51402d=>_0x51402d&&_0x51402d[_0x255488(0x2b8)]&&!_0x51402d[_0x255488(0x4b6)])[_0x255488(0x375)]:0x0,_0x372bcb=Array[_0x255488(0x222)](_0x385453)?_0x385453[_0x255488(0x32f)](_0x24911f=>String(_0x24911f[_0x255488(0x448)]||'')[_0x255488(0x3d6)]()===_0x255488(0x329))[_0x255488(0x375)]:0x0,_0x10c39f=_0xdc8485(_0x255488(0x51c)),_0xc28f1c=_0xdc8485(_0x255488(0x467)),_0x3065ff=_0xdc8485(_0x255488(0x4b2)),_0x1123de=_0xdc8485('stat-bug-reports'),_0x1390fc=_0xdc8485('admin-stats-status');if(_0x10c39f)_0x10c39f[_0x255488(0x26b)]=_0x9263a6;if(_0xc28f1c)_0xc28f1c[_0x255488(0x26b)]=_0x3c00a9;if(_0x3065ff)_0x3065ff[_0x255488(0x26b)]=_0x56b0ad;if(_0x1123de)_0x1123de[_0x255488(0x26b)]=_0x372bcb;if(_0x1390fc)_0x1390fc[_0x255488(0x26b)]='Stats\x20loaded.';}(_0x4c9300||_0xdc8485(_0x4db66a(0x51c)))&&_0x3e2c82()['then'](()=>{_0x3bd858('Bug\x20reports\x20loaded.');});_0x1a993a(function(_0x1c9c5b){const _0x23abc1=_0x4db66a;_0x2615d2=_0x1c9c5b[_0x23abc1(0x4e3)]()[_0x23abc1(0x2f6)]((_0x52656b,_0x522130)=>(Number(_0x52656b['position'])||0x0)-(Number(_0x522130[_0x23abc1(0x28e)])||0x0))[_0x23abc1(0x1ef)](_0x4a5a85=>({'level':_0x4a5a85[_0x23abc1(0x4dd)],'position':_0x4a5a85[_0x23abc1(0x28e)],'title':_0x4a5a85[_0x23abc1(0x2b8)],'url':_0x4a5a85['url'],'_isDraft':![]})),_0x37f7a3(),_0x112cb5(),_0x3fc410(_0x23abc1(0x325)),_0x4d625f();}),_0x32ba31(function(_0x111c79){const _0x3ec746=_0x4db66a;_0x15b678=_0x111c79[_0x3ec746(0x4e3)]()[_0x3ec746(0x2f6)]((_0x1f6e75,_0x127f62)=>new Date(_0x127f62['submittedAt'])-new Date(_0x1f6e75[_0x3ec746(0x4c3)])),_0x167767(),_0x5af7fe(_0x3ec746(0x49a)),_0x4d625f();});const _0x2c13e4=document[_0x4db66a(0x570)](_0x4db66a(0x2d5)),_0x2a2eae=document[_0x4db66a(0x570)]('.admin-tab-panel');function _0x30812f(_0x276433){const _0x883244=_0x4db66a;_0x2c13e4[_0x883244(0x2bd)](_0x4f61b7=>{const _0x354b4f=_0x883244;_0x4f61b7['classList'][_0x354b4f(0x348)](_0x354b4f(0x2b4),_0x4f61b7[_0x354b4f(0x561)](_0x354b4f(0x512))===_0x276433);}),_0x2a2eae[_0x883244(0x2bd)](_0x186df3=>{const _0xb104be=_0x883244;_0x186df3[_0xb104be(0x3f8)]=_0x186df3['id']!==_0xb104be(0x4e7)+_0x276433;});}_0x2c13e4[_0x4db66a(0x2bd)](_0x5f59d8=>{const _0x54e294=_0x4db66a;_0x5f59d8[_0x54e294(0x4eb)](_0x54e294(0x1d2),()=>{const _0x3946b8=_0x54e294,_0x334072=_0x5f59d8[_0x3946b8(0x561)](_0x3946b8(0x512));if(_0x334072){const _0x8b9175=document[_0x3946b8(0x2ce)](_0x3946b8(0x4e7)+_0x334072);_0x8b9175&&window[_0x3946b8(0x239)]&&!_0x555914()&&(_0x8b9175['style'][_0x3946b8(0x236)]='0',_0x8b9175['style']['transform']=_0x3946b8(0x316),window[_0x3946b8(0x239)]({'targets':_0x8b9175,'opacity':[0x0,0x1],'translateY':[0x6,0x0],'duration':0x12c,'easing':_0x3946b8(0x21d)})),_0x30812f(_0x334072);}});});}if(_0xb41a12===_0x4db66a(0x241)){const _0xf79083=_0xdc8485(_0x4db66a(0x4e1)),_0x5ebad2=_0xdc8485(_0x4db66a(0x425)),_0x59ea4f=_0xdc8485('run-list-status'),_0x4b45c9=_0xdc8485(_0x4db66a(0x3f4)),_0x46bea2=_0xdc8485('run-level-options'),_0x5c35f0=_0xdc8485('run-my-runs-section'),_0x14d8fd=_0xdc8485(_0x4db66a(0x28a)),_0x541183=_0xdc8485('run-save-account'),_0x411549=_0xdc8485('run-player-name');function _0x2e2543(_0x3d5572,_0x31ebb7,_0x4c5220){const _0x585e83=_0x4db66a;if(!_0x5ebad2)return;_0x5ebad2['textContent']=_0x3d5572,_0x5ebad2[_0x585e83(0x30b)][_0x585e83(0x348)](_0x585e83(0x537),!!_0x31ebb7),_0x5ebad2[_0x585e83(0x30b)][_0x585e83(0x348)]('success-text',!!_0x4c5220);}function _0x3a3556(_0x2051bc,_0x153c39){const _0x53f506=_0x4db66a;if(!_0x59ea4f)return;_0x59ea4f[_0x53f506(0x26b)]=_0x2051bc,_0x59ea4f[_0x53f506(0x30b)]['toggle'](_0x53f506(0x537),!!_0x153c39);}function _0x28a070(){const _0x17532f=_0x4db66a;if(!_0x4b45c9)return;_0x4b45c9[_0x17532f(0x26b)]='';for(let _0x10c8fa=0x0;_0x10c8fa<0x4;_0x10c8fa+=0x1){const _0x3088fc=document['createElement'](_0x17532f(0x2d4));_0x3088fc[_0x17532f(0x342)]=_0x17532f(0x2cc),_0x3088fc['setAttribute'](_0x17532f(0x3cf),_0x17532f(0x352)),_0x4b45c9[_0x17532f(0x3e6)](_0x3088fc);}}function _0x1cf156(){const _0x3664c4=_0x4db66a;if(!_0x411549||!_0x741b6c)return;if(String(_0x411549[_0x3664c4(0x51a)]||'')[_0x3664c4(0x4b8)]()!=='')return;_0x411549[_0x3664c4(0x51a)]=_0x741b6c;}function _0xd549b5(_0x54a1f1){const _0x125b49=_0x4db66a;_0x4b45c9[_0x125b49(0x345)]='';if(!_0x54a1f1[_0x125b49(0x375)]){_0x4b45c9['innerHTML']=_0x125b49(0x413);return;}_0x54a1f1[_0x125b49(0x4e3)](0x0,0x8)[_0x125b49(0x2bd)]((_0xe522b8,_0x1e7ce4)=>{const _0x31c493=_0x125b49,_0x3173d5=document[_0x31c493(0x56e)]('article');_0x3173d5[_0x31c493(0x342)]=_0x31c493(0x1e8),_0x3173d5[_0x31c493(0x415)]['animationDelay']=_0x1e7ce4*0x3c+'ms';const _0x58244a=_0xe522b8[_0x31c493(0x2fa)]?_0x31c493(0x347)+_0x236e7b(_0xe522b8[_0x31c493(0x2fa)]):'';_0x3173d5['innerHTML']='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22submission-card-top\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>'+_0x236e7b(_0xe522b8[_0x31c493(0x3fa)]||_0x31c493(0x494))+_0x31c493(0x356)+_0x34f0a8(_0xe522b8[_0x31c493(0x448)]||_0x31c493(0x2e6))+'\x22>'+_0x236e7b(_0xe522b8[_0x31c493(0x448)]||_0x31c493(0x2e6))+_0x31c493(0x2e4)+_0x236e7b(_0xe522b8[_0x31c493(0x2c4)]||'Unknown')+_0x31c493(0x50a)+_0x236e7b(_0xe522b8[_0x31c493(0x244)]||_0x31c493(0x2f2))+'%\x20•\x20'+_0x236e7b(new Date(_0xe522b8['submittedAt'])[_0x31c493(0x4d9)]())+_0x58244a+_0x31c493(0x24d)+_0x236e7b(_0xe522b8['reviewNotes']||_0xe522b8[_0x31c493(0x4c0)]||_0x31c493(0x24c))+_0x31c493(0x40c)+_0x34f0a8(_0xe522b8[_0x31c493(0x405)]||'#')+_0x31c493(0x269),_0x4b45c9[_0x31c493(0x3e6)](_0x3173d5);});}function _0x1ada5a(){const _0x513758=_0x4db66a;if(!_0x5c35f0||!_0x14d8fd)return;if(!_0x549aee){_0x5c35f0[_0x513758(0x3f8)]=!![];if(_0x541183)_0x541183['hidden']=!![];return;}_0x5c35f0[_0x513758(0x3f8)]=![];if(_0x541183)_0x541183[_0x513758(0x3f8)]=![];const _0x210820=_0x988d6f(_0x549aee),_0x4867ed=_0x210820[_0x513758(0x25e)]||[];_0x14d8fd[_0x513758(0x26b)]='';if(!_0x4867ed[_0x513758(0x375)]){const _0x55df38=document[_0x513758(0x56e)]('p');_0x55df38[_0x513758(0x342)]='muted',_0x55df38[_0x513758(0x26b)]=_0x513758(0x4c9),_0x14d8fd[_0x513758(0x3e6)](_0x55df38);return;}_0x4867ed[_0x513758(0x2bd)]((_0xcf8de4,_0x1c2722)=>{const _0x4d49ab=_0x513758,_0x524743=document['createElement'](_0x4d49ab(0x2d4));_0x524743[_0x4d49ab(0x342)]='submission-card\x20run-saved-card\x20run-card-in',_0x524743[_0x4d49ab(0x415)][_0x4d49ab(0x557)]=_0x1c2722*0x3c+'ms';const _0x1435ee=document[_0x4d49ab(0x56e)](_0x4d49ab(0x2a1));_0x1435ee[_0x4d49ab(0x342)]=_0x4d49ab(0x3fe);const _0x11a0a9=document[_0x4d49ab(0x56e)](_0x4d49ab(0x42b));_0x11a0a9['textContent']=_0xcf8de4['levelTitle']||'Untitled',_0x1435ee[_0x4d49ab(0x3e6)](_0x11a0a9);const _0x589e87=document[_0x4d49ab(0x56e)](_0x4d49ab(0x30f));_0x589e87[_0x4d49ab(0x342)]=_0x4d49ab(0x2f1),_0x589e87[_0x4d49ab(0x26b)]=_0x4d49ab(0x4a9),_0x1435ee[_0x4d49ab(0x3e6)](_0x589e87),_0x524743['appendChild'](_0x1435ee);const _0x42667f=document[_0x4d49ab(0x56e)]('p');_0x42667f[_0x4d49ab(0x342)]='submission-meta',_0x42667f[_0x4d49ab(0x26b)]=(_0xcf8de4[_0x4d49ab(0x2c4)]||'—')+'\x20•\x20'+(_0xcf8de4[_0x4d49ab(0x244)]||_0x4d49ab(0x2f2))+'%\x20•\x20'+(_0xcf8de4['savedAt']?new Date(_0xcf8de4[_0x4d49ab(0x39c)])[_0x4d49ab(0x4d9)]():''),_0x524743[_0x4d49ab(0x3e6)](_0x42667f);if(_0xcf8de4['videoUrl']){const _0x44f4b4=document[_0x4d49ab(0x56e)]('a');_0x44f4b4[_0x4d49ab(0x342)]=_0x4d49ab(0x299),_0x44f4b4[_0x4d49ab(0x20b)]=_0xcf8de4[_0x4d49ab(0x405)],_0x44f4b4['target']=_0x4d49ab(0x4c7),_0x44f4b4['rel']=_0x4d49ab(0x568),_0x44f4b4[_0x4d49ab(0x26b)]=_0x4d49ab(0x44f),_0x524743['appendChild'](_0x44f4b4);}const _0x1c41cb=document['createElement'](_0x4d49ab(0x2a1));_0x1c41cb['className']=_0x4d49ab(0x511);const _0x8af209=document[_0x4d49ab(0x56e)](_0x4d49ab(0x353));_0x8af209[_0x4d49ab(0x30c)]=_0x4d49ab(0x353),_0x8af209[_0x4d49ab(0x342)]=_0x4d49ab(0x205),_0x8af209[_0x4d49ab(0x26b)]=_0x4d49ab(0x536),_0x8af209[_0x4d49ab(0x4eb)](_0x4d49ab(0x1d2),()=>{const _0x18acef=_0x4d49ab;_0xdc8485('run-player-name')[_0x18acef(0x51a)]=_0xcf8de4[_0x18acef(0x2c4)]||'',_0xdc8485(_0x18acef(0x4a8))[_0x18acef(0x51a)]=_0xcf8de4[_0x18acef(0x3fa)]||'',_0xdc8485('run-video-url')['value']=_0xcf8de4[_0x18acef(0x405)]||'',_0xdc8485(_0x18acef(0x359))[_0x18acef(0x51a)]=_0xcf8de4[_0x18acef(0x244)]||_0x18acef(0x2f2),_0xdc8485(_0x18acef(0x515))[_0x18acef(0x51a)]=_0xcf8de4[_0x18acef(0x4cf)]||'',_0xdc8485(_0x18acef(0x45e))[_0x18acef(0x51a)]=_0xcf8de4[_0x18acef(0x4c0)]||'',_0x2e2543(_0x18acef(0x4d7),![],![]);});const _0x391733=document[_0x4d49ab(0x56e)](_0x4d49ab(0x353));_0x391733[_0x4d49ab(0x30c)]=_0x4d49ab(0x353),_0x391733[_0x4d49ab(0x342)]=_0x4d49ab(0x205),_0x391733[_0x4d49ab(0x26b)]=_0x4d49ab(0x524),_0x391733['addEventListener'](_0x4d49ab(0x1d2),()=>{const _0xd1fb79=_0x4d49ab,_0x134a3e=_0x524743;_0x388c00(_0x134a3e,_0xd1fb79(0x4a1)),setTimeout(()=>{_0x7ffc9b(_0x549aee,_0xcf8de4['id']),_0x1ada5a();},0x140);}),_0x1c41cb[_0x4d49ab(0x3e6)](_0x8af209),_0x1c41cb[_0x4d49ab(0x3e6)](_0x391733),_0x524743[_0x4d49ab(0x3e6)](_0x1c41cb),_0x14d8fd['appendChild'](_0x524743);});}function _0x500dcd(){const _0x2c1b23=_0x4db66a;_0x2a4102()[_0x2c1b23(0x2be)](_0x3bcc3a=>{const _0x401de8=_0x2c1b23,_0x3d4c58=_0x3bcc3a['map'](_0x2af6b0=>_0x2af6b0['title'])['filter'](Boolean);_0x46bea2['innerHTML']=_0x3d4c58[_0x401de8(0x1ef)](_0x2eec2d=>_0x401de8(0x56b)+_0x34f0a8(_0x2eec2d)+_0x401de8(0x475))[_0x401de8(0x429)]('');})[_0x2c1b23(0x461)](_0x26c28a=>console[_0x2c1b23(0x4a4)](_0x26c28a)),_0x28a070(),_0x3a3556('Loading\x20recent\x20submissions…'),_0x51d10a()['then'](_0x50ed85=>{const _0x2c8509=_0x2c1b23,_0x1fb09b=_0x50ed85['slice']()['sort']((_0x3cd611,_0x167f13)=>new Date(_0x167f13[_0x2c8509(0x4c3)])-new Date(_0x3cd611[_0x2c8509(0x4c3)]));_0xd549b5(_0x1fb09b),_0x3a3556(_0x2c8509(0x297));})[_0x2c1b23(0x461)](_0x5e1645=>{const _0x1d717a=_0x2c1b23;console[_0x1d717a(0x4a4)](_0x5e1645),_0xd549b5([]),_0x3a3556(_0x1d717a(0x358),!![]);});}_0x541183&&_0x541183[_0x4db66a(0x4eb)]('click',()=>{const _0xc1ce74=_0x4db66a,_0x5d982c={'playerName':_0xdc8485(_0xc1ce74(0x555))['value'][_0xc1ce74(0x4b8)](),'levelTitle':_0xdc8485(_0xc1ce74(0x4a8))['value'][_0xc1ce74(0x4b8)](),'videoUrl':_0xdc8485(_0xc1ce74(0x474))[_0xc1ce74(0x51a)][_0xc1ce74(0x4b8)](),'percent':_0xdc8485('run-percent')[_0xc1ce74(0x51a)][_0xc1ce74(0x4b8)](),'rawFootageUrl':_0xdc8485('run-raw-footage-url')[_0xc1ce74(0x51a)][_0xc1ce74(0x4b8)](),'notes':_0xdc8485('run-notes')[_0xc1ce74(0x51a)][_0xc1ce74(0x4b8)]()},_0x495ba2=_0x5d17f2(_0x549aee,_0x5d982c);if(!_0x495ba2['ok']){_0x2e2543(_0x495ba2[_0xc1ce74(0x4a4)],!![]);return;}_0x2e2543(_0xc1ce74(0x231),![],!![]);if(window[_0xc1ce74(0x239)]&&!_0x555914()){const _0x4fd631=_0xdc8485('run-form-status');_0x4fd631&&window['anime']({'targets':_0x4fd631,'scale':[0x1,1.03,0x1],'duration':0x1f4,'easing':'easeOutBack'});}_0x1ada5a();});function _0x388c00(_0x1cd5ac,_0x46206e){const _0x5cb86d=_0x4db66a;if(!window[_0x5cb86d(0x239)]||_0x555914())return;if(_0x46206e==='in')_0x1cd5ac['style'][_0x5cb86d(0x236)]='0',_0x1cd5ac[_0x5cb86d(0x415)][_0x5cb86d(0x204)]=_0x5cb86d(0x3c5),window['anime']({'targets':_0x1cd5ac,'opacity':[0x0,0x1],'translateY':[0x10,0x0],'scale':[0.96,0x1],'duration':_0xc18bf6()*0.5,'easing':_0x5cb86d(0x21d)});else _0x46206e===_0x5cb86d(0x4a1)&&window[_0x5cb86d(0x239)]({'targets':_0x1cd5ac,'opacity':[0x1,0x0],'scale':[0x1,0.95],'duration':0x12c,'easing':_0x5cb86d(0x2d2),'complete':()=>{const _0x46d0c5=_0x5cb86d;_0x1cd5ac[_0x46d0c5(0x1cf)]();}});}document[_0x4db66a(0x4eb)]('fedl-auth-updated',()=>{_0x1ada5a(),_0x1cf156();}),_0xf79083[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),function(_0x3ca889){const _0x27877a=_0x4db66a;_0x3ca889['preventDefault']();if(!_0xfb20e2){_0x2e2543('Submitting\x20runs\x20is\x20not\x20available\x20right\x20now.',!![]);return;}const _0x452f76={'playerName':_0xdc8485(_0x27877a(0x555))[_0x27877a(0x51a)][_0x27877a(0x4b8)](),'levelTitle':_0xdc8485(_0x27877a(0x4a8))[_0x27877a(0x51a)][_0x27877a(0x4b8)](),'videoUrl':_0xdc8485('run-video-url')[_0x27877a(0x51a)][_0x27877a(0x4b8)](),'percent':_0xdc8485(_0x27877a(0x359))['value']['trim'](),'rawFootageUrl':_0xdc8485(_0x27877a(0x515))['value'][_0x27877a(0x4b8)](),'notes':_0xdc8485(_0x27877a(0x45e))[_0x27877a(0x51a)][_0x27877a(0x4b8)]()};_0x2e2543(_0x27877a(0x4fd));const _0xfe2af5=_0xdc8485(_0x27877a(0x3fb));_0xfe2af5&&window['anime']&&!_0x555914()&&(_0xfe2af5[_0x27877a(0x30b)][_0x27877a(0x1ed)](_0x27877a(0x4b0)),_0xfe2af5[_0x27877a(0x1f9)]=!![]);const _0x21ca76={'Content-Type':'application/json'},_0x1dfc1d=_0x50fc9c();_0x1dfc1d&&(_0x21ca76[_0x27877a(0x30e)]='Bearer\x20'+_0x1dfc1d),fetch(_0x1db2fa,{'method':'POST','headers':_0x21ca76,'body':JSON[_0x27877a(0x4ef)](_0x452f76)})['then'](async _0x139be8=>{const _0x4c2e3e=_0x27877a;if(!_0x139be8['ok']){const {message:_0x263821}=await _0x357e63(_0x139be8);throw new Error(_0x263821);}_0x328a40(),_0xf79083[_0x4c2e3e(0x1f8)](),_0x1cf156();const _0xeb24b4=_0x741b6c?'Run\x20submitted\x20successfully.\x20It\x20is\x20linked\x20to\x20your\x20account\x20('+_0x741b6c+')\x20for\x20moderators.':_0x4c2e3e(0x2ac);_0x2e2543(_0xeb24b4,![],!![]);const _0x5660a7=_0xdc8485(_0x4c2e3e(0x3fb));_0x5660a7&&(_0x5660a7[_0x4c2e3e(0x30b)]['remove'](_0x4c2e3e(0x4b0)),_0x5660a7[_0x4c2e3e(0x1f9)]=![]);if(window[_0x4c2e3e(0x239)]&&!_0x555914()){const _0x2bd70d=_0xdc8485(_0x4c2e3e(0x425));_0x2bd70d&&(_0x2bd70d[_0x4c2e3e(0x342)]=_0x4c2e3e(0x4c2),window[_0x4c2e3e(0x239)]({'targets':_0x2bd70d,'scale':[0x1,1.03,0x1],'duration':0x1f4,'easing':_0x4c2e3e(0x334)}));}return _0x5a07fe();})['catch'](_0x45fa6b=>{const _0x144acd=_0x27877a;console[_0x144acd(0x4a4)](_0x45fa6b);const _0x3ec7d1=_0xdc8485(_0x144acd(0x3fb));_0x3ec7d1&&(_0x3ec7d1[_0x144acd(0x30b)]['remove'](_0x144acd(0x4b0)),_0x3ec7d1[_0x144acd(0x1f9)]=![]),_0x2e2543(_0x45fa6b[_0x144acd(0x3f0)]||'Could\x20not\x20submit\x20the\x20run.\x20Check\x20the\x20server\x20and\x20try\x20again.',!![]);});}),_0x1cb993(),_0x32ba31(function(_0x5dc614){const _0x418a3b=_0x4db66a,_0x20ddba=_0x5dc614['slice']()['sort']((_0x2a4026,_0x28f41c)=>new Date(_0x28f41c['submittedAt'])-new Date(_0x2a4026['submittedAt']));_0xd549b5(_0x20ddba),_0x3a3556(_0x418a3b(0x4ca));}),_0x16b62b()['then'](()=>_0x33b506(_0x549aee))[_0x4db66a(0x3b4)](()=>{_0x1ada5a(),_0xdc8400(),_0x1cf156();}),_0x500dcd();}const _0x51d056=/^[a-z0-9_]{3,24}$/,_0x452e60=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,_0x1e89c9=0x578;function _0x5ecc6a(_0xdfc56d,_0x162f0e,_0x282ecb){const _0x124096=_0x4db66a;if(!_0xdfc56d)return;_0xdfc56d[_0x124096(0x26b)]=_0x162f0e||'',_0xdfc56d[_0x124096(0x342)]=_0x282ecb===_0x124096(0x4a4)?_0x124096(0x36f):_0x282ecb===_0x124096(0x223)?_0x124096(0x33f):_0x124096(0x363);}if(_0xb41a12===_0x4db66a(0x318)){const _0x385a2a=_0xdc8485('signup-form'),_0x1fc5f0=_0xdc8485('signup-status'),_0x35c1b4=_0xdc8485(_0x4db66a(0x294));function _0x27ecc5(_0xac58b0,_0x201e80){_0x5ecc6a(_0x1fc5f0,_0xac58b0,_0x201e80);}function _0x3ea8d2(){const _0x274e5d=_0x4db66a;if(_0x5ae84c)return!![];const _0x3f62c6=_0xdc8485(_0x274e5d(0x572)),_0x1ba996=_0x3f62c6?String(_0x3f62c6[_0x274e5d(0x51a)]||''):'';if(!_0x1ba996)return _0x27ecc5(_0x274e5d(0x3bd),'error'),![];return!![];}_0x385a2a['addEventListener'](_0x4db66a(0x3c4),function(_0x2f7253){const _0x216dbe=_0x4db66a;_0x2f7253[_0x216dbe(0x46d)]();if(!_0x3ea8d2())return;if(!_0xfb20e2){_0x27ecc5(_0x216dbe(0x224),'error');return;}const _0x821a45=String(_0xdc8485(_0x216dbe(0x37e))[_0x216dbe(0x51a)]||'')[_0x216dbe(0x4b8)]()[_0x216dbe(0x3d6)](),_0x2d4b28=_0xdc8485(_0x216dbe(0x565))[_0x216dbe(0x51a)]||'',_0x30fb7f=_0xdc8485(_0x216dbe(0x262))[_0x216dbe(0x51a)]||'';if(!_0x51d056[_0x216dbe(0x444)](_0x821a45)){_0x27ecc5(_0x216dbe(0x27d),'error');return;}if(_0x2d4b28[_0x216dbe(0x375)]<0x8){_0x27ecc5(_0x216dbe(0x2e2),'error');return;}if(_0x2d4b28!==_0x30fb7f){_0x27ecc5(_0x216dbe(0x404),'error');return;}_0x35c1b4[_0x216dbe(0x1f9)]=!![],_0x27ecc5(_0x216dbe(0x2e0)),fetch(_0xd4ac54(_0x216dbe(0x20a)),{'method':_0x216dbe(0x2a8),'headers':{'Content-Type':_0x216dbe(0x2aa)},'body':JSON[_0x216dbe(0x4ef)]({'username':_0x821a45,'password':_0x2d4b28})})['then'](async _0x574d0a=>{const _0x2855e2=_0x216dbe,{data:_0x3c0e4f,message:_0x4acd88}=await _0x357e63(_0x574d0a);if(!_0x574d0a['ok'])throw new Error(_0x4acd88||_0x2855e2(0x513));return _0x7c440c(_0x3c0e4f['token']),_0x549aee=_0x3c0e4f[_0x2855e2(0x240)],_0x741b6c=_0x3c0e4f[_0x2855e2(0x28c)],document[_0x2855e2(0x387)](new CustomEvent(_0x2855e2(0x3a3))),_0x27ecc5(_0x2855e2(0x496),_0x2855e2(0x223)),_0x33b506(_0x3c0e4f['userId']);})[_0x216dbe(0x2be)](()=>{const _0x38c848=_0x216dbe;_0x27ecc5('You\x20are\x20signed\x20in.\x20Redirecting…',_0x38c848(0x223)),setTimeout(()=>{const _0x4b3fa9=_0x38c848,_0x19e4c1=new URLSearchParams(window[_0x4b3fa9(0x403)]['search']),_0xfbf1b0=_0x19e4c1['get'](_0x4b3fa9(0x3e0))||_0x4b3fa9(0x4bd);window[_0x4b3fa9(0x403)]['href']=_0xfbf1b0;},_0x1e89c9);})[_0x216dbe(0x461)](_0x2de146=>{const _0x596ac7=_0x216dbe;console[_0x596ac7(0x4a4)](_0x2de146),_0x27ecc5(_0x2de146[_0x596ac7(0x3f0)]||_0x596ac7(0x41a),_0x596ac7(0x4a4)),_0x35c1b4['disabled']=![];});});}if(_0xb41a12==='login'){const _0x326625=_0xdc8485('login-form'),_0x2dd22e=_0xdc8485(_0x4db66a(0x42d)),_0x2f83f3=_0xdc8485(_0x4db66a(0x2df));function _0x46a5fc(_0x5e562f,_0x3fbae4){_0x5ecc6a(_0x2dd22e,_0x5e562f,_0x3fbae4);}function _0x3ea8d2(){const _0x3c1524=_0x4db66a;if(_0x5ae84c)return!![];const _0x4f9f3e=_0xdc8485(_0x3c1524(0x572)),_0x1d6f7e=_0x4f9f3e?String(_0x4f9f3e['value']||''):'';if(!_0x1d6f7e)return _0x46a5fc(_0x3c1524(0x3bd),_0x3c1524(0x4a4)),![];return!![];}_0x326625[_0x4db66a(0x4eb)]('submit',function(_0x80d728){const _0x4e605c=_0x4db66a;_0x80d728[_0x4e605c(0x46d)]();if(!_0x3ea8d2())return;if(!_0xfb20e2){_0x46a5fc(_0x4e605c(0x43f),_0x4e605c(0x4a4));return;}const _0xaa4df8=String(_0xdc8485('login-username')[_0x4e605c(0x51a)]||'')[_0x4e605c(0x4b8)]()[_0x4e605c(0x3d6)](),_0x5ef7ab=_0xdc8485(_0x4e605c(0x503))['value']||'';if(!_0xaa4df8){_0x46a5fc(_0x4e605c(0x295),'error');return;}_0x2f83f3['disabled']=!![],_0x46a5fc(_0x4e605c(0x3ee)),fetch(_0xd4ac54(_0x4e605c(0x2a7)),{'method':'POST','headers':{'Content-Type':_0x4e605c(0x2aa)},'body':JSON[_0x4e605c(0x4ef)]({'username':_0xaa4df8,'password':_0x5ef7ab})})[_0x4e605c(0x2be)](async _0x43434c=>{const _0xb852ed=_0x4e605c,{data:_0x58adb4,message:_0x3491b2}=await _0x357e63(_0x43434c);if(!_0x43434c['ok'])throw new Error(_0x3491b2||_0xb852ed(0x38e));return _0x7c440c(_0x58adb4[_0xb852ed(0x2cd)]),_0x549aee=_0x58adb4[_0xb852ed(0x240)],_0x741b6c=_0x58adb4[_0xb852ed(0x28c)],document[_0xb852ed(0x387)](new CustomEvent(_0xb852ed(0x3a3))),_0x46a5fc('Signed\x20in\x20successfully.\x20Loading\x20your\x20data…','success'),_0x33b506(_0x58adb4[_0xb852ed(0x240)]);})['then'](()=>{const _0x132b17=_0x4e605c;_0x46a5fc(_0x132b17(0x29d),'success'),setTimeout(()=>{const _0x15314f=_0x132b17,_0x2effb3=new URLSearchParams(window['location'][_0x15314f(0x287)]),_0x5e1acb=_0x2effb3[_0x15314f(0x380)](_0x15314f(0x3e0))||'index.html';window[_0x15314f(0x403)]['href']=_0x5e1acb;},_0x1e89c9);})[_0x4e605c(0x461)](_0x2ca15c=>{const _0x49f888=_0x4e605c;console[_0x49f888(0x4a4)](_0x2ca15c),_0x46a5fc(_0x2ca15c['message']||_0x49f888(0x1f2),_0x49f888(0x4a4)),_0x2f83f3[_0x49f888(0x1f9)]=![];});});}window[_0x4db66a(0x2b7)]=function(_0x4e29cc){const _0xd568d=_0x4db66a;if(!_0x4e29cc||!_0x4e29cc[_0xd568d(0x3a2)]){console[_0xd568d(0x4a4)](_0xd568d(0x2e9));return;}const _0x37a455=_0xdc8485(_0xd568d(0x42d));_0x37a455&&_0x5ecc6a(_0x37a455,_0xd568d(0x57a)),fetch(_0xd4ac54(_0xd568d(0x1de)),{'method':_0xd568d(0x2a8),'headers':{'Content-Type':_0xd568d(0x2aa)},'body':JSON['stringify']({'token':_0x4e29cc[_0xd568d(0x3a2)]})})[_0xd568d(0x2be)](async _0x5c8b9b=>{const _0x268716=_0xd568d,{data:_0x565b18,message:_0x5a5d4a}=await _0x357e63(_0x5c8b9b);if(!_0x5c8b9b['ok'])throw new Error(_0x5a5d4a||_0x268716(0x376));return _0x7c440c(_0x565b18[_0x268716(0x2cd)]),_0x549aee=_0x565b18[_0x268716(0x240)],_0x741b6c=_0x565b18[_0x268716(0x28c)],document[_0x268716(0x387)](new CustomEvent('fedl-auth-updated')),_0x37a455&&_0x5ecc6a(_0x37a455,'Signed\x20in\x20successfully.\x20Loading\x20your\x20data…','success'),_0x33b506(_0x565b18['userId']);})['then'](()=>{const _0x38315=_0xd568d;_0x37a455&&_0x5ecc6a(_0x37a455,_0x38315(0x29d),_0x38315(0x223)),setTimeout(()=>{const _0x43c25e=_0x38315,_0x1652ff=new URLSearchParams(window['location'][_0x43c25e(0x287)]),_0x2f242f=_0x1652ff[_0x43c25e(0x380)](_0x43c25e(0x3e0))||'index.html';window[_0x43c25e(0x403)][_0x43c25e(0x20b)]=_0x2f242f;},_0x1e89c9);})[_0xd568d(0x461)](_0x533fea=>{const _0x3587d7=_0xd568d;console['error'](_0x3587d7(0x3ab),_0x533fea),_0x37a455&&_0x5ecc6a(_0x37a455,_0x533fea[_0x3587d7(0x3f0)]||'Could\x20not\x20sign\x20in\x20with\x20Google.',_0x3587d7(0x4a4));});},window['handleGoogleSignUp']=function(_0xa1fee7){const _0x149a82=_0x4db66a;if(!_0xa1fee7||!_0xa1fee7[_0x149a82(0x3a2)]){console['error'](_0x149a82(0x235));return;}const _0xf4f807=_0xdc8485('signup-status');_0xf4f807&&_0x5ecc6a(_0xf4f807,_0x149a82(0x21c)),fetch(_0xd4ac54(_0x149a82(0x442)),{'method':_0x149a82(0x2a8),'headers':{'Content-Type':_0x149a82(0x2aa)},'body':JSON[_0x149a82(0x4ef)]({'id_token':_0xa1fee7[_0x149a82(0x3a2)]})})['then'](async _0x30d02d=>{const _0x5afb35=_0x149a82,{data:_0x5a4df4,message:_0x10c65e}=await _0x357e63(_0x30d02d);if(!_0x30d02d['ok'])throw new Error(_0x10c65e||_0x5afb35(0x424));return _0x7c440c(_0x5a4df4[_0x5afb35(0x2cd)]),_0x549aee=_0x5a4df4[_0x5afb35(0x240)],_0x741b6c=_0x5a4df4[_0x5afb35(0x28c)],document[_0x5afb35(0x387)](new CustomEvent(_0x5afb35(0x3a3))),_0xf4f807&&_0x5ecc6a(_0xf4f807,_0x5afb35(0x496),_0x5afb35(0x223)),_0x33b506(_0x5a4df4[_0x5afb35(0x240)]);})[_0x149a82(0x2be)](()=>{const _0x278717=_0x149a82;_0xf4f807&&_0x5ecc6a(_0xf4f807,'You\x20are\x20signed\x20in.\x20Redirecting…',_0x278717(0x223)),setTimeout(()=>{const _0x3d29cc=_0x278717,_0x3e175c=new URLSearchParams(window[_0x3d29cc(0x403)]['search']),_0x20ba9f=_0x3e175c[_0x3d29cc(0x380)](_0x3d29cc(0x3e0))||_0x3d29cc(0x4bd);window[_0x3d29cc(0x403)][_0x3d29cc(0x20b)]=_0x20ba9f;},_0x1e89c9);})[_0x149a82(0x461)](_0x13b611=>{const _0x2f0ef8=_0x149a82;console[_0x2f0ef8(0x4a4)](_0x2f0ef8(0x465),_0x13b611),_0xf4f807&&_0x5ecc6a(_0xf4f807,_0x13b611[_0x2f0ef8(0x3f0)]||_0x2f0ef8(0x22f),_0x2f0ef8(0x4a4));});};if(_0xb41a12===_0x4db66a(0x3cc)){const _0x5328ef='fedl_theme',_0x1aca19=_0xdc8485(_0x4db66a(0x349)),_0x2ee7ff={'dark':{'--bg':'#0f1724','--panel':_0x4db66a(0x540),'--accent':_0x4db66a(0x1db),'--muted':'#9fb3c8','--text':_0x4db66a(0x253),'--card':_0x4db66a(0x20f),'--accent-warm':'#ffb84d'},'light':{'--bg':_0x4db66a(0x2c2),'--panel':_0x4db66a(0x4bb),'--accent':_0x4db66a(0x210),'--muted':_0x4db66a(0x40d),'--text':_0x4db66a(0x2ee),'--card':_0x4db66a(0x2af),'--accent-warm':_0x4db66a(0x390)},'blue':{'--bg':_0x4db66a(0x40e),'--panel':_0x4db66a(0x36e),'--accent':'#38bdf8','--muted':_0x4db66a(0x203),'--text':_0x4db66a(0x35b),'--card':_0x4db66a(0x509),'--accent-warm':_0x4db66a(0x212)},'midnight':{'--bg':'#0a0a12','--panel':'#12121f','--accent':_0x4db66a(0x4a0),'--muted':_0x4db66a(0x26c),'--text':_0x4db66a(0x2cb),'--card':_0x4db66a(0x542),'--accent-warm':'#f472b6'},'cyberpunk':{'--bg':_0x4db66a(0x542),'--panel':_0x4db66a(0x581),'--accent':_0x4db66a(0x229),'--muted':_0x4db66a(0x414),'--text':_0x4db66a(0x24a),'--card':_0x4db66a(0x447),'--accent-warm':_0x4db66a(0x406)},'earth':{'--bg':_0x4db66a(0x31a),'--panel':_0x4db66a(0x22b),'--accent':_0x4db66a(0x41e),'--muted':_0x4db66a(0x419),'--text':'#ecfccb','--card':_0x4db66a(0x426),'--accent-warm':'#fbbf24'},'retro':{'--bg':_0x4db66a(0x2a9),'--panel':_0x4db66a(0x26a),'--accent':_0x4db66a(0x208),'--muted':_0x4db66a(0x21b),'--text':_0x4db66a(0x4f4),'--card':_0x4db66a(0x4ac),'--accent-warm':_0x4db66a(0x57e)},'matrix':{'--bg':_0x4db66a(0x355),'--panel':_0x4db66a(0x277),'--accent':_0x4db66a(0x332),'--muted':_0x4db66a(0x1f5),'--text':_0x4db66a(0x332),'--card':_0x4db66a(0x277),'--accent-warm':_0x4db66a(0x3d4)},'synthwave':{'--bg':_0x4db66a(0x581),'--panel':_0x4db66a(0x4f5),'--accent':_0x4db66a(0x2b5),'--muted':'#c792ea','--text':'#f4e9ff','--card':_0x4db66a(0x44b),'--accent-warm':_0x4db66a(0x516)},'fire':{'--bg':_0x4db66a(0x311),'--panel':'#2d0a0a','--accent':'#ff4500','--muted':_0x4db66a(0x50e),'--text':_0x4db66a(0x4b7),'--card':_0x4db66a(0x4e8),'--accent-warm':_0x4db66a(0x1da)},'galaxy':{'--bg':_0x4db66a(0x3a7),'--panel':'#150f25','--accent':_0x4db66a(0x2a3),'--muted':_0x4db66a(0x333),'--text':_0x4db66a(0x2c5),'--card':_0x4db66a(0x31d),'--accent-warm':_0x4db66a(0x378)},'candy':{'--bg':_0x4db66a(0x42f),'--panel':_0x4db66a(0x391),'--accent':_0x4db66a(0x2d7),'--muted':'#94a3b8','--text':_0x4db66a(0x385),'--card':_0x4db66a(0x3b5),'--accent-warm':'#34d399'},'highcontrast':{'--bg':_0x4db66a(0x3f7),'--panel':'#111111','--accent':_0x4db66a(0x436),'--muted':_0x4db66a(0x1d7),'--text':_0x4db66a(0x436),'--card':'#0a0a0a','--accent-warm':_0x4db66a(0x377)},'original':{'--bg':'#0f1724','--panel':_0x4db66a(0x540),'--accent':_0x4db66a(0x1db),'--muted':'#9fb3c8','--text':_0x4db66a(0x253),'--card':'#081220','--accent-warm':_0x4db66a(0x22a)}};function _0x278bb6(_0x3099d8,_0x1da9ea=!![]){const _0xba3ca1=_0x4db66a,_0x573ecb=document['documentElement'],_0x2c3dd2=_0x2ee7ff[_0x3099d8];if(!_0x2c3dd2)return;if(_0x1da9ea&&window['anime']&&!_0x555914()){let _0x330949=document[_0xba3ca1(0x2ce)]('theme-transition-overlay');!_0x330949&&(_0x330949=document[_0xba3ca1(0x56e)]('div'),_0x330949['id']=_0xba3ca1(0x250),_0x330949[_0xba3ca1(0x415)]['cssText']=_0xba3ca1(0x304)+_0x2c3dd2[_0xba3ca1(0x39e)],document[_0xba3ca1(0x428)][_0xba3ca1(0x3e6)](_0x330949)),_0x330949[_0xba3ca1(0x415)][_0xba3ca1(0x263)]=_0x2c3dd2[_0xba3ca1(0x39e)],window[_0xba3ca1(0x239)]({'targets':_0x330949,'opacity':[0x0,0.3,0x0],'duration':0x258,'easing':_0xba3ca1(0x312),'begin':()=>{const _0x269560=_0xba3ca1;_0x330949[_0x269560(0x415)][_0x269560(0x4ee)]=_0x269560(0x567);},'update':_0x30c437=>{const _0x24614e=_0xba3ca1;_0x30c437[_0x24614e(0x35d)]>0x1e&&_0x30c437[_0x24614e(0x35d)]<0x46&&(Object['entries'](_0x2c3dd2)[_0x24614e(0x2bd)](([_0x38bcf1,_0x586bff])=>_0x573ecb[_0x24614e(0x415)][_0x24614e(0x4a5)](_0x38bcf1,_0x586bff)),document[_0x24614e(0x428)][_0x24614e(0x313)][_0x24614e(0x56d)]=_0x3099d8);},'complete':()=>{const _0x1f4ca5=_0xba3ca1;_0x330949[_0x1f4ca5(0x415)]['display']=_0x1f4ca5(0x46e);}});}else Object[_0xba3ca1(0x51d)](_0x2c3dd2)[_0xba3ca1(0x2bd)](([_0x2631c7,_0x402de7])=>_0x573ecb[_0xba3ca1(0x415)][_0xba3ca1(0x4a5)](_0x2631c7,_0x402de7)),document[_0xba3ca1(0x428)][_0xba3ca1(0x313)][_0xba3ca1(0x56d)]=_0x3099d8;}function _0x5d22c5(_0x455b6b,_0x50af3d){_0x5ecc6a(_0x1aca19,_0x455b6b,_0x50af3d);}function _0x53ccaf(){const _0x40ac1b=_0x4db66a,_0x48fd93=localStorage['getItem'](_0x5328ef)||_0x40ac1b(0x264);_0x278bb6(_0x48fd93,![]),document[_0x40ac1b(0x570)](_0x40ac1b(0x4d8))[_0x40ac1b(0x2bd)](_0x1eb94e=>{const _0x14e5cc=_0x40ac1b;_0x1eb94e['checked']=_0x1eb94e[_0x14e5cc(0x51a)]===_0x48fd93;});}document['querySelectorAll'](_0x4db66a(0x4d8))['forEach'](_0x1e9628=>{const _0x292831=_0x4db66a;_0x1e9628[_0x292831(0x4eb)]('change',function(){const _0x44a435=_0x292831,_0x311683=this[_0x44a435(0x51a)],_0x49c518=this[_0x44a435(0x438)][_0x44a435(0x350)]('.theme-preview');window[_0x44a435(0x239)]&&_0x49c518&&!_0x555914()&&window[_0x44a435(0x239)]({'targets':_0x49c518,'scale':[0x1,1.2,0x1],'duration':0x190,'easing':'easeInOutBack'});localStorage[_0x44a435(0x3c1)](_0x5328ef,_0x311683),_0x278bb6(_0x311683);const _0x1ecf7b=_0xdeb23f();if(_0x1ecf7b){const _0x3af0b1=_0x25d4c4(),_0x56cfed=_0x3af0b1[_0x44a435(0x466)](_0x22ea66=>_0x22ea66['id']===_0x1ecf7b);if(_0x56cfed){_0x56cfed['theme']=_0x311683,_0x29d5d5(_0x3af0b1);const _0x219e51=_0x988d6f(_0x1ecf7b);_0x219e51[_0x44a435(0x56d)]=_0x311683,_0x5444da(_0x44a435(0x4fc)+_0x1ecf7b,_0x219e51);}}_0x5d22c5(_0x44a435(0x33b),_0x44a435(0x223));const _0x431a0d=document['querySelector'](_0x44a435(0x4d6));_0x431a0d&&window[_0x44a435(0x239)]&&!_0x555914()&&(_0x431a0d[_0x44a435(0x30b)][_0x44a435(0x1ed)](_0x44a435(0x23a)),window[_0x44a435(0x239)]({'targets':_0x431a0d,'scale':[0x1,1.01,0x1],'duration':0x190,'easing':_0x44a435(0x334),'complete':()=>_0x431a0d['classList'][_0x44a435(0x1cf)]('success-shine')}));});});function _0x32d22c(){const _0x5b7c1e=_0x4db66a,_0x156d7f=_0xdeb23f();if(_0x156d7f){const _0x4f50b1=_0x988d6f(_0x156d7f);_0x4f50b1&&_0x4f50b1[_0x5b7c1e(0x56d)]&&(localStorage[_0x5b7c1e(0x3c1)](_0x5328ef,_0x4f50b1['theme']),_0x278bb6(_0x4f50b1[_0x5b7c1e(0x56d)],![]));}}_0x53ccaf(),_0x32d22c();const _0x3e3a98=_0xdc8485(_0x4db66a(0x327));_0x3e3a98&&(_0x3e3a98[_0x4db66a(0x2dc)]=!_0x555914(),_0x3e3a98[_0x4db66a(0x4eb)](_0x4db66a(0x200),function(){const _0xa7d4ea=_0x4db66a;_0x494704(!this[_0xa7d4ea(0x2dc)]);const _0x2e7590=this[_0xa7d4ea(0x57d)](_0xa7d4ea(0x2ad));_0x2e7590&&window[_0xa7d4ea(0x239)]&&!_0x555914()&&window[_0xa7d4ea(0x239)]({'targets':_0x2e7590,'scale':[0x1,1.01,0x1],'duration':0x190,'easing':_0xa7d4ea(0x334)});}));const _0x5a8091=_0xdc8485(_0x4db66a(0x31b));_0x5a8091&&(_0x5a8091[_0x4db66a(0x2dc)]=!_0x51c7e7(),_0x5a8091['addEventListener']('change',function(){const _0x2f01e3=_0x4db66a;localStorage['setItem'](_0x4c7291,String(!this['checked']));const _0x31f76b=this[_0x2f01e3(0x57d)](_0x2f01e3(0x2ad));_0x31f76b&&window['anime']&&!_0x555914()&&window[_0x2f01e3(0x239)]({'targets':_0x31f76b,'scale':[0x1,1.01,0x1],'duration':0x190,'easing':_0x2f01e3(0x334)});}));const _0x143d9d=_0xdc8485(_0x4db66a(0x282)),_0x133e96=_0xdc8485('account-animation-speed-label');_0x143d9d&&_0x133e96&&(_0x143d9d['value']=_0xc18bf6(),_0x133e96[_0x4db66a(0x26b)]=_0x143d9d[_0x4db66a(0x51a)]+'ms',_0x143d9d[_0x4db66a(0x4eb)](_0x4db66a(0x47b),function(){const _0x480b61=_0x4db66a;localStorage[_0x480b61(0x3c1)](_0x419502,String(this['value'])),_0x133e96['textContent']=this['value']+'ms',window[_0x480b61(0x239)]&&!_0x555914()&&window['anime']({'targets':_0x133e96,'scale':[0x1,1.1,0x1],'duration':0x12c,'easing':_0x480b61(0x334)});}));const _0x7554f0=_0xdc8485(_0x4db66a(0x3fd)),_0x254e72=_0xdc8485('account-username'),_0x4009b0=_0xdc8485(_0x4db66a(0x1dc)),_0x4702b5=_0xdc8485(_0x4db66a(0x206)),_0x425748=_0xdc8485(_0x4db66a(0x52c)),_0xfffe0c=_0xdc8485('account-password-form'),_0x1342dd=_0xdc8485(_0x4db66a(0x4f3)),_0x25b24d=_0xdc8485(_0x4db66a(0x228));function _0x3f3f97(_0x59e7a6,_0x1ea4e0){_0x5ecc6a(_0x7554f0,_0x59e7a6,_0x1ea4e0);}function _0x3a60a2(_0x3ca8d4,_0x2bb862){_0x5ecc6a(_0x425748,_0x3ca8d4,_0x2bb862);}function _0x2667f2(_0x3a1d0a,_0xc6ffb2){_0x5ecc6a(_0x1342dd,_0x3a1d0a,_0xc6ffb2);}function _0x12f52d(_0x3f9db3){const _0x42db2b=_0x4db66a;if(!_0x3f9db3)return _0x42db2b(0x457);const _0x21181e=new Date(_0x3f9db3);if(Number[_0x42db2b(0x34c)](_0x21181e[_0x42db2b(0x486)]()))return _0x42db2b(0x457);return _0x21181e[_0x42db2b(0x4c6)](undefined,{'year':_0x42db2b(0x4aa),'month':_0x42db2b(0x464),'day':_0x42db2b(0x4aa)});}function _0x27b399(){const _0xdda351=_0x4db66a;return{'Content-Type':_0xdda351(0x2aa),'Authorization':_0xdda351(0x1f6)+_0x50fc9c()};}function _0xd328de(){const _0x299c2c=_0x4db66a;if(!_0x50fc9c())return window[_0x299c2c(0x403)][_0x299c2c(0x2d8)]('login.html?return='+encodeURIComponent(_0x299c2c(0x3c6))),Promise['resolve']();return _0x3f3f97(_0x299c2c(0x32a)),fetch(_0xd4ac54('/api/account'),{'headers':{'Authorization':_0x299c2c(0x1f6)+_0x50fc9c()},'cache':'no-store'})['then'](async _0x26ec9b=>{const _0x9685ed=_0x299c2c,{data:_0x18edd9,message:_0x5a0f40}=await _0x357e63(_0x26ec9b);if(!_0x26ec9b['ok'])throw new Error(_0x5a0f40||_0x9685ed(0x1d9));_0x254e72&&(_0x254e72[_0x9685ed(0x26b)]=_0x18edd9[_0x9685ed(0x28c)]||_0x9685ed(0x457)),_0x4009b0&&(_0x4009b0['textContent']=_0x12f52d(_0x18edd9['createdAt'])),_0x3f3f97('');})[_0x299c2c(0x461)](_0x317554=>{const _0x5c6791=_0x299c2c;console[_0x5c6791(0x4a4)](_0x317554),_0x3f3f97(_0x317554[_0x5c6791(0x3f0)]||_0x5c6791(0x4cd),_0x5c6791(0x4a4)),String(_0x317554[_0x5c6791(0x3f0)]||'')[_0x5c6791(0x3d6)]()['includes'](_0x5c6791(0x2bf))&&window[_0x5c6791(0x403)][_0x5c6791(0x2d8)]('login.html?return='+encodeURIComponent(_0x5c6791(0x3c6)));});}_0x4702b5&&_0x4702b5[_0x4db66a(0x4eb)](_0x4db66a(0x1d2),function(){const _0x5a3a9b=_0x4db66a;_0x4702b5['disabled']=!![],_0x3a60a2('Sending\x20reset\x20code\x20to\x20your\x20messages…'),fetch(_0xd4ac54(_0x5a3a9b(0x52a)),{'method':_0x5a3a9b(0x2a8),'headers':{'Authorization':_0x5a3a9b(0x1f6)+_0x50fc9c()}})[_0x5a3a9b(0x2be)](async _0x1efe06=>{const _0x56bfd8=_0x5a3a9b,{message:_0x3e7814}=await _0x357e63(_0x1efe06);if(!_0x1efe06['ok'])throw new Error(_0x3e7814||_0x56bfd8(0x4f1));_0x3a60a2(_0x56bfd8(0x20c),'success');})[_0x5a3a9b(0x461)](_0x3254dd=>{const _0x4f1533=_0x5a3a9b;console[_0x4f1533(0x4a4)](_0x3254dd),_0x3a60a2(_0x3254dd[_0x4f1533(0x3f0)]||_0x4f1533(0x4f1),_0x4f1533(0x4a4));})[_0x5a3a9b(0x3b4)](()=>{_0x4702b5['disabled']=![];});}),_0xfffe0c&&_0xfffe0c[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),function(_0x2a18c6){const _0x55a58e=_0x4db66a;_0x2a18c6[_0x55a58e(0x46d)]();const _0x12aa86=String(_0xdc8485(_0x55a58e(0x518))[_0x55a58e(0x51a)]||''),_0x546c90=String(_0xdc8485(_0x55a58e(0x4c4))[_0x55a58e(0x51a)]||''),_0x41786f=String(_0xdc8485(_0x55a58e(0x303))[_0x55a58e(0x51a)]||'');if(!_0x12aa86){_0x2667f2(_0x55a58e(0x379),_0x55a58e(0x4a4));window['anime']&&!_0x555914()&&window[_0x55a58e(0x239)]({'targets':_0xdc8485(_0x55a58e(0x518)),'translateX':[-0x4,0x4,-0x4,0x4,0x0],'duration':0x12c,'easing':_0x55a58e(0x312)});return;}if(_0x546c90[_0x55a58e(0x375)]<0x8){_0x2667f2(_0x55a58e(0x4ec),_0x55a58e(0x4a4));return;}if(_0x546c90!==_0x41786f){_0x2667f2(_0x55a58e(0x2ea),_0x55a58e(0x4a4));return;}_0x25b24d&&(_0x25b24d[_0x55a58e(0x1f9)]=!![]),_0x2667f2('Updating\x20password…'),fetch(_0xd4ac54(_0x55a58e(0x498)),{'method':_0x55a58e(0x278),'headers':_0x27b399(),'body':JSON['stringify']({'currentPassword':_0x12aa86,'newPassword':_0x546c90})})[_0x55a58e(0x2be)](async _0x254a60=>{const _0x150d3c=_0x55a58e,{data:_0x3f2a20,message:_0x18e254}=await _0x357e63(_0x254a60);if(!_0x254a60['ok'])throw new Error(_0x18e254||'Could\x20not\x20update\x20password.');_0x3f2a20&&_0x3f2a20[_0x150d3c(0x2cd)]&&_0x7c440c(_0x3f2a20[_0x150d3c(0x2cd)]),_0xfffe0c[_0x150d3c(0x1f8)](),_0x2667f2('Password\x20updated.',_0x150d3c(0x223));})['catch'](_0x34410b=>{const _0x58e23c=_0x55a58e;console['error'](_0x34410b),_0x2667f2(_0x34410b[_0x58e23c(0x3f0)]||_0x58e23c(0x53a),'error');})['finally'](()=>{const _0x39ab2a=_0x55a58e;_0x25b24d&&(_0x25b24d[_0x39ab2a(0x1f9)]=![]);});}),_0xd328de();}if(_0xb41a12===_0x4db66a(0x3ac)){const _0x205479=_0xdc8485(_0x4db66a(0x530)),_0x16cbc6=_0xdc8485(_0x4db66a(0x4c1)),_0xef8365=_0xdc8485('reset-request-submit'),_0x35885d=_0xdc8485(_0x4db66a(0x4f8)),_0x22cc30=_0xdc8485(_0x4db66a(0x440)),_0x51905b=_0xdc8485('reset-password-form'),_0x22c46a=_0xdc8485(_0x4db66a(0x3b2)),_0x48cf0b=_0xdc8485(_0x4db66a(0x454));function _0x1ff562(_0x4f642c,_0x182e92){_0x5ecc6a(_0x16cbc6,_0x4f642c,_0x182e92);}function _0x45d073(_0x4341b3,_0x3cf47a){_0x5ecc6a(_0x22c46a,_0x4341b3,_0x3cf47a);}if(_0x22cc30){const _0x74cadd=new URLSearchParams(window[_0x4db66a(0x403)][_0x4db66a(0x287)]);_0x22cc30['value']=_0x74cadd['get']('token')||'';}_0x205479&&_0x205479['addEventListener'](_0x4db66a(0x3c4),function(_0x1be783){const _0x2b4836=_0x4db66a;_0x1be783[_0x2b4836(0x46d)]();if(!_0xfb20e2){_0x1ff562('Password\x20reset\x20is\x20not\x20available\x20right\x20now.',_0x2b4836(0x4a4));return;}const _0x57e1d5=String(_0x35885d?_0x35885d[_0x2b4836(0x51a)]:'')[_0x2b4836(0x4b8)]()[_0x2b4836(0x3d6)]();if(!_0x57e1d5){_0x1ff562(_0x2b4836(0x3e1),_0x2b4836(0x4a4));return;}_0xef8365&&(_0xef8365[_0x2b4836(0x1f9)]=!![]),_0x1ff562(_0x2b4836(0x54e)),fetch(_0xd4ac54('/api/auth/request-password-reset'),{'method':_0x2b4836(0x2a8),'headers':{'Content-Type':_0x2b4836(0x2aa)},'body':JSON[_0x2b4836(0x4ef)]({'identifier':_0x57e1d5})})[_0x2b4836(0x2be)](async _0x16f9f9=>{const _0x385918=_0x2b4836,_0x34994b=await _0x357e63(_0x16f9f9);if(!_0x16f9f9['ok'])throw new Error(_0x34994b['message']||_0x385918(0x3e7));_0x1ff562(_0x34994b['message']||'Check\x20your\x20messages\x20for\x20the\x20reset\x20code.',_0x385918(0x223)),_0x35885d&&(_0x35885d['value']='');})[_0x2b4836(0x461)](_0x42fb91=>{const _0x2c3885=_0x2b4836;console[_0x2c3885(0x4a4)](_0x42fb91),_0x1ff562(_0x42fb91[_0x2c3885(0x3f0)]||_0x2c3885(0x3e7),'error');})['finally'](()=>{const _0x3eaaf0=_0x2b4836;_0xef8365&&(_0xef8365[_0x3eaaf0(0x1f9)]=![]);});}),_0x51905b&&_0x51905b[_0x4db66a(0x4eb)](_0x4db66a(0x3c4),function(_0x192209){const _0x586100=_0x4db66a;_0x192209[_0x586100(0x46d)]();if(!_0xfb20e2){_0x45d073(_0x586100(0x330),_0x586100(0x4a4));return;}const _0x5c61da=String(_0x22cc30?_0x22cc30[_0x586100(0x51a)]:'')['trim'](),_0xd6335b=String(_0xdc8485(_0x586100(0x26d))[_0x586100(0x51a)]||''),_0x45811e=String(_0xdc8485(_0x586100(0x302))['value']||'');if(!_0x5c61da){_0x45d073(_0x586100(0x471),'error');return;}if(_0xd6335b[_0x586100(0x375)]<0x8){_0x45d073('New\x20password\x20must\x20be\x20at\x20least\x208\x20characters.',_0x586100(0x4a4));return;}if(_0xd6335b!==_0x45811e){_0x45d073(_0x586100(0x2ea),_0x586100(0x4a4));return;}_0x48cf0b&&(_0x48cf0b[_0x586100(0x1f9)]=!![]),_0x45d073(_0x586100(0x1f3)),fetch(_0xd4ac54(_0x586100(0x402)),{'method':_0x586100(0x2a8),'headers':{'Content-Type':_0x586100(0x2aa)},'body':JSON['stringify']({'token':_0x5c61da,'newPassword':_0xd6335b})})[_0x586100(0x2be)](async _0x268c4a=>{const _0xabfc8b=_0x586100,{message:_0xa09d95}=await _0x357e63(_0x268c4a);if(!_0x268c4a['ok'])throw new Error(_0xa09d95||_0xabfc8b(0x25a));_0x51905b[_0xabfc8b(0x1f8)](),_0x22cc30&&(_0x22cc30[_0xabfc8b(0x51a)]=''),_0x45d073('Password\x20reset\x20complete.\x20You\x20can\x20log\x20in\x20with\x20your\x20new\x20password\x20now.',_0xabfc8b(0x223));})['catch'](_0x440a58=>{const _0x1778f9=_0x586100;console[_0x1778f9(0x4a4)](_0x440a58),_0x45d073(_0x440a58[_0x1778f9(0x3f0)]||'Could\x20not\x20reset\x20password.',_0x1778f9(0x4a4));})[_0x586100(0x3b4)](()=>{_0x48cf0b&&(_0x48cf0b['disabled']=![]);});});}if(_0xb41a12===_0x4db66a(0x322)){const _0x532654=_0xdc8485(_0x4db66a(0x1fc)),_0x5600b8=_0xdc8485(_0x4db66a(0x2bc)),_0x2660fe=_0xdc8485(_0x4db66a(0x545)),_0x807053=_0xdc8485('contact-subject'),_0x4c2272=_0xdc8485(_0x4db66a(0x275)),_0x2af654=_0xdc8485(_0x4db66a(0x432));function _0x2882a8(_0x237443,_0x1a361f){const _0xa9ca25=_0x4db66a;if(!_0x5600b8)return;_0x5600b8[_0xa9ca25(0x26b)]=_0x237443,_0x1a361f?(_0x5600b8[_0xa9ca25(0x30b)][_0xa9ca25(0x1ed)](_0xa9ca25(0x537)),_0x5600b8[_0xa9ca25(0x30b)][_0xa9ca25(0x1cf)]('success-text')):(_0x5600b8['classList'][_0xa9ca25(0x1cf)](_0xa9ca25(0x537)),_0x5600b8[_0xa9ca25(0x30b)][_0xa9ca25(0x1ed)]('success-text'));}_0x532654&&_0x532654['addEventListener']('submit',function(_0x52af2e){const _0xaa1223=_0x4db66a;_0x52af2e['preventDefault']();if(!_0xfb20e2){_0x2882a8(_0xaa1223(0x3e8),!![]);return;}const _0x3eb148={'category':_0x2660fe?_0x2660fe['value']:_0xaa1223(0x508),'subject':_0x807053?_0x807053['value'][_0xaa1223(0x4b8)]():'','description':_0x4c2272?_0x4c2272[_0xaa1223(0x51a)][_0xaa1223(0x4b8)]():'','email':_0x2af654?_0x2af654['value']['trim']():''};if(!_0x3eb148[_0xaa1223(0x2f9)]||!_0x3eb148[_0xaa1223(0x251)]){_0x2882a8(_0xaa1223(0x1eb),!![]);return;}_0x2882a8('Submitting\x20your\x20report...');const _0xbf8d61={'Content-Type':'application/json'},_0x59b062=_0x50fc9c();_0x59b062&&(_0xbf8d61['Authorization']='Bearer\x20'+_0x59b062),fetch(_0x4a1987+_0xaa1223(0x364),{'method':_0xaa1223(0x2a8),'headers':_0xbf8d61,'body':JSON[_0xaa1223(0x4ef)](_0x3eb148)})['then'](async _0x1a2a18=>{const _0xc9e678=_0xaa1223;if(!_0x1a2a18['ok']){const {message:_0x4fcd04}=await _0x357e63(_0x1a2a18);throw new Error(_0x4fcd04||_0xc9e678(0x4d0));}return _0x1a2a18['json']();})[_0xaa1223(0x2be)](()=>{const _0x133621=_0xaa1223;_0x2882a8(_0x133621(0x488));if(_0x532654)_0x532654[_0x133621(0x1f8)]();})[_0xaa1223(0x461)](_0xca37=>{const _0x115c8a=_0xaa1223;console[_0x115c8a(0x4a4)](_0xca37),_0x2882a8(_0xca37[_0x115c8a(0x3f0)]||_0x115c8a(0x532),!![]);});});}_0x430c2f(),_0x16b62b()[_0x4db66a(0x3b4)](()=>{const _0x4b2c49=_0x4db66a;_0xdc8400(),(_0xb41a12===_0x4b2c49(0x318)||_0xb41a12===_0x4b2c49(0x310))&&_0x741b6c&&window[_0x4b2c49(0x403)][_0x4b2c49(0x2d8)]('index.html');});function _0x236e7b(_0x553b34){const _0x5292c6=_0x4db66a;return String(_0x553b34)[_0x5292c6(0x2d8)](/[&<>"']/g,_0x53854c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\x22':_0x5292c6(0x468),'\x27':_0x5292c6(0x1d6)}[_0x53854c]));}function _0x34f0a8(_0x3a160c){return _0x236e7b(String(_0x3a160c==null?'':_0x3a160c));}window[_0x4db66a(0x3aa)]=_0x4a1987,window[_0x4db66a(0x2fd)]=_0x7c440c;}()));function _0x2f07(_0x496c8b,_0x29a5ea){_0x496c8b=_0x496c8b-0x1cf;const _0x349a50=_0x349a();let _0x2f0700=_0x349a50[_0x496c8b];return _0x2f0700;}function _0x349a(){const _0x5ec750=['Level\x20ID:\x20-','roulette-slot-load-','Wrong\x20admin\x20password.\x20Enter\x20it\x20above,\x20then\x20try\x20again.','fedl_user_data_','Sending\x20your\x20run\x20to\x20the\x20live\x20queue...','#0a0a12','Rank\x20#','Not\x20provided','mouseleave','\x22\x20target=\x22_blank\x22\x20rel=\x22noopener\x20noreferrer\x22>','login-password','assign','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span><strong>Review\x20notes:</strong>\x20','data-bug-action','set','other','#142d4c','\x20•\x20','google-username-container','/api/auth/google/finalize','guess-card','#cc5500','hasOwnProperty','Add\x20demons\x20to\x20the\x20list','run-saved-card-actions','data-tab','Sign\x20up\x20failed','Guess\x20this\x20level\x27s\x20rank.','run-raw-footage-url','#05d9e8','Admin\x20password\x20required\x20or\x20incorrect.','account-current-password','Saved.\x20Live\x20pages\x20update\x20automatically.','value','Bug\x20report\x20delete\x20failed','stat-total-runs','entries','home','--text','sv_','/api/import/pointercrate','easeOutExpo','head','Remove','EventSource','Could\x20not\x20delete\x20that\x20bug\x20report.','suggestedUsername','Failed\x20to\x20load\x20bug\x20reports','Failed\x20to\x20submit\x20run.','/api/account/password-reset-email','\x22\x20type=\x22number\x22\x20min=\x221\x22\x20value=\x22','account-reset-status','lists.html','<p\x20class=\x22muted\x22>Loading\x20approved\x20runs...</p>','Close','reset-request-form','75CDkzuB','Could\x20not\x20submit\x20your\x20report.\x20Try\x20again\x20later.','guess','list-my-progress-cell','fedl_animations_disabled','Load\x20into\x20form','error-text','\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22google-username-prompt\x22\x20style=\x22display:inline-block;\x20text-align:left;\x20background:#fff;\x20padding:12px;\x20border-radius:8px;\x20border:1px\x20solid\x20#ddd;\x20margin-top:6px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-bottom:6px;\x20font-weight:600;\x20color:#000;\x22>Choose\x20a\x20username</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<input\x20id=\x22google-username-input\x22\x20value=\x22','matched','Could\x20not\x20update\x20password.','login.html?return=','Could\x20not\x20load\x20the\x20list.','admin-search','some','offline-list-area','#071326','cos','#0f0f1a','HEAD','endsWith','contact-category','handleCredentialResponse','import-targeted-form','roulette-progress-row','hero-total-levels','text','floor','\x20runs,\x20skipped\x20','Import\x20failed.','Checking\x20for\x20your\x20account…','top','answer','fedl:','right','Enter\x20a\x20valid\x20whole-number\x20rank.','Mode:\x20','run-player-name','/server/data.txt','animationDelay','bug-report-search','Save\x20failed','transition','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22run-admin-actions\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20ghost-btn\x20small-btn\x22\x20data-bug-action=\x22resolved\x22\x20data-bug-id=\x22','insertBefore','standard','no-store','now','Bulk\x20approve\x20failed.','getAttribute','</div>','google-username-container-signup','data-bug-delete','signup-password','\x20skipped\x20(duplicates\x20or\x20missing\x20video).\x20Notes\x20set\x20to\x20“Valid\x20run”.','block','noopener\x20noreferrer','No\x20ranked\x20levels\x20were\x20found.','Start\x20the\x20Node\x20server\x20to\x20save\x20the\x20live\x20list.','<option\x20value=\x22','\x20@\x20','theme','createElement','Try\x20again\x20after\x20the\x20list\x20finishes\x20loading.','querySelectorAll','animated','turnstile-response','Marathon','pathname','btn\x20ghost-btn\x20small-btn\x20fedl-logout-btn','Higher','hero-last-slot','.roulette-account-create-row','startsWith','Signing\x20in\x20with\x20Google…','Run\x20delete\x20failed','marginTop','closest','#ff6b35','origin','data','#1a0a2e','remove','\x22>Reject</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20danger-btn\x20small-btn\x22\x20data-run-delete=\x22','runs','click','Start\x20the\x20Node\x20server\x20to\x20review\x20submissions.','roulette-slot-save-','Sign\x20up','&#39;','#cccccc','\x20approved\x20for\x20','Could\x20not\x20load\x20account\x20details.','#ffaa00','#5cc5ff','account-created','Log\x20in','/api/auth/google','.search-row\x20input[type=\x22text\x22],\x20#list-search,\x20.levels-table\x20input','headers','rouletteSlots','admin-password','You\x20got\x20it.','offlineindex','Submitting...','bulk-approve-preview','Bug\x20report\x20update\x20failed','submission-card\x20run-card-in','--card','\x22></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><input\x20data-field=\x22url\x22\x20data-index=\x22','Subject\x20and\x20description\x20are\x20required.','hero-recent-runs','add','roulette-wheel-segment','map','--muted','name','Could\x20not\x20log\x20in.','Resetting\x20your\x20password…','Review\x20notes\x20for\x20','#00aa00','Bearer\x20','import-pointercrate','reset','disabled','<p\x20class=\x22muted\x22>No\x20approved\x20runs\x20have\x20been\x20linked\x20to\x20this\x20level\x20yet.</p>','<tr><td\x20colspan=\x225\x22\x20class=\x22muted\x22>Loading\x20player\x20stats...</td></tr>','contact-form','roulette-percent-submit','252HckbGy','Bulk\x20approve\x20done:\x20','change','onload','Checking\x20password...','#94a3b8','transform','btn\x20ghost-btn\x20small-btn','account-reset-email-btn','run-admin-body','#ff9f1c','added','/api/auth/signup','href','Reset\x20code\x20sent!\x20Check\x20your\x20messages.','Open','input[name=\x22import-targeted-filter\x22]:checked','#081220','#0284c7','push','#fbbf24','muted\x20fedl-server-account-note','import-targeted-modal','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20colspan=\x226\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22run-admin-detail\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span><strong>Raw:</strong>\x20','Wrong\x20admin\x20password.\x20Enter\x20it\x20above\x20to\x20delete\x20bug\x20reports.','bulk-approve-submit','/api/auth/logout','translateY(12px)','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22muted\x22>','#c9a66b','Creating\x20account\x20with\x20Google…','easeOutCubic','input[name=\x22import-targeted-filter\x22]','Wrong!\x20It\x20was\x20#','DELETE','Connected\x20to\x20live\x20list\x20data.','isArray','success','Sign\x20up\x20is\x20not\x20available\x20right\x20now.','target','levelPercents','bug-report-detail-row','account-password-submit','#00ff9f','#ffb84d','#2d4a2d','None\x20provided','Create\x20a\x20profile\x20on\x20the\x20Roulette\x20page\x20to\x20save\x20progress','https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js','Could\x20not\x20create\x20account\x20with\x20Google.','Username\x20must\x20be\x203-24\x20characters:\x20lowercase\x20letters,\x20numbers,\x20or\x20underscore.','Run\x20saved\x20to\x20your\x20account.\x20You\x20can\x20keep\x20multiple\x20saved\x20runs\x20and\x20load\x20them\x20anytime.','New\x20row\x20added\x20at\x20the\x20top.\x20Give\x20it\x20a\x20number\x20when\x20you\x20want\x20to\x20place\x20it.','\x22\x20type=\x22text\x22\x20pattern=\x22[a-z0-9_]{3,24}\x22\x20placeholder=\x223-24\x20chars,\x20a-z\x200-9\x20_\x22\x20style=\x22width:260px;\x20padding:8px;\x20border-radius:6px;\x20border:1px\x20solid\x20#ccc;\x22\x20/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22google-finalize-btn\x22\x20class=\x22btn\x22\x20style=\x22margin-left:8px;\x22>Create\x20account</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22google-username-status\x22\x20class=\x22muted\x22\x20style=\x22margin-top:6px;\x20display:block;\x22></div>\x0a\x20\x20\x20\x20\x20\x20</div>','string','Google\x20Sign-Up\x20failed:\x20No\x20credential\x20received','opacity','\x22\x20type=\x22text\x22\x20value=\x22','Rank:\x20-','anime','success-shine','new','flex','abort','rgba(92,197,255,0.2)','guess-level','userId','run','guess-answer','???','percent','has','Create\x20a\x20profile\x20below\x20or\x20log\x20in\x20to\x20use\x20save\x20slots.','createDocumentFragment','No\x20review\x20notes\x20yet.','6px','#e0f7fa','rgba(92,197,255,0.08)','No\x20notes\x20yet.','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>','color','https://www.youtube.com/embed/','theme-transition-overlay','description','header\x20nav','#e6eef8','<option\x20value=\x22all\x22>All\x20players</option>','prompt','accelerometer;\x20autoplay;\x20clipboard-write;\x20encrypted-media;\x20gyroscope;\x20picture-in-picture','\x20is\x20not\x20the\x20right\x20spot.','data.txt','file','Could\x20not\x20reset\x20password.','admin-login-form','dioxyx','data-bug-id','savedRuns','triesLeft','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>','players-body','signup-password2','background','dark','Unavailable','Importing\x20','toUpperCase','Bug\x20report\x20marked\x20','\x22\x20target=\x22_blank\x22\x20rel=\x22noopener\x20noreferrer\x22>Watch\x20run</a>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','#2b1a0a','textContent','#6b7280','reset-new-password','topLevels','list-update','bulk-approve-cancel','reviewedBy','New\x20row\x20added\x20at\x20the\x20bottom.','.roulette-account-panel','No\x20pending\x20runs\x20to\x20approve\x20for\x20','contact-description','Picking\x20a\x20level...','#001100','PUT','%</strong></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22run-admin-cell\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>','\x20added,\x20','.auth-panel','roulette-note\x20muted\x20guess-wrong','Use\x203–24\x20characters:\x20lowercase\x20letters,\x20numbers,\x20or\x20underscore\x20only.','google-finalize-btn','resolve','lists','guess-input','account-animation-speed','<td\x20colspan=\x225\x22\x20class=\x22muted\x22>No\x20rows\x20match\x20your\x20search.</td>','json','\x22>Delete</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','category','search','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><span\x20class=\x22status-pill\x20status-','Spinning...','run-saved-runs-list','main','username','Level\x20name\x20or\x20id','position','7380331UdtLZP','/__authcheck__','min','roulette-level-id','bulk-approve-form','signup-submit','Enter\x20your\x20username.','.\x20#','Live\x20submissions\x20are\x20updating\x20automatically.','admin-locked','text-link','/auth/github','Open\x20the\x20full\x20site','unshift','Welcome\x20back.\x20Redirecting…','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<article\x20class=\x22modal-run-card\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>','translateY(0)','Saved.\x20Next\x20goal\x20on\x20this\x20level:\x20100%\x20(full\x20completion).','div','runs-update','#e056fd','.modal-runs-wrap','/api/list','reduce','/api/auth/login','POST','#1a1208','application/json','allowFullscreen','Run\x20submitted\x20successfully.\x20The\x20admin\x20panel\x20can\x20review\x20it\x20now.','.account-panel','.fedl-auth-nav','#cbd5e1','Import\x20failed\x20with\x20status\x20','toString','data-run-action','admin-shell-content','active','#ff2a6d','Bug\x20report\x20removed.','handleGoogleSignIn','title','level-filter','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span><strong>Description:</strong>\x20','Could\x20not\x20load\x20list\x20data.','contact-form-status','forEach','then','not\x20signed\x20in','Start\x20the\x20Node\x20server\x20to\x20delete\x20submissions.','delete','#f0f4f8','data-index','playerName','#f0e6ff','</strong></p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22muted\x22>Rank\x20#','Targeted\x20import\x20failed.','fedl_anim_speed','<p\x20class=\x22modal-account-label\x22>','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22run-admin-actions\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x20class=\x22btn\x20ghost-btn\x20small-btn\x22\x20href=\x22','#e5e7eb','submission-card\x20submission-card--shimmer','token','getElementById','onclick','<td\x20colspan=\x226\x22\x20class=\x22muted\x22>No\x20bug\x20reports\x20match\x20your\x20search.</td>','script','easeInCubic','bulk-approve-player','article','.admin-tab','admelist','#f472b6','replace','input[name=\x22import-targeted-filter\x22][value=\x22level\x22]','header\x20nav\x20a','--bg','checked','points','</span></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><strong>','login-submit','Creating\x20account…','Signed\x20in\x20as\x20','Password\x20must\x20be\x20at\x20least\x208\x20characters.','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22submission-meta\x22>By\x20','tries','pending','translateX(0)\x20translateY(0)','/events','Google\x20Sign-In\x20failed:\x20No\x20credential\x20received','New\x20passwords\x20do\x20not\x20match.','undefined','Network\x20error','Level\x20ID:\x20','#1e293b','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><input\x20data-field=\x22position\x22\x20data-index=\x22','option','status-pill\x20status-pending','100','placeholder','history','</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>','sort','<tr><td\x20colspan=\x224\x22\x20class=\x22muted\x22>No\x20levels\x20match\x20this\x20search\x20or\x20range.</td></tr>','Start\x20the\x20Node\x20server\x20to\x20use\x20the\x20import\x20tool.','subject','accountUsername','scale(1)','\x22\x20target=\x22_blank\x22\x20rel=\x22noopener\x20noreferrer\x22>Video</a>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20ghost-btn\x20small-btn\x22\x20data-run-action=\x22approved\x22\x20data-run-id=\x22','fedlSetAuthToken','roulette-account-select','bestRank','list-area','roulette-wheel-inner','reset-confirm-password','account-confirm-password','position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:','Save\x20the\x20demon\x20on\x20screen\x20into\x20a\x20slot,\x20or\x20load\x20a\x20slot\x20to\x20swap\x20demons.','/api/import/targeted','metaKey','Hard','roulette-account-new','Runs\x20API\x20unavailable','classList','type','\x22></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><button\x20type=\x22button\x22\x20class=\x22btn\x20danger-btn\x20small-btn\x22\x20data-delete=\x22','Authorization','span','login','#1a0505','easeInOutQuad','dataset','Spin\x20a\x20demon\x20first,\x20and\x20use\x20a\x20profile\x20or\x20log\x20in.','.modal-account-progress','translateY(6px)','<td\x20colspan=\x226\x22\x20class=\x22muted\x22>No\x20run\x20submissions\x20match\x20your\x20search.</td>','signup','/auth/discord','#1a2f1a','account-list-animations-toggle','tagName','#0f0818','splice','Bulk\x20approve\x20failed\x20(','Delete\x20this\x20bug\x20report?','val','contact','<span\x20class=\x22muted\x22>%</span>','page','List\x20reloaded\x20from\x20live\x20server.','applyItems','account-animations-toggle','.roulette-account-label','open','Loading\x20your\x20account…','add-row','modal-account-progress','.inner','Password\x20saved\x20for\x20this\x20browser\x20session.','filter','Password\x20reset\x20is\x20not\x20available\x20right\x20now.','hero-list-updated','#00ff00','#7c3aed','easeOutBack','TEXTAREA','Player\x20name','needUsername','item','roulette-slot-label-','import-targeted-submit','Theme\x20saved!','<p\x20class=\x22muted\x22>Failed\x20to\x20load\x20list\x20data.</p>','Your\x20progress\x20for\x20this\x20level\x20(this\x20browser)','createTextNode','muted\x20success-text','includes','GET','className','Escape','\x20records…','innerHTML','#111111','\x20•\x20Account:\x20','toggle','account-theme-status','--panel','ctrlKey','isNaN','key','#f4e9ff','Correct.\x20Start\x20another\x20round\x20whenever\x20you\x20want.','querySelector','/api/user/state','true','button','celebration-particle','#000a00','</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22status-pill\x20status-','No\x20level\x20selected','Could\x20not\x20load\x20recent\x20submissions.','run-percent','skipped','#e0f2fe','<tr><td\x20colspan=\x225\x22\x20class=\x22muted\x22>Could\x20not\x20load\x20player\x20stats.</td></tr>','progress','.stat-card,\x20.stats-grid\x20.stat-box','mousedown','label','Could\x20not\x20load\x20bug\x20reports.','<div\x20class=\x22modal-account-row\x22>','muted','/api/bugreports','\x20is\x20#','.level-link','Start\x20a\x20round\x20first\x20so\x20there\x20is\x20a\x20level\x20to\x20guess.','kind','toISOString','onerror','<option\x20value=\x22\x22>No\x20profile\x20(progress\x20not\x20saved)</option>','#fb923c','e.g.\x20Acheron\x20or\x20demon\x20id','#1b3a5f','muted\x20error-text','unobserve','roulette-note\x20muted\x20guess-correct\x20success-shine','roulette-slots-hint','#0a0a0a','javascript:','length','Google\x20authentication\x20failed','#ffff00','#f9ca24','Enter\x20your\x20current\x20password.','Give\x20each\x20new\x20row\x20a\x20number\x20before\x20saving.','call','roulette-percent-hint','admelist.html','signup-username','split','get','signup.html','--accent-warm','file:','level-link','#831843','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22modal-runs-head\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>Approved\x20runs</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22muted\x22>Player,\x20percent,\x20and\x20linked\x20video</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22modal-runs-list\x22></div>\x0a\x20\x20\x20\x20\x20\x20','dispatchEvent','Unsaved\x20changes','Spin\x20a\x20demon\x20and\x20use\x20a\x20profile\x20or\x20log\x20in\x20to\x20track\x20%.','Start\x20the\x20Node\x20server\x20to\x20load\x20bug\x20reports.','Verify\x20failed','list-progress-input','noteSource','Log\x20in\x20failed','#38bdf8','#f59e0b','#fce7f3','meta','hero-top-entry','.skeleton-card','7918404EUhfMY','random','approved','auth','Loading\x20a\x20','guess-higher','observe','savedAt','bulk-approve-modal','--accent','Name\x20as\x20on\x20the\x20list','scale(0.9)\x20translateY(12px)','[data-delete]','credential','fedl-auth-updated','fedl-auth-nav','rotate(','roulettePick','#0a0612','guess-start','\x22></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><input\x20data-field=\x22level\x22\x20data-index=\x22','liveServerBase','Google\x20Sign-In\x20error:','reset-password','Run\x20update\x20failed','player-search','guess-form','server\x20data\x20unavailable','guess-attempts','reset-password-status','roulette-status','finally','#fbcfe8','localeCompare','mode-switching','protocol','Standard','import-status','focus','Failed','Please\x20complete\x20the\x20verification\x20challenge.','Your\x20progress\x20(saved\x20on\x20this\x20device)','<p\x20class=\x22muted\x22>Could\x20not\x20load\x20approved\x20runs\x20for\x20this\x20level.</p>','\x22>Approve</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20ghost-btn\x20small-btn\x22\x20data-run-action=\x22rejected\x22\x20data-run-id=\x22','setItem','390536QbOSuS','#0ea5e9','submit','translateY(16px)\x20scale(0.96)','account.html','#ff4500','close','documentElement','.video-modal','#c792ea','account','endValue','fedl_user_account_active','aria-hidden','translateY(15px)\x20scale(0.95)','#9fb3c8','No\x20list\x20data\x20was\x20found.','Start\x20the\x20Node\x20server\x20to\x20delete\x20bug\x20reports.','#88ff88','fedl_auth_token','toLowerCase','Could\x20not\x20load\x20the\x20list\x20for\x20the\x20guessing\x20game.','replaceState','url','\x20runs...','.roulette-slot-row:nth-child(','list-title','Could\x20not\x20load\x20run\x20submissions.','unknown','?diff=-2&demonFilter=5&count=10','return','Enter\x20your\x20username\x20or\x20email.','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>','easeInOutCubic','2610048VmDhPp','fedl_list_anim_disabled','appendChild','Could\x20not\x20request\x20password\x20reset.','Reports\x20are\x20not\x20available\x20right\x20now.','</strong></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22run-admin-cell\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>','inner','.table-wrap','keydown','indexOf','Signing\x20in…','admin-list-body','message','Bulk-approving\x20pending\x20runs\x20for\x20that\x20player...','roulette-open','roulette-login-sync-hint','run-submissions','bulk-approve-open','short','#000000','hidden','Full\x20List','levelTitle','run-submit','levels','account-overview-status','submission-card-top','match','</a>','Wrong\x20admin\x20password.\x20Try\x20again.','/api/auth/reset-password','location','Passwords\x20do\x20not\x20match.','videoUrl','#ff00a8','INPUT','parse','Score:\x20','import-targeted-open','8444MwSNiW','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22submission-links\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x20class=\x22text-link\x22\x20href=\x22','#64748b','#0d1b2a','modal-points','clipPath','/api/runs','\x22>Delete</button></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','<article\x20class=\x22submission-card\x22><strong>No\x20runs\x20submitted\x20yet</strong><p>The\x20live\x20queue\x20is\x20empty\x20right\x20now.</p></article>','#b388ff','style','rotate(0deg)','Account','.featured-card','#a3c9a3','Could\x20not\x20sign\x20up.','1812323TQlHbO','This\x20entry\x20does\x20not\x20have\x20a\x20linked\x20video\x20yet.','Basic\x20','#84cc16','messages','<a\x20href=\x22','iframe','%</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span><strong>Reviewed\x20by:</strong>\x20','#0f1724','Google\x20sign-up\x20failed','run-form-status','#223d22','\x20round.','body','join','float','strong','center','login-status','roulette-result','#fdf2f8','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</article>\x0a\x20\x20\x20\x20\x20\x20','\x22\x20target=\x22_blank\x22\x20rel=\x22noopener\x20noreferrer\x22>Open\x20run\x20video</a>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</article>\x0a\x20\x20\x20\x20\x20\x20','contact-email','#e11d48','\x20—\x20','No\x20demons\x20found.','#ffffff','transform\x20','parentElement','Could\x20not\x20delete\x20that\x20run.','#2d0a0a','all','modal-runs-wrap','.modal-points','\x20match\x20this\x20name\x20in\x20the\x20current\x20queue.','Log\x20in\x20is\x20not\x20available\x20right\x20now.','reset-token','5604985kjvqRU','/api/auth/google/token','https://server.fedl.site/fedl','test','guess-level-title','\x20points','#150f25','status','\x22\x20type=\x22url\x22\x20value=\x22','Saved.\x20Next\x20%\x20to\x20hit\x20on\x20this\x20level:\x20','#251440','items','Add\x20list\x20data\x20first,\x20then\x20start\x20another\x20round.','http://localhost:8090','Video\x20link','.modal-runs-list','You\x20will\x20get\x20hints\x20after\x20each\x20wrong\x20guess.','</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22muted\x20small\x22>','#34d399','reset-password-submit','players','success-text','Unknown','reviewNotes','google-username-input','isIntersecting','IntersectionObserver','Unknown\x20player','Admin','run-notes','Admin\x20auth\x20failed','/api/bugreports/','catch','API\x20unavailable','.\x20Enter\x20a\x20rank\x20number\x20to\x20start\x20guessing.','long','Google\x20Sign-Up\x20error:','find','stat-pending-runs','&quot;','data-field','Pointercrate','Enter\x20a\x20number\x20from\x200\x20to\x20100.','data-run-delete','preventDefault','none','Start\x20the\x20Node\x20server\x20to\x20update\x20bug\x20reports.','<option\x20value=\x22all\x22>Full\x20List</option>','Paste\x20the\x20reset\x20code\x20below.','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>','api','run-video-url','\x22></option>','deg)','Checking\x20your\x20local\x20file\x20and\x20API\x20if\x20needed.','\x22></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><input\x20data-field=\x22title\x22\x20data-index=\x22','Top\x20','<input\x20type=\x22text\x22\x20class=\x22modal-account-pct-input\x22\x20inputmode=\x22decimal\x22\x20placeholder=\x22e.g.\x2047\x22\x20/>','input','bulk-approve-notes','allow','[data-run-action]','/api/import/aredl','That\x20slot\x20is\x20empty.','Failed\x20to\x20finalize\x20username','roulette-note','fedl_theme','runs-admin-status','.roulette-account-controls','getTime','textAlign','Thank\x20you!\x20Your\x20report\x20has\x20been\x20submitted.\x20The\x20admins\x20will\x20review\x20it\x20soon.','#12121f','Correct!\x20It\x20was\x20#','easeOutQuad','Run\x20removed\x20from\x20the\x20queue.','Video\x20link\x20is\x20ready\x20from\x20the\x20list\x20page.','Targeted\x20import:\x20','concat','Casual','<tr><td\x20colspan=\x225\x22\x20class=\x22muted\x22>No\x20player\x20data\x20found.</td></tr>','confirm','email','Untitled','roulette-title','Account\x20created\x20successfully.\x20Loading\x20your\x20data…','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','/api/account/password','\x20pending\x20run','Run\x20queue\x20reloaded\x20from\x20the\x20live\x20server.','Level\x20ID\x20came\x20from\x20your\x20local\x20level-ids.txt\x20file.','</strong></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>','\x20matched,\x20','Wrong\x20admin\x20password.\x20Enter\x20it\x20above\x20to\x20delete\x20runs.','signinGithub','#a78bfa','out','values','run-raw-url','error','setProperty','fedl_user_accounts','input[name=\x22import-targeted-filter\x22][value=\x22player\x22]','run-level-title','Saved','numeric','fedl-auth-label\x20muted','#241809','reload','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>#','Tries\x20left:\x20','btn-loading','levelId','stat-levels-count','[data-bug-action]','Hi,\x20','The\x20correct\x20rank\x20will\x20show\x20here\x20if\x20you\x20run\x20out\x20of\x20guesses.','_isDraft','#ffd4b8','trim','No\x20submission\x20notes.','.\x20That\x20was\x20your\x20last\x20guess.','#e2e8f0','getItem','index.html','removeItem','sin','notes','reset-request-status','muted\x20success-text\x20run-success\x20success-shine','submittedAt','account-new-password','hero-total-players','toLocaleDateString','_blank','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<article\x20class=\x22featured-card\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22featured-rank\x22>#','No\x20runs\x20saved\x20yet.\x20Fill\x20the\x20form\x20and\x20use\x20\x22Save\x20to\x20my\x20account\x22\x20to\x20keep\x20drafts,\x20or\x20submit\x20to\x20the\x20live\x20queue.','Recent\x20submissions\x20reloaded.','FEDL\x20Admin','</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','Could\x20not\x20load\x20your\x20account.','showRuns','rawFootageUrl','Submit\x20failed','onepage','</p>','video-modal','Could\x20not\x20update\x20that\x20run.','cssText','.account-panel:nth-child(2)','Loaded\x20this\x20run\x20into\x20the\x20form.\x20Submit\x20or\x20edit,\x20then\x20save\x20or\x20send\x20to\x20the\x20queue.','input[name=\x22theme\x22]','toLocaleString','isFileProtocol:','Fetching\x20','bug-reports-admin-status','level','Level\x20ID\x20was\x20looked\x20up\x20from\x20the\x20Geometry\x20Dash\x20community\x20API.','googleId','Start\x20a\x20round\x20to\x20get\x20a\x20level.','run-form','import-targeted-cancel','slice','%\x20100%\x20','import-targeted-source','roulette-spin','tab-','#250a0a','Current\x20origin:','index','addEventListener','New\x20password\x20must\x20be\x20at\x20least\x208\x20characters.','roulette-account-create','display','stringify','src','Could\x20not\x20send\x20reset\x20code.','roulette','account-password-status','#ffe4b5','#2d1b4e','from','setTimeout','reset-identifier'];_0x349a=function(){return _0x5ec750;};return _0x349a();}
+// Lightweight multi-page handler for GD fedl
+(function(){
+  function qs(id){return document.getElementById(id)}
+  // Ensure Google Sign-In callback exists on the page
+  window.handleCredentialResponse = window.handleCredentialResponse || function(cred){
+    try {
+      const idToken = cred && cred.credential ? cred.credential : cred;
+      if (!idToken) return;
+      fetch(liveApiPath('/api/auth/google/token'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_token: idToken })
+      }).then(r => r.json()).then(j => {
+        if (j && j.token) {
+          fedlSetAuthToken(j.token);
+          window.location.reload();
+        } else if (j && j.needUsername) {
+          // Prompt user to choose a username for the new Google-based account
+          promptForUsername(j);
+        }
+      }).catch(()=>{});
+    } catch(e){ /* ignore */ }
+  };
+
+  window.fedlTurnstileSuccess = window.fedlTurnstileSuccess || function(token){
+    const el = qs('turnstile-response');
+    if (el) {
+      el.value = token || '';
+    }
+  };
+
+  window.signinGoogle = function(){
+    window.location.href = `${liveServerBase}/auth/google`;
+  };
+
+  window.signinDiscord = function(){
+    window.location.href = `${liveServerBase}/auth/discord`;
+  };
+
+  window.signinGithub = function(){
+    window.location.href = `${liveServerBase}/auth/github`;
+  };
+
+  function promptForUsername(payload){
+    const page = document.body.dataset.page;
+    // Determine container to inject UI
+    const containerId = page === 'login' ? 'google-username-container' : 'google-username-container-signup';
+    let container = document.getElementById(containerId);
+    if (!container) {
+      // Try to append near the Google sign-in blocks if container not found
+      container = document.createElement('div');
+      container.id = containerId;
+      container.style.textAlign = 'center';
+      container.style.marginTop = '6px';
+      // Try to place after the sign-in block in login card or signup card
+      const insertAfter = document.querySelector('.auth-panel') || document.body;
+      insertAfter.appendChild(container);
+    }
+    container.innerHTML = `
+      <div class="google-username-prompt" style="display:inline-block; text-align:left; background:#fff; padding:12px; border-radius:8px; border:1px solid #ddd; margin-top:6px;">
+        <div style="margin-bottom:6px; font-weight:600; color:#000;">Choose a username</div>
+        <input id="google-username-input" value="${payload.suggestedUsername || ''}" type="text" pattern="[a-z0-9_]{3,24}" placeholder="3-24 chars, a-z 0-9 _" style="width:260px; padding:8px; border-radius:6px; border:1px solid #ccc;" />
+        <button id="google-finalize-btn" class="btn" style="margin-left:8px;">Create account</button>
+        <div id="google-username-status" class="muted" style="margin-top:6px; display:block;"></div>
+      </div>`;
+    const finalBtn = document.getElementById('google-finalize-btn');
+    const input = document.getElementById('google-username-input');
+    const status = document.getElementById('google-username-status');
+    finalBtn.addEventListener('click', ()=>{
+      const username = String((input && input.value) || '').trim();
+      if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+        status.textContent = 'Username must be 3-24 characters: lowercase letters, numbers, or underscore.';
+        status.style.color = '#e11d48';
+        return;
+      }
+      fetch(liveApiPath('/api/auth/google/finalize'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ googleId: payload.googleId, email: payload.email, name: payload.name, username })
+      }).then(r => r.json()).then(res => {
+        if (res && res.token) {
+          fedlSetAuthToken(res.token);
+          window.location.reload();
+        } else {
+          status.textContent = res.error || 'Failed to finalize username';
+          status.style.color = '#e11d48';
+        }
+      }).catch(()=>{ status.textContent = 'Network error'; status.style.color = '#e11d48'; });
+    });
+  }
+
+  const page = document.body.dataset.page;
+  const isFileProtocol = window.location.protocol === 'file:';
+  const TESTING_MODE = false; // Set to true to enable testing mode with test server and mod accounts
+  console.log('Current origin:', window.location.origin, 'isFileProtocol:', isFileProtocol);
+  const liveServerBase = TESTING_MODE
+    ? 'http://localhost:8090'
+    : 'https://server.fedl.site/fedl';
+  const canUseLiveServer = !isFileProtocol || !!liveServerBase;
+  const liveApiUrl = `${liveServerBase}/api/list`;
+  const liveRunsUrl = `${liveServerBase}/api/runs`;
+  const liveEventsUrl = `${liveServerBase}/events`;
+  const liveDataFileUrl = `${liveServerBase}/server/data.txt`;
+  const MOD_USERS = ['wolf_reaper90','dioxyx','steve'];
+  const SPA_PAGE_KEY = 'onepage';
+  /** Use for POST /api/import/* and any path under the same base as list/runs (not root-relative /api/...). */
+  function liveApiPath(path){
+    const p = String(path || '').startsWith('/') ? path : `/${path}`;
+    return `${liveServerBase}${p}`;
+  }
+  const offlinePage = 'offlineindex.html';
+
+  function redirectToOffline(){
+    if(window.location.pathname.endsWith(`/${offlinePage}`)) return;
+    window.location.replace(offlinePage);
+  }
+
+  function probeLiveServer(timeoutMs = 5000){
+    const controller = new AbortController();
+    const timeoutId = setTimeout(()=>controller.abort(), timeoutMs);
+    return fetch(liveServerBase, {
+      method:'HEAD',
+      cache:'no-store',
+      signal: controller.signal
+    }).then(response => {
+      clearTimeout(timeoutId);
+      return response;
+    }).catch(error => {
+      clearTimeout(timeoutId);
+      throw error;
+    });
+  }
+
+  const pagesNeedingLiveStatus = new Set(['index', 'run', 'messages', 'contact', 'signup', 'login', 'account', 'reset-password', 'admelist']);
+  if(!TESTING_MODE && pagesNeedingLiveStatus.has(page) && !window.location.pathname.endsWith(`/${offlinePage}`)){
+    probeLiveServer().catch(()=>{
+      redirectToOffline();
+    });
+  }
+  let cachedItems = null;
+  let cachedRuns = null;
+  let cachedLevelMeta = null;
+  let liveBound = false;
+  let liveHandlers = [];
+  let runsHandlers = [];
+
+  // Storage helpers
+  function read(key, fallback){
+    try{const v = localStorage.getItem(key); return v?JSON.parse(v):fallback}
+    catch(e){return fallback}
+  }
+  function write(key, val){localStorage.setItem(key,JSON.stringify(val))}
+
+  function loadAnimeJS() {
+    return new Promise((resolve, reject) => {
+      if (window.anime) { resolve(window.anime); return; }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js';
+      script.onload = () => resolve(window.anime);
+      script.onerror = () => reject(new Error('Failed to load anime.js'));
+      document.head.appendChild(script);
+    });
+  }
+
+  function animateNumber(el, endValue) {
+    if (!window.anime || animationsDisabled()) { el.textContent = String(endValue); return; }
+    const obj = { val: 0 };
+    window.anime({
+      targets: obj,
+      val: endValue,
+      duration: 2000,
+      easing: 'easeOutExpo',
+      round: 1,
+      update: () => { el.textContent = Math.floor(obj.val); }
+    });
+  }
+
+  const numberObserver = ('IntersectionObserver' in window) ? new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        if (el.dataset.animated) return;
+        el.dataset.animated = 'true';
+        const endVal = parseInt(el.dataset.endValue, 10);
+        if (!isNaN(endVal)) animateNumber(el, endVal);
+        numberObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.1 }) : null;
+
+  function observeNumberEl(el) {
+    if (!numberObserver || !el) return;
+    numberObserver.observe(el);
+  }
+
+  const FEDL_ANIMATIONS_KEY = 'fedl_animations_disabled';
+  const FEDL_LIST_ANIM_KEY = 'fedl_list_anim_disabled';
+  const FEDL_ANIM_SPEED_KEY = 'fedl_anim_speed';
+
+  function animationsDisabled(){
+    const val = localStorage.getItem(FEDL_ANIMATIONS_KEY);
+    if (val === null) return false;
+    return val === 'true';
+  }
+  function setAnimationsDisabled(val){
+    localStorage.setItem(FEDL_ANIMATIONS_KEY, String(val));
+  }
+  function listAnimationsDisabled(){
+    return localStorage.getItem(FEDL_LIST_ANIM_KEY) === 'true';
+  }
+  function getAnimationSpeed(){
+    const val = localStorage.getItem(FEDL_ANIM_SPEED_KEY);
+    return val ? parseInt(val, 10) : 3000;
+  }
+  loadAnimeJS().then(() => {
+    if (window.anime) {
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+          if(!animationsDisabled()) window.anime({ targets: btn, scale: 0.95, duration: 500, easing: 'easeInOutQuad' });
+        });
+        btn.addEventListener('mouseup', () => {
+          if(!animationsDisabled()) window.anime({ targets: btn, scale: 1, duration: 500, easing: 'easeInOutQuad' });
+        });
+        btn.addEventListener('mouseleave', () => {
+          if(!animationsDisabled()) window.anime({ targets: btn, scale: 1, duration: 500, easing: 'easeInOutQuad' });
+        });
+      });
+    }
+  }).catch(() => {});
+
+  // Page transition helper
+  function animatePageTransition(callback){
+    if(animationsDisabled() || !window.anime){
+      if(callback) callback();
+      return;
+    }
+    let overlay = document.getElementById('page-transition-overlay');
+    if(!overlay){
+      overlay = document.createElement('div');
+      overlay.id = 'page-transition-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:99998;pointer-events:none;opacity:0;background:var(--accent);mix-blend-mode:screen;transition:opacity 0.3s ease';
+      document.body.appendChild(overlay);
+    }
+    overlay.style.opacity = '0';
+    overlay.style.display = 'block';
+    window.anime({
+      targets: overlay,
+      opacity: [0, 0.15, 0],
+      duration: 600,
+      easing: 'easeInOutQuad',
+      begin: () => { overlay.style.opacity = '0'; },
+      update: (anim) => {
+        if(anim.progress > 20 && anim.progress < 60 && callback){
+          callback();
+          callback = null;
+        }
+      },
+      complete: () => { overlay.style.display = 'none'; }
+    });
+  }
+
+  // Celebration particles helper
+  function createCelebrationParticles(count){
+    if(animationsDisabled() || !window.anime) return;
+    const colors = ['#5cc5ff','#ffb84d','#84cc16','#a78bfa','#f472b6','#ff9f1c','#00ff9f','#e056fd'];
+    for(let i = 0; i < (count || 8); i++){
+      const p = document.createElement('div');
+      p.className = 'celebration-particle';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = `${30 + Math.random() * 40}%`;
+      p.style.top = `${40 + Math.random() * 30}%`;
+      document.body.appendChild(p);
+      const angle = (Math.PI * 2 * i) / count;
+      const dist = 40 + Math.random() * 80;
+      window.anime({
+        targets: p,
+        '--px': [0, Math.cos(angle) * dist + 'px'],
+        '--py': [0, Math.sin(angle) * dist * -1 + 'px'],
+        opacity: [1, 0],
+        scale: [1, 0],
+        duration: 800 + Math.random() * 400,
+        easing: 'easeOutQuad',
+        complete: () => p.remove()
+      });
+    }
+  }
+
+  // Add page transition to nav links
+  (function initNavTransitions(){
+    if(animationsDisabled()) return;
+    document.querySelectorAll('header nav a').forEach(link => {
+      link.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if(!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+        e.preventDefault();
+        animatePageTransition(() => {
+          window.location.href = href;
+        });
+      });
+    });
+  })();
+
+  // Page-enter animation for all pages
+  (function initPageEnter(){
+    const page = document.body.dataset.page;
+    if(!page) return;
+    const main = document.querySelector('main');
+    if(main && window.anime && !animationsDisabled()){
+      main.style.opacity = '0';
+      main.style.transform = 'translateY(12px)';
+      window.anime({
+        targets: main,
+        opacity: [0, 1],
+        translateY: [12, 0],
+        duration: getAnimationSpeed() * 0.5,
+        easing: 'easeOutCubic'
+      });
+    } else if(main){
+      main.style.opacity = '1';
+      main.style.transform = 'translateY(0)';
+    }
+    // Input focus animation
+    if(window.anime && !animationsDisabled()){
+      document.querySelectorAll('input[type="text"], input[type="number"], input[type="password"], input[type="url"], textarea, select').forEach(el => {
+        el.addEventListener('focus', function(){
+          window.anime({ targets: this, scale: [1, 1.01, 1], duration: 300, easing: 'easeOutQuad' });
+        });
+      });
+    }
+    // Staggered nav items animation
+    if(window.anime && !animationsDisabled()){
+      const navLinks = document.querySelectorAll('header nav a');
+      navLinks.forEach((link, i) => {
+        link.style.opacity = '0';
+        link.style.transform = 'translateY(-8px)';
+        window.anime({
+          targets: link,
+          opacity: [0, 1],
+          translateY: [-8, 0],
+          duration: 400,
+          delay: 60 * i,
+          easing: 'easeOutCubic'
+        });
+      });
+    }
+    // Stats cards scroll observer (index page)
+    if(page === 'index' && window.anime && !animationsDisabled() && 'IntersectionObserver' in window){
+      const statCards = document.querySelectorAll('.stat-card, .stats-grid .stat-box');
+      if(statCards.length){
+        const statObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry, idx) => {
+            if(entry.isIntersecting){
+              window.anime({
+                targets: entry.target,
+                opacity: [0, 1],
+                translateY: [15, 0],
+                scale: [0.95, 1],
+                duration: getAnimationSpeed() * 0.4,
+                delay: idx * 80,
+                easing: 'easeOutCubic'
+              });
+              statObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        statCards.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(15px) scale(0.95)';
+          statObserver.observe(card);
+        });
+      }
+      // Featured cards stagger
+      const featuredCards = document.querySelectorAll('.featured-card');
+      if(featuredCards.length){
+        const featObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if(entry.isIntersecting){
+              const cards = entry.target.parentElement.querySelectorAll('.featured-card');
+              cards.forEach((card, i) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(12px)';
+                window.anime({
+                  targets: card,
+                  opacity: [0, 1],
+                  translateY: [12, 0],
+                  duration: 500,
+                  delay: i * 100,
+                  easing: 'easeOutCubic'
+                });
+              });
+              featObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        const featuredList = document.querySelector('.featured-list');
+        if(featuredList) featObserver.observe(featuredList);
+      }
+    }
+  })();
+
+  (function initTheme(){
+    const themes = {
+      dark: { '--bg': '#0f1724', '--panel': '#071326', '--accent': '#5cc5ff', '--muted': '#9fb3c8', '--text': '#e6eef8', '--card': '#081220', '--accent-warm': '#ffb84d' },
+      light: { '--bg': '#f0f4f8', '--panel': '#e2e8f0', '--accent': '#0284c7', '--muted': '#64748b', '--text': '#1e293b', '--card': '#cbd5e1', '--accent-warm': '#f59e0b' },
+      blue: { '--bg': '#0d1b2a', '--panel': '#1b3a5f', '--accent': '#38bdf8', '--muted': '#94a3b8', '--text': '#e0f2fe', '--card': '#142d4c', '--accent-warm': '#fbbf24' },
+      midnight: { '--bg': '#0a0a12', '--panel': '#12121f', '--accent': '#a78bfa', '--muted': '#6b7280', '--text': '#e5e7eb', '--card': '#0f0f1a', '--accent-warm': '#f472b6' },
+      cyberpunk: { '--bg': '#0f0f1a', '--panel': '#1a0a2e', '--accent': '#00ff9f', '--muted': '#b388ff', '--text': '#e0f7fa', '--card': '#150f25', '--accent-warm': '#ff00a8' },
+      earth: { '--bg': '#1a2f1a', '--panel': '#2d4a2d', '--accent': '#84cc16', '--muted': '#a3c9a3', '--text': '#ecfccb', '--card': '#223d22', '--accent-warm': '#fbbf24' },
+      retro: { '--bg': '#1a1208', '--panel': '#2b1a0a', '--accent': '#ff9f1c', '--muted': '#c9a66b', '--text': '#ffe4b5', '--card': '#241809', '--accent-warm': '#ff6b35' },
+      matrix: { '--bg': '#000a00', '--panel': '#001100', '--accent': '#00ff00', '--muted': '#00aa00', '--text': '#00ff00', '--card': '#001100', '--accent-warm': '#88ff88' },
+      synthwave: { '--bg': '#1a0a2e', '--panel': '#2d1b4e', '--accent': '#ff2a6d', '--muted': '#c792ea', '--text': '#f4e9ff', '--card': '#251440', '--accent-warm': '#05d9e8' },
+      fire: { '--bg': '#1a0505', '--panel': '#2d0a0a', '--accent': '#ff4500', '--muted': '#cc5500', '--text': '#ffd4b8', '--card': '#250a0a', '--accent-warm': '#ffaa00' },
+      galaxy: { '--bg': '#0a0612', '--panel': '#150f25', '--accent': '#e056fd', '--muted': '#7c3aed', '--text': '#f0e6ff', '--card': '#0f0818', '--accent-warm': '#f9ca24' },
+      candy: { '--bg': '#fdf2f8', '--panel': '#fce7f3', '--accent': '#f472b6', '--muted': '#94a3b8', '--text': '#831843', '--card': '#fbcfe8', '--accent-warm': '#34d399' },
+      highcontrast: { '--bg': '#000000', '--panel': '#111111', '--accent': '#ffffff', '--muted': '#cccccc', '--text': '#ffffff', '--card': '#0a0a0a', '--accent-warm': '#ffff00' },
+      original: { '--bg': '#0f1724', '--panel': '#071326', '--accent': '#5cc5ff', '--muted': '#9fb3c8', '--text': '#e6eef8', '--card': '#081220', '--accent-warm': '#ffb84d' }
+    };
+    const saved = localStorage.getItem('fedl_theme') || 'dark';
+    const vars = themes[saved];
+    if (vars) {
+      const root = document.documentElement;
+      Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+      document.body.dataset.theme = saved;
+    }
+    try {
+      const activeId = localStorage.getItem('fedl_user_account_active');
+      if (activeId) {
+        const userData = JSON.parse(localStorage.getItem('fedl_user_data_' + activeId));
+        if (userData && userData.theme) {
+          const themeName = userData.theme;
+          const accountVars = themes[themeName];
+          if (accountVars) {
+            document.documentElement.style.setProperty('--bg', accountVars['--bg']);
+            document.documentElement.style.setProperty('--panel', accountVars['--panel']);
+            document.documentElement.style.setProperty('--accent', accountVars['--accent']);
+            document.documentElement.style.setProperty('--muted', accountVars['--muted']);
+            document.documentElement.style.setProperty('--text', accountVars['--text']);
+            document.documentElement.style.setProperty('--card', accountVars['--card']);
+            document.documentElement.style.setProperty('--accent-warm', accountVars['--accent-warm']);
+            document.body.dataset.theme = themeName;
+            localStorage.setItem('fedl_theme', themeName);
+          }
+        }
+      }
+    } catch(e) {}
+  })();
+
+  function debounce(fn, wait){
+    let timeoutId = null;
+    return function(){
+      const ctx = this;
+      const args = arguments;
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(()=>fn.apply(ctx, args), wait);
+    };
+  }
+
+  const FEDL_USER_ACCOUNTS = 'fedl_user_accounts';
+  const FEDL_USER_ACCOUNT_ACTIVE = 'fedl_user_account_active';
+
+  function fedlAccountId(){
+    try {
+      return localStorage.getItem(FEDL_USER_ACCOUNT_ACTIVE) || '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function fedlSetActiveAccountId(id){
+    try {
+      if (id) {
+        localStorage.setItem(FEDL_USER_ACCOUNT_ACTIVE, id);
+      } else {
+        localStorage.removeItem(FEDL_USER_ACCOUNT_ACTIVE);
+      }
+    } catch (e) {}
+  }
+
+  function fedlListAccounts(){
+    return read(FEDL_USER_ACCOUNTS, []);
+  }
+
+  function fedlSaveAccountsList(accounts){
+    write(FEDL_USER_ACCOUNTS, accounts);
+  }
+
+  function fedlNewAccountId(){
+    return `u_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  function fedlEmptyRouletteSlots(){
+    return { '1': null, '2': null, '3': null };
+  }
+
+  function fedlDefaultUserData(){
+    return { roulettePick: null, levelPercents: {}, savedRuns: [], rouletteSlots: fedlEmptyRouletteSlots(), theme: 'dark' };
+  }
+
+  function fedlGetAccountPayload(accountId){
+    const raw = read(`fedl_user_data_${accountId}`, fedlDefaultUserData());
+    if (!Array.isArray(raw.savedRuns)) {
+      raw.savedRuns = [];
+    }
+    if (!raw.levelPercents || typeof raw.levelPercents !== 'object') {
+      raw.levelPercents = {};
+    }
+    if (!raw.rouletteSlots || typeof raw.rouletteSlots !== 'object') {
+      raw.rouletteSlots = fedlEmptyRouletteSlots();
+    }
+    ['1', '2', '3'].forEach(k => {
+      if (!Object.prototype.hasOwnProperty.call(raw.rouletteSlots, k)) {
+        raw.rouletteSlots[k] = null;
+      }
+    });
+    return raw;
+  }
+
+  function fedlNextPercentHint(inputValue){
+    const raw = String(inputValue || '').trim().replace(',', '.');
+    if (!raw) {
+      return {
+        kind: 'muted',
+        text: 'Enter your current best %, then tap Submit % to save and see the next % to aim for (+1% roulette step).'
+      };
+    }
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n) || n < 0 || n > 100) {
+      return { kind: 'error', text: 'Enter a number from 0 to 100.' };
+    }
+    if (n >= 100) {
+      return {
+        kind: 'success',
+        text: 'You are at 100%. Beat the level, then spin — your next demon usually adds +1% to your roulette target.'
+      };
+    }
+    const next = Math.min(100, Math.floor(n) + 1);
+    if (next >= 100) {
+      return { kind: 'success', text: 'Saved. Next goal on this level: 100% (full completion).' };
+    }
+    return {
+      kind: 'success',
+      text: `Saved. Next % to hit on this level: ${next}% (classic +1% roulette step).`
+    };
+  }
+
+  async function fedlReadJsonResponse(r){
+    const text = await r.text();
+    let data = {};
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch (e) {
+      data = {};
+    }
+    const msg = (data && data.error && String(data.error)) || (data && data.message && String(data.message)) || '';
+    const plain = String(text || '').trim();
+    return { data, message: msg || plain || r.statusText || `Error ${r.status}` };
+  }
+
+  function fedlAddSavedRun(accountId, fields){
+    if (!accountId || accountId !== fedlServerUserId) {
+      return { ok: false, error: 'Sign in to save runs to your account.' };
+    }
+    const playerName = String(fields.playerName || '').trim();
+    const levelTitle = String(fields.levelTitle || '').trim();
+    if (!playerName || !levelTitle) {
+      return { ok: false, error: 'Player name and level are required to save a run.' };
+    }
+    const p = fedlGetAccountPayload(accountId);
+    const list = p.savedRuns.slice();
+    const id = `sv_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
+    list.unshift({
+      id,
+      playerName,
+      levelTitle,
+      videoUrl: String(fields.videoUrl || '').trim(),
+      percent: String(fields.percent != null ? fields.percent : '100').trim() || '100',
+      rawFootageUrl: String(fields.rawFootageUrl || '').trim(),
+      notes: String(fields.notes || '').trim(),
+      savedAt: new Date().toISOString()
+    });
+    p.savedRuns = list.slice(0, 48);
+    fedlSaveAccountPayload(accountId, p);
+    return { ok: true };
+  }
+
+  function fedlRemoveSavedRun(accountId, runId){
+    if (!accountId || accountId !== fedlServerUserId || !runId) {
+      return;
+    }
+    const p = fedlGetAccountPayload(accountId);
+    p.savedRuns = (p.savedRuns || []).filter(r => r && r.id !== runId);
+    fedlSaveAccountPayload(accountId, p);
+  }
+
+  function fedlSaveAccountPayload(accountId, payload){
+    write(`fedl_user_data_${accountId}`, payload);
+    fedlSchedulePushUserState(accountId);
+  }
+
+  let fedlServerUserId = null;
+  let fedlServerUsername = null;
+  const FEDL_AUTH_TOKEN_KEY = 'fedl_auth_token';
+
+  function fedlGetAuthToken(){
+    try {
+      return localStorage.getItem(FEDL_AUTH_TOKEN_KEY) || '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function fedlSetAuthToken(token){
+    try {
+      if (token) {
+        localStorage.setItem(FEDL_AUTH_TOKEN_KEY, token);
+      } else {
+        localStorage.removeItem(FEDL_AUTH_TOKEN_KEY);
+      }
+    } catch (e) {}
+  }
+
+  function hydrateTokenFromUrl(){
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const token = String(params.get('token') || '').trim();
+      if (token) {
+        fedlSetAuthToken(token);
+        if (window.history && window.history.replaceState) {
+          params.delete('token');
+          const url = new URL(window.location.href);
+          url.search = params.toString();
+          window.history.replaceState({}, '', url.pathname + (url.search ? `?${url.search}` : '') + url.hash);
+        }
+      }
+    } catch (e) {}
+  }
+
+  hydrateTokenFromUrl();
+
+  function fedlClearServerSession(){
+    fedlServerUserId = null;
+    fedlServerUsername = null;
+    fedlSetAuthToken('');
+  }
+
+  function fedlDataUserId(){
+    if (fedlServerUserId) {
+      return fedlServerUserId;
+    }
+    return fedlAccountId();
+  }
+
+  let fedlPushStateTimer = null;
+  function fedlSchedulePushUserState(accountId){
+    if (!accountId || !fedlGetAuthToken() || accountId !== fedlServerUserId || !canUseLiveServer) {
+      return;
+    }
+    if (fedlPushStateTimer) {
+      clearTimeout(fedlPushStateTimer);
+    }
+    fedlPushStateTimer = setTimeout(()=>{
+      const payload = fedlGetAccountPayload(accountId);
+      fetch(`${liveServerBase}/api/user/state`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${fedlGetAuthToken()}`
+        },
+        body: JSON.stringify({ data: payload })
+      }).catch(()=>{});
+    }, 450);
+  }
+
+  function fedlRefreshAuthState(){
+    const t = fedlGetAuthToken();
+    if (!t || !canUseLiveServer) {
+      fedlServerUserId = null;
+      fedlServerUsername = null;
+      return Promise.resolve(null);
+    }
+    return fetch(`${liveServerBase}/api/auth/me`, {
+      headers: { Authorization: `Bearer ${t}` },
+      cache: 'no-store'
+    }).then(r=>{
+      if (!r.ok) {
+        throw new Error('auth');
+      }
+      return r.json();
+    }).then(j=>{
+      fedlServerUserId = j.userId;
+      fedlServerUsername = j.username;
+      return j;
+    }).catch(()=>{
+      fedlClearServerSession();
+      return null;
+    });
+  }
+
+  function fedlPullUserStateToLocal(userId){
+    const t = fedlGetAuthToken();
+    if (!t || !userId || !canUseLiveServer) {
+      return Promise.resolve();
+    }
+    return fetch(`${liveServerBase}/api/user/state`, {
+      headers: { Authorization: `Bearer ${t}` },
+      cache: 'no-store'
+    }).then(r=>{
+      if (!r.ok) {
+        return null;
+      }
+      return r.json();
+    }).then(j=>{
+      if (j && j.data) {
+        write(`fedl_user_data_${userId}`, j.data);
+      }
+    }).catch(()=>{});
+  }
+
+  function injectFedlAuthNav(){
+    const nav = document.querySelector('header nav');
+    if (!nav || nav.querySelector('.fedl-auth-nav')) {
+      return;
+    }
+    const wrap = document.createElement('span');
+    wrap.className = 'fedl-auth-nav';
+    nav.appendChild(wrap);
+  }
+
+  function isFedlMod(){
+      if(!fedlServerUsername) return Promise.resolve(false);
+      return Promise.resolve(MOD_USERS.includes(fedlServerUsername.toLowerCase()));
+    }
+
+  function fedlUpdateAuthNav(){
+    const wrap = document.querySelector('.fedl-auth-nav');
+    if (!wrap) {
+      return;
+    }
+    wrap.textContent = '';
+    if (fedlServerUsername) {
+      isFedlMod().then(isMod=>{
+        const label = document.createElement('span');
+        label.className = 'fedl-auth-label muted';
+        label.appendChild(document.createTextNode('Hi, '));
+        const strong = document.createElement('strong');
+        strong.textContent = fedlServerUsername;
+        label.appendChild(strong);
+        wrap.appendChild(label);
+        wrap.appendChild(document.createTextNode(' '));
+        if (isMod) {
+          const adminLink = document.createElement('a');
+          adminLink.href = 'admelist.html';
+          adminLink.textContent = 'Admin';
+          wrap.appendChild(adminLink);
+          wrap.appendChild(document.createTextNode(' '));
+        }
+        const accountLink = document.createElement('a');
+        accountLink.href = 'account.html';
+        accountLink.textContent = 'Account';
+        wrap.appendChild(accountLink);
+        wrap.appendChild(document.createTextNode(' '));
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn ghost-btn small-btn fedl-logout-btn';
+        btn.textContent = 'Log out';
+        btn.addEventListener('click', ()=>{
+          const tok = fedlGetAuthToken();
+          if (tok && canUseLiveServer) {
+            fetch(`${liveServerBase}/api/auth/logout`, {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${tok}` }
+            }).catch(()=>{});
+          }
+          fedlClearServerSession();
+          fedlUpdateAuthNav();
+          document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+          window.location.reload();
+        });
+        wrap.appendChild(btn);
+      });
+    } else {
+      const a1 = document.createElement('a');
+        const returnTo = encodeURIComponent(window.location.href);
+        a1.href = 'login.html?return=' + returnTo;
+      a1.textContent = 'Log in';
+      wrap.appendChild(a1);
+      wrap.appendChild(document.createTextNode(' '));
+      const a2 = document.createElement('a');
+      a2.href = 'signup.html';
+      a2.textContent = 'Sign up';
+      wrap.appendChild(a2);
+    }
+  }
+
+  function fedlNormalizeLevelKey(title){
+    return String(title || '').trim().toLowerCase();
+  }
+
+  function fedlGetLevelPercent(accountId, title){
+    if (!accountId) {
+      return '';
+    }
+    const p = fedlGetAccountPayload(accountId);
+    const k = fedlNormalizeLevelKey(title);
+    return (p.levelPercents && p.levelPercents[k]) ? String(p.levelPercents[k]) : '';
+  }
+
+  function fedlSetLevelPercent(accountId, title, percent){
+    if (!accountId) {
+      return;
+    }
+    const p = fedlGetAccountPayload(accountId);
+    if (!p.levelPercents) {
+      p.levelPercents = {};
+    }
+    const k = fedlNormalizeLevelKey(title);
+    const v = String(percent || '').trim();
+    if (v) {
+      p.levelPercents[k] = v;
+    } else {
+      delete p.levelPercents[k];
+    }
+    if (p.roulettePick && fedlNormalizeLevelKey(p.roulettePick.title) === k) {
+      p.roulettePick.percent = v;
+    }
+    fedlSaveAccountPayload(accountId, p);
+  }
+
+  function fedlSaveRoulettePick(accountId, pick){
+    if (!accountId || !pick) {
+      return;
+    }
+    const p = fedlGetAccountPayload(accountId);
+    p.roulettePick = {
+      title: pick.title,
+      position: pick.position,
+      level: pick.level,
+      url: pick.url,
+      levelId: pick.levelId,
+      noteSource: pick.noteSource,
+      percent: String(pick.percent || '').trim()
+    };
+    if (p.roulettePick.title && p.roulettePick.percent) {
+      if (!p.levelPercents) {
+        p.levelPercents = {};
+      }
+      p.levelPercents[fedlNormalizeLevelKey(p.roulettePick.title)] = p.roulettePick.percent;
+    }
+    fedlSaveAccountPayload(accountId, p);
+  }
+
+  function fedlCreateAccount(displayName){
+    const name = String(displayName || '').trim();
+    if (!name) {
+      return null;
+    }
+    const accounts = fedlListAccounts();
+    const id = fedlNewAccountId();
+    accounts.push({ id, name, createdAt: new Date().toISOString() });
+    fedlSaveAccountsList(accounts);
+    fedlSetActiveAccountId(id);
+    fedlSaveAccountPayload(id, fedlDefaultUserData());
+    return { id, name };
+  }
+
+  function parseData(txt){
+    return txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+      const parts = l.split('|').map(p=>p.trim());
+      return {level:parts[0]||'Unknown',position:parts[1]||'',title:parts[2]||'Untitled',url:parts[3]||''};
+    });
+  }
+
+  function formatData(items){
+    return items.map(item=>[
+      item.level || 'new',
+      item.position || '',
+      item.title || '',
+      item.url || ''
+    ].join('|')).join('\n');
+  }
+
+  function parseLevelMeta(txt){
+    const map = {};
+    txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(l=>{
+      if(l.startsWith('//')) return;
+      const parts = l.split('|').map(p=>p.trim());
+      const title = parts[0] || '';
+      if(!title) return;
+      map[title] = {
+        levelId: parts[1] || 'unknown',
+        percent: parts[2] || '100'
+      };
+    });
+    return map;
+  }
+
+  function loadItems(){
+    if(cachedItems) return Promise.resolve(cachedItems);
+    if(!canUseLiveServer){
+      return fetch('data.txt', {cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error('static data unavailable');
+        return r.text();
+      }).then(txt=>{
+        cachedItems = parseData(txt);
+        return cachedItems;
+      });
+    }
+    return fetch(liveApiUrl, {cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error('API unavailable');
+      const contentType = (r.headers.get('content-type') || '').toLowerCase();
+      if(contentType.includes('application/json')){
+        return r.json().then(data=>Array.isArray(data.items) ? data.items : []);
+      }
+      return r.text().then(txt=>parseData(txt));
+    }).then(items=>{
+      cachedItems = items;
+      return cachedItems;
+    }).catch(()=>{
+      return fetch(liveDataFileUrl, {cache:'no-store'}).then(r=>{
+        if(!r.ok) throw new Error('server data unavailable');
+        return r.text();
+      }).then(txt=>{
+        cachedItems = parseData(txt);
+        return cachedItems;
+      }).catch(()=>{
+        return fetch('data.txt', {cache:'no-store'}).then(r=>{
+          if(!r.ok) throw new Error('static data unavailable');
+          return r.text();
+        }).then(txt=>{
+          cachedItems = parseData(txt);
+          return cachedItems;
+        });
+      });
+    });
+  }
+
+  function clearItemsCache(){
+    cachedItems = null;
+  }
+
+  function loadRuns(){
+    if(cachedRuns) return Promise.resolve(cachedRuns);
+    if(!canUseLiveServer){
+      cachedRuns = [];
+      return Promise.resolve(cachedRuns);
+    }
+    return fetch(liveRunsUrl, {cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error('Runs API unavailable');
+      return r.json();
+    }).then(data=>{
+      cachedRuns = Array.isArray(data.items) ? data.items : [];
+      return cachedRuns;
+    });
+  }
+
+  function clearRunsCache(){
+    cachedRuns = null;
+  }
+
+  function onLiveUpdate(handler){
+    liveHandlers.push(handler);
+  }
+
+  function notifyLiveUpdate(items){
+    liveHandlers.forEach(handler=>handler(items));
+  }
+
+  function onRunsUpdate(handler){
+    runsHandlers.push(handler);
+  }
+
+  function notifyRunsUpdate(runs){
+    runsHandlers.forEach(handler=>handler(runs));
+  }
+
+  function refreshItems(){
+    clearItemsCache();
+    return loadItems().then(items=>{
+      notifyLiveUpdate(items);
+      return items;
+    });
+  }
+
+  function refreshRuns(){
+    clearRunsCache();
+    return loadRuns().then(runs=>{
+      notifyRunsUpdate(runs);
+      return runs;
+    });
+  }
+
+  function bindLiveUpdates(){
+    if(liveBound || !canUseLiveServer || typeof window.EventSource === 'undefined') return;
+    liveBound = true;
+    const source = new EventSource(liveEventsUrl);
+    source.addEventListener('list-update', ()=>{
+      refreshItems().catch(err=>console.error(err));
+    });
+    source.addEventListener('runs-update', ()=>{
+      refreshRuns().catch(err=>console.error(err));
+    });
+    source.onerror = function(){
+      source.close();
+      liveBound = false;
+      window.setTimeout(bindLiveUpdates, 3000);
+    };
+  }
+
+  function loadLevelMeta(){
+    if(cachedLevelMeta) return Promise.resolve(cachedLevelMeta);
+    return fetch('level-ids.txt').then(r=>r.text()).then(txt=>{
+      cachedLevelMeta = parseLevelMeta(txt);
+      return cachedLevelMeta;
+    }).catch(()=>{
+      cachedLevelMeta = {};
+      return cachedLevelMeta;
+    });
+  }
+
+  function fetchLevelIdFromApi(title){
+    const url = `https://gdbrowser.com/api/search/${encodeURIComponent(title)}?diff=-2&demonFilter=5&count=10`;
+    return fetch(url).then(r=>r.json()).then(results=>{
+      if(!Array.isArray(results) || !results.length) return null;
+      const exact = results.find(item=>String(item.name||'').toLowerCase() === String(title||'').toLowerCase());
+      const match = exact || results[0];
+      if(!match || !match.id) return null;
+      return String(match.id);
+    }).catch(()=>null);
+  }
+
+  function renderApprovedRunsForLevel(item, hostEl){
+    if(!hostEl) return;
+    hostEl.innerHTML = '<p class="muted">Loading approved runs...</p>';
+    loadRuns().then(runs=>{
+      const approvedRuns = runs.filter(run=>{
+        return String(run.status || '').toLowerCase() === 'approved'
+          && String(run.levelTitle || '').toLowerCase() === String(item.title || '').toLowerCase();
+      });
+      if(!approvedRuns.length){
+        hostEl.innerHTML = '<p class="muted">No approved runs have been linked to this level yet.</p>';
+        return;
+      }
+      hostEl.innerHTML = approvedRuns.map(run=>`
+        <article class="modal-run-card">
+          <strong>${escapeHtml(run.playerName || 'Unknown player')}</strong>
+          <span>${escapeHtml(run.percent || '100')}%</span>
+          <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Open run video</a>
+        </article>
+      `).join('');
+    }).catch(err=>{
+      console.error(err);
+      hostEl.innerHTML = '<p class="muted">Could not load approved runs for this level.</p>';
+    });
+  }
+
+  function extractYouTubeID(url){
+    const m = String(url || '').match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : '';
+  }
+
+  function updateAccountProgressInModal(modal, item){
+    if (!modal) {
+      return;
+    }
+    const inner = modal.querySelector('.inner');
+    if (!inner) {
+      return;
+    }
+    let accBar = modal.querySelector('.modal-account-progress');
+    if (!accBar) {
+      accBar = document.createElement('div');
+      accBar.className = 'modal-account-progress';
+      const runsWrap = inner.querySelector('.modal-runs-wrap');
+      if (runsWrap) {
+        inner.insertBefore(accBar, runsWrap);
+      } else {
+        inner.appendChild(accBar);
+      }
+    }
+    const accId = fedlDataUserId();
+    if (!accId || !item || !item.title) {
+      accBar.hidden = true;
+      accBar.innerHTML = '';
+      return;
+    }
+    accBar.hidden = false;
+    const cur = fedlGetLevelPercent(accId, item.title);
+    const labelText = fedlServerUserId
+      ? 'Your progress (synced to your account)'
+      : 'Your progress (saved on this device)';
+    accBar.innerHTML =
+      '<p class="modal-account-label">' +
+      labelText +
+      '</p>' +
+      '<div class="modal-account-row">' +
+      '<input type="text" class="modal-account-pct-input" inputmode="decimal" placeholder="e.g. 47" />' +
+      '<span class="muted">%</span>' +
+      '</div>';
+    const input = accBar.querySelector('.modal-account-pct-input');
+    if (input) {
+      input.value = cur;
+      input.addEventListener('change', ()=>{
+        fedlSetLevelPercent(accId, item.title, input.value);
+      });
+    }
+  }
+
+  function calculatePoints(rank){
+    if(!rank || rank < 1) return 0;
+    if(rank <= 200) return 10000 - (rank - 1) * 50;
+    return 50;
+  }
+
+  function openVideoModal(item, options){
+    const config = Object.assign({showRuns:false}, options || {});
+    const url = item && item.url;
+    if(!url) return;
+    const id = extractYouTubeID(url);
+    if(!id){
+      window.open(url,'_blank');
+      return;
+    }
+    const rank = Number(item.position) || 0;
+    const points = calculatePoints(rank);
+    let modal = document.querySelector('.video-modal');
+    if(!modal){
+      modal = document.createElement('div'); modal.className='video-modal';
+      const inner = document.createElement('div'); inner.className='inner';
+      const close = document.createElement('button'); close.textContent='Close'; close.className='btn'; close.style.float='right'; close.onclick=()=>modal.remove();
+      inner.appendChild(close);
+      const iframe = document.createElement('iframe'); iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; iframe.allowFullscreen=true;
+      inner.appendChild(iframe); modal.appendChild(inner); document.body.appendChild(modal);
+      const runsWrap = document.createElement('div'); runsWrap.className = 'modal-runs-wrap';
+      runsWrap.innerHTML = `
+        <div class="modal-runs-head">
+          <strong>Approved runs</strong>
+          <span class="muted">Player, percent, and linked video</span>
+        </div>
+        <div class="modal-runs-list"></div>
+      `;
+      inner.appendChild(runsWrap);
+    }
+    modal.querySelector('iframe').src = `https://www.youtube.com/embed/${id}`;
+    let pointsEl = modal.querySelector('.modal-points');
+    if(!pointsEl){
+      pointsEl = document.createElement('div'); pointsEl.className='modal-points';
+      pointsEl.style.cssText = 'font-size:1.5em;font-weight:bold;margin-bottom:10px;color:var(--accent-color,#00aaff);';
+      const inner = modal.querySelector('.inner');
+      inner.insertBefore(pointsEl, inner.querySelector('iframe'));
+    }
+    pointsEl.textContent = rank > 0 ? `Rank #${rank} — ${points} points` : '';
+    const runsWrap = modal.querySelector('.modal-runs-wrap');
+    const runsList = modal.querySelector('.modal-runs-list');
+    if(runsWrap) runsWrap.hidden = !config.showRuns;
+    if(config.showRuns && runsList){
+      renderApprovedRunsForLevel(item, runsList);
+    }
+    updateAccountProgressInModal(modal, item);
+    if(!animationsDisabled() && window.anime){
+      modal.style.opacity = '0';
+      modal.style.transform = 'scale(0.95)';
+      modal.style.display = 'flex';
+      window.anime({ targets: modal, opacity: [0,1], scale: [0.95,1], duration: 3000, easing: 'easeInOutCubic' });
+    } else {
+      modal.style.opacity = '1';
+      modal.style.transform = 'scale(1)';
+      modal.style.display = 'flex';
+    }
+  }
+
+  function bindHomeSnapshot(includeRuns){
+    const totalEl = qs('hero-total-levels');
+    const topEl = qs('hero-top-entry');
+    const approvedRunsEl = qs('hero-last-slot');
+    const playersEl = qs('hero-total-players');
+    const recentRunsEl = qs('hero-recent-runs');
+    const lastUpdatedEl = qs('hero-list-updated');
+    const featuredListEl = qs('featured-list');
+    const listPreviewEl = qs('offline-list-area');
+
+    function renderFeatured(items){
+      if(!featuredListEl) return;
+      const rankedItems = items.slice().sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+      const featured = rankedItems.slice(0, 10);
+      if(!featured.length){
+        featuredListEl.innerHTML = `
+          <article class="featured-card">
+            <span class="featured-rank">#--</span>
+            <strong>No list data found</strong>
+            <p>The homepage preview could not load any FEDL entries yet.</p>
+          </article>
+        `;
+        return;
+      }
+
+      featuredListEl.innerHTML = featured.map(item=>`
+        <article class="featured-card">
+          <span class="featured-rank">#${escapeHtml(item.position || '--')}</span>
+          <strong>${escapeHtml(item.title || 'Untitled')}</strong>
+          <p>${item.url ? 'Video link is ready from the list page.' : 'This entry does not have a linked video yet.'}</p>
+        </article>
+      `).join('');
+      document.querySelectorAll('.skeleton-card').forEach(el => el.remove());
+    }
+
+    function renderHome(items){
+      const rankedItems = items.slice().sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+      const firstItem = rankedItems[0];
+
+      if(totalEl) { totalEl.dataset.endValue = rankedItems.length || 0; totalEl.textContent = '0'; observeNumberEl(totalEl); }
+      if(topEl) topEl.textContent = firstItem ? firstItem.title : 'Unavailable';
+      renderFeatured(rankedItems);
+      if(listPreviewEl){
+        const preview = rankedItems.slice(0, 10);
+        listPreviewEl.innerHTML = preview.length ? preview.map(item=>`
+          <tr>
+            <td>#${escapeHtml(item.position || '--')}</td>
+            <td>${escapeHtml(item.title || 'Untitled')}</td>
+          </tr>
+        `).join('') : '<tr><td colspan="2" class="muted">No local list data found.</td></tr>';
+      }
+    }
+
+    function renderHomeStats(runs, items){
+      const lookup = new Map((items || []).map(item => [String(item.title || '').toLowerCase(), Number(item.position) || 9999]));
+      const map = new Map();
+      runs.forEach(run=>{
+        if(String(run.status || '').toLowerCase() !== 'approved') return;
+        const playerName = String(run.playerName || '').trim();
+        if(!playerName) return;
+        const key = playerName.toLowerCase();
+        let entry = map.get(key);
+        if(!entry){
+          entry = {name: playerName, runs: 0, bestRank: 9999, points: 0};
+          map.set(key, entry);
+        }
+        entry.runs += 1;
+        const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
+        if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
+        if(rank > 0 && rank < 1000) entry.points += calculatePoints(rank);
+      });
+      const sortedPlayers = Array.from(map.values()).sort((a,b)=>{
+        if(b.points !== a.points) return b.points - a.points;
+        const aRank = a.bestRank === 9999 ? 9999 : a.bestRank;
+        const bRank = b.bestRank === 9999 ? 9999 : b.bestRank;
+        if(aRank !== bRank) return aRank - bRank;
+        return a.name.localeCompare(b.name);
+      });
+      const topPlayer = sortedPlayers[0]?.name || 'None';
+      if(playersEl) playersEl.textContent = topPlayer;
+      const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      const recentRuns = runs.filter(run=>{
+        if(String(run.status || '').toLowerCase() !== 'approved') return false;
+        const submitted = run.submittedAt ? new Date(run.submittedAt).getTime() : 0;
+        return submitted >= oneWeekAgo;
+      }).length;
+      if(recentRunsEl) { recentRunsEl.dataset.endValue = recentRuns; recentRunsEl.textContent = '0'; observeNumberEl(recentRunsEl); }
+      const sortedRuns = runs.slice().sort((a,b)=>new Date(b.submittedAt||0) - new Date(a.submittedAt||0));
+      const latestRun = sortedRuns.find(run=>run.submittedAt);
+      if(lastUpdatedEl) lastUpdatedEl.textContent = latestRun 
+        ? new Date(latestRun.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : 'N/A';
+    }
+
+    function renderApprovedRuns(runs){
+      if(!approvedRunsEl) return;
+      const approvedCount = runs.filter(run=>String(run.status || '').toLowerCase() === 'approved').length;
+      approvedRunsEl.dataset.endValue = approvedCount;
+      approvedRunsEl.textContent = '0';
+      observeNumberEl(approvedRunsEl);
+    }
+
+    loadItems().then(items=>{
+      renderHome(items);
+      if(includeRuns){
+        loadRuns().then(runs=>{
+          renderApprovedRuns(runs);
+          renderHomeStats(runs, items);
+        }).catch(()=>{
+          renderApprovedRuns([]);
+          renderHomeStats([], items);
+        });
+        onRunsUpdate(runs=>{
+          renderApprovedRuns(runs);
+          renderHomeStats(runs, items);
+        });
+      }
+    }).catch(()=>{
+      renderHome([]);
+    });
+    onLiveUpdate(renderHome);
+  }
+
+  if(page==='index'){
+    bindHomeSnapshot(true);
+    bindLiveUpdates();
+  }
+
+  // One page app handler
+  if(page===SPA_PAGE_KEY){
+    const spaPage = window.location.hash.slice(1) || 'home';
+    if(spaPage === 'lists' || spaPage === 'home'){
+      bindHomeSnapshot(true);
+      bindLiveUpdates();
+      const listBody = qs('list-body');
+      if(listBody){
+        const listPage = initListPage();
+        onLiveUpdate(function(updatedItems){
+          listPage.applyItems(updatedItems);
+        });
+      }
+    }
+    if(spaPage === 'players'){
+      const playersBody = qs('players-body');
+      const playerSearch = qs('player-search');
+      if(playersBody && playerSearch){
+        let players = [];
+        Promise.all([loadRuns(), loadItems()]).then(([runs, items])=>{
+          const lookup = new Map(items.map(item => [String(item.title || '').toLowerCase(), Number(item.position) || 9999]));
+          const map = new Map();
+          runs.filter(run => String(run.status || '').toLowerCase() === 'approved').forEach(run => {
+            const playerName = String(run.playerName || '').trim();
+            if(!playerName) return;
+            const key = playerName.toLowerCase();
+            let entry = map.get(key);
+            if(!entry){
+              entry = {name: playerName, runs: 0, bestRank: 9999, points: 0, topLevels: new Set()};
+              map.set(key, entry);
+            }
+            entry.runs += 1;
+            const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
+            if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
+            if(rank > 0 && rank < 1000) entry.points += calculatePoints(rank);
+            if(run.levelTitle) entry.topLevels.add(String(run.levelTitle).trim());
+          });
+          players = Array.from(map.values()).map(entry => ({
+            name: entry.name,
+            runs: entry.runs,
+            bestRank: entry.bestRank === 9999 ? '—' : `#${entry.bestRank}`,
+            points: entry.points,
+            topLevels: Array.from(entry.topLevels).slice(0, 3).join(', ')
+          })).sort((a,b) => b.points - a.points || a.name.localeCompare(b.name));
+          function render(){
+            const query = (playerSearch.value || '').toLowerCase();
+            const filtered = players.filter(p => !query || p.name.toLowerCase().includes(query));
+            if(!filtered.length){
+              playersBody.innerHTML = '<tr><td colspan="5" class="muted">No player data found.</td></tr>';
+              return;
+            }
+            playersBody.innerHTML = filtered.slice(0, 100).map(p => `
+              <tr>
+                <td><strong>${escapeHtml(p.name)}</strong></td>
+                <td>${p.runs}</td>
+                <td>${p.bestRank}</td>
+                <td>${p.points}</td>
+                <td>${escapeHtml(p.topLevels)}</td>
+              </tr>
+            `).join('');
+          }
+          playerSearch.addEventListener('input', render);
+          render();
+        });
+      }
+    }
+    if(spaPage === 'run'){
+      const runForm = qs('run-form');
+      if(runForm){
+        const playerNameInput = qs('run-player-name');
+        const formStatusEl = qs('run-form-status');
+        runForm.addEventListener('submit', function(e){
+          e.preventDefault();
+          const playerName = playerNameInput.value.trim();
+          const levelTitle = qs('run-level-title').value.trim();
+          const videoUrl = qs('run-video-url').value.trim();
+          const percent = qs('run-percent').value.trim();
+          const rawUrl = qs('run-raw-url').value.trim();
+          const notes = qs('run-notes').value.trim();
+          if(!playerName || !levelTitle || !videoUrl || !percent){
+            formStatusEl.textContent = 'Please fill in all required fields.';
+            return;
+          }
+          formStatusEl.textContent = 'Submitting...';
+          fetch(liveRunsUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ playerName, levelTitle, videoUrl, percent, rawFootageUrl: rawUrl, notes })
+          }).then(r => {
+            if(!r.ok) throw new Error('Failed');
+            formStatusEl.textContent = 'Run submitted successfully!';
+            runForm.reset();
+          }).catch(() => {
+            formStatusEl.textContent = 'Failed to submit run.';
+          });
+        });
+      }
+    }
+    if(spaPage === 'roulette'){
+      const spinBtn = qs('roulette-spin');
+      const resultEl = qs('roulette-result');
+      if(spinBtn && resultEl){
+        spinBtn.addEventListener('click', function(){
+          loadItems().then(items => {
+            if(!items.length){
+              resultEl.innerHTML = '<p class="muted">No levels loaded.</p>';
+              return;
+            }
+            const random = items[Math.floor(Math.random() * items.length)];
+            resultEl.innerHTML = `
+              <p><strong>${escapeHtml(random.title || 'Untitled')}</strong></p>
+              <p class="muted">Rank #${random.position || '?'}</p>
+              <p class="muted">${random.level || ''}</p>
+            `;
+          });
+        });
+      }
+    }
+    if(spaPage === 'guess'){
+      const higherBtn = qs('guess-higher');
+      const lowerBtn = qs('guess-lower');
+      const levelEl = qs('guess-level');
+      const resultEl = qs('guess-result');
+      const scoreEl = qs('guess-score');
+      if(higherBtn && lowerBtn && levelEl){
+        let currentLevel = null;
+        let score = 0;
+        let revealed = false;
+        function newRound(){
+          loadItems().then(items => {
+            if(!items.length) return;
+            currentLevel = items[Math.floor(Math.random() * items.length)];
+            levelEl.textContent = currentLevel.title || '???';
+            resultEl.textContent = '';
+            revealed = false;
+          });
+        }
+        higherBtn.addEventListener('click', function(){
+          if(revealed || !currentLevel) return;
+          revealed = true;
+          const rank = Number(currentLevel.position) || 9999;
+          const actual = Math.random() * 100;
+          if(actual > 50){
+            score++;
+            resultEl.textContent = `Correct! It was #${rank}`;
+          }else{
+            resultEl.textContent = `Wrong! It was #${rank}`;
+          }
+          scoreEl.textContent = `Score: ${score}`;
+          setTimeout(newRound, 2000);
+        });
+        lowerBtn.addEventListener('click', function(){
+          if(revealed || !currentLevel) return;
+          revealed = true;
+          const rank = Number(currentLevel.position) || 9999;
+          const actual = Math.random() * 100;
+          if(actual < 50){
+            score++;
+            resultEl.textContent = `Correct! It was #${rank}`;
+          }else{
+            resultEl.textContent = `Wrong! It was #${rank}`;
+          }
+          scoreEl.textContent = `Score: ${score}`;
+          setTimeout(newRound, 2000);
+        });
+        newRound();
+      }
+    }
+  }
+
+  if(page==='offlineindex'){
+    bindHomeSnapshot(false);
+  }
+
+  if(page==='roulette'){
+    const spinBtn = qs('roulette-spin');
+    const statusEl = qs('roulette-status');
+    const titleEl = qs('roulette-title');
+    const rankEl = qs('roulette-rank');
+    const idEl = qs('roulette-level-id');
+    const noteEl = qs('roulette-note');
+    const openEl = qs('roulette-open');
+    const pctInput = qs('roulette-percent');
+    const pctRow = qs('roulette-progress-row');
+    const accountSelect = qs('roulette-account-select');
+    const accountNewInput = qs('roulette-account-new');
+    const accountCreateBtn = qs('roulette-account-create');
+    const restoreBtn = qs('roulette-restore');
+    const pctHint = qs('roulette-percent-hint');
+    const loginSyncHint = qs('roulette-login-sync-hint');
+    const slotsHintEl = qs('roulette-slots-hint');
+    const pctSubmitBtn = qs('roulette-percent-submit');
+
+    let lastRoulette = { item: null, meta: null };
+
+    function setPercentHint(text, kind){
+      if(!pctHint) return;
+      pctHint.textContent = text || '';
+      pctHint.className =
+        'small roulette-percent-hint ' +
+        (kind === 'error' ? 'error-text' : kind === 'success' ? 'success-text' : 'muted');
+    }
+
+    function resetPercentHint(){
+      const h = fedlNextPercentHint('');
+      setPercentHint(h.text, h.kind);
+    }
+
+    function refreshRouletteSlotsUi(){
+      const aid = fedlDataUserId();
+      ['1', '2', '3'].forEach(k=>{
+        const saveB = qs(`roulette-slot-save-${k}`);
+        const loadB = qs(`roulette-slot-load-${k}`);
+        const lab = qs(`roulette-slot-label-${k}`);
+        if(saveB) saveB.disabled = !aid;
+        if(loadB) loadB.disabled = !aid;
+        if(lab){
+          if(!aid){
+            lab.textContent = '—';
+          }else{
+            const slot = fedlGetAccountPayload(aid).rouletteSlots[k];
+            if(slot && slot.title){
+              const pct = slot.percent ? ` @ ${slot.percent}%` : '';
+              const t = String(slot.title);
+              const short = t.length > 36 ? `${t.slice(0, 34)}…` : t;
+              lab.textContent = short + pct;
+            }else{
+              lab.textContent = 'Empty';
+            }
+          }
+        }
+      });
+      if(slotsHintEl){
+        if(!aid){
+          slotsHintEl.textContent = 'Create a profile below or log in to use save slots.';
+        }else{
+          slotsHintEl.textContent = 'Save the demon on screen into a slot, or load a slot to swap demons.';
+        }
+      }
+    }
+
+    function syncPercentRow(){
+      if(!pctRow) return;
+      const aid = fedlDataUserId();
+      if(!aid || !lastRoulette.item){
+        pctRow.hidden = true;
+        if(pctInput) pctInput.value = '';
+        if(pctHint) pctHint.textContent = '';
+        return;
+      }
+      pctRow.hidden = false;
+      if(pctInput){
+        pctInput.value = fedlGetLevelPercent(aid, lastRoulette.item.title) || '';
+      }
+      resetPercentHint();
+    }
+
+    function refreshRouletteAccountUi(){
+      const panel = document.querySelector('.roulette-account-panel');
+      const serverMode = !!fedlServerUsername;
+      if(loginSyncHint){
+        loginSyncHint.hidden = !!fedlServerUserId;
+      }
+      if(panel){
+        const controls = panel.querySelector('.roulette-account-controls');
+        const createRow = panel.querySelector('.roulette-account-create-row');
+        const selLabel = panel.querySelector('.roulette-account-label');
+        let note = panel.querySelector('.fedl-server-account-note');
+        if(serverMode){
+          if(controls) controls.style.display = 'none';
+          if(createRow) createRow.style.display = 'none';
+          if(selLabel) selLabel.style.display = 'none';
+          if(!note){
+            note = document.createElement('p');
+            note.className = 'muted fedl-server-account-note';
+            const heading = panel.querySelector('.roulette-account-heading');
+            if(heading){
+              heading.insertAdjacentElement('afterend', note);
+            }else{
+              panel.appendChild(note);
+            }
+          }
+          note.textContent = `Signed in as ${fedlServerUsername}. Progress syncs online and this browser keeps a copy.`;
+          note.style.display = '';
+        }else{
+          if(controls) controls.style.display = '';
+          if(createRow) createRow.style.display = '';
+          if(selLabel) selLabel.style.display = '';
+          if(note) note.style.display = 'none';
+        }
+      }
+      if(!accountSelect || serverMode){
+        if(restoreBtn){
+          const id = fedlDataUserId();
+          const pick = id ? fedlGetAccountPayload(id).roulettePick : null;
+          restoreBtn.hidden = !pick || !pick.title;
+        }
+        refreshRouletteSlotsUi();
+        syncPercentRow();
+        return;
+      }
+      const accounts = fedlListAccounts();
+      const active = fedlAccountId();
+      accountSelect.innerHTML = '<option value="">No profile (progress not saved)</option>';
+      accounts.forEach(a=>{
+        const opt = document.createElement('option');
+        opt.value = a.id;
+        opt.textContent = a.name;
+        if(a.id === active) opt.selected = true;
+        accountSelect.appendChild(opt);
+      });
+      if(restoreBtn){
+        const pick = active ? fedlGetAccountPayload(active).roulettePick : null;
+        restoreBtn.hidden = !pick || !pick.title;
+      }
+      refreshRouletteSlotsUi();
+      syncPercentRow();
+    }
+
+    function showPick(item, meta){
+      lastRoulette = { item, meta };
+      const card = qs('roulette-card');
+      if(card && window.anime && !animationsDisabled()){
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.9) translateY(12px)';
+      }
+      statusEl.textContent = 'Your demon is:';
+      titleEl.textContent = item.title;
+      rankEl.textContent = `Rank: #${item.position}`;
+      idEl.textContent = `Level ID: ${meta.levelId || 'unknown'}`;
+      noteEl.textContent = meta.source === 'api'
+        ? 'Level ID was looked up from the Geometry Dash community API.'
+        : 'Level ID came from your local level-ids.txt file.';
+      if(item.url){
+        openEl.hidden = false;
+        openEl.href = '#';
+        openEl.onclick = function(e){
+          e.preventDefault();
+          openVideoModal(item, {showRuns:false});
+        };
+      }else{
+        openEl.hidden = true;
+        openEl.onclick = null;
+      }
+      const aid = fedlDataUserId();
+      if(aid){
+        const pct = fedlGetLevelPercent(aid, item.title) || '';
+        fedlSaveRoulettePick(aid, {
+          title: item.title,
+          position: item.position,
+          level: item.level,
+          url: item.url,
+          levelId: meta.levelId,
+          noteSource: meta.source,
+          percent: pct
+        });
+        refreshRouletteAccountUi();
+      }
+      syncPercentRow();
+      if(card && window.anime && !animationsDisabled()){
+        const speed = getAnimationSpeed();
+        window.anime({
+          targets: card,
+          opacity: [0, 1],
+          scale: [0.9, 1.02, 1],
+          translateY: [12, -2, 0],
+          duration: speed,
+          easing: 'easeOutCubic'
+        });
+      }
+    }
+
+    function saveRouletteSlot(slotKey){
+      const aid = fedlDataUserId();
+      if(!aid || !lastRoulette.item){
+        if(slotsHintEl) slotsHintEl.textContent = 'Spin a demon first, and use a profile or log in.';
+        return;
+      }
+      const p = fedlGetAccountPayload(aid);
+      const pct = pctInput ? String(pctInput.value || '').trim() : '';
+      p.rouletteSlots[slotKey] = {
+        title: lastRoulette.item.title,
+        position: lastRoulette.item.position,
+        level: lastRoulette.item.level,
+        url: lastRoulette.item.url,
+        levelId: lastRoulette.meta && lastRoulette.meta.levelId,
+        noteSource: lastRoulette.meta && lastRoulette.meta.source,
+        percent: pct,
+        savedAt: new Date().toISOString()
+      };
+      fedlSaveAccountPayload(aid, p);
+      if(pct){
+        fedlSetLevelPercent(aid, lastRoulette.item.title, pct);
+      }
+      refreshRouletteSlotsUi();
+      const slotRow = document.querySelector(`.roulette-slot-row:nth-child(${slotKey})`);
+      if(slotRow && window.anime && !animationsDisabled()){
+        slotRow.classList.add('slot-active');
+        window.anime({ targets: slotRow, backgroundColor: ['rgba(92,197,255,0.2)', 'rgba(92,197,255,0.08)'], duration: 500, easing: 'easeOutQuad', complete: () => slotRow.classList.remove('slot-active') });
+      }
+    }
+
+    function loadRouletteSlot(slotKey){
+      const aid = fedlDataUserId();
+      if(!aid) return;
+      const slot = fedlGetAccountPayload(aid).rouletteSlots[slotKey];
+      if(!slot || !slot.title){
+        if(slotsHintEl) slotsHintEl.textContent = 'That slot is empty.';
+        return;
+      }
+      const pctStr = String(slot.percent != null ? slot.percent : '').trim();
+      if(pctStr){
+        fedlSetLevelPercent(aid, slot.title, pctStr);
+      }
+      const item = {
+        title: slot.title,
+        position: slot.position,
+        level: slot.level,
+        url: slot.url
+      };
+      const meta = {
+        levelId: slot.levelId,
+        source: slot.noteSource === 'api' ? 'api' : 'file'
+      };
+      showPick(item, meta);
+      if(pctInput){
+        pctInput.value = pctStr || fedlGetLevelPercent(aid, slot.title) || '';
+      }
+      resetPercentHint();
+      refreshRouletteSlotsUi();
+    }
+
+    if(pctInput){
+      pctInput.addEventListener('change', ()=>{
+        const aid = fedlDataUserId();
+        if(!aid || !lastRoulette.item) return;
+        fedlSetLevelPercent(aid, lastRoulette.item.title, pctInput.value);
+      });
+    }
+    if(pctSubmitBtn){
+      pctSubmitBtn.addEventListener('click', ()=>{
+        const aid = fedlDataUserId();
+        if(!aid || !lastRoulette.item){
+          setPercentHint('Spin a demon and use a profile or log in to track %.', 'error');
+          return;
+        }
+        fedlSetLevelPercent(aid, lastRoulette.item.title, pctInput ? pctInput.value : '');
+        const h = fedlNextPercentHint(pctInput ? pctInput.value : '');
+        setPercentHint(h.text, h.kind);
+      });
+    }
+    ['1', '2', '3'].forEach(k=>{
+      const sb = qs(`roulette-slot-save-${k}`);
+      const lb = qs(`roulette-slot-load-${k}`);
+      if(sb) sb.addEventListener('click', ()=> saveRouletteSlot(k));
+      if(lb) lb.addEventListener('click', ()=> loadRouletteSlot(k));
+    });
+    if(accountSelect){
+      accountSelect.addEventListener('change', ()=>{
+        fedlSetActiveAccountId(accountSelect.value || '');
+        refreshRouletteAccountUi();
+      });
+    }
+    if(accountCreateBtn && accountNewInput){
+      accountCreateBtn.addEventListener('click', ()=>{
+        const name = String(accountNewInput.value || '').trim();
+        if(!name) return;
+        fedlCreateAccount(name);
+        accountNewInput.value = '';
+        refreshRouletteAccountUi();
+      });
+    }
+    if(restoreBtn){
+      restoreBtn.addEventListener('click', ()=>{
+        const aid = fedlDataUserId();
+        if(!aid) return;
+        const pick = fedlGetAccountPayload(aid).roulettePick;
+        if(!pick || !pick.title) return;
+        const item = {
+          title: pick.title,
+          position: pick.position,
+          level: pick.level,
+          url: pick.url
+        };
+        const meta = {
+          levelId: pick.levelId,
+          source: pick.noteSource === 'api' ? 'api' : 'file'
+        };
+        showPick(item, meta);
+      });
+    }
+
+    document.addEventListener('fedl-auth-updated', ()=>{
+      refreshRouletteAccountUi();
+    });
+    fedlRefreshAuthState()
+      .then(()=> fedlPullUserStateToLocal(fedlServerUserId))
+      .finally(()=>{
+        refreshRouletteAccountUi();
+        fedlUpdateAuthNav();
+      });
+
+    const wheelWrap = document.getElementById('roulette-wheel-wrap');
+    const wheelInner = document.getElementById('roulette-wheel-inner');
+
+    function buildWheel(items){
+      if(!wheelInner || !items.length) return;
+      wheelInner.innerHTML = '';
+      const segmentAngle = 360 / Math.min(items.length, 20);
+      const colors = ['#5cc5ff','#ff6b35','#84cc16','#a78bfa','#f472b6','#ff9f1c','#00ff9f','#e056fd','#38bdf8','#ff4500','#34d399','#ffb84d','#c792ea','#5cc5ff','#fbbf24','#ff2a6d','#88ff88','#0ea5e9','#fb923c','#f0abfc'];
+      const count = Math.min(items.length, 20);
+      for(let i = 0; i < count; i++){
+        const seg = document.createElement('div');
+        seg.className = 'roulette-wheel-segment';
+        seg.style.transform = `rotate(${i * segmentAngle}deg)`;
+        seg.style.background = colors[i % colors.length];
+        seg.style.clipPath = `polygon(0 0, 100% 0, 100% ${50 + 50 * Math.cos((segmentAngle/2) * Math.PI/180)}% 100% ${50 - 50 * Math.sin((segmentAngle/2) * Math.PI/180)}%)`;
+        seg.textContent = items[i].title.substring(0,8);
+        wheelInner.appendChild(seg);
+      }
+    }
+
+    function spinWheel(targetIndex, totalItems, duration){
+      if(!wheelInner || animationsDisabled()) return Promise.resolve();
+      const segmentAngle = 360 / Math.min(totalItems, 20);
+      const spins = 5;
+      const finalAngle = spins * 360 - (targetIndex * segmentAngle);
+      wheelInner.style.transition = 'none';
+      wheelInner.style.transform = 'rotate(0deg)';
+      return new Promise(resolve => {
+        window.setTimeout(() => {
+          if(window.anime){
+            window.anime({
+              targets: wheelInner,
+              rotate: [0, finalAngle],
+              duration: duration,
+              easing: 'easeOutCubic',
+              update: () => {
+                wheelInner.style.transition = 'none';
+              },
+              complete: resolve
+            });
+          } else {
+            wheelInner.style.transition = `transform ${duration}ms ease-out`;
+            wheelInner.style.transform = `rotate(${finalAngle}deg)`;
+            window.setTimeout(resolve, duration);
+          }
+        }, 50);
+      });
+    }
+
+    spinBtn.addEventListener('click', ()=>{
+      statusEl.textContent = 'Spinning...';
+      titleEl.textContent = 'Choosing a demon';
+      rankEl.textContent = 'Rank: -';
+      idEl.textContent = 'Level ID: -';
+      noteEl.textContent = 'Checking your local file and API if needed.';
+      openEl.hidden = true;
+      if(pctRow) pctRow.hidden = true;
+      if(pctHint) pctHint.textContent = '';
+      spinBtn.classList.add('btn-loading');
+      spinBtn.disabled = true;
+      if(window.anime && !animationsDisabled()){
+        window.anime({ targets: spinBtn, scale: [1, 1.05, 1], duration: 600, easing: 'easeInOutSine', loop: true });
+      }
+      Promise.all([loadItems(), loadLevelMeta()]).then(([items, metaMap])=>{
+        if(!items.length){
+          statusEl.textContent = 'No demons found.';
+          titleEl.textContent = 'Add demons to the list';
+          idEl.textContent = 'Level ID: -';
+          noteEl.textContent = 'No list data was found.';
+          return;
+        }
+        buildWheel(items);
+        const targetIndex = Math.floor(Math.random()*Math.min(items.length, 20));
+        const item = items[targetIndex] || items[Math.floor(Math.random()*items.length)];
+        const spinDuration = getAnimationSpeed();
+        spinWheel(targetIndex, items.length, spinDuration).then(() => {
+          spinBtn.classList.remove('btn-loading');
+          spinBtn.disabled = false;
+          if(window.anime && !animationsDisabled()){
+            window.anime({ targets: spinBtn, scale: [1.05, 1], duration: 300, easing: 'easeOutBack' });
+          }
+          const localMeta = metaMap[item.title] || {levelId:'unknown', percent:'100'};
+          if(localMeta.levelId && localMeta.levelId !== 'unknown'){
+            showPick(item, {levelId: localMeta.levelId, percent: localMeta.percent, source: 'file'});
+            return;
+          }
+          fetchLevelIdFromApi(item.title).then(levelId=>{
+            const meta = {
+              levelId: levelId || 'unknown',
+              percent: localMeta.percent || '100',
+              source: levelId ? 'api' : 'file'
+            };
+            showPick(item, meta);
+          });
+        });
+      }).catch(err=>{
+        statusEl.textContent = 'Could not load the list.';
+        titleEl.textContent = 'Open the full site';
+        rankEl.textContent = 'Rank: -';
+        idEl.textContent = 'Level ID: -';
+        noteEl.textContent = 'The list or lookup failed.';
+        console.error(err);
+      });
+    });
+  }
+
+  if(page==='guess'){
+    const modeSelect = qs('guess-mode');
+    const startBtn = qs('guess-start');
+    const form = qs('guess-form');
+    const input = qs('guess-input');
+    const statusEl = qs('guess-status');
+    const titleEl = qs('guess-level-title');
+    const attemptsEl = qs('guess-attempts');
+    const feedbackEl = qs('guess-feedback');
+    const answerEl = qs('guess-answer');
+    const openEl = qs('guess-open');
+
+    const guessModes = {
+      casual: {label:'Casual', tries:6},
+      standard: {label:'Standard', tries:4},
+      hard: {label:'Hard', tries:3},
+      marathon: {label:'Marathon', tries:8}
+    };
+
+    const state = {
+      active: false,
+      triesLeft: guessModes.standard.tries,
+      answer: null,
+      item: null
+    };
+
+    function getRankedItems(items){
+      return items.slice().filter(item=>Number(item.position) > 0).sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+    }
+
+    function getSelectedMode(){
+      return guessModes[(modeSelect && modeSelect.value) || 'standard'] || guessModes.standard;
+    }
+
+    function resetGuessUi(message){
+      const mode = getSelectedMode();
+      state.active = false;
+      state.triesLeft = mode.tries;
+      state.answer = null;
+      state.item = null;
+      statusEl.textContent = message;
+      titleEl.textContent = 'No level selected';
+      attemptsEl.textContent = `Tries left: ${mode.tries}`;
+      feedbackEl.textContent = `Mode: ${mode.label}. Enter a rank number to start guessing.`;
+      answerEl.textContent = 'The correct rank will show here if you run out of guesses.';
+      openEl.hidden = true;
+      openEl.href = '#';
+      openEl.onclick = null;
+      input.value = '';
+    }
+
+    function finishRound(message, revealAnswer){
+      state.active = false;
+      statusEl.textContent = message;
+      attemptsEl.textContent = `Tries left: ${state.triesLeft}`;
+      answerEl.textContent = revealAnswer
+        ? `${state.item.title} is ranked #${state.answer}.`
+        : 'Correct. Start another round whenever you want.';
+      if(state.item && state.item.url){
+        openEl.hidden = false;
+        openEl.href = '#';
+        openEl.onclick = function(e){
+          e.preventDefault();
+          openVideoModal(state.item, {showRuns:false});
+        };
+      }
+      if(window.anime && !animationsDisabled()){
+        const speed = getAnimationSpeed();
+        window.anime({
+          targets: answerEl,
+          opacity: [0, 1],
+          translateY: [8, 0],
+          duration: speed * 0.5,
+          easing: 'easeOutCubic'
+        });
+      }
+    }
+
+    function startRound(){
+      const mode = getSelectedMode();
+      statusEl.textContent = 'Picking a level...';
+      attemptsEl.textContent = `Tries left: ${mode.tries}`;
+      feedbackEl.textContent = `Loading a ${mode.label.toLowerCase()} round.`;
+      answerEl.textContent = 'You will get hints after each wrong guess.';
+      openEl.hidden = true;
+      openEl.onclick = null;
+      input.value = '';
+      loadItems().then(items=>{
+        const rankedItems = getRankedItems(items);
+        if(!rankedItems.length){
+          resetGuessUi('No ranked levels were found.');
+          feedbackEl.textContent = 'Add list data first, then start another round.';
+          return;
+        }
+        const item = rankedItems[Math.floor(Math.random() * rankedItems.length)];
+        state.active = true;
+        state.triesLeft = mode.tries;
+        state.answer = Number(item.position);
+        state.item = item;
+        statusEl.textContent = 'Guess this level\'s rank.';
+        titleEl.textContent = item.title;
+        attemptsEl.textContent = `Tries left: ${mode.tries}`;
+        feedbackEl.textContent = `Mode: ${mode.label}. Guess the rank and I will tell you higher or lower.`;
+        answerEl.textContent = 'The correct rank will show here if you run out of guesses.';
+        input.value = '';
+        input.focus();
+      }).catch(err=>{
+        console.error(err);
+        resetGuessUi('Could not load the list for the guessing game.');
+        feedbackEl.textContent = 'Try again after the list finishes loading.';
+      });
+    }
+
+    function submitGuess(){
+      if(!state.active || !state.item){
+        feedbackEl.textContent = 'Start a round first so there is a level to guess.';
+        return;
+      }
+      const rawGuess = input.value.trim();
+      const guess = Number(rawGuess);
+      if(!rawGuess || !Number.isInteger(guess) || guess < 1){
+        feedbackEl.textContent = 'Enter a valid whole-number rank.';
+        return;
+      }
+      if(guess === state.answer){
+        feedbackEl.textContent = `Correct. ${state.item.title} is #${state.answer}.`;
+        feedbackEl.className = 'roulette-note muted guess-correct success-shine';
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: feedbackEl, scale: [1, 1.05, 1], duration: 600, easing: 'easeOutBack' });
+        }
+        // Celebration particles
+        createCelebrationParticles(10);
+        finishRound('You got it.', false);
+        return;
+      }
+      state.triesLeft -= 1;
+      attemptsEl.textContent = `Tries left: ${state.triesLeft}`;
+      const direction = guess < state.answer ? 'Higher' : 'Lower';
+      if(state.triesLeft > 0){
+        feedbackEl.textContent = `${direction}. #${guess} is not the right spot.`;
+        feedbackEl.className = 'roulette-note muted guess-wrong';
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: feedbackEl, translateX: [-6, 6, -6, 6, 0], duration: 400, easing: 'easeInOutQuad' });
+        }
+        return;
+      }
+      feedbackEl.textContent = `${direction}. That was your last guess.`;
+      feedbackEl.className = 'roulette-note muted guess-wrong';
+      finishRound('Round over.', true);
+    }
+
+    resetGuessUi('Start a round to get a level.');
+    if(modeSelect){
+      modeSelect.addEventListener('change', ()=>{
+        if(!state.active) resetGuessUi('Start a round to get a level.');
+        const card = qs('guess-card');
+        if(card && window.anime && !animationsDisabled()){
+          card.classList.add('mode-switching');
+          window.anime({
+            targets: card,
+            opacity: [0.5, 1],
+            duration: 300,
+            easing: 'easeOutQuad',
+            complete: () => { card.classList.remove('mode-switching'); }
+          });
+        }
+      });
+    }
+    startBtn.addEventListener('click', startRound);
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      submitGuess();
+    });
+  }
+
+  // Players page
+  if(page==='players'){
+    const playersArea = qs('players-area');
+    const searchEl = qs('search');
+    const filterSelect = qs('group-filter');
+    const groupsEl = qs('player-groups');
+    if(!playersArea || !searchEl || !filterSelect || !groupsEl) return;
+
+    let players = [];
+
+    function getGroupKey(name){
+      const first = String(name || '').trim().charAt(0).toUpperCase();
+      return first.match(/[A-Z0-9]/) ? first : '#';
+    }
+
+    function computeGroups(items){
+      const set = new Set();
+      items.forEach(item => set.add(getGroupKey(item.name)));
+      return Array.from(set).sort((a,b)=> a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b));
+    }
+
+    function setupGroups(items){
+      const groups = computeGroups(items);
+      groupsEl.innerHTML = '';
+      filterSelect.innerHTML = '<option value="all">All players</option>';
+      groups.forEach(group => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = group;
+        btn.className = 'level-link';
+        btn.addEventListener('click', () => {
+          filterSelect.value = group;
+          renderTable();
+          groupsEl.querySelectorAll('.level-link').forEach(el=>el.classList.remove('active'));
+          btn.classList.add('active');
+        });
+        li.appendChild(btn);
+        groupsEl.appendChild(li);
+
+        const opt = document.createElement('option');
+        opt.value = group;
+        opt.textContent = group;
+        filterSelect.appendChild(opt);
+      });
+    }
+
+    function buildPlayers(runs, listItems){
+      const lookup = new Map(listItems.map(item => [String(item.title || '').toLowerCase(), Number(item.position) || 9999]));
+      const map = new Map();
+      runs.filter(run => String(run.status || '').toLowerCase() === 'approved').forEach(run => {
+        const playerName = String(run.playerName || '').trim();
+        if(!playerName) return;
+        const key = playerName.toLowerCase();
+        let entry = map.get(key);
+        if(!entry){
+          entry = {name: playerName, runs: 0, bestRank: 9999, points: 0, topLevels: new Set()};
+          map.set(key, entry);
+        }
+        entry.runs += 1;
+        const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
+        if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
+        if(rank > 0 && rank < 1000) entry.points += calculatePoints(rank);
+        if(run.levelTitle) entry.topLevels.add(String(run.levelTitle).trim());
+      });
+      return Array.from(map.values()).map(entry => ({
+        name: entry.name,
+        runs: entry.runs,
+        bestRank: entry.bestRank === 9999 ? '—' : `#${entry.bestRank}`,
+        points: entry.points,
+        topLevels: Array.from(entry.topLevels).slice(0, 3).join(', ')
+      })).sort((a,b) => {
+        if(b.points !== a.points) return b.points - a.points;
+        const aRank = typeof a.bestRank === 'string' ? Number(a.bestRank.slice(1)) || 9999 : a.bestRank;
+        const bRank = typeof b.bestRank === 'string' ? Number(b.bestRank.slice(1)) || 9999 : b.bestRank;
+        if(aRank !== bRank) return aRank - bRank;
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function renderTable(){
+      const query = String(searchEl.value || '').toLowerCase().trim();
+      const filterValue = filterSelect.value || 'all';
+      const filtered = players.filter(item => {
+        if(filterValue !== 'all' && getGroupKey(item.name) !== filterValue) return false;
+        if(!query) return true;
+        return item.name.toLowerCase().includes(query);
+      });
+
+      playersArea.innerHTML = '';
+      if(!filtered.length){
+        playersArea.innerHTML = '<tr><td colspan="5" class="muted">No player data found.</td></tr>';
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      filtered.forEach(item => {
+        const tr = document.createElement('tr');
+        const tdName = document.createElement('td'); tdName.textContent = item.name;
+        const tdRuns = document.createElement('td'); tdRuns.textContent = String(item.runs);
+        const tdPoints = document.createElement('td'); tdPoints.textContent = String(item.points);
+        const tdRank = document.createElement('td'); tdRank.textContent = item.bestRank;
+        const tdLevels = document.createElement('td'); tdLevels.textContent = item.topLevels;
+        tr.appendChild(tdName);
+        tr.appendChild(tdRuns);
+        tr.appendChild(tdPoints);
+        tr.appendChild(tdRank);
+        tr.appendChild(tdLevels);
+        fragment.appendChild(tr);
+      });
+      playersArea.appendChild(fragment);
+    }
+
+    function showLoading(){
+      playersArea.innerHTML = '<tr><td colspan="5" class="muted">Loading player stats...</td></tr>';
+    }
+
+    function syncView(newPlayers){
+      players = newPlayers;
+      setupGroups(players);
+      renderTable();
+    }
+
+    function loadPlayerStats(){
+      showLoading();
+      return Promise.all([loadRuns(), loadItems()])
+        .then(([runs, items]) => {
+          const computed = buildPlayers(runs, items);
+          syncView(computed);
+        })
+        .catch(err => {
+          console.error(err);
+          playersArea.innerHTML = '<tr><td colspan="5" class="muted">Could not load player stats.</td></tr>';
+        });
+    }
+
+    searchEl.addEventListener('input', debounce(renderTable, 120));
+    filterSelect.addEventListener('change', () => {
+      const activeBtn = Array.from(groupsEl.querySelectorAll('.level-link')).find(btn => btn.textContent === filterSelect.value);
+      groupsEl.querySelectorAll('.level-link').forEach(btn => btn.classList.toggle('active', btn === activeBtn));
+      renderTable();
+    });
+
+    loadPlayerStats();
+    bindLiveUpdates();
+    onRunsUpdate(() => {
+      loadPlayerStats();
+    });
+    onLiveUpdate(() => {
+      loadPlayerStats();
+    });
+  }
+
+  function initListPage(){
+    const levelsEl = qs('levels'); const listArea = qs('list-area'); const titleEl = qs('list-title');
+    const searchEl = qs('search');
+    const filterSelect = qs('level-filter');
+    let currentItems = [];
+    let controlsBound = false;
+    // Load hard-coded data file data.txt (category|position|title|url per line)
+    function loadData(){
+      const run = ()=>{
+        loadItems().then(items=>{
+          applyItems(items);
+        }).catch(err=>{listArea.innerHTML='<p class="muted">Failed to load list data.</p>'; console.error(err)});
+      };
+      fedlRefreshAuthState()
+        .then(()=> fedlPullUserStateToLocal(fedlServerUserId))
+        .finally(run);
+    }
+
+    function computeCategories(items){
+      const max = items.reduce((m,it)=>Math.max(m, Number(it.position)||0), 0);
+      const cats = ['Full List'];
+      for(let i=1;i<=max;i+=10){
+        const start = i; const end = Math.min(i+9, max);
+        cats.push(`Top ${start}-${end}`);
+      }
+      return cats;
+    }
+
+    function setupLevels(items){
+      const categories = computeCategories(items);
+      levelsEl.innerHTML='';
+      filterSelect.innerHTML = '<option value="all">Full List</option>';
+      categories.forEach(cat=>{
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = cat;
+        btn.className = 'level-link';
+        btn.addEventListener('click', ()=> {
+          selectLevel(cat, items, btn);
+          filterSelect.value = cat;
+        });
+        li.appendChild(btn);
+        levelsEl.appendChild(li);
+
+        const opt = document.createElement('option'); opt.value = cat; opt.textContent = cat; filterSelect.appendChild(opt);
+      });
+      if(!controlsBound){
+        searchEl.addEventListener('input', debounce(()=> renderTable(currentItems), 120));
+        filterSelect.addEventListener('change', ()=> renderTable(currentItems));
+        controlsBound = true;
+      }
+    }
+
+    function selectLevel(level, items, linkEl){
+      levelsEl.querySelectorAll('.level-link').forEach(a=>a.classList.remove('active'));
+      if(linkEl) linkEl.classList.add('active');
+      qs('level-filter').value = level;
+      renderTable(items);
+      if(window.anime && !animationsDisabled() && !listAnimationsDisabled()){
+        const tableWrap = document.querySelector('.table-wrap');
+        if(tableWrap){
+          window.anime({ targets: tableWrap, translateY: [8, 0], opacity: [0.7, 1], duration: 400, easing: 'easeOutQuad' });
+        }
+      }
+    }
+
+    function renderTable(items){
+      const q = (searchEl && searchEl.value || '').toLowerCase();
+      const levelFilter = (filterSelect && filterSelect.value) || 'all';
+      const filtered = items.filter(it=>{
+        if(levelFilter && levelFilter!=='all' && levelFilter!=='Full List'){
+          const m = levelFilter.match(/Top\s*(\d+)-(\d+)/i);
+          if(m){
+            const s = Number(m[1]); const e = Number(m[2]); const pos = Number(it.position)||0;
+            if(pos < s || pos > e) return false;
+          }
+        }
+        if(!q) return true;
+        return (it.title||'').toLowerCase().includes(q) || (it.level||'').toLowerCase().includes(q);
+      }).sort((a,b)=> (Number(a.position)||0)-(Number(b.position)||0));
+
+      const tbody = qs('list-area'); tbody.innerHTML='';
+      if((q || levelFilter !== 'all' && levelFilter !== 'Full List') && window.anime && !animationsDisabled()){
+        const tableWrap = document.querySelector('.table-wrap');
+        if(tableWrap){
+          window.anime({ targets: tableWrap, scale: [0.99, 1], duration: 300, easing: 'easeOutQuad' });
+        }
+      }
+      if(!filtered.length){
+        tbody.innerHTML = '<tr><td colspan="4" class="muted">No levels match this search or range.</td></tr>';
+        return;
+      }
+      currentItems = filtered;
+      const accId = fedlDataUserId();
+      const fragment = document.createDocumentFragment();
+      const allRows = [];
+      filtered.forEach(it=>{
+        const tr = document.createElement('tr');
+        if(window.anime && !animationsDisabled()){ tr.style.opacity = '0'; tr.style.transform = 'translateX(-20px) translateY(10px)'; }
+        const tdNum = document.createElement('td'); tdNum.textContent = it.position;
+        const tdTitle = document.createElement('td'); tdTitle.textContent = it.title;
+        const tdPct = document.createElement('td');
+        tdPct.className = 'list-my-progress-cell';
+        if(accId){
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.className = 'list-progress-input';
+          inp.value = fedlGetLevelPercent(accId, it.title) || '';
+          inp.placeholder = '%';
+          inp.title = 'Your progress for this level (this browser)';
+          inp.addEventListener('change', ()=>{
+            fedlSetLevelPercent(accId, it.title, inp.value);
+            if(window.anime && !animationsDisabled() && !listAnimationsDisabled()){
+              window.anime({ targets: inp, scale: [1, 1.08, 1], duration: 400, easing: 'easeOutBack' });
+            }
+          });
+          tdPct.appendChild(inp);
+        }else{
+          const span = document.createElement('span');
+          span.className = 'muted';
+          span.textContent = '—';
+          span.title = 'Create a profile on the Roulette page to save progress';
+          tdPct.appendChild(span);
+        }
+        const tdAct = document.createElement('td');
+        const a = document.createElement('a'); a.textContent='Open'; a.href='#'; a.className='btn';
+        a.addEventListener('click', (e)=>{e.preventDefault(); openVideoModal(it, {showRuns:true})});
+        tdAct.appendChild(a);
+        tr.appendChild(tdNum); tr.appendChild(tdTitle); tr.appendChild(tdPct); tr.appendChild(tdAct);
+        allRows.push(tr);
+        fragment.appendChild(tr);
+      });
+      tbody.appendChild(fragment);
+      if(window.anime && !animationsDisabled() && !listAnimationsDisabled()){
+        const speed = getAnimationSpeed();
+        const rowObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if(entry.isIntersecting){
+              const row = entry.target;
+              window.anime({
+                targets: row,
+                opacity: [0,1],
+                translateX: [-20,0],
+                translateY: [10,0],
+                duration: speed,
+                easing: 'easeOutCubic'
+              });
+              rowObserver.unobserve(row);
+            }
+          });
+        }, { threshold: 0.1 });
+        allRows.forEach(row => rowObserver.observe(row));
+      } else {
+        allRows.forEach(r => { r.style.opacity = '1'; r.style.transform = 'translateX(0) translateY(0)'; });
+      }
+    }
+
+    function applyItems(items){
+      const previousFilter = filterSelect.value || 'all';
+      currentItems = items.slice();
+      setupLevels(currentItems);
+      const availableFilters = Array.from(filterSelect.options).map(option=>option.value);
+      filterSelect.value = availableFilters.includes(previousFilter) ? previousFilter : 'all';
+      const activeText = filterSelect.value === 'all' ? 'Full List' : filterSelect.value;
+      levelsEl.querySelectorAll('.level-link').forEach(btn=>{
+        btn.classList.toggle('active', btn.textContent === activeText);
+      });
+      renderTable(currentItems);
+    }
+
+    loadData();
+    return {applyItems};
+  }
+
+  // Lists page
+  if(page==='lists'){
+    const listPage = initListPage();
+    document.addEventListener('fedl-auth-updated', ()=>{
+      loadItems().then(items=>listPage.applyItems(items)).catch(()=>{});
+    });
+    bindLiveUpdates();
+    onLiveUpdate(function(updatedItems){
+      listPage.applyItems(updatedItems);
+    });
+  }
+
+  if(page==='admelist'){
+    fedlRefreshAuthState().then(j=>{
+      if(!j) return;
+      const username = (j.username || '').toLowerCase();
+      if(!username || !MOD_USERS.map(m=>m.toLowerCase()).includes(username)){
+        window.location.href = 'index.html';
+      }
+    });
+    const loginScreenEl = qs('admin-login-screen');
+    const adminShellContentEl = qs('admin-shell-content');
+    const loginFormEl = qs('admin-login-form');
+    const adminPasswordEl = qs('admin-password');
+    const authStatusEl = qs('admin-auth-status');
+    const statusEl = qs('admin-status');
+    const listTbody = qs('admin-list-body');
+    const addBtn = qs('add-row');
+    const addRowBottomBtn = qs('add-row-bottom');
+    const saveBtn = qs('save-list');
+    const searchEl = qs('admin-search');
+    const runsStatusEl = qs('runs-admin-status');
+    const runsTbody = qs('run-admin-body');
+    const runSearchEl = qs('run-search');
+    const importStatusEl = qs('import-status');
+    const importPointercrateBtn = qs('import-pointercrate');
+    const importAredlBtn = qs('import-aredl');
+    const importTargetedOpenBtn = qs('import-targeted-open');
+    const importTargetedModal = qs('import-targeted-modal');
+    const importTargetedForm = qs('import-targeted-form');
+    const importTargetedSourceEl = qs('import-targeted-source');
+    const importTargetedQueryEl = qs('import-targeted-query');
+    const importTargetedQueryLabelEl = qs('import-targeted-query-label');
+    const importTargetedSubmitBtn = qs('import-targeted-submit');
+    const importTargetedCancelBtn = qs('import-targeted-cancel');
+    const bulkApproveOpenBtn = qs('bulk-approve-open');
+    const bulkApproveModal = qs('bulk-approve-modal');
+    const bulkApproveForm = qs('bulk-approve-form');
+    const bulkApprovePlayerInput = qs('bulk-approve-player');
+    const bulkApproveNotesInput = qs('bulk-approve-notes');
+    const bulkApprovePreviewEl = qs('bulk-approve-preview');
+    const bulkApproveCancelBtn = qs('bulk-approve-cancel');
+    const bulkApproveSubmitBtn = qs('bulk-approve-submit');
+    let items = [];
+    let runs = [];
+    const adminPasswordKey = 'fedl_admin_password';
+
+    function getAdminPassword(){
+      try{return sessionStorage.getItem(adminPasswordKey) || '';}
+      catch(e){return '';}
+    }
+
+    function setAdminPassword(password){
+      try{
+        if(password) sessionStorage.setItem(adminPasswordKey, password);
+        else sessionStorage.removeItem(adminPasswordKey);
+      }catch(e){}
+      if(adminPasswordEl) adminPasswordEl.value = password;
+      if(authStatusEl){
+        authStatusEl.textContent = password ? 'Password saved for this browser session.' : 'Saved only in this browser session.';
+        if(password) authStatusEl.classList.remove('error-text');
+      }
+    }
+
+    function authHeaders(extraHeaders){
+      const headers = Object.assign({}, extraHeaders || {});
+      const password = getAdminPassword();
+      if(password){
+        headers.Authorization = `Basic ${btoa(`fedl:${password}`)}`;
+      }
+      return headers;
+    }
+
+    function handleAdminAuthFailure(message){
+      setAdminPassword('');
+      document.body.classList.add('admin-locked');
+      if(adminShellContentEl) adminShellContentEl.hidden = true;
+      if(loginScreenEl) loginScreenEl.hidden = false;
+      if(authStatusEl){
+        authStatusEl.textContent = message || 'Admin password required or incorrect.';
+        authStatusEl.classList.add('error-text');
+      }
+    }
+
+    function unlockAdminShell(){
+      document.body.classList.remove('admin-locked');
+      if(loginScreenEl) loginScreenEl.hidden = true;
+      if(adminShellContentEl) adminShellContentEl.hidden = false;
+    }
+
+    function verifyAdminPassword(){
+      if(!getAdminPassword()){
+        handleAdminAuthFailure('Enter the admin password to continue.');
+        return Promise.resolve(false);
+      }
+      return fetch(`${liveRunsUrl}/__authcheck__`, {
+        method:'DELETE',
+        headers:authHeaders()
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(r.status !== 404 && r.status !== 204) throw new Error('Verify failed');
+        return true;
+      }).then(ok=>{
+        unlockAdminShell();
+        loadAdmin();
+        loadRunsAdmin();
+        return ok;
+      }).catch(err=>{
+        console.error(err);
+        handleAdminAuthFailure('Wrong admin password. Try again.');
+        return false;
+      });
+    }
+
+    if(loginFormEl){
+      loginFormEl.addEventListener('submit', function(event){
+        event.preventDefault();
+        setAdminPassword((adminPasswordEl && adminPasswordEl.value || '').trim());
+        if(authStatusEl){
+          authStatusEl.textContent = 'Checking password...';
+          authStatusEl.classList.remove('error-text');
+        }
+        verifyAdminPassword();
+      });
+    }
+
+    if(getAdminPassword()){
+      verifyAdminPassword();
+    }
+
+    function setStatus(message, isError){
+      if(!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function setRunsStatus(message, isError){
+      if(!runsStatusEl) return;
+      runsStatusEl.textContent = message;
+      runsStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function filteredItems(){
+      const query = (searchEl && searchEl.value || '').trim().toLowerCase();
+      if(!query) return items;
+      return items.filter(item=>{
+        return [item.level, item.position, item.title, item.url].some(value=>
+          String(value || '').toLowerCase().includes(query)
+        );
+      });
+    }
+
+    function normalizePositions(){
+      let position = 1;
+      items.forEach(item=>{
+        if(item._isDraft){
+          item.position = '';
+          return;
+        }
+        item.position = String(position);
+        position += 1;
+      });
+    }
+
+    function moveItemToPosition(index, rawPosition){
+      if(!items[index]) return;
+      const parsedPosition = Number(rawPosition);
+      if(!Number.isFinite(parsedPosition) || parsedPosition < 1) return;
+      const nextPosition = Math.max(1, parsedPosition);
+      const [item] = items.splice(index, 1);
+      item._isDraft = false;
+      const drafts = items.filter(entry=>entry._isDraft);
+      const ranked = items.filter(entry=>!entry._isDraft);
+      const targetIndex = Math.min(ranked.length, nextPosition - 1);
+      ranked.splice(targetIndex, 0, item);
+      items = drafts.concat(ranked);
+      normalizePositions();
+    }
+
+    function renderAdminTable(){
+      const rows = filteredItems();
+      listTbody.innerHTML = '';
+      rows.forEach(item=>{
+        const actualIndex = items.indexOf(item);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input data-field="position" data-index="${actualIndex}" type="number" min="1" value="${escapeAttr(item.position)}"></td>
+          <td><input data-field="level" data-index="${actualIndex}" type="text" value="${escapeAttr(item.level)}"></td>
+          <td><input data-field="title" data-index="${actualIndex}" type="text" value="${escapeAttr(item.title)}"></td>
+          <td><input data-field="url" data-index="${actualIndex}" type="url" value="${escapeAttr(item.url)}"></td>
+          <td><button type="button" class="btn danger-btn small-btn" data-delete="${actualIndex}">Delete</button></td>
+        `;
+        listTbody.appendChild(tr);
+      });
+      if(!rows.length){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" class="muted">No rows match your search.</td>';
+        listTbody.appendChild(tr);
+      }
+    }
+
+    function filteredRuns(){
+      const query = (runSearchEl && runSearchEl.value || '').trim().toLowerCase();
+      if(!query) return runs;
+      return runs.filter(run=>{
+        return [
+          run.status,
+          run.playerName,
+          run.levelTitle,
+          run.videoUrl,
+          run.rawFootageUrl,
+          run.notes,
+          run.reviewNotes
+        ].some(value=>String(value || '').toLowerCase().includes(query));
+      });
+    }
+
+    function formatDate(value){
+      if(!value) return 'Unknown';
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return 'Unknown';
+      return date.toLocaleString();
+    }
+
+    function renderRunsTable(){
+      const rows = filteredRuns();
+      runsTbody.innerHTML = '';
+      rows.forEach(run=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="status-pill status-${escapeAttr(run.status || 'pending')}">${escapeHtml(run.status || 'pending')}</span></td>
+          <td><strong>${escapeHtml(run.playerName || 'Unknown')}</strong></td>
+          <td><strong>${escapeHtml(run.percent || '100')}%</strong></td>
+          <td>
+            <div class="run-admin-cell">
+              <strong>${escapeHtml(run.levelTitle || 'Untitled')}</strong>
+              <span class="muted small">${escapeHtml(run.notes || 'No submission notes.')}</span>
+            </div>
+          </td>
+          <td>${escapeHtml(formatDate(run.submittedAt))}</td>
+          <td>
+            <div class="run-admin-actions">
+              <a class="btn ghost-btn small-btn" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Video</a>
+              <button type="button" class="btn ghost-btn small-btn" data-run-action="approved" data-run-id="${escapeAttr(run.id)}">Approve</button>
+              <button type="button" class="btn ghost-btn small-btn" data-run-action="rejected" data-run-id="${escapeAttr(run.id)}">Reject</button>
+              <button type="button" class="btn danger-btn small-btn" data-run-delete="${escapeAttr(run.id)}">Delete</button>
+            </div>
+          </td>
+        `;
+        runsTbody.appendChild(tr);
+
+        const detailRow = document.createElement('tr');
+        detailRow.className = 'run-admin-detail-row';
+        detailRow.innerHTML = `
+          <td colspan="6">
+            <div class="run-admin-detail">
+              <span><strong>Raw:</strong> ${run.rawFootageUrl ? `<a href="${escapeAttr(run.rawFootageUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(run.rawFootageUrl)}</a>` : 'None provided'}</span>
+              <span><strong>Percent:</strong> ${escapeHtml(run.percent || '100')}%</span>
+              <span><strong>Reviewed by:</strong> ${escapeHtml(run.reviewedBy || 'Unassigned')}</span>
+              <span><strong>Review notes:</strong> ${escapeHtml(run.reviewNotes || 'No review notes yet.')}</span>
+            </div>
+          </td>
+        `;
+        runsTbody.appendChild(detailRow);
+      });
+      if(!rows.length){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="6" class="muted">No run submissions match your search.</td>';
+        runsTbody.appendChild(tr);
+      }
+    }
+
+    function saveItems(){
+      if(!canUseLiveServer){
+        setStatus('Start the Node server to save the live list.', true);
+        return Promise.resolve();
+      }
+      const hasUnplacedDraft = items.some(item=>{
+        const hasContent = String(item.title || '').trim() || String(item.url || '').trim() || String(item.level || '').trim();
+        return item._isDraft && hasContent;
+      });
+      if(hasUnplacedDraft){
+        setStatus('Give each new row a number before saving.', true);
+        return Promise.resolve();
+      }
+      items = items
+        .map(item=>({
+          level: String(item.level || '').trim() || 'new',
+          position: String(item.position || '').trim(),
+          title: String(item.title || '').trim(),
+          url: String(item.url || '').trim()
+        }))
+        .filter(item=>item.title);
+      normalizePositions();
+      return fetch(liveApiUrl, {
+        method:'PUT',
+        headers:authHeaders({'Content-Type':'application/json'}),
+        body: JSON.stringify({text: formatData(items)})
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(!r.ok) throw new Error('Save failed');
+        clearItemsCache();
+        renderAdminTable();
+        setStatus('Saved. Live pages update automatically.');
+      }).catch(err=>{
+        console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above, then try again.', setStatus);
+          return;
+        }
+        setStatus('Could not save. Check the live server endpoint.', true);
+      });
+    }
+
+    function loadAdmin(){
+      loadItems().then(loaded=>{
+        items = loaded.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
+          level: item.level,
+          position: item.position,
+          title: item.title,
+          url: item.url,
+          _isDraft: false
+        }));
+        normalizePositions();
+        renderAdminTable();
+        setStatus('Connected to live list data.');
+        updateStats();
+      }).catch(err=>{
+        console.error(err);
+        setStatus('Could not load list data.', true);
+      });
+    }
+
+    function loadRunsAdmin(){
+      loadRuns().then(loadedRuns=>{
+        runs = loadedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+        renderRunsTable();
+        setRunsStatus('Connected to live run submissions.');
+        updateStats();
+      }).catch(err=>{
+        console.error(err);
+        setRunsStatus('Could not load run submissions.', true);
+      });
+    }
+
+    function updateRunStatus(runId, status){
+      if(!canUseLiveServer){
+        setRunsStatus('Start the Node server to review submissions.', true);
+        return;
+      }
+      const run = runs.find(entry=>entry.id === runId);
+      if(!run) return;
+      const reviewNotes = window.prompt(`Review notes for ${run.levelTitle} (${status})`, run.reviewNotes || '');
+      if(reviewNotes === null) return;
+      fetch(`${liveRunsUrl}/${encodeURIComponent(runId)}`, {
+        method:'PUT',
+        headers:authHeaders({'Content-Type':'application/json'}),
+        body: JSON.stringify({
+          ...run,
+          status,
+          reviewNotes,
+          reviewedBy: fedlServerUsername || 'FEDL Admin'
+        })
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(!r.ok) throw new Error('Run update failed');
+        clearRunsCache();
+        setRunsStatus(`Run marked ${status}.`);
+        return refreshRuns();
+      }).catch(err=>{
+        console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above to review runs.', setRunsStatus);
+          return;
+        }
+        setRunsStatus('Could not update that run.', true);
+      });
+    }
+
+    function deleteRun(runId){
+      if(!canUseLiveServer){
+        setRunsStatus('Start the Node server to delete submissions.', true);
+        return;
+      }
+      fetch(`${liveRunsUrl}/${encodeURIComponent(runId)}`, {
+        method:'DELETE',
+        headers:authHeaders()
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(!r.ok) throw new Error('Run delete failed');
+        clearRunsCache();
+        setRunsStatus('Run removed from the queue.');
+        return refreshRuns();
+      }).catch(err=>{
+        console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above to delete runs.', setRunsStatus);
+          return;
+        }
+        setRunsStatus('Could not delete that run.', true);
+      });
+    }
+
+    listTbody.addEventListener('input', function(event){
+      const target = event.target;
+      const field = target.getAttribute('data-field');
+      const index = Number(target.getAttribute('data-index'));
+      if(!field || Number.isNaN(index) || !items[index]) return;
+      if(field === 'position') return;
+      items[index][field] = target.value;
+      setStatus('Unsaved changes');
+    });
+
+    listTbody.addEventListener('focusout', function(event){
+      const target = event.target;
+      if(!(target instanceof HTMLElement)) return;
+      const field = target.getAttribute('data-field');
+      const index = Number(target.getAttribute('data-index'));
+      if(field !== 'position' || Number.isNaN(index) || !items[index]) return;
+      moveItemToPosition(index, target.value);
+      renderAdminTable();
+      setStatus('Unsaved changes');
+    });
+
+    listTbody.addEventListener('click', function(event){
+      const deleteButton = event.target.closest('[data-delete]');
+      if(deleteButton){
+        const deleteIndex = deleteButton.getAttribute('data-delete');
+        if(deleteIndex == null) return;
+        const index = Number(deleteIndex);
+        if(Number.isNaN(index)) return;
+        items.splice(index, 1);
+        normalizePositions();
+        renderAdminTable();
+        setStatus('Row removed. Save when ready.');
+      }
+    });
+
+    runsTbody.addEventListener('click', function(event){
+      const actionButton = event.target.closest('[data-run-action]');
+      if(actionButton){
+        updateRunStatus(
+          actionButton.getAttribute('data-run-id'),
+          actionButton.getAttribute('data-run-action')
+        );
+        return;
+      }
+      const deleteButton = event.target.closest('[data-run-delete]');
+      if(deleteButton){
+        const runId = deleteButton.getAttribute('data-run-delete');
+        if(runId && window.confirm('Delete this run submission?')){
+          deleteRun(runId);
+        }
+      }
+    });
+
+    addBtn.addEventListener('click', function(){
+      items.unshift({level:'new', position:'', title:'', url:'', _isDraft:true});
+      normalizePositions();
+      renderAdminTable();
+      setStatus('New row added at the top. Give it a number when you want to place it.');
+    });
+
+    if(addRowBottomBtn){
+      addRowBottomBtn.addEventListener('click', function(){
+        items.push({level:'new', position:'', title:'', url:'', _isDraft:true});
+        normalizePositions();
+        renderAdminTable();
+        setStatus('New row added at the bottom.');
+      });
+    }
+
+    saveBtn.addEventListener('click', function(){
+      saveItems();
+    });
+
+    if(searchEl){
+      searchEl.addEventListener('input', debounce(()=> renderAdminTable(), 120));
+      searchEl.addEventListener('input', function(){
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: this, scale: [1, 1.02, 1], duration: 400, easing: 'easeOutQuad' });
+        }
+      });
+    }
+    if(runSearchEl){
+      runSearchEl.addEventListener('input', renderRunsTable);
+    }
+    if(adminPasswordEl){
+      setAdminPassword(getAdminPassword());
+    }
+
+    function setImportStatus(message, isError){
+      if(!importStatusEl) return;
+      importStatusEl.textContent = message;
+      importStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function toggleImportButtons(enabled){
+      [importPointercrateBtn, importAredlBtn, importTargetedOpenBtn, bulkApproveOpenBtn].forEach(btn=>{ if(btn) btn.disabled = !enabled; });
+    }
+
+    function updateImportTargetedQueryLabel(){
+      if(!importTargetedQueryLabelEl) return;
+      const levelRadio = document.querySelector('input[name="import-targeted-filter"][value="level"]');
+      const isLevel = levelRadio && levelRadio.checked;
+      importTargetedQueryLabelEl.textContent = isLevel ? 'Level name or id' : 'Player name';
+      if(importTargetedQueryEl){
+        importTargetedQueryEl.placeholder = isLevel ? 'e.g. Acheron or demon id' : 'Name as on the list';
+      }
+    }
+    function openImportTargetedModal(){
+      if(!importTargetedModal) return;
+      importTargetedModal.hidden = false;
+      if(importTargetedForm) importTargetedForm.reset();
+      const playerRadio = document.querySelector('input[name="import-targeted-filter"][value="player"]');
+      if(playerRadio) playerRadio.checked = true;
+      updateImportTargetedQueryLabel();
+      if(importTargetedQueryEl) importTargetedQueryEl.focus();
+    }
+    function closeImportTargetedModal(){
+      if(importTargetedModal) importTargetedModal.hidden = true;
+    }
+    function submitImportTargeted(event){
+      event.preventDefault();
+      if(!canUseLiveServer){
+        setImportStatus('Start the Node server to use the import tool.', true);
+        return;
+      }
+      const source = importTargetedSourceEl && String(importTargetedSourceEl.value || '').trim();
+      const filterRadio = document.querySelector('input[name="import-targeted-filter"]:checked');
+      const filter = filterRadio && String(filterRadio.value || '').trim();
+      const query = importTargetedQueryEl && String(importTargetedQueryEl.value || '').trim();
+      if(!source || !filter || !query) return;
+      if(importTargetedSubmitBtn) importTargetedSubmitBtn.disabled = true;
+      setImportStatus(`Fetching ${source} records…`);
+      toggleImportButtons(false);
+      fetch(liveApiPath('/api/import/targeted'), {
+        method: 'POST',
+        headers: authHeaders({'Content-Type':'application/json'}),
+        body: JSON.stringify({ source, filter, query })
+      }).then(async response=>{
+        const payload = await response.json().catch(()=>({}));
+        if(response.status === 401) throw new Error('Admin auth failed');
+        if(!response.ok) throw new Error(payload.error || `Import failed (${response.status})`);
+        return payload;
+      }).then(payload=>{
+        clearRunsCache();
+        const matched = Number(payload.matched) || 0;
+        const added = Number(payload.added) || 0;
+        const skipped = Number(payload.skipped) || 0;
+        setImportStatus(
+          `Targeted import: ${matched} API record${matched === 1 ? '' : 's'} matched, ${added} added, ${skipped} skipped (duplicates or missing video). Notes set to “Valid run”.`
+        );
+        closeImportTargetedModal();
+        return refreshRuns();
+      }).catch(err=>{
+        console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above, then try again.', setImportStatus);
+          closeImportTargetedModal();
+          return;
+        }
+        setImportStatus(err.message || 'Targeted import failed.', true);
+      }).finally(()=>{
+        if(importTargetedSubmitBtn) importTargetedSubmitBtn.disabled = false;
+        toggleImportButtons(true);
+      });
+    }
+
+    let bulkApprovePreviewTimer = null;
+    function countPendingRunsForPlayer(name){
+      const q = String(name || '').trim().toLowerCase();
+      if(!q) return 0;
+      return runs.filter(run=>{
+        const st = String(run.status || 'pending').toLowerCase();
+        const pn = String(run.playerName || '').trim().toLowerCase();
+        return st === 'pending' && pn === q;
+      }).length;
+    }
+    function updateBulkApprovePreview(){
+      if(!bulkApprovePreviewEl || !bulkApprovePlayerInput) return;
+      const n = countPendingRunsForPlayer(bulkApprovePlayerInput.value);
+      const label = String(bulkApprovePlayerInput.value || '').trim();
+      if(!label){
+        bulkApprovePreviewEl.textContent = '';
+        return;
+      }
+      bulkApprovePreviewEl.textContent = n
+        ? `${n} pending run${n === 1 ? '' : 's'} match this name in the current queue.`
+        : 'No pending runs match this name in the current queue.';
+    }
+    function openBulkApproveModal(){
+      if(!bulkApproveModal) return;
+      bulkApproveModal.hidden = false;
+      if(bulkApproveForm) bulkApproveForm.reset();
+      updateBulkApprovePreview();
+      if(bulkApprovePlayerInput){
+        bulkApprovePlayerInput.focus();
+      }
+    }
+    function closeBulkApproveModal(){
+      if(bulkApproveModal) bulkApproveModal.hidden = true;
+      if(bulkApprovePreviewTimer){
+        clearTimeout(bulkApprovePreviewTimer);
+        bulkApprovePreviewTimer = null;
+      }
+    }
+    function submitBulkApprove(event){
+      event.preventDefault();
+      if(!canUseLiveServer){
+        setImportStatus('Start the Node server to use the import tool.', true);
+        return;
+      }
+      const playerName = bulkApprovePlayerInput && String(bulkApprovePlayerInput.value || '').trim();
+      if(!playerName) return;
+      const reviewNotesRaw = bulkApproveNotesInput && String(bulkApproveNotesInput.value || '').trim();
+      const body = { playerName };
+      if(reviewNotesRaw) body.reviewNotes = reviewNotesRaw;
+      if(bulkApproveSubmitBtn) bulkApproveSubmitBtn.disabled = true;
+      setImportStatus('Bulk-approving pending runs for that player...');
+      fetch(`${liveRunsUrl}/bulk-approve`, {
+        method: 'POST',
+        headers: authHeaders({'Content-Type':'application/json'}),
+        body: JSON.stringify(body)
+      }).then(async response=>{
+        const payload = await response.json().catch(()=>({}));
+        if(response.status === 401) throw new Error('Admin auth failed');
+        if(!response.ok) throw new Error(payload.error || `Bulk approve failed (${response.status})`);
+        return payload;
+      }).then(payload=>{
+        clearRunsCache();
+        const n = Number(payload.approved) || 0;
+        setImportStatus(n ? `Bulk approve done: ${n} pending run${n === 1 ? '' : 's'} approved for ${playerName}.` : `No pending runs to approve for ${playerName}.`);
+        closeBulkApproveModal();
+        return refreshRuns();
+      }).catch(err=>{
+        console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above, then try again.', setImportStatus);
+          closeBulkApproveModal();
+          return;
+        }
+        setImportStatus(err.message || 'Bulk approve failed.', true);
+      }).finally(()=>{
+        if(bulkApproveSubmitBtn) bulkApproveSubmitBtn.disabled = false;
+      });
+    }
+
+    function runImport(path, label){
+      setImportStatus(`Importing ${label} runs...`);
+      toggleImportButtons(false);
+      return fetch(liveApiPath(path), {
+        method: 'POST',
+        headers: authHeaders({'Content-Type':'application/json'})
+      }).then(async response => {
+        const payload = await response.json().catch(()=>({}));
+        if(response.status === 401){
+          throw new Error('Admin auth failed');
+        }
+        if(!response.ok){
+          throw new Error(payload.error || `Import failed with status ${response.status}`);
+        }
+        return payload;
+      }).then(payload => {
+        setImportStatus(`${label} import complete. Added ${payload.added || 0} runs, skipped ${payload.skipped || 0}.`);
+        refreshRuns().catch(()=>{});
+      }).catch(error => {
+        console.error(error);
+        if(error.message === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above, then try again.', setImportStatus);
+          return;
+        }
+        setImportStatus(error.message || 'Import failed.', true);
+      }).finally(()=>{
+        toggleImportButtons(true);
+      });
+    }
+
+    if(importPointercrateBtn){
+      importPointercrateBtn.addEventListener('click', ()=> runImport('/api/import/pointercrate', 'Pointercrate'));
+    }
+    if(importAredlBtn){
+      importAredlBtn.addEventListener('click', ()=> runImport('/api/import/aredl', 'AREDL'));
+    }
+
+    if(importTargetedOpenBtn){
+      importTargetedOpenBtn.addEventListener('click', ()=> openImportTargetedModal());
+    }
+    if(importTargetedCancelBtn){
+      importTargetedCancelBtn.addEventListener('click', ()=> closeImportTargetedModal());
+    }
+    if(importTargetedModal){
+      importTargetedModal.addEventListener('click', event=>{
+        if(event.target === importTargetedModal) closeImportTargetedModal();
+      });
+    }
+    if(importTargetedForm){
+      importTargetedForm.addEventListener('submit', submitImportTargeted);
+      importTargetedForm.querySelectorAll('input[name="import-targeted-filter"]').forEach(radio=>{
+        radio.addEventListener('change', updateImportTargetedQueryLabel);
+      });
+    }
+
+    if(bulkApproveOpenBtn){
+      bulkApproveOpenBtn.addEventListener('click', ()=> openBulkApproveModal());
+    }
+    if(bulkApproveCancelBtn){
+      bulkApproveCancelBtn.addEventListener('click', ()=> closeBulkApproveModal());
+    }
+    if(bulkApproveModal){
+      bulkApproveModal.addEventListener('click', event=>{
+        if(event.target === bulkApproveModal) closeBulkApproveModal();
+      });
+    }
+    if(bulkApproveForm){
+      bulkApproveForm.addEventListener('submit', submitBulkApprove);
+    }
+    if(bulkApprovePlayerInput){
+      bulkApprovePlayerInput.addEventListener('input', ()=>{
+        if(bulkApprovePreviewTimer) clearTimeout(bulkApprovePreviewTimer);
+        bulkApprovePreviewTimer = setTimeout(updateBulkApprovePreview, 200);
+      });
+    }
+    document.addEventListener('keydown', event=>{
+      if(event.key !== 'Escape') return;
+      if(importTargetedModal && !importTargetedModal.hidden){
+        closeImportTargetedModal();
+        return;
+      }
+      if(bulkApproveModal && !bulkApproveModal.hidden) closeBulkApproveModal();
+    });
+    document.addEventListener('keydown', event=>{
+      if(event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
+      const key = event.key.toLowerCase();
+      if(key === '/' && !event.ctrlKey && !event.metaKey){
+        event.preventDefault();
+        const searchInput = document.querySelector('.search-row input[type="text"], #list-search, .levels-table input');
+        if(searchInput) searchInput.focus();
+      }
+      if(key === 'h' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'index.html';
+      }
+      if(key === 'l' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'lists.html';
+      }
+      if(key === 'r' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'run.html';
+      }
+      if(key === '?' && !event.ctrlKey && !event.metaKey){
+        window.location.href = 'rules.html';
+      }
+    });
+
+    bindLiveUpdates();
+    onLiveUpdate(function(updatedItems){
+      items = updatedItems.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
+        level: item.level,
+        position: item.position,
+        title: item.title,
+        url: item.url,
+        _isDraft: false
+      }));
+      normalizePositions();
+      renderAdminTable();
+      setStatus('List reloaded from live server.');
+    });
+    onRunsUpdate(function(updatedRuns){
+      runs = updatedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+      renderRunsTable();
+      setRunsStatus('Run queue reloaded from the live server.');
+    });
+
+    loadAdmin();
+    loadRunsAdmin();
+
+    const bugReportsBody = qs('bug-reports-body');
+    const bugReportSearchEl = qs('bug-report-search');
+    const bugReportsStatusEl = qs('bug-reports-admin-status');
+    let bugReports = [];
+
+    function setBugReportsStatus(message, isError){
+      if(!bugReportsStatusEl) return;
+      bugReportsStatusEl.textContent = message;
+      bugReportsStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function loadBugReports(){
+      if(!canUseLiveServer){
+        setBugReportsStatus('Start the Node server to load bug reports.', true);
+        return Promise.resolve([]);
+      }
+      return fetch(`${liveServerBase}/api/bugreports`, {
+        method: 'GET',
+        headers: authHeaders()
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(!r.ok) throw new Error('Failed to load bug reports');
+        return r.json();
+      }).then(payload=>{
+        return Array.isArray(payload.items) ? payload.items : [];
+      }).catch(err=>{
+        console.error(err);
+        setBugReportsStatus('Could not load bug reports.', true);
+        return [];
+      });
+    }
+
+    function refreshBugReports(){
+      return loadBugReports().then(loaded=>{
+        bugReports = loaded.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+        renderBugReportsTable();
+        updateStats();
+      });
+    }
+
+    function filteredBugReports(){
+      const query = (bugReportSearchEl && bugReportSearchEl.value || '').trim().toLowerCase();
+      if(!query) return bugReports;
+      return bugReports.filter(report=>{
+        return [
+          report.category,
+          report.status,
+          report.subject,
+          report.description,
+          report.accountUsername
+        ].some(value=>String(value || '').toLowerCase().includes(query));
+      });
+    }
+
+    function renderBugReportsTable(){
+      const rows = filteredBugReports();
+      if(!bugReportsBody) return;
+      bugReportsBody.innerHTML = '';
+      rows.forEach(report=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="status-pill status-${escapeAttr(report.category || 'other')}">${escapeHtml(report.category || 'other')}</span></td>
+          <td><span class="status-pill status-${escapeAttr(report.status || 'open')}">${escapeHtml(report.status || 'open')}</span></td>
+          <td><strong>${escapeHtml(report.accountUsername || 'Anonymous')}</strong></td>
+          <td>
+            <div class="run-admin-cell">
+              <strong>${escapeHtml(report.subject || 'Untitled')}</strong>
+              <span class="muted small">${escapeHtml((report.description || '').slice(0, 100))}${report.description && report.description.length > 100 ? '...' : ''}</span>
+            </div>
+          </td>
+          <td>${escapeHtml(formatDate(report.submittedAt))}</td>
+          <td>
+            <div class="run-admin-actions">
+              <button type="button" class="btn ghost-btn small-btn" data-bug-action="resolved" data-bug-id="${escapeAttr(report.id)}">Resolve</button>
+              <button type="button" class="btn danger-btn small-btn" data-bug-delete="${escapeAttr(report.id)}">Delete</button>
+            </div>
+          </td>
+        `;
+        bugReportsBody.appendChild(tr);
+
+        const detailRow = document.createElement('tr');
+        detailRow.className = 'bug-report-detail-row';
+        detailRow.innerHTML = `
+          <td colspan="6">
+            <div class="bug-report-detail">
+              <span><strong>Email:</strong> ${report.email ? escapeHtml(report.email) : 'Not provided'}</span>
+              <span><strong>Description:</strong> ${escapeHtml(report.description || 'No description')}</span>
+            </div>
+          </td>
+        `;
+        bugReportsBody.appendChild(detailRow);
+      });
+      if(!rows.length){
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="6" class="muted">No bug reports match your search.</td>';
+        bugReportsBody.appendChild(tr);
+      }
+    }
+
+    function updateBugReportStatus(reportId, status){
+      if(!canUseLiveServer){
+        setBugReportsStatus('Start the Node server to update bug reports.', true);
+        return;
+      }
+      const report = bugReports.find(entry=>entry.id === reportId);
+      if(!report) return;
+      fetch(`${liveServerBase}/api/bugreports/${encodeURIComponent(reportId)}`, {
+        method:'PUT',
+        headers:authHeaders({'Content-Type':'application/json'}),
+        body: JSON.stringify({
+          ...report,
+          status
+        })
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(!r.ok) throw new Error('Bug report update failed');
+        return refreshBugReports();
+      }).then(()=>{
+        setBugReportsStatus(`Bug report marked ${status}.`);
+      }).catch(err=>{
+        console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above to update bug reports.', setBugReportsStatus);
+          return;
+        }
+        setBugReportsStatus('Could not update that bug report.', true);
+      });
+    }
+
+    function deleteBugReport(reportId){
+      if(!canUseLiveServer){
+        setBugReportsStatus('Start the Node server to delete bug reports.', true);
+        return;
+      }
+      fetch(`${liveServerBase}/api/bugreports/${encodeURIComponent(reportId)}`, {
+        method:'DELETE',
+        headers:authHeaders()
+      }).then(r=>{
+        if(r.status === 401) throw new Error('Admin auth failed');
+        if(!r.ok) throw new Error('Bug report delete failed');
+        return refreshBugReports();
+      }).then(()=>{
+        setBugReportsStatus('Bug report removed.');
+      }).catch(err=>{
+        console.error(err);
+        if(String(err && err.message || '') === 'Admin auth failed'){
+          handleAdminAuthFailure('Wrong admin password. Enter it above to delete bug reports.', setBugReportsStatus);
+          return;
+        }
+        setBugReportsStatus('Could not delete that bug report.', true);
+      });
+    }
+
+    if(bugReportsBody){
+      bugReportsBody.addEventListener('click', function(event){
+        const actionButton = event.target.closest('[data-bug-action]');
+        if(actionButton){
+          updateBugReportStatus(
+            actionButton.getAttribute('data-bug-id'),
+            actionButton.getAttribute('data-bug-action')
+          );
+          return;
+        }
+        const deleteButton = event.target.closest('[data-bug-delete]');
+        if(deleteButton){
+          const reportId = deleteButton.getAttribute('data-bug-delete');
+          if(reportId && window.confirm('Delete this bug report?')){
+            deleteBugReport(reportId);
+          }
+        }
+      });
+    }
+
+    if(bugReportSearchEl){
+      bugReportSearchEl.addEventListener('input', renderBugReportsTable);
+    }
+
+    function updateStats(){
+      const totalRuns = Array.isArray(runs) ? runs.length : 0;
+      const pendingRuns = Array.isArray(runs) ? runs.filter(r=>String(r.status || '').toLowerCase() === 'pending').length : 0;
+      const levelsCount = items ? items.filter(i=>i && i.title && !i._isDraft).length : 0;
+      const openReports = Array.isArray(bugReports) ? bugReports.filter(r=>String(r.status || '').toLowerCase() === 'open').length : 0;
+      const statTotalRuns = qs('stat-total-runs');
+      const statPendingRuns = qs('stat-pending-runs');
+      const statLevelsCount = qs('stat-levels-count');
+      const statBugReports = qs('stat-bug-reports');
+      const statsStatusEl = qs('admin-stats-status');
+      if(statTotalRuns) statTotalRuns.textContent = totalRuns;
+      if(statPendingRuns) statPendingRuns.textContent = pendingRuns;
+      if(statLevelsCount) statLevelsCount.textContent = levelsCount;
+      if(statBugReports) statBugReports.textContent = openReports;
+      if(statsStatusEl) statsStatusEl.textContent = 'Stats loaded.';
+    }
+
+    if(bugReportsBody || qs('stat-total-runs')){
+      refreshBugReports().then(()=>{
+        setBugReportsStatus('Bug reports loaded.');
+      });
+    }
+
+    onLiveUpdate(function(updatedItems){
+      items = updatedItems.slice().sort((a,b)=>(Number(a.position) || 0) - (Number(b.position) || 0)).map(item=>({
+        level: item.level,
+        position: item.position,
+        title: item.title,
+        url: item.url,
+        _isDraft: false
+      }));
+      normalizePositions();
+      renderAdminTable();
+      setStatus('List reloaded from live server.');
+      updateStats();
+    });
+    onRunsUpdate(function(updatedRuns){
+      runs = updatedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+      renderRunsTable();
+      setRunsStatus('Run queue reloaded from the live server.');
+      updateStats();
+    });
+
+    const adminTabButtons = document.querySelectorAll('.admin-tab');
+    const adminTabPanels = document.querySelectorAll('.admin-tab-panel');
+
+    function switchAdminTab(tabName){
+      adminTabButtons.forEach(btn=>{
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+      });
+      adminTabPanels.forEach(panel=>{
+        panel.hidden = panel.id !== `tab-${tabName}`;
+      });
+    }
+
+    adminTabButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const tab = btn.getAttribute('data-tab');
+        if(tab) {
+          const panel = document.getElementById(`tab-${tab}`);
+          if(panel && window.anime && !animationsDisabled()){
+            panel.style.opacity = '0';
+            panel.style.transform = 'translateY(6px)';
+            window.anime({
+              targets: panel,
+              opacity: [0, 1],
+              translateY: [6, 0],
+              duration: 300,
+              easing: 'easeOutCubic'
+            });
+          }
+          switchAdminTab(tab);
+        }
+      });
+    });
+  }
+
+  if(page==='run'){
+    const form = qs('run-form');
+    const formStatusEl = qs('run-form-status');
+    const listStatusEl = qs('run-list-status');
+    const submissionsEl = qs('run-submissions');
+    const levelOptionsEl = qs('run-level-options');
+    const myRunsSection = qs('run-my-runs-section');
+    const savedRunsListEl = qs('run-saved-runs-list');
+    const saveAccountBtn = qs('run-save-account');
+    const playerNameInput = qs('run-player-name');
+
+    function setRunFormStatus(message, isError, isSuccess){
+      if(!formStatusEl) return;
+      formStatusEl.textContent = message;
+      formStatusEl.classList.toggle('error-text', !!isError);
+      formStatusEl.classList.toggle('success-text', !!isSuccess);
+    }
+
+    function setRunListStatus(message, isError){
+      if(!listStatusEl) return;
+      listStatusEl.textContent = message;
+      listStatusEl.classList.toggle('error-text', !!isError);
+    }
+
+    function showRunSubmissionsShimmer(){
+      if(!submissionsEl) return;
+      submissionsEl.textContent = '';
+      for(let i = 0; i < 4; i += 1){
+        const card = document.createElement('article');
+        card.className = 'submission-card submission-card--shimmer';
+        card.setAttribute('aria-hidden', 'true');
+        submissionsEl.appendChild(card);
+      }
+    }
+
+    function applyRunPlayerDefault(){
+      if(!playerNameInput || !fedlServerUsername) return;
+      if(String(playerNameInput.value || '').trim() !== '') return;
+      playerNameInput.value = fedlServerUsername;
+    }
+
+    function renderRunSubmissions(runs){
+      submissionsEl.innerHTML = '';
+      if(!runs.length){
+        submissionsEl.innerHTML = '<article class="submission-card"><strong>No runs submitted yet</strong><p>The live queue is empty right now.</p></article>';
+        return;
+      }
+      runs.slice(0, 8).forEach((run, idx)=>{
+        const card = document.createElement('article');
+        card.className = 'submission-card run-card-in';
+        card.style.animationDelay = `${idx * 60}ms`;
+        const acct = run.accountUsername
+          ? ` • Account: ${escapeHtml(run.accountUsername)}`
+          : '';
+        card.innerHTML = `
+          <div class="submission-card-top">
+            <strong>${escapeHtml(run.levelTitle || 'Untitled')}</strong>
+            <span class="status-pill status-${escapeAttr(run.status || 'pending')}">${escapeHtml(run.status || 'pending')}</span>
+          </div>
+          <p class="submission-meta">By ${escapeHtml(run.playerName || 'Unknown')} • ${escapeHtml(run.percent || '100')}% • ${escapeHtml(new Date(run.submittedAt).toLocaleString())}${acct}</p>
+          <p>${escapeHtml(run.reviewNotes || run.notes || 'No notes yet.')}</p>
+          <div class="submission-links">
+            <a class="text-link" href="${escapeAttr(run.videoUrl || '#')}" target="_blank" rel="noopener noreferrer">Watch run</a>
+          </div>
+        `;
+        submissionsEl.appendChild(card);
+      });
+    }
+
+    function renderMySavedRuns(){
+      if(!myRunsSection || !savedRunsListEl) return;
+      if(!fedlServerUserId){
+        myRunsSection.hidden = true;
+        if(saveAccountBtn) saveAccountBtn.hidden = true;
+        return;
+      }
+      myRunsSection.hidden = false;
+      if(saveAccountBtn) saveAccountBtn.hidden = false;
+      const p = fedlGetAccountPayload(fedlServerUserId);
+      const runs = p.savedRuns || [];
+      savedRunsListEl.textContent = '';
+      if(!runs.length){
+        const empty = document.createElement('p');
+        empty.className = 'muted';
+        empty.textContent = 'No runs saved yet. Fill the form and use "Save to my account" to keep drafts, or submit to the live queue.';
+        savedRunsListEl.appendChild(empty);
+        return;
+      }
+      runs.forEach((entry, idx)=>{
+        const card = document.createElement('article');
+        card.className = 'submission-card run-saved-card run-card-in';
+        card.style.animationDelay = `${idx * 60}ms`;
+        const top = document.createElement('div');
+        top.className = 'submission-card-top';
+        const strong = document.createElement('strong');
+        strong.textContent = entry.levelTitle || 'Untitled';
+        top.appendChild(strong);
+        const pill = document.createElement('span');
+        pill.className = 'status-pill status-pending';
+        pill.textContent = 'Saved';
+        top.appendChild(pill);
+        card.appendChild(top);
+        const meta = document.createElement('p');
+        meta.className = 'submission-meta';
+        meta.textContent = `${entry.playerName || '—'} • ${entry.percent || '100'}% • ${entry.savedAt ? new Date(entry.savedAt).toLocaleString() : ''}`;
+        card.appendChild(meta);
+        if(entry.videoUrl){
+          const link = document.createElement('a');
+          link.className = 'text-link';
+          link.href = entry.videoUrl;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = 'Video link';
+          card.appendChild(link);
+        }
+        const actions = document.createElement('div');
+        actions.className = 'run-saved-card-actions';
+        const fillBtn = document.createElement('button');
+        fillBtn.type = 'button';
+        fillBtn.className = 'btn ghost-btn small-btn';
+        fillBtn.textContent = 'Load into form';
+        fillBtn.addEventListener('click', ()=>{
+          qs('run-player-name').value = entry.playerName || '';
+          qs('run-level-title').value = entry.levelTitle || '';
+          qs('run-video-url').value = entry.videoUrl || '';
+          qs('run-percent').value = entry.percent || '100';
+          qs('run-raw-footage-url').value = entry.rawFootageUrl || '';
+          qs('run-notes').value = entry.notes || '';
+          setRunFormStatus('Loaded this run into the form. Submit or edit, then save or send to the queue.', false, false);
+        });
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'btn ghost-btn small-btn';
+        delBtn.textContent = 'Remove';
+        delBtn.addEventListener('click', ()=>{
+          const cardEl = card;
+          animateSavedRunCard(cardEl, 'out');
+          setTimeout(()=>{
+            fedlRemoveSavedRun(fedlServerUserId, entry.id);
+            renderMySavedRuns();
+          }, 320);
+        });
+        actions.appendChild(fillBtn);
+        actions.appendChild(delBtn);
+        card.appendChild(actions);
+        savedRunsListEl.appendChild(card);
+      });
+    }
+
+    function loadRunPage(){
+      loadItems().then(items=>{
+        const titles = items.map(item=>item.title).filter(Boolean);
+        levelOptionsEl.innerHTML = titles.map(title=>`<option value="${escapeAttr(title)}"></option>`).join('');
+      }).catch(err=>console.error(err));
+
+      showRunSubmissionsShimmer();
+      setRunListStatus('Loading recent submissions…');
+
+      loadRuns().then(runs=>{
+        const sortedRuns = runs.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+        renderRunSubmissions(sortedRuns);
+        setRunListStatus('Live submissions are updating automatically.');
+      }).catch(err=>{
+        console.error(err);
+        renderRunSubmissions([]);
+        setRunListStatus('Could not load recent submissions.', true);
+      });
+    }
+
+    if(saveAccountBtn){
+      saveAccountBtn.addEventListener('click', ()=>{
+        const fields = {
+          playerName: qs('run-player-name').value.trim(),
+          levelTitle: qs('run-level-title').value.trim(),
+          videoUrl: qs('run-video-url').value.trim(),
+          percent: qs('run-percent').value.trim(),
+          rawFootageUrl: qs('run-raw-footage-url').value.trim(),
+          notes: qs('run-notes').value.trim()
+        };
+        const res = fedlAddSavedRun(fedlServerUserId, fields);
+        if(!res.ok){
+          setRunFormStatus(res.error, true);
+          return;
+        }
+        setRunFormStatus('Run saved to your account. You can keep multiple saved runs and load them anytime.', false, true);
+        if(window.anime && !animationsDisabled()){
+          const statusEl = qs('run-form-status');
+          if(statusEl){
+            window.anime({ targets: statusEl, scale: [1, 1.03, 1], duration: 500, easing: 'easeOutBack' });
+          }
+        }
+        renderMySavedRuns();
+      });
+    }
+
+    function animateSavedRunCard(card, direction){
+      if(!window.anime || animationsDisabled()) return;
+      if(direction === 'in'){
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(16px) scale(0.96)';
+        window.anime({
+          targets: card,
+          opacity: [0, 1],
+          translateY: [16, 0],
+          scale: [0.96, 1],
+          duration: getAnimationSpeed() * 0.5,
+          easing: 'easeOutCubic'
+        });
+      } else if(direction === 'out'){
+        window.anime({
+          targets: card,
+          opacity: [1, 0],
+          scale: [1, 0.95],
+          duration: 300,
+          easing: 'easeInCubic',
+          complete: () => { card.remove(); }
+        });
+      }
+    }
+
+    document.addEventListener('fedl-auth-updated', ()=>{
+      renderMySavedRuns();
+      applyRunPlayerDefault();
+    });
+
+    form.addEventListener('submit', function(event){
+      event.preventDefault();
+      if(!canUseLiveServer){
+        setRunFormStatus('Submitting runs is not available right now.', true);
+        return;
+      }
+      const payload = {
+        playerName: qs('run-player-name').value.trim(),
+        levelTitle: qs('run-level-title').value.trim(),
+        videoUrl: qs('run-video-url').value.trim(),
+        percent: qs('run-percent').value.trim(),
+        rawFootageUrl: qs('run-raw-footage-url').value.trim(),
+        notes: qs('run-notes').value.trim()
+      };
+      setRunFormStatus('Sending your run to the live queue...');
+      const submitBtn = qs('run-submit');
+      if(submitBtn && window.anime && !animationsDisabled()){
+        submitBtn.classList.add('btn-loading');
+        submitBtn.disabled = true;
+      }
+      const headers = { 'Content-Type': 'application/json' };
+      const tok = fedlGetAuthToken();
+      if(tok){
+        headers.Authorization = `Bearer ${tok}`;
+      }
+      fetch(liveRunsUrl, {
+        method:'POST',
+        headers,
+        body: JSON.stringify(payload)
+      }).then(async r=>{
+        if(!r.ok){
+          const { message } = await fedlReadJsonResponse(r);
+          throw new Error(message);
+        }
+        clearRunsCache();
+        form.reset();
+        applyRunPlayerDefault();
+        const okMsg = fedlServerUsername
+          ? `Run submitted successfully. It is linked to your account (${fedlServerUsername}) for moderators.`
+          : 'Run submitted successfully. The admin panel can review it now.';
+        setRunFormStatus(okMsg, false, true);
+        const submitBtn = qs('run-submit');
+        if(submitBtn){
+          submitBtn.classList.remove('btn-loading');
+          submitBtn.disabled = false;
+        }
+        if(window.anime && !animationsDisabled()){
+          const statusEl = qs('run-form-status');
+          if(statusEl){
+            statusEl.className = 'muted success-text run-success success-shine';
+            window.anime({ targets: statusEl, scale: [1, 1.03, 1], duration: 500, easing: 'easeOutBack' });
+          }
+        }
+        return refreshRuns();
+        }).catch(err=>{
+        console.error(err);
+        const submitBtn = qs('run-submit');
+        if(submitBtn){
+          submitBtn.classList.remove('btn-loading');
+          submitBtn.disabled = false;
+        }
+        setRunFormStatus(err.message || 'Could not submit the run. Check the server and try again.', true);
+      });
+    });
+
+    bindLiveUpdates();
+    onRunsUpdate(function(updatedRuns){
+      const sortedRuns = updatedRuns.slice().sort((a,b)=>new Date(b.submittedAt) - new Date(a.submittedAt));
+      renderRunSubmissions(sortedRuns);
+      setRunListStatus('Recent submissions reloaded.');
+    });
+
+    fedlRefreshAuthState()
+      .then(()=> fedlPullUserStateToLocal(fedlServerUserId))
+      .finally(()=>{
+        renderMySavedRuns();
+        fedlUpdateAuthNav();
+        applyRunPlayerDefault();
+      });
+
+    loadRunPage();
+  }
+
+  const FEDL_USERNAME_RE = /^[a-z0-9_]{3,24}$/;
+  const FEDL_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const FEDL_AUTH_REDIRECT_MS = 1400;
+  function fedlSetFormStatus(el, msg, kind){
+    if (!el) {
+      return;
+    }
+    el.textContent = msg || '';
+    el.className =
+      kind === 'error' ? 'muted error-text' : kind === 'success' ? 'muted success-text' : 'muted';
+  }
+
+  if (page === 'signup') {
+    const form = qs('signup-form');
+    const statusEl = qs('signup-status');
+    const submitBtn = qs('signup-submit');
+    function setSignupStatus(msg, kind){
+      fedlSetFormStatus(statusEl, msg, kind);
+    }
+    function checkTurnstile(){
+      if(TESTING_MODE) return true;
+      const responseEl = qs('turnstile-response');
+      const token = responseEl ? String(responseEl.value || '') : '';
+      if(!token){
+        setSignupStatus('Please complete the verification challenge.', 'error');
+        return false;
+      }
+      return true;
+    }
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      if(!checkTurnstile()) return;
+      if (!canUseLiveServer) {
+        setSignupStatus('Sign up is not available right now.', 'error');
+        return;
+      }
+      const username = String(qs('signup-username').value || '').trim().toLowerCase();
+      const password = qs('signup-password').value || '';
+      const password2 = qs('signup-password2').value || '';
+      if (!FEDL_USERNAME_RE.test(username)) {
+        setSignupStatus('Use 3–24 characters: lowercase letters, numbers, or underscore only.', 'error');
+        return;
+      }
+      if (password.length < 8) {
+        setSignupStatus('Password must be at least 8 characters.', 'error');
+        return;
+      }
+      if (password !== password2) {
+        setSignupStatus('Passwords do not match.', 'error');
+        return;
+      }
+      submitBtn.disabled = true;
+      setSignupStatus('Creating account…');
+      fetch(liveApiPath('/api/auth/signup'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      }).then(async r=>{
+        const { data, message } = await fedlReadJsonResponse(r);
+        if (!r.ok) {
+          throw new Error(message || 'Sign up failed');
+        }
+        fedlSetAuthToken(data.token);
+        fedlServerUserId = data.userId;
+        fedlServerUsername = data.username;
+        document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+        setSignupStatus('Account created successfully. Loading your data…', 'success');
+        return fedlPullUserStateToLocal(data.userId);
+      }).then(()=>{
+        setSignupStatus('You are signed in. Redirecting…', 'success');
+        setTimeout(()=>{
+          const params = new URLSearchParams(window.location.search);
+          const returnUrl = params.get('return') || 'index.html';
+          window.location.href = returnUrl;
+        }, FEDL_AUTH_REDIRECT_MS);
+      }).catch(err=>{
+        console.error(err);
+        setSignupStatus(err.message || 'Could not sign up.', 'error');
+        submitBtn.disabled = false;
+      });
+    });
+  }
+
+  if (page === 'login') {
+    const form = qs('login-form');
+    const statusEl = qs('login-status');
+    const submitBtn = qs('login-submit');
+    function setLoginStatus(msg, kind){
+      fedlSetFormStatus(statusEl, msg, kind);
+    }
+    function checkTurnstile(){
+      if(TESTING_MODE) return true;
+      const responseEl = qs('turnstile-response');
+      const token = responseEl ? String(responseEl.value || '') : '';
+      if(!token){
+        setLoginStatus('Please complete the verification challenge.', 'error');
+        return false;
+      }
+      return true;
+    }
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      if(!checkTurnstile()) return;
+      if (!canUseLiveServer) {
+        setLoginStatus('Log in is not available right now.', 'error');
+        return;
+      }
+      const username = String(qs('login-username').value || '').trim().toLowerCase();
+      const password = qs('login-password').value || '';
+      if (!username) {
+        setLoginStatus('Enter your username.', 'error');
+        return;
+      }
+      submitBtn.disabled = true;
+      setLoginStatus('Signing in…');
+      fetch(liveApiPath('/api/auth/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      }).then(async r=>{
+        const { data, message } = await fedlReadJsonResponse(r);
+        if (!r.ok) {
+          throw new Error(message || 'Log in failed');
+        }
+        fedlSetAuthToken(data.token);
+        fedlServerUserId = data.userId;
+        fedlServerUsername = data.username;
+        document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+        setLoginStatus('Signed in successfully. Loading your data…', 'success');
+        return fedlPullUserStateToLocal(data.userId);
+      }).then(()=>{
+        setLoginStatus('Welcome back. Redirecting…', 'success');
+        setTimeout(()=>{
+          const params = new URLSearchParams(window.location.search);
+          const returnUrl = params.get('return') || 'index.html';
+          window.location.href = returnUrl;
+        }, FEDL_AUTH_REDIRECT_MS);
+      }).catch(err=>{
+        console.error(err);
+        setLoginStatus(err.message || 'Could not log in.', 'error');
+        submitBtn.disabled = false;
+      });
+    });
+  }
+
+  // Handle Google Sign-In callback
+  window.handleGoogleSignIn = function(response) {
+    if (!response || !response.credential) {
+      console.error('Google Sign-In failed: No credential received');
+      return;
+    }
+
+    const statusEl = qs('login-status');
+    if (statusEl) {
+      fedlSetFormStatus(statusEl, 'Signing in with Google…');
+    }
+
+    // Send the JWT token to your backend for verification
+    fetch(liveApiPath('/api/auth/google'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: response.credential })
+    }).then(async r => {
+      const { data, message } = await fedlReadJsonResponse(r);
+      if (!r.ok) {
+        throw new Error(message || 'Google authentication failed');
+      }
+      fedlSetAuthToken(data.token);
+      fedlServerUserId = data.userId;
+      fedlServerUsername = data.username;
+      document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'Signed in successfully. Loading your data…', 'success');
+      }
+      return fedlPullUserStateToLocal(data.userId);
+    }).then(() => {
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'Welcome back. Redirecting…', 'success');
+      }
+      setTimeout(() => {
+        const params = new URLSearchParams(window.location.search);
+        const returnUrl = params.get('return') || 'index.html';
+        window.location.href = returnUrl;
+      }, FEDL_AUTH_REDIRECT_MS);
+    }).catch(err => {
+      console.error('Google Sign-In error:', err);
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, err.message || 'Could not sign in with Google.', 'error');
+      }
+    });
+  };
+
+  // Handle Google Sign-Up callback (unify with Google token endpoint)
+  window.handleGoogleSignUp = function(response) {
+    if (!response || !response.credential) {
+      console.error('Google Sign-Up failed: No credential received');
+      return;
+    }
+
+    const statusEl = qs('signup-status');
+    if (statusEl) {
+      fedlSetFormStatus(statusEl, 'Creating account with Google…');
+    }
+
+    // Send the JWT token to your backend for verification (use token endpoint)
+    fetch(liveApiPath('/api/auth/google/token'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_token: response.credential })
+    }).then(async r => {
+      const { data, message } = await fedlReadJsonResponse(r);
+      if (!r.ok) {
+        throw new Error(message || 'Google sign-up failed');
+      }
+      fedlSetAuthToken(data.token);
+      fedlServerUserId = data.userId;
+      fedlServerUsername = data.username;
+      document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'Account created successfully. Loading your data…', 'success');
+      }
+      return fedlPullUserStateToLocal(data.userId);
+    }).then(() => {
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, 'You are signed in. Redirecting…', 'success');
+      }
+      setTimeout(() => {
+        const params = new URLSearchParams(window.location.search);
+        const returnUrl = params.get('return') || 'index.html';
+        window.location.href = returnUrl;
+      }, FEDL_AUTH_REDIRECT_MS);
+    }).catch(err => {
+      console.error('Google Sign-Up error:', err);
+      if (statusEl) {
+        fedlSetFormStatus(statusEl, err.message || 'Could not create account with Google.', 'error');
+      }
+    });
+  };
+
+  if (page === 'account') {
+    const FEDL_THEME_KEY = 'fedl_theme';
+    const themeStatusEl = qs('account-theme-status');
+
+    const themes = {
+      dark: { '--bg': '#0f1724', '--panel': '#071326', '--accent': '#5cc5ff', '--muted': '#9fb3c8', '--text': '#e6eef8', '--card': '#081220', '--accent-warm': '#ffb84d' },
+      light: { '--bg': '#f0f4f8', '--panel': '#e2e8f0', '--accent': '#0284c7', '--muted': '#64748b', '--text': '#1e293b', '--card': '#cbd5e1', '--accent-warm': '#f59e0b' },
+      blue: { '--bg': '#0d1b2a', '--panel': '#1b3a5f', '--accent': '#38bdf8', '--muted': '#94a3b8', '--text': '#e0f2fe', '--card': '#142d4c', '--accent-warm': '#fbbf24' },
+      midnight: { '--bg': '#0a0a12', '--panel': '#12121f', '--accent': '#a78bfa', '--muted': '#6b7280', '--text': '#e5e7eb', '--card': '#0f0f1a', '--accent-warm': '#f472b6' },
+      cyberpunk: { '--bg': '#0f0f1a', '--panel': '#1a0a2e', '--accent': '#00ff9f', '--muted': '#b388ff', '--text': '#e0f7fa', '--card': '#150f25', '--accent-warm': '#ff00a8' },
+      earth: { '--bg': '#1a2f1a', '--panel': '#2d4a2d', '--accent': '#84cc16', '--muted': '#a3c9a3', '--text': '#ecfccb', '--card': '#223d22', '--accent-warm': '#fbbf24' },
+      retro: { '--bg': '#1a1208', '--panel': '#2b1a0a', '--accent': '#ff9f1c', '--muted': '#c9a66b', '--text': '#ffe4b5', '--card': '#241809', '--accent-warm': '#ff6b35' },
+      matrix: { '--bg': '#000a00', '--panel': '#001100', '--accent': '#00ff00', '--muted': '#00aa00', '--text': '#00ff00', '--card': '#001100', '--accent-warm': '#88ff88' },
+      synthwave: { '--bg': '#1a0a2e', '--panel': '#2d1b4e', '--accent': '#ff2a6d', '--muted': '#c792ea', '--text': '#f4e9ff', '--card': '#251440', '--accent-warm': '#05d9e8' },
+      fire: { '--bg': '#1a0505', '--panel': '#2d0a0a', '--accent': '#ff4500', '--muted': '#cc5500', '--text': '#ffd4b8', '--card': '#250a0a', '--accent-warm': '#ffaa00' },
+      galaxy: { '--bg': '#0a0612', '--panel': '#150f25', '--accent': '#e056fd', '--muted': '#7c3aed', '--text': '#f0e6ff', '--card': '#0f0818', '--accent-warm': '#f9ca24' },
+      candy: { '--bg': '#fdf2f8', '--panel': '#fce7f3', '--accent': '#f472b6', '--muted': '#94a3b8', '--text': '#831843', '--card': '#fbcfe8', '--accent-warm': '#34d399' },
+      highcontrast: { '--bg': '#000000', '--panel': '#111111', '--accent': '#ffffff', '--muted': '#cccccc', '--text': '#ffffff', '--card': '#0a0a0a', '--accent-warm': '#ffff00' },
+      original: { '--bg': '#0f1724', '--panel': '#071326', '--accent': '#5cc5ff', '--muted': '#9fb3c8', '--text': '#e6eef8', '--card': '#081220', '--accent-warm': '#ffb84d' }
+    };
+
+    function applyTheme(name, animate = true) {
+      const root = document.documentElement;
+      const vars = themes[name];
+      if (!vars) return;
+
+      if (animate && window.anime && !animationsDisabled()) {
+        let overlay = document.getElementById('theme-transition-overlay');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.id = 'theme-transition-overlay';
+          overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:' + vars['--accent'];
+          document.body.appendChild(overlay);
+        }
+        overlay.style.background = vars['--accent'];
+        window.anime({
+          targets: overlay,
+          opacity: [0, 0.3, 0],
+          duration: 600,
+          easing: 'easeInOutQuad',
+          begin: () => { overlay.style.display = 'block'; },
+          update: (anim) => {
+            if (anim.progress > 30 && anim.progress < 70) {
+              Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+              document.body.dataset.theme = name;
+            }
+          },
+          complete: () => { overlay.style.display = 'none'; }
+        });
+      } else {
+        Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+        document.body.dataset.theme = name;
+      }
+    }
+
+    function setThemeStatus(msg, kind) {
+      fedlSetFormStatus(themeStatusEl, msg, kind);
+    }
+
+    function loadTheme() {
+      const saved = localStorage.getItem(FEDL_THEME_KEY) || 'dark';
+      applyTheme(saved, false);
+      document.querySelectorAll('input[name="theme"]').forEach(el => {
+        el.checked = el.value === saved;
+      });
+    }
+
+    document.querySelectorAll('input[name="theme"]').forEach(el => {
+      el.addEventListener('change', function() {
+        const name = this.value;
+        const preview = this.parentElement.querySelector('.theme-preview');
+        if (window.anime && preview && !animationsDisabled()) {
+          window.anime({
+            targets: preview,
+            scale: [1, 1.2, 1],
+            duration: 400,
+            easing: 'easeInOutBack'
+          });
+        }
+        localStorage.setItem(FEDL_THEME_KEY, name);
+        applyTheme(name);
+        const activeId = fedlAccountId();
+        if (activeId) {
+          const accounts = fedlListAccounts();
+          const account = accounts.find(a => a.id === activeId);
+          if (account) {
+            account.theme = name;
+            fedlSaveAccountsList(accounts);
+            const userData = fedlGetAccountPayload(activeId);
+            userData.theme = name;
+            write(`fedl_user_data_${activeId}`, userData);
+          }
+        }
+        setThemeStatus('Theme saved!', 'success');
+        const themePanel = document.querySelector('.account-panel:nth-child(2)');
+        if(themePanel && window.anime && !animationsDisabled()){
+          themePanel.classList.add('success-shine');
+          window.anime({ targets: themePanel, scale: [1, 1.01, 1], duration: 400, easing: 'easeOutBack', complete: () => themePanel.classList.remove('success-shine') });
+        }
+      });
+    });
+
+    function loadAccountTheme() {
+      const activeId = fedlAccountId();
+      if (activeId) {
+        const userData = fedlGetAccountPayload(activeId);
+        if (userData && userData.theme) {
+          localStorage.setItem(FEDL_THEME_KEY, userData.theme);
+          applyTheme(userData.theme, false);
+        }
+      }
+    }
+
+    loadTheme();
+    loadAccountTheme();
+
+    const animToggle = qs('account-animations-toggle');
+    if(animToggle){
+      animToggle.checked = !animationsDisabled();
+      animToggle.addEventListener('change', function(){
+        setAnimationsDisabled(!this.checked);
+        const panel = this.closest('.account-panel');
+        if(panel && window.anime && !animationsDisabled()){
+          window.anime({ targets: panel, scale: [1, 1.01, 1], duration: 400, easing: 'easeOutBack' });
+        }
+      });
+    }
+    const listAnimToggle = qs('account-list-animations-toggle');
+    if(listAnimToggle){
+      listAnimToggle.checked = !listAnimationsDisabled();
+      listAnimToggle.addEventListener('change', function(){
+        localStorage.setItem(FEDL_LIST_ANIM_KEY, String(!this.checked));
+        const panel = this.closest('.account-panel');
+        if(panel && window.anime && !animationsDisabled()){
+          window.anime({ targets: panel, scale: [1, 1.01, 1], duration: 400, easing: 'easeOutBack' });
+        }
+      });
+    }
+    const speedSlider = qs('account-animation-speed');
+    const speedLabel = qs('account-animation-speed-label');
+    if(speedSlider && speedLabel){
+      speedSlider.value = getAnimationSpeed();
+      speedLabel.textContent = speedSlider.value + 'ms';
+      speedSlider.addEventListener('input', function(){
+        localStorage.setItem(FEDL_ANIM_SPEED_KEY, String(this.value));
+        speedLabel.textContent = this.value + 'ms';
+        if(window.anime && !animationsDisabled()){
+          window.anime({ targets: speedLabel, scale: [1, 1.1, 1], duration: 300, easing: 'easeOutBack' });
+        }
+      });
+    }
+
+    const overviewStatusEl = qs('account-overview-status');
+    const accountUsernameEl = qs('account-username');
+    const accountCreatedEl = qs('account-created');
+    const resetBtn = qs('account-reset-email-btn');
+    const resetStatusEl = qs('account-reset-status');
+    const passwordForm = qs('account-password-form');
+    const passwordStatusEl = qs('account-password-status');
+    const passwordSubmit = qs('account-password-submit');
+
+    function setOverviewStatus(msg, kind){
+      fedlSetFormStatus(overviewStatusEl, msg, kind);
+    }
+    function setResetStatus(msg, kind){
+      fedlSetFormStatus(resetStatusEl, msg, kind);
+    }
+    function setPasswordStatus(msg, kind){
+      fedlSetFormStatus(passwordStatusEl, msg, kind);
+    }
+    function formatJoinedDate(iso){
+      if (!iso) return 'Unknown';
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return 'Unknown';
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    function authHeaders(){
+      return {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${fedlGetAuthToken()}`
+      };
+    }
+    function loadAccount(){
+      if (!fedlGetAuthToken()) {
+        window.location.replace('login.html?return=' + encodeURIComponent('account.html'));
+        return Promise.resolve();
+      }
+      setOverviewStatus('Loading your account…');
+      return fetch(liveApiPath('/api/account'), {
+        headers: { Authorization: `Bearer ${fedlGetAuthToken()}` },
+        cache: 'no-store'
+      }).then(async r=>{
+        const { data, message } = await fedlReadJsonResponse(r);
+        if (!r.ok) {
+          throw new Error(message || 'Could not load account details.');
+        }
+        if (accountUsernameEl) {
+          accountUsernameEl.textContent = data.username || 'Unknown';
+        }
+        if (accountCreatedEl) {
+          accountCreatedEl.textContent = formatJoinedDate(data.createdAt);
+        }
+        setOverviewStatus('');
+      }).catch(err=>{
+        console.error(err);
+        setOverviewStatus(err.message || 'Could not load your account.', 'error');
+        if (String(err.message || '').toLowerCase().includes('not signed in')) {
+          window.location.replace('login.html?return=' + encodeURIComponent('account.html'));
+        }
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function(){
+        resetBtn.disabled = true;
+        setResetStatus('Sending reset code to your messages…');
+        fetch(liveApiPath('/api/account/password-reset-email'), {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${fedlGetAuthToken()}` }
+        }).then(async r=>{
+          const { message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not send reset code.');
+          }
+          setResetStatus('Reset code sent! Check your messages.', 'success');
+        }).catch(err=>{
+          console.error(err);
+          setResetStatus(err.message || 'Could not send reset code.', 'error');
+        }).finally(()=>{
+          resetBtn.disabled = false;
+        });
+      });
+    }
+
+    if (passwordForm) {
+      passwordForm.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        const currentPassword = String(qs('account-current-password').value || '');
+        const newPassword = String(qs('account-new-password').value || '');
+        const confirmPassword = String(qs('account-confirm-password').value || '');
+        if (!currentPassword) {
+          setPasswordStatus('Enter your current password.', 'error');
+          if(window.anime && !animationsDisabled()){
+            window.anime({ targets: qs('account-current-password'), translateX: [-4,4,-4,4,0], duration: 300, easing: 'easeInOutQuad' });
+          }
+          return;
+        }
+        if (newPassword.length < 8) {
+          setPasswordStatus('New password must be at least 8 characters.', 'error');
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          setPasswordStatus('New passwords do not match.', 'error');
+          return;
+        }
+        if (passwordSubmit) {
+          passwordSubmit.disabled = true;
+        }
+        setPasswordStatus('Updating password…');
+        fetch(liveApiPath('/api/account/password'), {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: JSON.stringify({ currentPassword, newPassword })
+        }).then(async r=>{
+          const { data, message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not update password.');
+          }
+          if (data && data.token) {
+            fedlSetAuthToken(data.token);
+          }
+          passwordForm.reset();
+          setPasswordStatus('Password updated.', 'success');
+        }).catch(err=>{
+          console.error(err);
+          setPasswordStatus(err.message || 'Could not update password.', 'error');
+        }).finally(()=>{
+          if (passwordSubmit) {
+            passwordSubmit.disabled = false;
+          }
+        });
+      });
+    }
+
+    loadAccount();
+  }
+
+  if (page === 'reset-password') {
+    const requestForm = qs('reset-request-form');
+    const requestStatusEl = qs('reset-request-status');
+    const requestSubmit = qs('reset-request-submit');
+    const requestInput = qs('reset-identifier');
+    const tokenInput = qs('reset-token');
+    const resetForm = qs('reset-password-form');
+    const resetStatusEl = qs('reset-password-status');
+    const resetSubmit = qs('reset-password-submit');
+
+    function setRequestStatus(msg, kind){
+      fedlSetFormStatus(requestStatusEl, msg, kind);
+    }
+    function setResetPasswordStatus(msg, kind){
+      fedlSetFormStatus(resetStatusEl, msg, kind);
+    }
+
+    if (tokenInput) {
+      const params = new URLSearchParams(window.location.search);
+      tokenInput.value = params.get('token') || '';
+    }
+
+    if (requestForm) {
+      requestForm.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        if (!canUseLiveServer) {
+          setRequestStatus('Password reset is not available right now.', 'error');
+          return;
+        }
+        const identifier = String(requestInput ? requestInput.value : '').trim().toLowerCase();
+        if (!identifier) {
+          setRequestStatus('Enter your username or email.', 'error');
+          return;
+        }
+        if (requestSubmit) {
+          requestSubmit.disabled = true;
+        }
+        setRequestStatus('Checking for your account…');
+        fetch(liveApiPath('/api/auth/request-password-reset'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier })
+        }).then(async r=>{
+          const data = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(data.message || 'Could not request password reset.');
+          }
+          setRequestStatus(data.message || 'Check your messages for the reset code.', 'success');
+          if (requestInput) {
+            requestInput.value = '';
+          }
+        }).catch(err=>{
+          console.error(err);
+          setRequestStatus(err.message || 'Could not request password reset.', 'error');
+        }).finally(()=>{
+          if (requestSubmit) {
+            requestSubmit.disabled = false;
+          }
+        });
+      });
+    }
+
+    if (resetForm) {
+      resetForm.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        if (!canUseLiveServer) {
+          setResetPasswordStatus('Password reset is not available right now.', 'error');
+          return;
+        }
+        const token = String(tokenInput ? tokenInput.value : '').trim();
+        const newPassword = String(qs('reset-new-password').value || '');
+        const confirmPassword = String(qs('reset-confirm-password').value || '');
+        if (!token) {
+          setResetPasswordStatus('Paste the reset code below.', 'error');
+          return;
+        }
+        if (newPassword.length < 8) {
+          setResetPasswordStatus('New password must be at least 8 characters.', 'error');
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          setResetPasswordStatus('New passwords do not match.', 'error');
+          return;
+        }
+        if (resetSubmit) {
+          resetSubmit.disabled = true;
+        }
+        setResetPasswordStatus('Resetting your password…');
+        fetch(liveApiPath('/api/auth/reset-password'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, newPassword })
+        }).then(async r=>{
+          const { message } = await fedlReadJsonResponse(r);
+          if (!r.ok) {
+            throw new Error(message || 'Could not reset password.');
+          }
+          resetForm.reset();
+          if (tokenInput) {
+            tokenInput.value = '';
+          }
+          setResetPasswordStatus('Password reset complete. You can log in with your new password now.', 'success');
+        }).catch(err=>{
+          console.error(err);
+          setResetPasswordStatus(err.message || 'Could not reset password.', 'error');
+        }).finally(()=>{
+          if (resetSubmit) {
+            resetSubmit.disabled = false;
+          }
+        });
+      });
+    }
+  }
+
+  if(page==='contact'){
+    const form = qs('contact-form');
+    const formStatusEl = qs('contact-form-status');
+    const categoryEl = qs('contact-category');
+    const subjectEl = qs('contact-subject');
+    const descriptionEl = qs('contact-description');
+    const emailEl = qs('contact-email');
+
+    function setContactFormStatus(message, isError){
+      if(!formStatusEl) return;
+      formStatusEl.textContent = message;
+      if(isError){
+        formStatusEl.classList.add('error-text');
+        formStatusEl.classList.remove('success-text');
+      }else{
+        formStatusEl.classList.remove('error-text');
+        formStatusEl.classList.add('success-text');
+      }
+    }
+
+    if(form){
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        if(!canUseLiveServer){
+          setContactFormStatus('Reports are not available right now.', true);
+          return;
+        }
+        const payload = {
+          category: categoryEl ? categoryEl.value : 'other',
+          subject: subjectEl ? subjectEl.value.trim() : '',
+          description: descriptionEl ? descriptionEl.value.trim() : '',
+          email: emailEl ? emailEl.value.trim() : ''
+        };
+        if(!payload.subject || !payload.description){
+          setContactFormStatus('Subject and description are required.', true);
+          return;
+        }
+        setContactFormStatus('Submitting your report...');
+        const headers = { 'Content-Type': 'application/json' };
+        const tok = fedlGetAuthToken();
+        if(tok){
+          headers.Authorization = `Bearer ${tok}`;
+        }
+        fetch(`${liveServerBase}/api/bugreports`, {
+          method:'POST',
+          headers,
+          body: JSON.stringify(payload)
+        }).then(async r=>{
+          if(!r.ok){
+            const { message } = await fedlReadJsonResponse(r);
+            throw new Error(message || 'Submit failed');
+          }
+          return r.json();
+        }).then(()=>{
+          setContactFormStatus('Thank you! Your report has been submitted. The admins will review it soon.');
+          if(form) form.reset();
+        }).catch(err=>{
+          console.error(err);
+          setContactFormStatus(err.message || 'Could not submit your report. Try again later.', true);
+        });
+      });
+    }
+  }
+
+  injectFedlAuthNav();
+  fedlRefreshAuthState().finally(()=>{
+    fedlUpdateAuthNav();
+    if ((page === 'signup' || page === 'login') && fedlServerUsername) {
+      window.location.replace('index.html');
+    }
+  });
+
+   // Utility
+   function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}
+   function escapeAttr(s){return escapeHtml(String(s == null ? '' : s))}
+
+   // Expose variables needed by oauth-callback.html
+   window.liveServerBase = liveServerBase;
+   window.fedlSetAuthToken = fedlSetAuthToken;
+})();
