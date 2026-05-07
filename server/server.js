@@ -1390,6 +1390,19 @@ function handleRequest(req, res) {
     pathname = pathname.slice(BASE.length) || '/';
   }
 
+  function matchesRoute(route) {
+    return pathname === route || pathname === `/fedl${route}`;
+  }
+
+  function getPrefixedRoute(route) {
+    return pathname.startsWith('/fedl') ? `/fedl${route}` : route;
+  }
+
+  function getRedirectBase() {
+    const protocol = getRequestProtocol(req);
+    return pathname.startsWith('/fedl') ? `${protocol}://${req.headers.host}/fedl` : `${protocol}://${req.headers.host}`;
+  }
+
   if (req.method === 'OPTIONS') {
     setCors(res);
     res.writeHead(204);
@@ -1556,20 +1569,21 @@ function handleRequest(req, res) {
   }
 
   // Discord OAuth
-if (req.method === 'GET' && pathname === '/auth/google') {
+if (req.method === 'GET' && matchesRoute('/auth/google')) {
     if (!googleClientId || !googleClientSecret) {
       sendError(res, 500, 'Google OAuth not configured');
       return;
     }
     const protocol = getRequestProtocol(req);
-    const redirectUri = `${protocol}://${req.headers.host}/auth/google/callback`;
+    const callbackPath = getPrefixedRoute('/auth/google/callback');
+    const redirectUri = `${protocol}://${req.headers.host}${callbackPath}`;
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&access_type=online&prompt=select_account`;
     res.writeHead(302, { Location: authUrl });
     res.end();
     return;
   }
 
-  if (req.method === 'GET' && pathname === '/auth/google/callback') {
+  if (req.method === 'GET' && matchesRoute('/auth/google/callback')) {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const code = url.searchParams.get('code');
     if (!code) {
@@ -1584,7 +1598,8 @@ if (req.method === 'GET' && pathname === '/auth/google') {
     params.append('grant_type', 'authorization_code');
     params.append('code', code);
     const protocol = getRequestProtocol(req);
-    params.append('redirect_uri', `${protocol}://${req.headers.host}/auth/google/callback`);
+    const callbackPath = getPrefixedRoute('/auth/google/callback');
+    params.append('redirect_uri', `${protocol}://${req.headers.host}${callbackPath}`);
     fetch(tokenUrl, {
       method: 'POST',
       body: params,
@@ -1613,7 +1628,7 @@ if (req.method === 'GET' && pathname === '/auth/google') {
           user = createUserFromGoogle(googleId, email, name);
         }
         const token = createSession(user.id, user.username);
-        res.writeHead(302, { Location: `/?token=${token}` });
+        res.writeHead(302, { Location: `${getRedirectBase()}/?token=${token}` });
         res.end();
       }).catch(err => {
         console.error('Google token exchange error:', err);
@@ -1628,20 +1643,21 @@ if (req.method === 'GET' && pathname === '/auth/google') {
     return;
   }
 
-  if (req.method === 'GET' && pathname === '/auth/discord') {
+  if (req.method === 'GET' && matchesRoute('/auth/discord')) {
     if (!discordClientId) {
       sendError(res, 500, 'Discord OAuth not configured');
       return;
     }
     const protocol = getRequestProtocol(req);
-    const redirectUri = `${protocol}://${req.headers.host}/auth/discord/callback`;
+    const callbackPath = getPrefixedRoute('/auth/discord/callback');
+    const redirectUri = `${protocol}://${req.headers.host}${callbackPath}`;
     const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email`;
     res.writeHead(302, { Location: authUrl });
     res.end();
     return;
   }
 
-  if (req.method === 'GET' && pathname === '/auth/discord/callback') {
+  if (req.method === 'GET' && matchesRoute('/auth/discord/callback')) {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const code = url.searchParams.get('code');
     if (!code) {
@@ -1656,7 +1672,8 @@ if (req.method === 'GET' && pathname === '/auth/google') {
     params.append('grant_type', 'authorization_code');
     params.append('code', code);
     const protocol = getRequestProtocol(req);
-    params.append('redirect_uri', `${protocol}://${req.headers.host}/auth/discord/callback`);
+    const callbackPath = getPrefixedRoute('/auth/discord/callback');
+    params.append('redirect_uri', `${protocol}://${req.headers.host}${callbackPath}`);
     fetch(tokenUrl, {
       method: 'POST',
       body: params,
@@ -1683,7 +1700,7 @@ if (req.method === 'GET' && pathname === '/auth/google') {
           writeUsers(readUsers().map(u => u.id === user.id ? user : u));
         }
         const token = createSession(user.id, user.username);
-        res.writeHead(302, { Location: `/?token=${token}` });
+        res.writeHead(302, { Location: `${getRedirectBase()}/?token=${token}` });
         res.end();
       }).catch(err => {
         console.error('Discord user fetch error:', err);
@@ -1699,20 +1716,21 @@ if (req.method === 'GET' && pathname === '/auth/google') {
   }
 
   // GitHub OAuth
-  if (req.method === 'GET' && pathname === '/auth/github') {
+  if (req.method === 'GET' && matchesRoute('/auth/github')) {
     if (!githubClientId) {
       sendError(res, 500, 'GitHub OAuth not configured');
       return;
     }
     const protocol = getRequestProtocol(req);
-    const redirectUri = `${protocol}://${req.headers.host}/auth/github/callback`;
+    const callbackPath = getPrefixedRoute('/auth/github/callback');
+    const redirectUri = `${protocol}://${req.headers.host}${callbackPath}`;
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(githubClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email`;
     res.writeHead(302, { Location: authUrl });
     res.end();
     return;
   }
 
-  if (req.method === 'GET' && pathname === '/auth/github/callback') {
+  if (req.method === 'GET' && matchesRoute('/auth/github/callback')) {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const code = url.searchParams.get('code');
     if (!code) {
@@ -1726,7 +1744,8 @@ if (req.method === 'GET' && pathname === '/auth/google') {
     params.append('client_secret', githubClientSecret);
     params.append('code', code);
     const protocol = getRequestProtocol(req);
-    params.append('redirect_uri', `${protocol}://${req.headers.host}/auth/github/callback`);
+    const callbackPath = getPrefixedRoute('/auth/github/callback');
+    params.append('redirect_uri', `${protocol}://${req.headers.host}${callbackPath}`);
     fetch(tokenUrl, {
       method: 'POST',
       body: params,
@@ -1766,7 +1785,7 @@ if (req.method === 'GET' && pathname === '/auth/google') {
             writeUsers(readUsers().map(u => u.id === user.id ? user : u));
           }
           const token = createSession(user.id, user.username);
-          res.writeHead(302, { Location: `/?token=${token}` });
+          res.writeHead(302, { Location: `${getRedirectBase()}/?token=${token}` });
           res.end();
         }
       }).catch(err => {
