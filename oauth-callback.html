@@ -49,14 +49,14 @@
           return;
         }
 
-        const redirectUri = `${window.location.origin}${window.location.pathname}`;
-        fetch(`${liveServerBase}/api/auth/${state}/relay`, {
+        const redirectUri = `${window.location.origin}/oauth-callback`;
+        fetch(`${window.liveServerBase}/api/auth/${state}/relay`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code, redirect_uri: redirectUri })
         }).then(r => r.json()).then(json => {
           if (json && json.token) {
-            fedlSetAuthToken(json.token);
+            window.fedlSetAuthToken(json.token);
             msg.textContent = 'Signed in! Redirecting...';
             setTimeout(() => { window.location.href = '/'; }, 500);
           } else {
