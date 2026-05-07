@@ -30,15 +30,41 @@
   };
 
   window.signinGoogle = function(){
-    window.location.href = `${liveServerBase}/auth/google`;
+    const clientId = document.querySelector('meta[name="google-signin-client_id"]')?.content ||
+                      '271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com';
+    const redirectUri = `${window.location.origin}/oauth-callback`;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${encodeURIComponent(clientId)}&` +
+      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+      `response_type=code&` +
+      `scope=openid%20email%20profile&` +
+      `access_type=online&` +
+      `prompt=select_account&` +
+      `state=google`;
+    window.location.href = authUrl;
   };
 
   window.signinDiscord = function(){
-    window.location.href = `${liveServerBase}/auth/discord`;
+    const clientId = 'YOUR_DISCORD_CLIENT_ID';
+    const redirectUri = `${window.location.origin}/oauth-callback`;
+    const authUrl = `https://discord.com/api/oauth2/authorize?` +
+      `client_id=${encodeURIComponent(clientId)}&` +
+      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+      `response_type=code&` +
+      `scope=identify%20email&` +
+      `state=discord`;
+    window.location.href = authUrl;
   };
 
   window.signinGithub = function(){
-    window.location.href = `${liveServerBase}/auth/github`;
+    const clientId = 'YOUR_GITHUB_CLIENT_ID';
+    const redirectUri = `${window.location.origin}/oauth-callback`;
+    const authUrl = `https://github.com/login/oauth/authorize?` +
+      `client_id=${encodeURIComponent(clientId)}&` +
+      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+      `scope=user:email&` +
+      `state=github`;
+    window.location.href = authUrl;
   };
 
   function promptForUsername(payload){

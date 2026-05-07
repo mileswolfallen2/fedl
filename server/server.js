@@ -209,7 +209,7 @@ function createUserFromGithub(githubId, email, username, avatar){
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '';
-const adminPassword = String(process.env.ADMIN_PASSWORD || 'test');
+const adminPassword = String(process.env.ADMIN_PASSWORD || 'mimiAL64.68');
 const clients = new Set();
 
 const contentTypes = {
