@@ -48,7 +48,16 @@
         </div>
       </form>
     </section>
+    <section class="panel auth-panel">
+      <p class="hero-kicker">Or continue with</p>
+      <div class="auth-actions">
+        <button type="button" class="btn oauth-btn google-btn" onclick="window.signinGoogle()">Sign in with Google</button>
+        <button type="button" class="btn oauth-btn discord-btn" onclick="window.signinDiscord()">Sign in with Discord</button>
+        <button type="button" class="btn oauth-btn github-btn" onclick="window.signinGitHub()">Sign in with GitHub</button>
+      </div>
+    </section>
   </main>
+  <script src="oauth.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>

@@ -1355,6 +1355,15 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (req.method === 'GET' && pathname === '/api/config') {
+    sendJson(res, 200, {
+      googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+      discordClientId: process.env.DISCORD_CLIENT_ID || '',
+      githubClientId: process.env.GITHUB_CLIENT_ID || ''
+    });
+    return;
+  }
+
   if (req.method === 'GET' && pathname === '/api/account') {
     const sess = getSessionFromRequest(req);
     if (!sess) {
