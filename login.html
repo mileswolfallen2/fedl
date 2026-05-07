@@ -4,8 +4,10 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6951907799659255"
      crossorigin="anonymous"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script async src="https://accounts.google.com/gsi/client"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="google-signin-client_id" content="271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com">
   <title>Log in — GD fedl</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/png" href="pageicon.png">
@@ -26,7 +28,7 @@
     </nav>
   </header>
   <main class="auth-main">
-    <section class="panel auth-panel">
+    <section class="panel auth-panel auth-card">
       <p class="hero-kicker">FEDL account</p>
       <h2>Welcome back</h2>
       <p class="muted">Sign in to load your saved roulette pick and per-level progress from the server.</p>
@@ -39,7 +41,8 @@
           <span>Password</span>
           <input id="login-password" name="password" type="password" autocomplete="current-password" required />
         </label>
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAAC_RrrNCJVX_wbHb"></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAC_RrrNCJVX_wbHb" data-callback="fedlTurnstileSuccess"></div>
+        <input type="hidden" id="turnstile-response" name="cf-turnstile-response" value="" />
         <p id="login-status" class="muted" role="status"></p>
         <div class="auth-actions">
           <button type="submit" class="btn" id="login-submit">Log in</button>
@@ -47,6 +50,7 @@
           <a class="text-link" href="reset-password.html">Forgot password?</a>
         </div>
       </form>
+<<<<<<< HEAD
     </section>
     <section class="panel auth-panel">
       <p class="hero-kicker">Or continue with</p>
@@ -58,6 +62,75 @@
     </section>
   </main>
   <script src="oauth.js" defer></script>
+=======
+      <div id="google-signin-container" style="text-align:center; margin: 12px 0 6px;">
+        <div id="g_id_onload" data-client_id="271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com" data-context="signin" data-callback="handleCredentialResponse" data-auto_prompt="true"></div>
+        <div class="g_id_signin" data-type="standard" data-width="320"></div>
+      </div>
+      <p class="muted small" style="text-align:center; margin: 10px 0 14px;">
+        OAuth sign-in is handled by the FEDL server at <strong>https://server.fedl.site/fedl</strong>. If you see redirect errors, make sure the provider callback URL matches the server path.
+      </p>
+      <div class="auth-social-buttons">
+        <a class="btn social-btn google-btn" href="javascript:void(0)" onclick="window.signinGoogle()">
+          <span class="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.163 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" fill="#4285F4"/>
+              <path d="M3.327 8.784L5.92 6.4C7.127 4.77 9.553 3.42 12.48 3.42c1.92 0 3.68.646 5.103 1.706l-2.316 2.316c-.573-.533-1.365-.85-2.31-.85-1.52 0-2.81.92-3.345 2.195L3.327 8.784z" fill="#34A853"/>
+              <path d="M12.48 3.42c-1.893 0-3.603.687-4.958 1.815l2.446-2.445C6.885 1.144 9.558 0 12.48 0c3.326 0 6.32 1.272 8.493 3.346l-2.307 2.307C16.987 3.447 14.872 3.42 12.48 3.42z" fill="#FBBC05"/>
+              <path d="M12.48 14.2c1.08 0 2.047-.35 2.802-.943l2.357 2.357c-1.237 1.168-2.82 1.898-4.859 1.898-2.638 0-4.872-1.6-5.908-3.92l2.533 1.95C5.903 17.137 8.451 20.52 12.48 20.52c3.92 0 7.344-1.854 9.52-4.783l-2.64-2.176C17.91 15.38 15.44 16.64 12.48 16.64c-3.327 0-6.138-1.478-7.896-3.83l2.3-1.628c1.24 1.83 3.37 3.137 5.98 3.137z" fill="#EA4335"/>
+            </svg>
+          </span>
+          Sign in with Google
+        </a>
+        <a class="btn social-btn discord-btn" href="javascript:void(0)" onclick="window.signinDiscord()">
+          <span class="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.074 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-1.2952-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.36.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189z"/>
+          </svg>
+          </span>
+          Sign in with Discord
+        </a>
+        <a class="btn social-btn github-btn" href="javascript:void(0)" onclick="window.signinGithub()">
+          <span class="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577 0-.285-.01-1.04-.016-2.04-1.338-.2762-2.4189 0 1.3332-.9555 2.4189-2.1569 2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189z"/>
+          </svg>
+          </span>
+          Sign in with GitHub
+        </a>
+        <a class="btn social-btn discord-btn" href="https://server.fedl.site/fedl/auth/discord">
+          <span class="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+            </svg>
+          </span>
+          Sign in with Discord
+        </a>
+        <a class="btn social-btn github-btn" href="https://server.fedl.site/fedl/auth/github">
+          <span class="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577 0-.285-.01-1.04-.016-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.238 1.84 1.238 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.605-2.665-.303-5.467-1.335-5.467-5.93 0-1.31.47-2.38 1.236-3.22-.124-.303-.536-1.525.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.655 1.651.243 2.873.12 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.807 5.625-5.48 5.92.43.37.824 1.103.824 2.225 0 1.607-.015 2.903-.015 3.298 0 .32.192.694.8.577C20.565 21.796 24 17.296 24 12 24 5.37 18.63 0 12 0z"/></svg>
+          </span>
+          Sign in with GitHub
+        </a>
+      </div>
+      </section>
+    <div class="auth-blob"></div>
+  </main>
+  <footer>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="players.html">Players</a>
+      <a href="run.html">Submit Run</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="rules.html">Rules</a>
+      <a href="messages.html">Messages</a>
+      <a href="contact.html">Contact</a>
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+    </nav>
+  </footer>
+>>>>>>> ce3825ca557eb6e5e66b290e66c963aa2abbd42a
   <script src="app.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>

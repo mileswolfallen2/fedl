@@ -40,6 +40,8 @@ Console output shows the effective `PORT`, `HOST`, data paths, and whether admin
 
 All HTTP handling assumes a **URL prefix** of `/fedl`. Incoming paths are normalized: if the request path starts with `/fedl`, that prefix is stripped and the remainder is used for routing and static files.
 
+The default `BASE` constant in `server/server.js` is `/fedl`.
+
 **Examples** (with defaults, no reverse proxy):
 
 - Site root (often `index.html`): `http://127.0.0.1:8090/fedl` or `http://127.0.0.1:8090/fedl/`

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Completing sign in... - FEDL</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #0f0f0f;
+      color: #fff;
+    }
+    .message {
+      text-align: center;
+    }
+    .error {
+      color: #ff4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="message" id="message">Completing sign in...</div>
+  <script>
+    (function() {
+      const msg = document.getElementById('message');
+
+      // Define server base directly - no dependency on app.js
+      const liveServerBase = (window.location.origin === 'https://fedl.site' ||
+                            window.location.origin === 'https://www.fedl.site')
+        ? 'https://server.fedl.site/fedl'
+        : window.location.origin;
+
+      // Token storage function
+      function fedlSetAuthToken(token) {
+        if (!token) return;
+        localStorage.setItem('fedl_auth_token', String(token));
+        localStorage.setItem('fedl_auth_time', Date.now().toString());
+        // Dispatch event to notify app
+        window.dispatchEvent(new CustomEvent('fedl-auth-updated'));
+      }
+
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const code = String(params.get('code') || '').trim();
+        const state = String(params.get('state') || '').trim().toLowerCase();
+        const error = params.get('error');
+
+        if (error) {
+          msg.className = 'error';
+          msg.textContent = 'Sign in cancelled or failed.';
+          setTimeout(() => { window.location.href = '/'; }, 2000);
+          return;
+        }
+
+        if (!code || !['google','discord','github'].includes(state)) {
+          msg.className = 'error';
+          msg.textContent = 'Invalid callback.';
+          setTimeout(() => { window.location.href = '/'; }, 2000);
+          return;
+        }
+
+        const redirectUri = `${window.location.origin}/oauth-callback`;
+        fetch(`${liveServerBase}/api/auth/${state}/relay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, redirect_uri: redirectUri })
+        }).then(r => r.json()).then(json => {
+          if (json && json.token) {
+            fedlSetAuthToken(json.token);
+            msg.textContent = 'Signed in! Redirecting...';
+            setTimeout(() => { window.location.href = '/'; }, 500);
+          } else {
+            msg.className = 'error';
+            msg.textContent = 'Sign in failed: ' + (json.error || 'Unknown error');
+            setTimeout(() => { window.location.href = '/'; }, 3000);
+          }
+        }).catch(err => {
+          msg.className = 'error';
+          msg.textContent = 'Sign in failed. Please try again.';
+          setTimeout(() => { window.location.href = '/'; }, 3000);
+        });
+      } catch (e) {
+        msg.className = 'error';
+        msg.textContent = 'An error occurred.';
+        setTimeout(() => { window.location.href = '/'; }, 2000);
+      }
+    })();
+  </script>
+</body>
+</html>

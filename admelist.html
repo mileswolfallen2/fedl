@@ -1,59 +1,50 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6951907799659255"
-     crossorigin="anonymous"></script>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Edit List - GD fedl</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FEDL Admin Panel</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
   <link rel="icon" type="image/png" href="pageicon.png">
 </head>
-<body data-page="admelist" class="admin-locked">
+<body data-page="admelist">
   <header id="admin-page-header">
     <h1>FEDL Admin</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="lists.html">Lists</a>
-      <a href="players.html">Players</a>
-      <a href="run.html">Submit Run</a>
-      <a href="roulette.html">Roulette</a>
-      <a href="rules.html">Rules</a>
-      <a href="messages.html">Messages</a>
-      <a href="contact.html">Contact</a>
-      <a href="about.html">About</a>
-    </nav>
   </header>
-  <main class="admin-shell">
-    <section id="admin-login-screen" class="admin-login-screen">
-      <div class="admin-login-card">
-        <p class="hero-kicker">Admin Access</p>
-        <h2>Enter the admin password</h2>
-        <p class="muted">Submit the server password to unlock the list editor and run moderation tools.</p>
-        <form id="admin-login-form" class="admin-login-form">
-          <label class="admin-password-field" for="admin-password">
-            <span>Admin password</span>
-            <input id="admin-password" type="password" placeholder="Enter server password" autocomplete="current-password" />
-          </label>
-          <div class="admin-login-actions">
-            <button id="admin-login-submit" type="submit" class="btn">Submit</button>
-            <p id="admin-auth-status" class="muted">Saved only in this browser session.</p>
-          </div>
-        </form>
-      </div>
+
+  <!-- Admin login overlay -->
+  <section id="admin-login-screen" class="admin-login-screen">
+    <div class="admin-login-card">
+      <p class="hero-kicker" style="text-transform:uppercase;letter-spacing:.18em;font-size:.75rem;margin:0 0 6px 0;color:var(--accent);">Admin Access</p>
+      <h2 style="margin:0 0 8px 0;font-size:1.25rem;">Enter the admin password</h2>
+      <p class="muted" style="margin:0 0 12px 0;">Submit the server password to unlock the list editor and run moderation tools.</p>
+      <form id="admin-login-form" class="admin-login-form">
+        <label class="admin-password-field" for="admin-password">
+          <span>Admin password</span>
+          <input id="admin-password" type="password" placeholder="Enter server password" autocomplete="current-password" style="padding:10px;border-radius:6px;border:1px solid rgba(0,0,0,.2);background:var(--bg);color:var(--text);"/>
+        </label>
+        <div class="admin-login-actions">
+          <button id="admin-login-submit" type="submit" class="btn">Submit</button>
+          <p id="admin-auth-status" class="muted"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Admin content (hidden until login) -->
+  <main id="admin-shell-content" hidden>
+    <section class="admin-tabs" aria-label="Admin Tabs" style="padding:12px 16px; border-bottom:1px solid rgba(255,255,255,.08);">
+      <button class="admin-tab active" data-tab="stats">Stats</button>
+      <button class="admin-tab" data-tab="list">List Editor</button>
+      <button class="admin-tab" data-tab="runs">Run Queue</button>
+      <button class="admin-tab" data-tab="mods">Mods</button>
+      <button class="admin-tab" data-tab="bugs">Bug Reports</button>
+      <button class="admin-tab" data-tab="import">Import</button>
     </section>
 
-    <section id="admin-shell-content" class="admin-shell-content" hidden>
-    <section class="admin-tabs">
-      <button type="button" class="admin-tab active" data-tab="stats">Stats</button>
-      <button type="button" class="admin-tab" data-tab="list">List Editor</button>
-      <button type="button" class="admin-tab" data-tab="runs">Run Queue</button>
-      <button type="button" class="admin-tab" data-tab="mods">Mods</button>
-      <button type="button" class="admin-tab" data-tab="bugs">Bug Reports</button>
-      <button type="button" class="admin-tab" data-tab="import">Import</button>
-    </section>
-
-    <section class="panel admin-panel admin-tab-panel" id="tab-stats">
+    <!-- Stats Panel -->
+    <section id="tab-stats" class="panel admin-panel admin-tab-panel">
       <div class="admin-toolbar">
         <div>
           <p class="hero-kicker">Statistics</p>
@@ -61,187 +52,127 @@
           <p id="admin-stats-status" class="muted">Loading stats...</p>
         </div>
       </div>
-      <div class="stats-grid">
-        <div class="stat-box">
-          <strong id="stat-total-runs">--</strong>
-          <span>Total Runs</span>
-        </div>
-        <div class="stat-box">
-          <strong id="stat-pending-runs">--</strong>
-          <span>Pending</span>
-        </div>
-        <div class="stat-box">
-          <strong id="stat-levels-count">--</strong>
-          <span>Levels</span>
-        </div>
-        <div class="stat-box">
-          <strong id="stat-bug-reports">--</strong>
-          <span>Open Reports</span>
-        </div>
+      <div class="stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:12px;">
+        <div class="stat-box"><strong id="stat-total-runs">--</strong><span>Total Runs</span></div>
+        <div class="stat-box"><strong id="stat-pending-runs">--</strong><span>Pending</span></div>
+        <div class="stat-box"><strong id="stat-levels-count">--</strong><span>Levels</span></div>
+        <div class="stat-box"><strong id="stat-bug-reports">--</strong><span>Open Bug Reports</span></div>
       </div>
     </section>
 
-    <section class="panel admin-panel admin-tab-panel" id="tab-list" hidden>
+    <!-- List Editor Panel -->
+    <section id="tab-list" class="panel admin-panel admin-tab-panel" hidden>
       <div class="admin-toolbar">
         <div>
           <p class="hero-kicker">List Editor</p>
-          <h2>Manage the live list</h2>
-          <p id="admin-status" class="muted">Loading list data...</p>
+          <h2>Edit List</h2>
+          <p id="admin-status" class="muted">Loading list...</p>
         </div>
-        <div class="admin-actions">
-          <input id="admin-search" type="text" placeholder="Search rows..." />
+        <div class="admin-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input id="admin-search" type="text" placeholder="Search rows..." style="padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:var(--bg);color:var(--text);" />
           <button id="add-row" type="button" class="btn ghost-btn">Add Row</button>
           <button id="save-list" type="button" class="btn">Save List</button>
         </div>
       </div>
+      <div class="table-wrap">
+        <table class="levels-table admin-table">
+          <thead><tr><th style="width:90px">#</th><th style="width:140px">Level</th><th>Title</th><th>Video URL</th><th style="width:120px">Actions</th></tr></thead>
+          <tbody id="admin-list-body"></tbody>
+        </table>
+      </div>
+      <div style="padding:16px">
+        <button id="add-row-bottom" type="button" class="btn ghost-btn">Add Row</button>
+      </div>
+    </section>
 
-        <div class="table-wrap">
-          <table class="levels-table admin-table">
-            <thead>
-              <tr>
-                <th style="width:90px">#</th>
-                <th style="width:140px">Level</th>
-                <th>Title</th>
-                <th>Video URL</th>
-                <th style="width:120px">Delete</th>
-              </tr>
-            </thead>
-            <tbody id="admin-list-body"></tbody>
-          </table>
-        </div>
-        <div style="padding:16px">
-          <button id="add-row-bottom" type="button" class="btn ghost-btn">Add Row</button>
-        </div>
-      </section>
-
-    <section class="panel admin-panel admin-tab-panel" id="tab-runs" hidden>
+    <!-- Run Queue Panel -->
+    <section id="tab-runs" class="panel admin-panel admin-tab-panel" hidden>
       <div class="admin-toolbar">
         <div>
           <p class="hero-kicker">Run Queue</p>
-          <h2>Review submitted runs</h2>
-          <p id="runs-admin-status" class="muted">Loading run submissions...</p>
+          <h2>Review runs</h2>
+          <p id="runs-admin-status" class="muted">Loading runs...</p>
         </div>
-        <div class="admin-actions">
-          <input id="run-search" type="text" placeholder="Search submissions..." />
-        </div>
+        <div class="admin-actions"><input id="run-search" type="text" placeholder="Search submissions..." style="padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:var(--bg);color:var(--text);" /></div>
       </div>
-
       <div class="table-wrap">
         <table class="levels-table admin-table">
-          <thead>
-            <tr>
-              <th style="width:130px">Status</th>
-              <th style="width:160px">Player</th>
-              <th style="width:110px">Percent</th>
-              <th>Level</th>
-              <th style="width:180px">Submitted</th>
-              <th style="width:240px">Actions</th>
-            </tr>
-          </thead>
+          <thead><tr><th style="width:130px">Status</th><th style="width:160px">Player</th><th style="width:110px">Percent</th><th>Level</th><th style="width:180px">Submitted</th><th style="width:240px">Actions</th></tr></thead>
           <tbody id="run-admin-body"></tbody>
         </table>
       </div>
     </section>
 
-    <section class="panel admin-panel admin-tab-panel" id="tab-bugs" hidden>
-      <div class="admin-toolbar">
-        <div>
-          <p class="hero-kicker">Reports</p>
-          <h2>View and manage bug reports</h2>
-          <p id="bug-reports-admin-status" class="muted">Loading bug reports...</p>
-        </div>
-        <div class="admin-actions">
-          <input id="bug-report-search" type="text" placeholder="Search reports..." />
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table class="levels-table admin-table">
-          <thead>
-            <tr>
-              <th style="width:100px">Category</th>
-              <th style="width:100px">Status</th>
-              <th style="width:160px">Submitted By</th>
-              <th>Subject</th>
-              <th style="width:180px">Submitted</th>
-              <th style="width:180px">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="bug-reports-body"></tbody>
-        </table>
-      </div>
+    <!-- Mods Panel -->
+    <section id="tab-mods" class="panel admin-panel admin-tab-panel" hidden>
+      <div class="admin-toolbar"><div><p class="hero-kicker">Mods</p><h2>Moderators</h2><p class="muted">Manage moderators and permissions</p></div></div>
+      <div id="mods-panel" class="muted">Mods panel placeholder</div>
     </section>
 
-    <section class="panel admin-panel admin-tab-panel" id="tab-import" hidden>
-      <div class="admin-toolbar">
-        <div>
-          <p class="hero-kicker">Import tool</p>
-          <h2>External lists & bulk approve</h2>
-          <p id="import-status" class="muted">Pull records from Pointercrate or AREDL (AREDL needs a server API key or token). Targeted import loads victories from the API by player or level, adds them as approved runs with notes set to "Valid run". Bulk approve approves pending FEDL submissions only. Full imports run one page at a time to limit rate usage.</p>
-        </div>
-        <div class="admin-actions admin-import-actions">
-          <button id="import-pointercrate" type="button" class="btn ghost-btn">Import Pointercrate</button>
-          <button id="import-aredl" type="button" class="btn ghost-btn">Import AREDL</button>
-          <button id="import-targeted-open" type="button" class="btn ghost-btn">Import by player or level…</button>
-          <button id="bulk-approve-open" type="button" class="btn ghost-btn">Bulk-approve by player…</button>
-        </div>
-      </div>
+    <!-- Bug Reports Panel -->
+    <section id="tab-bugs" class="panel admin-panel admin-tab-panel" hidden>
+      <div class="admin-toolbar"><div><p class="hero-kicker">Bug Reports</p><h2>Bug Reports</h2><p id="bug-reports-admin-status" class="muted">Loading bug reports...</p></div><div class="admin-actions"><input id="bug-report-search" type="text" placeholder="Search bug reports..." style="padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:var(--bg);color:var(--text);" /></div></div>
+      <div class="table-wrap"><table class="levels-table admin-table"><thead><tr><th style="width:100px">Category</th><th style="width:100px">Status</th><th style="width:160px">Submitted By</th><th>Subject</th><th style="width:180px">Submitted</th><th style="width:180px">Actions</th></tr></thead><tbody id="bug-reports-body"></tbody></table></div>
     </section>
 
-    <div id="import-targeted-modal" class="video-modal bulk-approve-modal" hidden>
-      <div class="inner bulk-approve-modal-card" role="dialog" aria-modal="true" aria-labelledby="import-targeted-title">
-        <p class="hero-kicker">Import tool</p>
-        <h2 id="import-targeted-title">Import victories from API</h2>
-        <p class="muted">Choose a list, match by player or level, then import. New runs are <strong>approved</strong> with submission and review notes <strong>Valid run</strong>. Duplicates (same video URL) are skipped.</p>
-        <form id="import-targeted-form" class="admin-login-form bulk-approve-form">
-          <label class="admin-password-field" for="import-targeted-source">
-            <span>List API</span>
-            <select id="import-targeted-source" required>
+    <!-- Import Panel -->
+    <section id="tab-import" class="panel admin-panel admin-tab-panel" hidden>
+      <div class="admin-toolbar"><div><p class="hero-kicker">Import</p><h2>Imports</h2><p class="muted">Import data from external sources</p></div><div class="admin-actions admin-import-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="import-pointercrate" type="button" class="btn ghost-btn">Import Pointercrate</button>
+        <button id="import-aredl" type="button" class="btn ghost-btn">Import AREDL</button>
+        <button id="import-targeted-open" type="button" class="btn ghost-btn">Import by Player/Level</button>
+        <button id="bulk-approve-open" type="button" class="btn ghost-btn">Bulk Approve</button>
+      </div></div>
+      <div id="import-status" class="muted" style="padding:0 12px 12px 12px;"></div>
+      <div id="import-area" class="table-wrap" style="padding:0 12px 12px;"> </div>
+    </section>
+
+    <div id="import-targeted-modal" class="admin-modal" hidden>
+      <div class="admin-modal-card panel" style="max-width:520px; margin: auto;">
+        <h2>Targeted Import</h2>
+        <form id="import-targeted-form" style="display:grid;gap:12px;">
+          <label class="admin-password-field">Source
+            <select id="import-targeted-source" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text);">
               <option value="pointercrate">Pointercrate</option>
               <option value="aredl">AREDL</option>
             </select>
           </label>
-          <div class="import-targeted-mode">
-            <span class="import-targeted-mode-label">Match</span>
-            <label class="import-targeted-radio"><input type="radio" name="import-targeted-filter" value="player" checked /> Player</label>
-            <label class="import-targeted-radio"><input type="radio" name="import-targeted-filter" value="level" /> Level</label>
-          </div>
-          <label class="admin-password-field" for="import-targeted-query">
-            <span id="import-targeted-query-label">Player name</span>
-            <input id="import-targeted-query" type="text" placeholder="Name as on the list" autocomplete="off" required />
-          </label>
-          <p class="muted small import-targeted-hint">Pointercrate: use the <strong>exact</strong> player or demon name from the list, or a numeric id (player id / demon id). The old API filters were unreliable; names are resolved correctly now. AREDL prefers an exact name match, then substring, across scanned pages.</p>
-          <div class="admin-login-actions bulk-approve-actions">
-            <button type="submit" class="btn" id="import-targeted-submit">Import as valid runs</button>
-            <button type="button" class="btn ghost-btn" id="import-targeted-cancel">Cancel</button>
+          <fieldset style="display:grid;gap:8px;border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:12px;">
+            <legend style="font-weight:700;color:var(--text);">Filter</legend>
+            <label class="import-targeted-radio"><input type="radio" name="import-targeted-filter" value="player" checked> Player</label>
+            <label class="import-targeted-radio"><input type="radio" name="import-targeted-filter" value="level"> Level</label>
+          </fieldset>
+          <label class="admin-password-field" id="import-targeted-query-label">Player name</label>
+          <input id="import-targeted-query" type="text" placeholder="Name as on the list" style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text);" />
+          <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+            <button id="import-targeted-cancel" type="button" class="btn ghost-btn">Cancel</button>
+            <button id="import-targeted-submit" type="submit" class="btn">Import</button>
           </div>
         </form>
       </div>
     </div>
 
-    <div id="bulk-approve-modal" class="video-modal bulk-approve-modal" hidden>
-      <div class="inner bulk-approve-modal-card" role="dialog" aria-modal="true" aria-labelledby="bulk-approve-title">
-        <p class="hero-kicker">Import tool</p>
-        <h2 id="bulk-approve-title">Bulk-approve by player</h2>
-        <p class="muted">Only submissions still marked <strong>pending</strong> are updated. Approved and rejected runs are left unchanged.</p>
-        <form id="bulk-approve-form" class="admin-login-form bulk-approve-form">
-          <label class="admin-password-field" for="bulk-approve-player">
-            <span>Player name</span>
-            <input id="bulk-approve-player" type="text" placeholder="Exact name from the run queue" autocomplete="off" required />
+    <div id="bulk-approve-modal" class="admin-modal" hidden>
+      <div class="admin-modal-card panel" style="max-width:520px; margin: auto;">
+        <h2>Bulk Approve Runs</h2>
+        <form id="bulk-approve-form" style="display:grid;gap:12px;">
+          <label class="admin-password-field">Player name
+            <input id="bulk-approve-player" type="text" placeholder="Exact player name" style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text);" />
           </label>
-          <p id="bulk-approve-preview" class="muted" aria-live="polite"></p>
-          <label class="admin-password-field" for="bulk-approve-notes">
-            <span>Review notes (optional)</span>
-            <input id="bulk-approve-notes" type="text" placeholder="Shown on each approved run" autocomplete="off" />
+          <label class="admin-password-field">Review notes (optional)
+            <textarea id="bulk-approve-notes" rows="4" placeholder="Notes for approved runs" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text);"></textarea>
           </label>
-          <div class="admin-login-actions bulk-approve-actions">
-            <button type="submit" class="btn" id="bulk-approve-submit">Approve all pending</button>
-            <button type="button" class="btn ghost-btn" id="bulk-approve-cancel">Cancel</button>
+          <p id="bulk-approve-preview" class="muted"></p>
+          <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+            <button id="bulk-approve-cancel" type="button" class="btn ghost-btn">Cancel</button>
+            <button id="bulk-approve-submit" type="submit" class="btn">Approve</button>
           </div>
         </form>
       </div>
     </div>
-    </section>
   </main>
+
   <script src="app.js" defer></script>
+  <script src="admin.js" defer></script>
 </body>
 </html>

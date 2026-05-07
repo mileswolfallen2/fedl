@@ -1,0 +1,32 @@
+/* Admin panel page styles */
+#admin-shell-content { padding: 12px; }
+#admin-page-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.admin-toolbar { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.admin-tabs { display: flex; gap: 8px; margin: 0 0 12px 0; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.admin-tab { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); color: var(--muted); cursor: pointer; font-weight: 700; }
+.admin-tab.active { background: var(--accent); color: var(--bg); }
+.panel { background: var(--panel); padding: 16px; border-radius: 18px; margin-bottom: 16px; }
+.admin-panel { padding: 16px; }
+.admin-login-screen { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 30px; background:
+  radial-gradient(circle at top, rgba(255,184,77,0.16), transparent 24%),
+  linear-gradient(180deg, rgba(6,16,33,0.98), rgba(7,20,38,0.99)); }
+.admin-login-card { width: min(100%, 520px); max-width: 90%; padding: 24px; border-radius: 28px; background: linear-gradient(145deg, rgba(255,184,77,0.12), rgba(7,19,38,0.96) 42%), radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 35%); border: 1px solid rgba(255,184,77,0.16); }
+.admin-login-card h2 { margin: 0 0 10px 0; font-size: clamp(2rem, 4vw, 2.8rem); }
+.admin-login-form { display: grid; gap: 16px; margin-top: 20px; }
+.admin-login-actions { display: grid; gap: 12px; }
+.admin-login-actions p { margin: 0; font-size: 0.85rem; }
+.admin-password-field { display: grid; gap: 8px; width: 100%; font-weight: 700; color: var(--text); }
+.admin-password-field span { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.admin-password-field input, .admin-actions input[type=text], .admin-actions input[type=password] { min-width: 220px; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); color: var(--text); }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.table-wrap { overflow: auto; border-radius: 8px; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 12px; }
+.table-wrap table.admin-table th, .table-wrap table.admin-table td { border-bottom-color: rgba(255,255,255,.08); }
+.admin-modal { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,0.62); z-index: 2500; }
+.admin-modal[hidden] { display: none; }
+.admin-modal-card { width: min(100%, 620px); border-radius: 24px; background: var(--panel); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 24px 80px rgba(0,0,0,0.35); }
+.admin-modal-card h2 { margin: 0 0 8px 0; font-size: 1.6rem; }
+.admin-modal-card form { display: grid; gap: 14px; }
+.import-targeted-radio, .admin-targeted-radio { display: inline-flex; align-items: center; gap: 10px; }
+.muted { color: var(--muted); }
+.btn { cursor: pointer; }

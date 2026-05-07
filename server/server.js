@@ -17,9 +17,40 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
+const publicFrontendBase = String(process.env.FRONTEND_BASE_URL || process.env.FRONTEND_HOST || process.env.PUBLIC_HOST || serverConfig.frontendHost || 'https://fedl.site').trim().replace(/\/+$|\s+$/g, '');
+// Google OAuth credentials (env/.env or NV/EMV/EV files)
+let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
+let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
+let discordClientId = String(process.env.DISCORD_CLIENT_ID || '').trim();
+let discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || '').trim();
+let githubClientId = String(process.env.GITHUB_CLIENT_ID || '').trim();
+let githubClientSecret = String(process.env.GITHUB_CLIENT_SECRET || '').trim();
+// Lightweight .env loader (server/.env)
+function loadEnvFromFile(){
+  try {
+    const envPath = require('path').join(__dirname, '.env');
+    if (!fs.existsSync(envPath)) return;
+    const raw = fs.readFileSync(envPath, 'utf8');
+    raw.split(/\r?\n/).forEach(line => {
+      const m = String(line || '').trim().match(/^([^=]+)=(.*)$/);
+      if (m) {
+        const key = m[1].trim();
+        const val = m[2];
+        if (key) process.env[key] = val;
+      }
+    });
+  } catch (e) {}
+}
+loadEnvFromFile();
+googleClientId = String(process.env.GOOGLE_CLIENT_ID || googleClientId || '').trim();
+googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || googleClientSecret || '').trim();
+discordClientId = String(process.env.DISCORD_CLIENT_ID || discordClientId || '').trim();
+discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || discordClientSecret || '').trim();
+githubClientId = String(process.env.GITHUB_CLIENT_ID || githubClientId || '').trim();
+githubClientSecret = String(process.env.GITHUB_CLIENT_SECRET || githubClientSecret || '').trim();
 const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
 
-async function sendDiscordNotification(message) {
+ async function sendDiscordNotification(message) {
   if (!discordWebhookUrl || !discordWebhookUrl.startsWith('http')) {
     return;
   }
@@ -49,10 +80,136 @@ async function sendDiscordNotification(message) {
     console.error(`[FEDL] Discord notification failed: ${e.message}`);
   }
 }
+
+// Google OAuth: verify an ID token issued by Google
+async function verifyGoogleIdToken(idToken){
+  try {
+    const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
+    if (!res.ok) return null;
+    const payload = await res.json();
+    if (!payload || typeof payload !== 'object') return null;
+    if (googleClientId && (payload.aud || payload.client_id) !== googleClientId) return null;
+    const iss = String(payload.iss || '');
+    if (iss !== 'accounts.google.com' && iss !== 'https://accounts.google.com') return null;
+    if (payload.exp && Date.now() > payload.exp * 1000) return null;
+    return payload;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Load OAuth credentials from NV/EMV/EV files or environment
+function readKvLine(line){
+  const m = String(line || '').trim().match(/^([A-Za-z0-9_]+)=(.*)$/);
+  if (!m) return null;
+  return [m[1], m[2]];
+}
+
+function readKvFileSimple(filePath){
+  try {
+    if (!fs.existsSync(filePath)) return null;
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const out = {};
+    raw.split(/\r?\n/).forEach(line => {
+      const kv = readKvLine(line);
+      if (kv) out[kv[0]] = kv[1];
+    });
+    return Object.keys(out).length ? out : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function loadOAuthCredentials(){
+  const nvPath = require('path').join(appRoot, 'NV', 'google_oauth.nv');
+  const emvPath = require('path').join(appRoot, 'EMV', 'google_oauth.emv');
+  const evPath = require('path').join(appRoot, 'EV', 'google_oauth.env');
+
+  let data = readKvFileSimple(nvPath);
+  if (data && data.GOOGLE_CLIENT_ID) {
+    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    return;
+  }
+  data = readKvFileSimple(emvPath);
+  if (data && data.GOOGLE_CLIENT_ID) {
+    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    return;
+  }
+  data = readKvFileSimple(evPath);
+  if (data && data.GOOGLE_CLIENT_ID) {
+    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    return;
+  }
+  if (process.env.GOOGLE_CLIENT_ID) googleClientId = String(process.env.GOOGLE_CLIENT_ID).trim();
+  if (process.env.GOOGLE_CLIENT_SECRET) googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET).trim();
+}
+
+loadOAuthCredentials();
+
+function findUserByGoogleId(googleId){
+  const users = readUsers();
+  return users.find(u => String(u.googleId || '') === String(googleId));
+}
+function findUserByDiscordId(discordId){
+  const users = readUsers();
+  return users.find(u => String(u.discordId || '') === String(discordId));
+}
+function findUserByGithubId(githubId){
+  const users = readUsers();
+  return users.find(u => String(u.githubId || '') === String(githubId));
+}
+function findUserByEmail(email){
+  const em = String(email || '').trim().toLowerCase();
+  const users = readUsers();
+  return users.find(u => String((u.email || '')).toLowerCase() === em);
+}
+function deriveUsernameFromEmail(email){
+  const local = String(email || '').split('@')[0] || 'user';
+  let base = local.toLowerCase().replace(/[^a-z0-9_]/g, '');
+  if (!base) base = 'user';
+  const users = readUsers();
+  let candidate = base;
+  let i = 0;
+  while (users.find(u => String(u.username || '') === candidate)) {
+    i += 1;
+    candidate = `${base}_${i}`;
+  }
+  return candidate;
+}
+function createUserFromGoogle(googleId, email, name){
+  const users = readUsers();
+  const username = email ? deriveUsernameFromEmail(email) : `google_${Date.now().toString(36)}`;
+  const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+  const user = { id, username, googleId, email, name, createdAt: new Date().toISOString() };
+  users.push(user);
+  writeUsers(users);
+  return user;
+}
+function createUserFromDiscord(discordId, email, username, avatar){
+  const users = readUsers();
+  const uname = username ? deriveUsernameFromEmail(username + '@discord.com') : `discord_${Date.now().toString(36)}`;
+  const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+  const user = { id, username: uname, discordId, email, avatar, createdAt: new Date().toISOString() };
+  users.push(user);
+  writeUsers(users);
+  return user;
+}
+function createUserFromGithub(githubId, email, username, avatar){
+  const users = readUsers();
+  const uname = username ? deriveUsernameFromEmail(username + '@github.com') : `github_${Date.now().toString(36)}`;
+  const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+  const user = { id, username: uname, githubId, email, avatar, createdAt: new Date().toISOString() };
+  users.push(user);
+  writeUsers(users);
+  return user;
+}
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
-const BASE = '/fedl';
-const adminPassword = String(process.env.ADMIN_PASSWORD || 'test');
+const BASE = '';
+const adminPassword = String(process.env.ADMIN_PASSWORD || 'mimiAL64.68');
 const clients = new Set();
 
 const contentTypes = {
@@ -121,6 +278,7 @@ function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Cross-Origin-Opener-Policy', 'unsafe-none');
 }
 
 function sendJson(res, statusCode, payload) {
@@ -130,6 +288,24 @@ function sendJson(res, statusCode, payload) {
     'Cache-Control': 'no-store'
   });
   res.end(JSON.stringify(payload));
+}
+
+function sendError(res, statusCode, message) {
+  sendJson(res, statusCode, { error: message });
+}
+
+function getRequestProtocol(req) {
+  const protoHeader = String(req.headers['x-forwarded-proto'] || '');
+  if (protoHeader) {
+    return protoHeader.split(',')[0].trim();
+  }
+
+  const host = String(req.headers.host || '').toLowerCase();
+  if (host && !host.startsWith('localhost') && !host.startsWith('127.') && !host.startsWith('[::1]')) {
+    return 'https';
+  }
+
+  return req.connection && req.connection.encrypted ? 'https' : 'http';
 }
 
 function sendEvent(eventName, data) {
@@ -160,6 +336,68 @@ function requireAdmin(req, res) {
   res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('Authentication required');
   return false;
+}
+
+async function verifyGoogleToken(token) {
+  try {
+    // Decode the JWT header to get the key ID
+    const header = JSON.parse(Buffer.from(token.split('.')[0], 'base64').toString());
+    const kid = header.kid;
+    
+    // Fetch Google's public keys
+    const response = await new Promise((resolve, reject) => {
+      const https = require('https');
+      https.get('https://www.googleapis.com/oauth2/v3/certs', (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => resolve(JSON.parse(data)));
+      }).on('error', reject);
+    });
+    
+    const key = response.keys.find(k => k.kid === kid);
+    if (!key) {
+      throw new Error('Invalid key ID');
+    }
+    
+    // Verify the JWT
+    const crypto = require('crypto');
+    const verifier = crypto.createVerify('RSA-SHA256');
+    verifier.update(token.split('.').slice(0, 2).join('.'));
+    
+    const publicKey = `-----BEGIN CERTIFICATE-----\n${key.x5c[0]}\n-----END CERTIFICATE-----`;
+    const signature = Buffer.from(token.split('.')[2], 'base64');
+    
+    if (!verifier.verify(publicKey, signature)) {
+      throw new Error('Invalid signature');
+    }
+    
+    // Decode the payload
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    
+    // Verify claims
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp < now) {
+      throw new Error('Token expired');
+    }
+    if (payload.iat > now) {
+      throw new Error('Token issued in future');
+    }
+    if (payload.iss !== 'https://accounts.google.com') {
+      throw new Error('Invalid issuer');
+    }
+    const expectedAud = String(googleClientId || '').trim();
+    if (expectedAud) {
+      const audValue = payload.aud;
+      const audMatches = Array.isArray(audValue) ? audValue.includes(expectedAud) : audValue === expectedAud;
+      if (!audMatches) {
+        throw new Error('Invalid audience');
+      }
+    }
+    
+    return payload;
+  } catch (error) {
+    throw new Error(`Token verification failed: ${error.message}`);
+  }
 }
 
 function ensureRunsFile() {
@@ -414,6 +652,28 @@ async function sendMailViaWorker({ to, subject, text }) {
   if (!res.ok) {
     const err = await res.text();
     throw new Error(`Worker email failed: ${err}`);
+  }
+
+  // Username availability check for Google sign-up flow
+  if (req.method === 'GET' && pathname === '/api/username-available') {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const uname = String(url.searchParams.get('username') || '').trim().toLowerCase();
+    if (!uname) {
+      sendJson(res, 400, { available: false, reason: 'empty' });
+      return;
+    }
+    if (!usernameOk(uname)) {
+      sendJson(res, 200, { available: false, reason: 'invalid' });
+      return;
+    }
+    const users = readUsers();
+    const exists = users.find(u => String(u.username || '').toLowerCase() === uname);
+    if (exists) {
+      sendJson(res, 200, { available: false, reason: 'taken' });
+    } else {
+      sendJson(res, 200, { available: true });
+    }
+    return;
   }
 
   return res.json();
@@ -1132,12 +1392,33 @@ function serveFile(reqPath, res) {
   });
 }
 
-const server = http.createServer((req, res) => {
-  const url = new URL(req.url, `http://${req.headers.host}`);
+function handleRequest(req, res) {
+  const scheme = req.connection.encrypted ? 'https' : 'http';
+  const url = new URL(req.url, `${scheme}://${req.headers.host}`);
   let pathname = url.pathname;
 
   if (pathname.startsWith(BASE)) {
     pathname = pathname.slice(BASE.length) || '/';
+  }
+
+  function matchesRoute(route) {
+    return pathname === route || pathname === `/fedl${route}`;
+  }
+
+  function getPrefixedRoute(route) {
+    return pathname.startsWith('/fedl') ? `/fedl${route}` : route;
+  }
+
+  function getRedirectBase() {
+    const protocol = getRequestProtocol(req);
+    return pathname.startsWith('/fedl') ? `${protocol}://${req.headers.host}/fedl` : `${protocol}://${req.headers.host}`;
+  }
+
+  function getAuthReturnBase() {
+    if (publicFrontendBase) {
+      return publicFrontendBase;
+    }
+    return getRedirectBase();
   }
 
   if (req.method === 'OPTIONS') {
@@ -1217,6 +1498,358 @@ const server = http.createServer((req, res) => {
     });
     return;
   }
+
+  if (req.method === 'POST' && (pathname === '/api/auth/google/token' || pathname === '/fedl/api/auth/google/token')) {
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const idToken = String(payload.id_token || '').trim();
+        if (!idToken) {
+          sendJson(res, 400, { error: 'id_token is required' });
+          return;
+        }
+        const verified = await verifyGoogleIdToken(idToken);
+        if (!verified) {
+          sendJson(res, 401, { error: 'Invalid Google token' });
+          return;
+        }
+        const googleId = String(verified.sub || '').trim();
+        const email = String(verified.email || '').trim();
+        const name = String(verified.name || verified.given_name || '').trim();
+        let user = null;
+        if (googleId) user = findUserByGoogleId(googleId);
+        const users = readUsers();
+        if (!user && email) {
+          const byEmail = users.find(u => String((u.email || '')).toLowerCase() === email.toLowerCase());
+          if (byEmail) {
+            byEmail.googleId = googleId;
+            byEmail.email = email;
+            writeUsers(users);
+            user = byEmail;
+          }
+        }
+        if (!user) {
+          // Do not auto-create yet; ask client to pick a username
+          const baseUsername = email ? deriveUsernameFromEmail(email) : `google_${Date.now().toString(36)}`;
+          return sendJson(res, 200, {
+            ok: true,
+            needUsername: true,
+            googleId,
+            email,
+            name,
+            suggestedUsername: baseUsername
+          });
+        }
+        const token = createSession(user.id, user.username);
+        sendJson(res, 200, { ok: true, token, userId: user.id, username: user.username });
+      } catch (e) {
+        sendJson(res, 500, { error: 'Google token flow failed' });
+      }
+    });
+    return;
+  }
+
+  // Finalize Google sign-up with chosen username
+  if (req.method === 'POST' && pathname === '/api/auth/google/finalize') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const { googleId, email, name, username } = payload;
+        if (!googleId) {
+          sendJson(res, 400, { error: 'Missing googleId' });
+          return;
+        }
+        const users = readUsers();
+        const uname = String(username || '').trim();
+        if (!uname || !usernameOk(uname)) {
+          sendJson(res, 400, { error: 'Invalid username' });
+          return;
+        }
+        if (users.find(u => String(u.username || '').toLowerCase() === uname.toLowerCase())) {
+          sendJson(res, 409, { error: 'That username is already taken.' });
+          return;
+        }
+        const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+        const newUser = { id, username: uname, googleId, email: email || '', name: name || '', createdAt: new Date().toISOString() };
+        users.push(newUser);
+        writeUsers(users);
+        const token = createSession(newUser.id, newUser.username);
+        sendJson(res, 200, { ok: true, token, userId: newUser.id, username: newUser.username });
+      } catch (e) {
+        sendJson(res, 400, { error: 'Finalize failed' });
+      }
+    });
+    return;
+  }
+
+  // Discord OAuth
+  if (req.method === 'GET' && matchesRoute('/auth/google')) {
+    if (!googleClientId || !googleClientSecret) {
+      sendError(res, 500, 'Google OAuth not configured');
+      return;
+    }
+    if (!publicFrontendBase) {
+      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+      return;
+    }
+    const redirectUri = `${publicFrontendBase}/oauth-callback`;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&access_type=online&prompt=select_account&state=google`;
+    res.writeHead(302, { Location: authUrl });
+    res.end();
+    return;
+  }
+
+  if (req.method === 'POST' && matchesRoute('/api/auth/google/relay')) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+    if (body.length > 65536) req.destroy();
+  });
+  req.on('end', () => {
+    try {
+      const payload = JSON.parse(body || '{}');
+      const code = String(payload.code || '').trim();
+      const redirectUri = String(payload.redirect_uri || '').trim();
+      if (!code) {
+        sendJson(res, 400, { error: 'No code provided' });
+        return;
+      }
+      if (!redirectUri) {
+        sendJson(res, 400, { error: 'No redirect_uri provided' });
+        return;
+      }
+      const tokenUrl = 'https://oauth2.googleapis.com/token';
+      const params = new URLSearchParams();
+      params.append('client_id', googleClientId);
+      params.append('client_secret', googleClientSecret);
+      params.append('grant_type', 'authorization_code');
+      params.append('code', code);
+      params.append('redirect_uri', redirectUri);
+      fetch(tokenUrl, {
+        method: 'POST',
+        body: params,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(r => r.json()).then(tokenData => {
+        if (!tokenData.id_token) {
+          sendJson(res, 400, { error: 'Failed to get Google token' });
+          return;
+        }
+        verifyGoogleToken(tokenData.id_token).then(payload => {
+          const googleId = String(payload.sub || '').trim();
+          const email = String(payload.email || '').trim();
+          const name = String(payload.name || payload.given_name || '').trim();
+          let user = findUserByGoogleId(googleId);
+          const users = readUsers();
+          if (!user && email) {
+            const byEmail = users.find(u => String((u.email || '')).toLowerCase() === email.toLowerCase());
+            if (byEmail) {
+              byEmail.googleId = googleId;
+              writeUsers(users);
+              user = byEmail;
+            }
+          }
+          if (!user) {
+            user = createUserFromGoogle(googleId, email, name);
+          }
+          const token = createSession(user.id, user.username);
+          sendJson(res, 200, { token });
+        }).catch(err => {
+          console.error('Google token exchange error:', err);
+          sendJson(res, 500, { error: 'Error verifying Google token' });
+        });
+      }).catch(err => {
+        console.error('Google token exchange error:', err);
+        sendJson(res, 500, { error: 'Error exchanging code' });
+      });
+    } catch (e) {
+      sendJson(res, 400, { error: 'Invalid request' });
+    }
+  });
+  return;
+}
+
+  if (req.method === 'GET' && matchesRoute('/auth/discord')) {
+    if (!discordClientId) {
+      sendError(res, 500, 'Discord OAuth not configured');
+      return;
+    }
+    if (!publicFrontendBase) {
+      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+      return;
+    }
+    const redirectUri = `${publicFrontendBase}/oauth-callback`;
+    const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email&state=discord`;
+    res.writeHead(302, { Location: authUrl });
+    res.end();
+    return;
+  }
+
+  if (req.method === 'POST' && matchesRoute('/api/auth/discord/relay')) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+    if (body.length > 65536) req.destroy();
+  });
+  req.on('end', () => {
+    try {
+      const payload = JSON.parse(body || '{}');
+      const code = String(payload.code || '').trim();
+      const redirectUri = String(payload.redirect_uri || '').trim();
+      if (!code) {
+        sendJson(res, 400, { error: 'No code provided' });
+        return;
+      }
+      if (!redirectUri) {
+        sendJson(res, 400, { error: 'No redirect_uri provided' });
+        return;
+      }
+      const tokenUrl = 'https://discord.com/api/oauth2/token';
+      const params = new URLSearchParams();
+      params.append('client_id', discordClientId);
+      params.append('client_secret', discordClientSecret);
+      params.append('grant_type', 'authorization_code');
+      params.append('code', code);
+      params.append('redirect_uri', redirectUri);
+      fetch(tokenUrl, {
+        method: 'POST',
+        body: params,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(r => r.json()).then(tokenData => {
+        if (!tokenData.access_token) {
+          sendJson(res, 400, { error: 'Failed to get token' });
+          return;
+        }
+        fetch('https://discord.com/api/users/@me', {
+          headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
+        }).then(r => r.json()).then(userData => {
+          const discordId = userData.id;
+          const email = userData.email;
+          const username = userData.username;
+          const avatar = userData.avatar ? `https://cdn.discordapp.com/avatars/${discordId}/${userData.avatar}.png` : null;
+          let user = findUserByDiscordId(discordId);
+          if (!user) {
+            user = createUserFromDiscord(discordId, email, username, avatar);
+          } else {
+            if (email && !user.email) user.email = email;
+            if (avatar && !user.avatar) user.avatar = avatar;
+            writeUsers(readUsers().map(u => u.id === user.id ? user : u));
+          }
+          const token = createSession(user.id, user.username);
+          sendJson(res, 200, { token });
+        }).catch(err => {
+          console.error('Discord user fetch error:', err);
+          sendJson(res, 500, { error: 'Error fetching user' });
+        });
+      }).catch(err => {
+        console.error('Discord token exchange error:', err);
+        sendJson(res, 500, { error: 'Error exchanging code' });
+      });
+    } catch (e) {
+      sendJson(res, 400, { error: 'Invalid request' });
+    }
+  });
+  return;
+}
+
+  // GitHub OAuth
+  if (req.method === 'GET' && matchesRoute('/auth/github')) {
+    if (!githubClientId) {
+      sendError(res, 500, 'GitHub OAuth not configured');
+      return;
+    }
+    if (!publicFrontendBase) {
+      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+      return;
+    }
+    const redirectUri = `${publicFrontendBase}/oauth-callback`;
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(githubClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email&state=github`;
+    res.writeHead(302, { Location: authUrl });
+    res.end();
+    return;
+  }
+
+  if (req.method === 'POST' && matchesRoute('/api/auth/github/relay')) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+    if (body.length > 65536) req.destroy();
+  });
+  req.on('end', () => {
+    try {
+      const payload = JSON.parse(body || '{}');
+      const code = String(payload.code || '').trim();
+      const redirectUri = String(payload.redirect_uri || '').trim();
+      if (!code) {
+        sendJson(res, 400, { error: 'No code provided' });
+        return;
+      }
+      if (!redirectUri) {
+        sendJson(res, 400, { error: 'No redirect_uri provided' });
+        return;
+      }
+      const tokenUrl = 'https://github.com/login/oauth/access_token';
+      const params = new URLSearchParams();
+      params.append('client_id', githubClientId);
+      params.append('client_secret', githubClientSecret);
+      params.append('code', code);
+      params.append('redirect_uri', redirectUri);
+      fetch(tokenUrl, {
+        method: 'POST',
+        body: params,
+        headers: { 'Accept': 'application/json' }
+      }).then(r => r.json()).then(tokenData => {
+        if (!tokenData.access_token) {
+          sendJson(res, 400, { error: 'Failed to get token' });
+          return;
+        }
+        fetch('https://api.github.com/user', {
+          headers: { 'Authorization': `token ${tokenData.access_token}` }
+        }).then(r => r.json()).then(userData => {
+          const githubId = userData.id;
+          let email = userData.email;
+          const username = userData.login;
+          const avatar = userData.avatar_url;
+          if (!email) {
+            fetch('https://api.github.com/user/emails', {
+              headers: { 'Authorization': `token ${tokenData.access_token}` }
+            }).then(r => r.json()).then(emails => {
+              const primary = emails.find(e => e.primary);
+              email = primary ? primary.email : null;
+              createOrUpdateUser();
+            }).catch(() => createOrUpdateUser());
+          } else {
+            createOrUpdateUser();
+          }
+          function createOrUpdateUser() {
+            let user = findUserByGithubId(githubId);
+            if (!user) {
+              user = createUserFromGithub(githubId, email, username, avatar);
+            } else {
+              if (email && !user.email) user.email = email;
+              if (avatar && !user.avatar) user.avatar = avatar;
+              writeUsers(readUsers().map(u => u.id === user.id ? user : u));
+            }
+            const token = createSession(user.id, user.username);
+            sendJson(res, 200, { token });
+          }
+        }).catch(err => {
+          console.error('GitHub user fetch error:', err);
+          sendJson(res, 500, { error: 'Error fetching user' });
+        });
+      }).catch(err => {
+        console.error('GitHub token exchange error:', err);
+        sendJson(res, 500, { error: 'Error exchanging code' });
+      });
+    } catch (e) {
+      sendJson(res, 400, { error: 'Invalid request' });
+    }
+  });
+  return;
+}
 
   if (req.method === 'POST' && pathname === '/api/auth/logout') {
     const token = getBearerToken(req);
@@ -1355,11 +1988,101 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+<<<<<<< HEAD
   if (req.method === 'GET' && pathname === '/api/config') {
     sendJson(res, 200, {
       googleClientId: process.env.GOOGLE_CLIENT_ID || '',
       discordClientId: process.env.DISCORD_CLIENT_ID || '',
       githubClientId: process.env.GITHUB_CLIENT_ID || ''
+=======
+  if (req.method === 'POST' && pathname.replace(BASE, '') === '/api/auth/google') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const token = String(payload.token || '');
+        if (!token) {
+          sendJson(res, 400, { error: 'Token is required.' });
+          return;
+        }
+        verifyGoogleToken(token).then(googleUser => {
+          const users = readUsers();
+          const user = users.find(u => u.googleId === googleUser.sub);
+          if (!user) {
+            sendJson(res, 404, { error: 'No account found with this Google account. Please sign up first.' });
+            return;
+          }
+          const sessionToken = createSession(user.id, user.username);
+          sendJson(res, 200, { ok: true, token: sessionToken, userId: user.id, username: user.username });
+        }).catch(error => {
+          console.error(`[FEDL] Google auth failed: ${error.message}`);
+          sendJson(res, 401, { error: 'Google authentication failed.' });
+        });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid Google auth request' });
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'POST' && pathname.replace(BASE, '') === '/api/auth/google-signup') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 65536) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const token = String(payload.token || '');
+        if (!token) {
+          sendJson(res, 400, { error: 'Token is required.' });
+          return;
+        }
+        verifyGoogleToken(token).then(googleUser => {
+          const users = readUsers();
+          let user = users.find(u => u.googleId === googleUser.sub);
+          if (user) {
+            sendJson(res, 409, { error: 'An account with this Google account already exists.' });
+            return;
+          }
+          // Generate a unique username based on Google name/email
+          let baseUsername = (googleUser.name || googleUser.email.split('@')[0] || 'user').toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 20);
+          let username = baseUsername;
+          let counter = 1;
+          while (users.some(u => u.username === username)) {
+            username = `${baseUsername}${counter}`;
+            counter++;
+            if (counter > 100) {
+              sendJson(res, 400, { error: 'Could not generate a unique username.' });
+              return;
+            }
+          }
+          const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+          user = {
+            id,
+            username,
+            googleId: googleUser.sub,
+            email: googleUser.email,
+            name: googleUser.name,
+            createdAt: new Date().toISOString()
+          };
+          users.push(user);
+          writeUsers(users);
+          const sessionToken = createSession(id, username);
+          sendJson(res, 201, { ok: true, token: sessionToken, userId: id, username });
+        }).catch(error => {
+          console.error(`[FEDL] Google signup failed: ${error.message}`);
+          sendJson(res, 400, { error: 'Google sign-up failed.' });
+        });
+      } catch (error) {
+        sendJson(res, 400, { error: 'Invalid Google sign-up request' });
+      }
+>>>>>>> ce3825ca557eb6e5e66b290e66c963aa2abbd42a
     });
     return;
   }
@@ -2036,7 +2759,23 @@ const server = http.createServer((req, res) => {
   }
 
   serveFile(pathname, res);
-});
+}
+
+const server = (() => {
+  const keyPath = path.join(__dirname, 'key.pem');
+  const certPath = path.join(__dirname, 'cert.pem');
+  const isHttps = fs.existsSync(keyPath) && fs.existsSync(certPath);
+  if (isHttps) {
+    const https = require('https');
+    const options = {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certPath)
+    };
+    return https.createServer(options, handleRequest);
+  } else {
+    return http.createServer(handleRequest);
+  }
+})();
 
 ensureRunsFile();
 safeWatch(dataPath, 'list-update');
@@ -2052,7 +2791,8 @@ server.on('error', error => {
 });
 
 server.listen(port, host, () => {
-  console.log(`FEDL server running at http://${host}:${port}`);
+  const scheme = fs.existsSync(path.join(__dirname, 'key.pem')) && fs.existsSync(path.join(__dirname, 'cert.pem')) ? 'https' : 'http';
+  console.log(`FEDL server running at ${scheme}://${host}:${port}`);
   console.log(`Base path: ${BASE}`);
   console.log(`Using live list file: ${dataPath}`);
   console.log(`Legacy list fallback: ${legacyDataPath}`);
