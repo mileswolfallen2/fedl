@@ -17,6 +17,7 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
+const publicFrontendBase = String(process.env.FRONTEND_BASE_URL || process.env.FRONTEND_HOST || process.env.PUBLIC_HOST || serverConfig.frontendHost || '').trim().replace(/\/+$|\s+$/g, '');
 // Google OAuth credentials (env/.env or NV/EMV/EV files)
 let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
 let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
@@ -1413,6 +1414,13 @@ function handleRequest(req, res) {
     return pathname.startsWith('/fedl') ? `${protocol}://${req.headers.host}/fedl` : `${protocol}://${req.headers.host}`;
   }
 
+  function getAuthReturnBase() {
+    if (publicFrontendBase) {
+      return publicFrontendBase;
+    }
+    return getRedirectBase();
+  }
+
   if (req.method === 'OPTIONS') {
     setCors(res);
     res.writeHead(204);
@@ -1638,7 +1646,7 @@ if (req.method === 'GET' && matchesRoute('/auth/google')) {
           user = createUserFromGoogle(googleId, email, name);
         }
         const token = createSession(user.id, user.username);
-        res.writeHead(302, { Location: `${getRedirectBase()}/?token=${token}` });
+        res.writeHead(302, { Location: `${getAuthReturnBase()}/?token=${token}` });
         res.end();
       }).catch(err => {
         console.error('Google token exchange error:', err);
@@ -1710,7 +1718,7 @@ if (req.method === 'GET' && matchesRoute('/auth/google')) {
           writeUsers(readUsers().map(u => u.id === user.id ? user : u));
         }
         const token = createSession(user.id, user.username);
-        res.writeHead(302, { Location: `${getRedirectBase()}/?token=${token}` });
+        res.writeHead(302, { Location: `${getAuthReturnBase()}/?token=${token}` });
         res.end();
       }).catch(err => {
         console.error('Discord user fetch error:', err);
@@ -1795,7 +1803,7 @@ if (req.method === 'GET' && matchesRoute('/auth/google')) {
             writeUsers(readUsers().map(u => u.id === user.id ? user : u));
           }
           const token = createSession(user.id, user.username);
-          res.writeHead(302, { Location: `${getRedirectBase()}/?token=${token}` });
+          res.writeHead(302, { Location: `${getAuthReturnBase()}/?token=${token}` });
           res.end();
         }
       }).catch(err => {
