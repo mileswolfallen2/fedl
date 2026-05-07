@@ -2,8 +2,7 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:"Space Grotesk","Trebuchet MS",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
 header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 20px;background:linear-gradient(90deg,rgba(6,16,33,0.9),rgba(7,20,38,0.72));backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.05)}
-header h1{margin:0;font-size:1.1rem;letter-spacing:.02em;display:inline-flex;align-items:center;gap:10px}
-header h1::before{content:'';width:24px;height:24px;background:url(pageicon.png) center/contain no-repeat;display:block}
+header h1{margin:0;font-size:1.1rem;letter-spacing:.02em}
 nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px 12px}
 nav a{color:var(--muted);margin-left:0;text-decoration:none;transition:color .2s ease,opacity .2s ease}
 nav a:hover{color:var(--text)}
@@ -452,18 +451,6 @@ linear-gradient(180deg,rgba(8,18,32,0.98),rgba(7,19,38,0.94))}
 .auth-form{display:grid;gap:16px;margin-top:18px}
 .auth-form .auth-hint{margin:-6px 0 0 0;font-size:.82rem}
 .auth-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:8px}
-.auth-social-buttons{display:grid;gap:14px;margin:16px auto 0;max-width:320px;width:100%}
-.auth-social-buttons .social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 18px;min-height:48px;border:none;outline:none;box-shadow:none;text-transform:none}
-.auth-social-buttons .social-btn:focus-visible{outline:3px solid rgba(59,130,246,0.5);outline-offset:3px}
-.auth-social-buttons .social-btn .social-icon{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center}
-.google-btn{background:#fff;color:#202124;border:1px solid rgba(0,0,0,0.12)}
-.google-btn:hover{background:#f8f9fa}
-.google-btn .social-icon svg{border-radius:2px}
-.discord-btn{background:#5865F2;color:#fff}
-.github-btn{background:#24292E;color:#fff}
-.g_id_signin{display:none !important}
-.auth-social-buttons{display:grid;gap:14px;margin:16px auto 0;max-width:320px;width:100%}
-.auth-social-buttons .btn{width:100%;justify-content:center}
 .account-main{max-width:820px;margin:0 auto;padding:28px 20px 48px;display:grid;gap:18px}
 .account-hero,.account-panel{padding:28px 26px}
 .account-hero{background:linear-gradient(145deg,rgba(255,184,77,0.12),rgba(7,19,38,0.96) 42%),radial-gradient(circle at top left,rgba(255,255,255,0.08),transparent 35%);border:1px solid rgba(255,184,77,0.16);border-radius:28px}
@@ -641,19 +628,7 @@ header nav .fedl-auth-nav a:hover{color:var(--text)}
 .page-transition.loaded{opacity:1}
 body{animation:page-enter 0.3s ease}
 @keyframes page-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-
-.oauth-btn{display:block;width:100%;margin:8px 0;padding:12px 18px;font-weight:700;border:none;border-radius:6px;cursor:pointer;text-align:center}
-.google-btn{background:#fff;color:#333;border:1px solid #ddd}
-.google-btn:hover{background:#f5f5f5}
-.discord-btn{background:#5865f2;color:#fff}
-.discord-btn:hover{background:#4752c4}
-.github-btn{background:#24292e;color:#fff}
-.github-btn:hover{background:#1a1e22}
-
-
 .auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:0.9rem}
 .auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.1)}
 .g_id_signin{display:flex;justify-content:center;margin:16px 0}
 #g_id_onload{display:none}
-
