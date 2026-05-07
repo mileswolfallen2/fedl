@@ -17,14 +17,11 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
-const publicFrontendBase = String(process.env.FRONTEND_BASE_URL || process.env.FRONTEND_HOST || process.env.PUBLIC_HOST || serverConfig.frontendHost || 'https://fedl.site').trim().replace(/\/+$|\s+$/g, '');
+
 // Google OAuth credentials (env/.env or NV/EMV/EV files)
 let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
 let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
-let discordClientId = String(process.env.DISCORD_CLIENT_ID || '').trim();
-let discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || '').trim();
-let githubClientId = String(process.env.GITHUB_CLIENT_ID || '').trim();
-let githubClientSecret = String(process.env.GITHUB_CLIENT_SECRET || '').trim();
+
 // Lightweight .env loader (server/.env)
 function loadEnvFromFile(){
   try {
@@ -44,10 +41,7 @@ function loadEnvFromFile(){
 loadEnvFromFile();
 googleClientId = String(process.env.GOOGLE_CLIENT_ID || googleClientId || '').trim();
 googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || googleClientSecret || '').trim();
-discordClientId = String(process.env.DISCORD_CLIENT_ID || discordClientId || '').trim();
-discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || discordClientSecret || '').trim();
-githubClientId = String(process.env.GITHUB_CLIENT_ID || githubClientId || '').trim();
-githubClientSecret = String(process.env.GITHUB_CLIENT_SECRET || githubClientSecret || '').trim();
+
 const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
 
  async function sendDiscordNotification(message) {
@@ -153,14 +147,7 @@ function findUserByGoogleId(googleId){
   const users = readUsers();
   return users.find(u => String(u.googleId || '') === String(googleId));
 }
-function findUserByDiscordId(discordId){
-  const users = readUsers();
-  return users.find(u => String(u.discordId || '') === String(discordId));
-}
-function findUserByGithubId(githubId){
-  const users = readUsers();
-  return users.find(u => String(u.githubId || '') === String(githubId));
-}
+
 function findUserByEmail(email){
   const em = String(email || '').trim().toLowerCase();
   const users = readUsers();
@@ -188,29 +175,12 @@ function createUserFromGoogle(googleId, email, name){
   writeUsers(users);
   return user;
 }
-function createUserFromDiscord(discordId, email, username, avatar){
-  const users = readUsers();
-  const uname = username ? deriveUsernameFromEmail(username + '@discord.com') : `discord_${Date.now().toString(36)}`;
-  const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
-  const user = { id, username: uname, discordId, email, avatar, createdAt: new Date().toISOString() };
-  users.push(user);
-  writeUsers(users);
-  return user;
-}
-function createUserFromGithub(githubId, email, username, avatar){
-  const users = readUsers();
-  const uname = username ? deriveUsernameFromEmail(username + '@github.com') : `github_${Date.now().toString(36)}`;
-  const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
-  const user = { id, username: uname, githubId, email, avatar, createdAt: new Date().toISOString() };
-  users.push(user);
-  writeUsers(users);
-  return user;
-}
+
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '';
-const adminPassword = String(process.env.ADMIN_PASSWORD || 'mimiAL64.68');
-const clients = new Set();
+const adminPassword = String(process.env.ADMIN_PASSWORD || 'test');
+
 
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -385,13 +355,10 @@ async function verifyGoogleToken(token) {
     if (payload.iss !== 'https://accounts.google.com') {
       throw new Error('Invalid issuer');
     }
-    const expectedAud = String(googleClientId || '').trim();
-    if (expectedAud) {
-      const audValue = payload.aud;
-      const audMatches = Array.isArray(audValue) ? audValue.includes(expectedAud) : audValue === expectedAud;
-      if (!audMatches) {
-        throw new Error('Invalid audience');
-      }
+
+    if (!payload.aud.includes('271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com')) {
+      throw new Error('Invalid audience');
+
     }
     
     return payload;
@@ -1586,270 +1553,6 @@ function handleRequest(req, res) {
     return;
   }
 
-  // Discord OAuth
-  if (req.method === 'GET' && matchesRoute('/auth/google')) {
-    if (!googleClientId || !googleClientSecret) {
-      sendError(res, 500, 'Google OAuth not configured');
-      return;
-    }
-    if (!publicFrontendBase) {
-      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
-      return;
-    }
-    const redirectUri = `${publicFrontendBase}/oauth-callback`;
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&access_type=online&prompt=select_account&state=google`;
-    res.writeHead(302, { Location: authUrl });
-    res.end();
-    return;
-  }
-
-  if (req.method === 'POST' && matchesRoute('/api/auth/google/relay')) {
-  let body = '';
-  req.on('data', chunk => {
-    body += chunk;
-    if (body.length > 65536) req.destroy();
-  });
-  req.on('end', () => {
-    try {
-      const payload = JSON.parse(body || '{}');
-      const code = String(payload.code || '').trim();
-      const redirectUri = String(payload.redirect_uri || '').trim();
-      if (!code) {
-        sendJson(res, 400, { error: 'No code provided' });
-        return;
-      }
-      if (!redirectUri) {
-        sendJson(res, 400, { error: 'No redirect_uri provided' });
-        return;
-      }
-      const tokenUrl = 'https://oauth2.googleapis.com/token';
-      const params = new URLSearchParams();
-      params.append('client_id', googleClientId);
-      params.append('client_secret', googleClientSecret);
-      params.append('grant_type', 'authorization_code');
-      params.append('code', code);
-      params.append('redirect_uri', redirectUri);
-      fetch(tokenUrl, {
-        method: 'POST',
-        body: params,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      }).then(r => r.json()).then(tokenData => {
-        if (!tokenData.id_token) {
-          sendJson(res, 400, { error: 'Failed to get Google token' });
-          return;
-        }
-        verifyGoogleToken(tokenData.id_token).then(payload => {
-          const googleId = String(payload.sub || '').trim();
-          const email = String(payload.email || '').trim();
-          const name = String(payload.name || payload.given_name || '').trim();
-          let user = findUserByGoogleId(googleId);
-          const users = readUsers();
-          if (!user && email) {
-            const byEmail = users.find(u => String((u.email || '')).toLowerCase() === email.toLowerCase());
-            if (byEmail) {
-              byEmail.googleId = googleId;
-              writeUsers(users);
-              user = byEmail;
-            }
-          }
-          if (!user) {
-            user = createUserFromGoogle(googleId, email, name);
-          }
-          const token = createSession(user.id, user.username);
-          sendJson(res, 200, { token });
-        }).catch(err => {
-          console.error('Google token exchange error:', err);
-          sendJson(res, 500, { error: 'Error verifying Google token' });
-        });
-      }).catch(err => {
-        console.error('Google token exchange error:', err);
-        sendJson(res, 500, { error: 'Error exchanging code' });
-      });
-    } catch (e) {
-      sendJson(res, 400, { error: 'Invalid request' });
-    }
-  });
-  return;
-}
-
-  if (req.method === 'GET' && matchesRoute('/auth/discord')) {
-    if (!discordClientId) {
-      sendError(res, 500, 'Discord OAuth not configured');
-      return;
-    }
-    if (!publicFrontendBase) {
-      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
-      return;
-    }
-    const redirectUri = `${publicFrontendBase}/oauth-callback`;
-    const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email&state=discord`;
-    res.writeHead(302, { Location: authUrl });
-    res.end();
-    return;
-  }
-
-  if (req.method === 'POST' && matchesRoute('/api/auth/discord/relay')) {
-  let body = '';
-  req.on('data', chunk => {
-    body += chunk;
-    if (body.length > 65536) req.destroy();
-  });
-  req.on('end', () => {
-    try {
-      const payload = JSON.parse(body || '{}');
-      const code = String(payload.code || '').trim();
-      const redirectUri = String(payload.redirect_uri || '').trim();
-      if (!code) {
-        sendJson(res, 400, { error: 'No code provided' });
-        return;
-      }
-      if (!redirectUri) {
-        sendJson(res, 400, { error: 'No redirect_uri provided' });
-        return;
-      }
-      const tokenUrl = 'https://discord.com/api/oauth2/token';
-      const params = new URLSearchParams();
-      params.append('client_id', discordClientId);
-      params.append('client_secret', discordClientSecret);
-      params.append('grant_type', 'authorization_code');
-      params.append('code', code);
-      params.append('redirect_uri', redirectUri);
-      fetch(tokenUrl, {
-        method: 'POST',
-        body: params,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      }).then(r => r.json()).then(tokenData => {
-        if (!tokenData.access_token) {
-          sendJson(res, 400, { error: 'Failed to get token' });
-          return;
-        }
-        fetch('https://discord.com/api/users/@me', {
-          headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
-        }).then(r => r.json()).then(userData => {
-          const discordId = userData.id;
-          const email = userData.email;
-          const username = userData.username;
-          const avatar = userData.avatar ? `https://cdn.discordapp.com/avatars/${discordId}/${userData.avatar}.png` : null;
-          let user = findUserByDiscordId(discordId);
-          if (!user) {
-            user = createUserFromDiscord(discordId, email, username, avatar);
-          } else {
-            if (email && !user.email) user.email = email;
-            if (avatar && !user.avatar) user.avatar = avatar;
-            writeUsers(readUsers().map(u => u.id === user.id ? user : u));
-          }
-          const token = createSession(user.id, user.username);
-          sendJson(res, 200, { token });
-        }).catch(err => {
-          console.error('Discord user fetch error:', err);
-          sendJson(res, 500, { error: 'Error fetching user' });
-        });
-      }).catch(err => {
-        console.error('Discord token exchange error:', err);
-        sendJson(res, 500, { error: 'Error exchanging code' });
-      });
-    } catch (e) {
-      sendJson(res, 400, { error: 'Invalid request' });
-    }
-  });
-  return;
-}
-
-  // GitHub OAuth
-  if (req.method === 'GET' && matchesRoute('/auth/github')) {
-    if (!githubClientId) {
-      sendError(res, 500, 'GitHub OAuth not configured');
-      return;
-    }
-    if (!publicFrontendBase) {
-      sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
-      return;
-    }
-    const redirectUri = `${publicFrontendBase}/oauth-callback`;
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(githubClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email&state=github`;
-    res.writeHead(302, { Location: authUrl });
-    res.end();
-    return;
-  }
-
-  if (req.method === 'POST' && matchesRoute('/api/auth/github/relay')) {
-  let body = '';
-  req.on('data', chunk => {
-    body += chunk;
-    if (body.length > 65536) req.destroy();
-  });
-  req.on('end', () => {
-    try {
-      const payload = JSON.parse(body || '{}');
-      const code = String(payload.code || '').trim();
-      const redirectUri = String(payload.redirect_uri || '').trim();
-      if (!code) {
-        sendJson(res, 400, { error: 'No code provided' });
-        return;
-      }
-      if (!redirectUri) {
-        sendJson(res, 400, { error: 'No redirect_uri provided' });
-        return;
-      }
-      const tokenUrl = 'https://github.com/login/oauth/access_token';
-      const params = new URLSearchParams();
-      params.append('client_id', githubClientId);
-      params.append('client_secret', githubClientSecret);
-      params.append('code', code);
-      params.append('redirect_uri', redirectUri);
-      fetch(tokenUrl, {
-        method: 'POST',
-        body: params,
-        headers: { 'Accept': 'application/json' }
-      }).then(r => r.json()).then(tokenData => {
-        if (!tokenData.access_token) {
-          sendJson(res, 400, { error: 'Failed to get token' });
-          return;
-        }
-        fetch('https://api.github.com/user', {
-          headers: { 'Authorization': `token ${tokenData.access_token}` }
-        }).then(r => r.json()).then(userData => {
-          const githubId = userData.id;
-          let email = userData.email;
-          const username = userData.login;
-          const avatar = userData.avatar_url;
-          if (!email) {
-            fetch('https://api.github.com/user/emails', {
-              headers: { 'Authorization': `token ${tokenData.access_token}` }
-            }).then(r => r.json()).then(emails => {
-              const primary = emails.find(e => e.primary);
-              email = primary ? primary.email : null;
-              createOrUpdateUser();
-            }).catch(() => createOrUpdateUser());
-          } else {
-            createOrUpdateUser();
-          }
-          function createOrUpdateUser() {
-            let user = findUserByGithubId(githubId);
-            if (!user) {
-              user = createUserFromGithub(githubId, email, username, avatar);
-            } else {
-              if (email && !user.email) user.email = email;
-              if (avatar && !user.avatar) user.avatar = avatar;
-              writeUsers(readUsers().map(u => u.id === user.id ? user : u));
-            }
-            const token = createSession(user.id, user.username);
-            sendJson(res, 200, { token });
-          }
-        }).catch(err => {
-          console.error('GitHub user fetch error:', err);
-          sendJson(res, 500, { error: 'Error fetching user' });
-        });
-      }).catch(err => {
-        console.error('GitHub token exchange error:', err);
-        sendJson(res, 500, { error: 'Error exchanging code' });
-      });
-    } catch (e) {
-      sendJson(res, 400, { error: 'Invalid request' });
-    }
-  });
-  return;
-}
 
   if (req.method === 'POST' && pathname === '/api/auth/logout') {
     const token = getBearerToken(req);
@@ -1988,13 +1691,7 @@ function handleRequest(req, res) {
     return;
   }
 
-<<<<<<< HEAD
-  if (req.method === 'GET' && pathname === '/api/config') {
-    sendJson(res, 200, {
-      googleClientId: process.env.GOOGLE_CLIENT_ID || '',
-      discordClientId: process.env.DISCORD_CLIENT_ID || '',
-      githubClientId: process.env.GITHUB_CLIENT_ID || ''
-=======
+
   if (req.method === 'POST' && pathname.replace(BASE, '') === '/api/auth/google') {
     let body = '';
     req.on('data', chunk => {
@@ -2082,7 +1779,7 @@ function handleRequest(req, res) {
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid Google sign-up request' });
       }
->>>>>>> ce3825ca557eb6e5e66b290e66c963aa2abbd42a
+
     });
     return;
   }

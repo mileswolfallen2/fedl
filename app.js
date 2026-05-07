@@ -29,44 +29,6 @@
     }
   };
 
-  window.signinGoogle = function(){
-    const clientId = document.querySelector('meta[name="google-signin-client_id"]')?.content ||
-                      '271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com';
-    const redirectUri = `${window.location.origin}/oauth-callback`;
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${encodeURIComponent(clientId)}&` +
-      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-      `response_type=code&` +
-      `scope=openid%20email%20profile&` +
-      `access_type=online&` +
-      `prompt=select_account&` +
-      `state=google`;
-    window.location.href = authUrl;
-  };
-
-  window.signinDiscord = function(){
-    const clientId = 'YOUR_DISCORD_CLIENT_ID';
-    const redirectUri = `${window.location.origin}/oauth-callback`;
-    const authUrl = `https://discord.com/api/oauth2/authorize?` +
-      `client_id=${encodeURIComponent(clientId)}&` +
-      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-      `response_type=code&` +
-      `scope=identify%20email&` +
-      `state=discord`;
-    window.location.href = authUrl;
-  };
-
-  window.signinGithub = function(){
-    const clientId = 'YOUR_GITHUB_CLIENT_ID';
-    const redirectUri = `${window.location.origin}/oauth-callback`;
-    const authUrl = `https://github.com/login/oauth/authorize?` +
-      `client_id=${encodeURIComponent(clientId)}&` +
-      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-      `scope=user:email&` +
-      `state=github`;
-    window.location.href = authUrl;
-  };
-
   function promptForUsername(payload){
     const page = document.body.dataset.page;
     // Determine container to inject UI
@@ -644,24 +606,6 @@
       }
     } catch (e) {}
   }
-
-  function hydrateTokenFromUrl(){
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const token = String(params.get('token') || '').trim();
-      if (token) {
-        fedlSetAuthToken(token);
-        if (window.history && window.history.replaceState) {
-          params.delete('token');
-          const url = new URL(window.location.href);
-          url.search = params.toString();
-          window.history.replaceState({}, '', url.pathname + (url.search ? `?${url.search}` : '') + url.hash);
-        }
-      }
-    } catch (e) {}
-  }
-
-  hydrateTokenFromUrl();
 
   function fedlClearServerSession(){
     fedlServerUserId = null;
@@ -4492,11 +4436,7 @@
     }
   });
 
-   // Utility
-   function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}
-   function escapeAttr(s){return escapeHtml(String(s == null ? '' : s))}
-
-   // Expose variables needed by oauth-callback.html
-   window.liveServerBase = liveServerBase;
-   window.fedlSetAuthToken = fedlSetAuthToken;
+  // Utility
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}
+  function escapeAttr(s){return escapeHtml(String(s == null ? '' : s))}
 })();
