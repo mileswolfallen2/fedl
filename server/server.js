@@ -1588,236 +1588,268 @@ function handleRequest(req, res) {
 
   // Discord OAuth
 if (req.method === 'GET' && matchesRoute('/auth/google')) {
-    if (!googleClientId || !googleClientSecret) {
-      sendError(res, 500, 'Google OAuth not configured');
-      return;
-    }
-    const protocol = getRequestProtocol(req);
-    const callbackPath = getPrefixedRoute('/auth/google/callback');
-    const redirectUri = `${protocol}://${req.headers.host}${callbackPath}`;
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&access_type=online&prompt=select_account`;
-    res.writeHead(302, { Location: authUrl });
-    res.end();
+  if (!googleClientId || !googleClientSecret) {
+    sendError(res, 500, 'Google OAuth not configured');
     return;
   }
+  if (!publicFrontendBase) {
+    sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+    return;
+  }
+  const redirectUri = `${publicFrontendBase}/oauth-callback.html`;
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&access_type=online&prompt=select_account&state=google`;
+  res.writeHead(302, { Location: authUrl });
+  res.end();
+  return;
+}
 
-  if (req.method === 'GET' && matchesRoute('/auth/google/callback')) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const code = url.searchParams.get('code');
-    if (!code) {
-      res.writeHead(400, { 'Content-Type': 'text/plain' });
-      res.end('No code provided');
-      return;
-    }
-    const tokenUrl = 'https://oauth2.googleapis.com/token';
-    const params = new URLSearchParams();
-    params.append('client_id', googleClientId);
-    params.append('client_secret', googleClientSecret);
-    params.append('grant_type', 'authorization_code');
-    params.append('code', code);
-    const protocol = getRequestProtocol(req);
-    const callbackPath = getPrefixedRoute('/auth/google/callback');
-    params.append('redirect_uri', `${protocol}://${req.headers.host}${callbackPath}`);
-    fetch(tokenUrl, {
-      method: 'POST',
-      body: params,
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).then(r => r.json()).then(tokenData => {
-      if (!tokenData.id_token) {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Failed to get Google token');
+  if (req.method === 'POST' && matchesRoute('/api/auth/google/relay')) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+    if (body.length > 65536) req.destroy();
+  });
+  req.on('end', () => {
+    try {
+      const payload = JSON.parse(body || '{}');
+      const code = String(payload.code || '').trim();
+      const redirectUri = String(payload.redirect_uri || '').trim();
+      if (!code) {
+        sendJson(res, 400, { error: 'No code provided' });
         return;
       }
-      verifyGoogleToken(tokenData.id_token).then(payload => {
-        const googleId = String(payload.sub || '').trim();
-        const email = String(payload.email || '').trim();
-        const name = String(payload.name || payload.given_name || '').trim();
-        let user = findUserByGoogleId(googleId);
-        const users = readUsers();
-        if (!user && email) {
-          const byEmail = users.find(u => String((u.email || '')).toLowerCase() === email.toLowerCase());
-          if (byEmail) {
-            byEmail.googleId = googleId;
-            writeUsers(users);
-            user = byEmail;
+      if (!redirectUri) {
+        sendJson(res, 400, { error: 'No redirect_uri provided' });
+        return;
+      }
+      const tokenUrl = 'https://oauth2.googleapis.com/token';
+      const params = new URLSearchParams();
+      params.append('client_id', googleClientId);
+      params.append('client_secret', googleClientSecret);
+      params.append('grant_type', 'authorization_code');
+      params.append('code', code);
+      params.append('redirect_uri', redirectUri);
+      fetch(tokenUrl, {
+        method: 'POST',
+        body: params,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(r => r.json()).then(tokenData => {
+        if (!tokenData.id_token) {
+          sendJson(res, 400, { error: 'Failed to get Google token' });
+          return;
+        }
+        verifyGoogleToken(tokenData.id_token).then(payload => {
+          const googleId = String(payload.sub || '').trim();
+          const email = String(payload.email || '').trim();
+          const name = String(payload.name || payload.given_name || '').trim();
+          let user = findUserByGoogleId(googleId);
+          const users = readUsers();
+          if (!user && email) {
+            const byEmail = users.find(u => String((u.email || '')).toLowerCase() === email.toLowerCase());
+            if (byEmail) {
+              byEmail.googleId = googleId;
+              writeUsers(users);
+              user = byEmail;
+            }
           }
-        }
-        if (!user) {
-          user = createUserFromGoogle(googleId, email, name);
-        }
-        const token = createSession(user.id, user.username);
-        res.writeHead(302, { Location: `${getAuthReturnBase()}/?token=${token}` });
-        res.end();
+          if (!user) {
+            user = createUserFromGoogle(googleId, email, name);
+          }
+          const token = createSession(user.id, user.username);
+          sendJson(res, 200, { token });
+        }).catch(err => {
+          console.error('Google token exchange error:', err);
+          sendJson(res, 500, { error: 'Error verifying Google token' });
+        });
       }).catch(err => {
         console.error('Google token exchange error:', err);
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('Error verifying Google token');
+        sendJson(res, 500, { error: 'Error exchanging code' });
       });
-    }).catch(err => {
-      console.error('Google token exchange error:', err);
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
-      res.end('Error exchanging code');
-    });
-    return;
-  }
+    } catch (e) {
+      sendJson(res, 400, { error: 'Invalid request' });
+    }
+  });
+  return;
+}
 
   if (req.method === 'GET' && matchesRoute('/auth/discord')) {
-    if (!discordClientId) {
-      sendError(res, 500, 'Discord OAuth not configured');
-      return;
-    }
-    const protocol = getRequestProtocol(req);
-    const callbackPath = getPrefixedRoute('/auth/discord/callback');
-    const redirectUri = `${protocol}://${req.headers.host}${callbackPath}`;
-    const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email`;
-    res.writeHead(302, { Location: authUrl });
-    res.end();
+  if (!discordClientId) {
+    sendError(res, 500, 'Discord OAuth not configured');
     return;
   }
+  if (!publicFrontendBase) {
+    sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+    return;
+  }
+  const redirectUri = `${publicFrontendBase}/oauth-callback.html`;
+  const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email&state=discord`;
+  res.writeHead(302, { Location: authUrl });
+  res.end();
+  return;
+}
 
-  if (req.method === 'GET' && matchesRoute('/auth/discord/callback')) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const code = url.searchParams.get('code');
-    if (!code) {
-      res.writeHead(400, { 'Content-Type': 'text/plain' });
-      res.end('No code provided');
-      return;
-    }
-    const tokenUrl = 'https://discord.com/api/oauth2/token';
-    const params = new URLSearchParams();
-    params.append('client_id', discordClientId);
-    params.append('client_secret', discordClientSecret);
-    params.append('grant_type', 'authorization_code');
-    params.append('code', code);
-    const protocol = getRequestProtocol(req);
-    const callbackPath = getPrefixedRoute('/auth/discord/callback');
-    params.append('redirect_uri', `${protocol}://${req.headers.host}${callbackPath}`);
-    fetch(tokenUrl, {
-      method: 'POST',
-      body: params,
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).then(r => r.json()).then(tokenData => {
-      if (!tokenData.access_token) {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Failed to get token');
+  if (req.method === 'POST' && matchesRoute('/api/auth/discord/relay')) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+    if (body.length > 65536) req.destroy();
+  });
+  req.on('end', () => {
+    try {
+      const payload = JSON.parse(body || '{}');
+      const code = String(payload.code || '').trim();
+      const redirectUri = String(payload.redirect_uri || '').trim();
+      if (!code) {
+        sendJson(res, 400, { error: 'No code provided' });
         return;
       }
-      fetch('https://discord.com/api/users/@me', {
-        headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
-      }).then(r => r.json()).then(userData => {
-        const discordId = userData.id;
-        const email = userData.email;
-        const username = userData.username;
-        const avatar = userData.avatar ? `https://cdn.discordapp.com/avatars/${discordId}/${userData.avatar}.png` : null;
-        let user = findUserByDiscordId(discordId);
-        if (!user) {
-          user = createUserFromDiscord(discordId, email, username, avatar);
-        } else {
-          if (email && !user.email) user.email = email;
-          if (avatar && !user.avatar) user.avatar = avatar;
-          writeUsers(readUsers().map(u => u.id === user.id ? user : u));
-        }
-        const token = createSession(user.id, user.username);
-        res.writeHead(302, { Location: `${getAuthReturnBase()}/?token=${token}` });
-        res.end();
-      }).catch(err => {
-        console.error('Discord user fetch error:', err);
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('Error fetching user');
-      });
-    }).catch(err => {
-      console.error('Discord token exchange error:', err);
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
-      res.end('Error exchanging code');
-    });
-    return;
-  }
-
-  // GitHub OAuth
-  if (req.method === 'GET' && matchesRoute('/auth/github')) {
-    if (!githubClientId) {
-      sendError(res, 500, 'GitHub OAuth not configured');
-      return;
-    }
-    const protocol = getRequestProtocol(req);
-    const callbackPath = getPrefixedRoute('/auth/github/callback');
-    const redirectUri = `${protocol}://${req.headers.host}${callbackPath}`;
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(githubClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email`;
-    res.writeHead(302, { Location: authUrl });
-    res.end();
-    return;
-  }
-
-  if (req.method === 'GET' && matchesRoute('/auth/github/callback')) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const code = url.searchParams.get('code');
-    if (!code) {
-      res.writeHead(400, { 'Content-Type': 'text/plain' });
-      res.end('No code provided');
-      return;
-    }
-    const tokenUrl = 'https://github.com/login/oauth/access_token';
-    const params = new URLSearchParams();
-    params.append('client_id', githubClientId);
-    params.append('client_secret', githubClientSecret);
-    params.append('code', code);
-    const protocol = getRequestProtocol(req);
-    const callbackPath = getPrefixedRoute('/auth/github/callback');
-    params.append('redirect_uri', `${protocol}://${req.headers.host}${callbackPath}`);
-    fetch(tokenUrl, {
-      method: 'POST',
-      body: params,
-      headers: { 'Accept': 'application/json' }
-    }).then(r => r.json()).then(tokenData => {
-      if (!tokenData.access_token) {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Failed to get token');
+      if (!redirectUri) {
+        sendJson(res, 400, { error: 'No redirect_uri provided' });
         return;
       }
-      fetch('https://api.github.com/user', {
-        headers: { 'Authorization': `token ${tokenData.access_token}` }
-      }).then(r => r.json()).then(userData => {
-        const githubId = userData.id;
-        let email = userData.email;
-        const username = userData.login;
-        const avatar = userData.avatar_url;
-        // If no email, try to get it
-        if (!email) {
-          fetch('https://api.github.com/user/emails', {
-            headers: { 'Authorization': `token ${tokenData.access_token}` }
-          }).then(r => r.json()).then(emails => {
-            const primary = emails.find(e => e.primary);
-            email = primary ? primary.email : null;
-            createOrUpdateUser();
-          }).catch(() => createOrUpdateUser());
-        } else {
-          createOrUpdateUser();
+      const tokenUrl = 'https://discord.com/api/oauth2/token';
+      const params = new URLSearchParams();
+      params.append('client_id', discordClientId);
+      params.append('client_secret', discordClientSecret);
+      params.append('grant_type', 'authorization_code');
+      params.append('code', code);
+      params.append('redirect_uri', redirectUri);
+      fetch(tokenUrl, {
+        method: 'POST',
+        body: params,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }).then(r => r.json()).then(tokenData => {
+        if (!tokenData.access_token) {
+          sendJson(res, 400, { error: 'Failed to get token' });
+          return;
         }
-        function createOrUpdateUser() {
-          let user = findUserByGithubId(githubId);
+        fetch('https://discord.com/api/users/@me', {
+          headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
+        }).then(r => r.json()).then(userData => {
+          const discordId = userData.id;
+          const email = userData.email;
+          const username = userData.username;
+          const avatar = userData.avatar ? `https://cdn.discordapp.com/avatars/${discordId}/${userData.avatar}.png` : null;
+          let user = findUserByDiscordId(discordId);
           if (!user) {
-            user = createUserFromGithub(githubId, email, username, avatar);
+            user = createUserFromDiscord(discordId, email, username, avatar);
           } else {
             if (email && !user.email) user.email = email;
             if (avatar && !user.avatar) user.avatar = avatar;
             writeUsers(readUsers().map(u => u.id === user.id ? user : u));
           }
           const token = createSession(user.id, user.username);
-          res.writeHead(302, { Location: `${getAuthReturnBase()}/?token=${token}` });
-          res.end();
-        }
+          sendJson(res, 200, { token });
+        }).catch(err => {
+          console.error('Discord user fetch error:', err);
+          sendJson(res, 500, { error: 'Error fetching user' });
+        });
       }).catch(err => {
-        console.error('GitHub user fetch error:', err);
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('Error fetching user');
+        console.error('Discord token exchange error:', err);
+        sendJson(res, 500, { error: 'Error exchanging code' });
       });
-    }).catch(err => {
-      console.error('GitHub token exchange error:', err);
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
-      res.end('Error exchanging code');
-    });
+    } catch (e) {
+      sendJson(res, 400, { error: 'Invalid request' });
+    }
+  });
+  return;
+}
+
+  // GitHub OAuth
+  if (req.method === 'GET' && matchesRoute('/auth/github')) {
+  if (!githubClientId) {
+    sendError(res, 500, 'GitHub OAuth not configured');
     return;
   }
+  if (!publicFrontendBase) {
+    sendError(res, 500, 'Frontend base URL not configured. Set FRONTEND_BASE_URL environment variable.');
+    return;
+  }
+  const redirectUri = `${publicFrontendBase}/oauth-callback.html`;
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(githubClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email&state=github`;
+  res.writeHead(302, { Location: authUrl });
+  res.end();
+  return;
+}
+
+  if (req.method === 'POST' && matchesRoute('/api/auth/github/relay')) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+    if (body.length > 65536) req.destroy();
+  });
+  req.on('end', () => {
+    try {
+      const payload = JSON.parse(body || '{}');
+      const code = String(payload.code || '').trim();
+      const redirectUri = String(payload.redirect_uri || '').trim();
+      if (!code) {
+        sendJson(res, 400, { error: 'No code provided' });
+        return;
+      }
+      if (!redirectUri) {
+        sendJson(res, 400, { error: 'No redirect_uri provided' });
+        return;
+      }
+      const tokenUrl = 'https://github.com/login/oauth/access_token';
+      const params = new URLSearchParams();
+      params.append('client_id', githubClientId);
+      params.append('client_secret', githubClientSecret);
+      params.append('code', code);
+      params.append('redirect_uri', redirectUri);
+      fetch(tokenUrl, {
+        method: 'POST',
+        body: params,
+        headers: { 'Accept': 'application/json' }
+      }).then(r => r.json()).then(tokenData => {
+        if (!tokenData.access_token) {
+          sendJson(res, 400, { error: 'Failed to get token' });
+          return;
+        }
+        fetch('https://api.github.com/user', {
+          headers: { 'Authorization': `token ${tokenData.access_token}` }
+        }).then(r => r.json()).then(userData => {
+          const githubId = userData.id;
+          let email = userData.email;
+          const username = userData.login;
+          const avatar = userData.avatar_url;
+          if (!email) {
+            fetch('https://api.github.com/user/emails', {
+              headers: { 'Authorization': `token ${tokenData.access_token}` }
+            }).then(r => r.json()).then(emails => {
+              const primary = emails.find(e => e.primary);
+              email = primary ? primary.email : null;
+              createOrUpdateUser();
+            }).catch(() => createOrUpdateUser());
+          } else {
+            createOrUpdateUser();
+          }
+          function createOrUpdateUser() {
+            let user = findUserByGithubId(githubId);
+            if (!user) {
+              user = createUserFromGithub(githubId, email, username, avatar);
+            } else {
+              if (email && !user.email) user.email = email;
+              if (avatar && !user.avatar) user.avatar = avatar;
+              writeUsers(readUsers().map(u => u.id === user.id ? user : u));
+            }
+            const token = createSession(user.id, user.username);
+            sendJson(res, 200, { token });
+          }
+        }).catch(err => {
+          console.error('GitHub user fetch error:', err);
+          sendJson(res, 500, { error: 'Error fetching user' });
+        });
+      }).catch(err => {
+        console.error('GitHub token exchange error:', err);
+        sendJson(res, 500, { error: 'Error exchanging code' });
+      });
+    } catch (e) {
+      sendJson(res, 400, { error: 'Invalid request' });
+    }
+  });
+  return;
+}
 
   if (req.method === 'POST' && pathname === '/api/auth/logout') {
     const token = getBearerToken(req);
