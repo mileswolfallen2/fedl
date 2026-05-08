@@ -17,11 +17,9 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
-
 // Google OAuth credentials (env/.env or NV/EMV/EV files)
 let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
 let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
-
 // Lightweight .env loader (server/.env)
 function loadEnvFromFile(){
   try {
@@ -41,7 +39,6 @@ function loadEnvFromFile(){
 loadEnvFromFile();
 googleClientId = String(process.env.GOOGLE_CLIENT_ID || googleClientId || '').trim();
 googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || googleClientSecret || '').trim();
-
 const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
 
  async function sendDiscordNotification(message) {
@@ -147,7 +144,6 @@ function findUserByGoogleId(googleId){
   const users = readUsers();
   return users.find(u => String(u.googleId || '') === String(googleId));
 }
-
 function findUserByEmail(email){
   const em = String(email || '').trim().toLowerCase();
   const users = readUsers();
@@ -175,12 +171,11 @@ function createUserFromGoogle(googleId, email, name){
   writeUsers(users);
   return user;
 }
-
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
 const BASE = '';
 const adminPassword = String(process.env.ADMIN_PASSWORD || 'test');
-
+const clients = new Set();
 
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -260,24 +255,6 @@ function sendJson(res, statusCode, payload) {
   res.end(JSON.stringify(payload));
 }
 
-function sendError(res, statusCode, message) {
-  sendJson(res, statusCode, { error: message });
-}
-
-function getRequestProtocol(req) {
-  const protoHeader = String(req.headers['x-forwarded-proto'] || '');
-  if (protoHeader) {
-    return protoHeader.split(',')[0].trim();
-  }
-
-  const host = String(req.headers.host || '').toLowerCase();
-  if (host && !host.startsWith('localhost') && !host.startsWith('127.') && !host.startsWith('[::1]')) {
-    return 'https';
-  }
-
-  return req.connection && req.connection.encrypted ? 'https' : 'http';
-}
-
 function sendEvent(eventName, data) {
   const message = `event: ${eventName}\ndata: ${JSON.stringify(data)}\n\n`;
   for (const client of clients) {
@@ -355,10 +332,8 @@ async function verifyGoogleToken(token) {
     if (payload.iss !== 'https://accounts.google.com') {
       throw new Error('Invalid issuer');
     }
-
     if (!payload.aud.includes('271857503660-5sttp7vrmq4orlpiequdgdfnii60a1on.apps.googleusercontent.com')) {
       throw new Error('Invalid audience');
-
     }
     
     return payload;
@@ -1368,26 +1343,6 @@ function handleRequest(req, res) {
     pathname = pathname.slice(BASE.length) || '/';
   }
 
-  function matchesRoute(route) {
-    return pathname === route || pathname === `/fedl${route}`;
-  }
-
-  function getPrefixedRoute(route) {
-    return pathname.startsWith('/fedl') ? `/fedl${route}` : route;
-  }
-
-  function getRedirectBase() {
-    const protocol = getRequestProtocol(req);
-    return pathname.startsWith('/fedl') ? `${protocol}://${req.headers.host}/fedl` : `${protocol}://${req.headers.host}`;
-  }
-
-  function getAuthReturnBase() {
-    if (publicFrontendBase) {
-      return publicFrontendBase;
-    }
-    return getRedirectBase();
-  }
-
   if (req.method === 'OPTIONS') {
     setCors(res);
     res.writeHead(204);
@@ -1553,7 +1508,6 @@ function handleRequest(req, res) {
     return;
   }
 
-
   if (req.method === 'POST' && pathname === '/api/auth/logout') {
     const token = getBearerToken(req);
     if (token) {
@@ -1691,7 +1645,6 @@ function handleRequest(req, res) {
     return;
   }
 
-
   if (req.method === 'POST' && pathname.replace(BASE, '') === '/api/auth/google') {
     let body = '';
     req.on('data', chunk => {
@@ -1779,7 +1732,6 @@ function handleRequest(req, res) {
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid Google sign-up request' });
       }
-
     });
     return;
   }
