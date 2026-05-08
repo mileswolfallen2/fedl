@@ -213,14 +213,22 @@
         statusEl.textContent = 'Deleting account...';
 
         var token = window.localStorage.getItem('fedl_auth_token') || '';
-        fetch('/api/account', {
+        fetch(window.fedlApiPath('/api/account'), {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': token ? 'Bearer ' + token : ''
           }
         }).then(function (res) {
-          return res.json().then(function (body) {
+          return res.text().then(function (text) {
+            var body = {};
+            if (text) {
+              try {
+                body = JSON.parse(text);
+              } catch (err) {
+                body = {};
+              }
+            }
             if (!res.ok) {
               throw new Error(body.error || 'Could not delete account.');
             }
