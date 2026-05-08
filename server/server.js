@@ -17,8 +17,7 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
-// OAuth credentials are loaded from environment variables and env files.
-// Supported env sources: server/.env, project root .env, NV/EMV/EV credential files.
+const baseUrl = process.env.APP_BASE_URL || 'https://fedl.site/fedl';
 let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
 let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
 let discordClientId = String(process.env.DISCORD_CLIENT_ID || '').trim();
@@ -1598,6 +1597,136 @@ function handleRequest(req, res) {
         }
         const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
         const newUser = { id, username: uname, googleId, email: email || '', name: name || '', createdAt: new Date().toISOString() };
+        users.push(newUser);
+        writeUsers(users);
+        const token = createSession(newUser.id, newUser.username);
+        sendJson(res, 200, { ok: true, token, userId: newUser.id, username: newUser.username });
+      } catch (e) {
+        sendJson(res, 400, { error: 'Finalize failed' });
+      }
+    });
+    return;
+  }
+
+  // Discord OAuth
+  if (req.method === 'GET' && (pathname === '/api/auth/discord' || pathname === '/fedl/api/auth/discord')) {
+    if (!discordClientId) {
+      sendJson(res, 500, { error: 'Discord OAuth not configured' });
+      return;
+    }
+    const urlObj = new URL(req.url, `http://${req.headers.host}`);
+    const mode = urlObj.searchParams.get('mode') || 'login';
+    const returnPath = urlObj.searchParams.get('return') || '/';
+    const state = encodeOAuthState({ mode, returnPath });
+    const redirectUri = `${baseUrl}/api/auth/discord/callback`;
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify&state=${encodeURIComponent(state)}`;
+    res.writeHead(302, { 'Location': discordAuthUrl });
+    res.end();
+    return;
+  }
+
+  if (req.method === 'GET' && (pathname === '/api/auth/discord/callback' || pathname === '/fedl/api/auth/discord/callback')) {
+    const urlObj = new URL(req.url, `http://${req.headers.host}`);
+    const code = urlObj.searchParams.get('code');
+    const stateParam = urlObj.searchParams.get('state');
+    if (!code || !stateParam) {
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
+      res.end('Invalid request');
+      return;
+    }
+    const decodedState = decodeOAuthState(stateParam);
+    if (!decodedState) {
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
+      res.end('Invalid state');
+      return;
+    }
+    // Exchange code for token
+    (async () => {
+      try {
+        const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            client_id: discordClientId,
+            client_secret: discordClientSecret,
+            grant_type: 'authorization_code',
+            code: code,
+            redirect_uri: `${baseUrl}/api/auth/discord/callback`,
+          }),
+        });
+        const tokenData = await tokenRes.json();
+        if (!tokenData.access_token) {
+          res.writeHead(400, { 'Content-Type': 'text/plain' });
+          res.end('Failed to get token');
+          return;
+        }
+        // Get user info
+        const userRes = await fetch('https://discord.com/api/users/@me', {
+          headers: {
+            'Authorization': `Bearer ${tokenData.access_token}`,
+          },
+        });
+        const userData = await userRes.json();
+        if (!userData.id) {
+          res.writeHead(400, { 'Content-Type': 'text/plain' });
+          res.end('Failed to get user info');
+          return;
+        }
+        // Find or create user
+        let user = findUserByDiscordId(userData.id);
+        if (!user) {
+          // Instead of creating, redirect with data for client to finalize
+          const returnUrl = new URL(decodedState.returnPath, baseUrl);
+          returnUrl.searchParams.set('needDiscordUsername', 'true');
+          returnUrl.searchParams.set('discordId', userData.id);
+          returnUrl.searchParams.set('email', userData.email || '');
+          returnUrl.searchParams.set('name', userData.username || '');
+          returnUrl.searchParams.set('suggestedUsername', deriveUsernameFromEmail(userData.email || userData.username || 'discord'));
+          res.writeHead(302, { 'Location': returnUrl.toString() });
+          res.end();
+          return;
+        }
+        // Create session
+        const token = createSession(user.id, user.username);
+        // Redirect to return path with token
+        const returnUrl = new URL(decodedState.returnPath, baseUrl);
+        returnUrl.searchParams.set('token', token);
+        res.writeHead(302, { 'Location': returnUrl.toString() });
+        res.end();
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('OAuth error');
+      }
+    })();
+    return;
+  }
+
+  // Finalize Discord sign-up with chosen username
+  if (req.method === 'POST' && (pathname === '/api/auth/discord/finalize' || pathname === '/fedl/api/auth/discord/finalize')) {
+    let body = '';
+    req.on('data', chunk => { body += chunk; if (body.length > 65536) req.destroy(); });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const { discordId, email, name, username } = payload;
+        if (!discordId) {
+          sendJson(res, 400, { error: 'Missing discordId' });
+          return;
+        }
+        const users = readUsers();
+        const uname = String(username || '').trim();
+        if (!uname || !usernameOk(uname)) {
+          sendJson(res, 400, { error: 'Invalid username' });
+          return;
+        }
+        if (users.find(u => String(u.username || '').toLowerCase() === uname.toLowerCase())) {
+          sendJson(res, 409, { error: 'That username is already taken.' });
+          return;
+        }
+        const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+        const newUser = { id, username: uname, discordId, email: email || '', name: name || '', createdAt: new Date().toISOString() };
         users.push(newUser);
         writeUsers(users);
         const token = createSession(newUser.id, newUser.username);
