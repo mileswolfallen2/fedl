@@ -628,6 +628,14 @@ header nav .fedl-auth-nav a:hover{color:var(--text)}
 .page-transition.loaded{opacity:1}
 body{animation:page-enter 0.3s ease}
 @keyframes page-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pageicon{width:22px;height:22px;vertical-align:middle;margin-right:6px;border-radius:4px}
+footer{margin-top:40px;padding:30px 20px 20px;border-top:1px solid rgba(255,255,255,0.06);background:rgba(6,16,33,0.5)}
+footer .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;max-width:1100px;margin:0 auto}
+footer h4{margin:0 0 12px 0;font-size:0.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+footer a{display:block;padding:4px 0;color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color .2s}
+footer a:hover{color:var(--text)}
+footer .footer-bottom{margin-top:28px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);text-align:center;font-size:0.82rem;color:var(--muted)}
+footer .footer-bottom p{margin:0}
 .auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:0.9rem}
 .auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.1)}
 .g_id_signin{display:flex;justify-content:center;margin:16px 0}
