@@ -184,10 +184,60 @@
         </div>
       </form>
     </section>
+
+    <section class="panel account-panel account-danger-panel">
+      <h3>Delete account</h3>
+      <p class="muted">This is permanent. Deleting your account will remove your profile and sign you out immediately.</p>
+      <p id="account-delete-status" class="muted" role="status"></p>
+      <div class="auth-actions">
+        <button type="button" id="account-delete-btn" class="btn danger-btn">Delete my account</button>
+      </div>
+    </section>
   </main>
 
   <script src="script.js"></script>
   <script src="app.js" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var deleteBtn = document.getElementById('account-delete-btn');
+      var statusEl = document.getElementById('account-delete-status');
+      if (!deleteBtn || !statusEl) return;
+
+      deleteBtn.addEventListener('click', function () {
+        var warning = 'Delete your FEDL account? This cannot be undone. Your account, saved settings, and messages will be removed and you will be signed out.';
+        if (!window.confirm(warning)) {
+          return;
+        }
+
+        deleteBtn.disabled = true;
+        statusEl.textContent = 'Deleting account...';
+
+        var token = window.localStorage.getItem('fedl_auth_token') || '';
+        fetch('/api/account', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? 'Bearer ' + token : ''
+          }
+        }).then(function (res) {
+          return res.json().then(function (body) {
+            if (!res.ok) {
+              throw new Error(body.error || 'Could not delete account.');
+            }
+            return body;
+          });
+        }).then(function () {
+          window.localStorage.removeItem('fedl_auth_token');
+          window.localStorage.removeItem('fedl_user_account_active');
+          statusEl.textContent = 'Account deleted. Redirecting…';
+          window.location.href = 'index.html';
+        }).catch(function (err) {
+          statusEl.textContent = err.message || 'Could not delete account.';
+          deleteBtn.disabled = false;
+        });
+      });
+    });
+  </script>
 <footer>
   <div class="footer-grid">
     <div>
