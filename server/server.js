@@ -1756,6 +1756,38 @@ function handleRequest(req, res) {
     return;
   }
 
+  if (req.method === 'DELETE' && pathname === '/api/account') {
+    const sess = getSessionFromRequest(req);
+    if (!sess) {
+      sendJson(res, 401, { error: 'Not signed in' });
+      return;
+    }
+    const users = readUsers();
+    const userIndex = users.findIndex(u => u.id === sess.userId);
+    if (userIndex === -1) {
+      sendJson(res, 404, { error: 'Account not found' });
+      return;
+    }
+    const user = users[userIndex];
+    users.splice(userIndex, 1);
+    writeUsers(users);
+
+    const userData = readUserDataMap();
+    if (Object.prototype.hasOwnProperty.call(userData, user.id)) {
+      delete userData[user.id];
+      writeUserDataMap(userData);
+    }
+
+    removeResetTokensForUser(user.id);
+    revokeUserSessions(user.id);
+
+    const messages = readMessages().filter(msg => msg.toUserId !== user.id && msg.fromUserId !== user.id);
+    writeMessages(messages);
+
+    sendJson(res, 200, { ok: true });
+    return;
+  }
+
   if (req.method === 'PUT' && pathname === '/api/account/password') {
     const sess = getSessionFromRequest(req);
     if (!sess) {
