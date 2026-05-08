@@ -1,6 +1,38 @@
 // Lightweight multi-page handler for GD fedl
 (function(){
   function qs(id){return document.getElementById(id)}
+  // Handle token from URL (for Discord OAuth)
+  const urlParams = new URLSearchParams(window.location.search);
+  const tokenFromUrl = urlParams.get('token');
+  if (tokenFromUrl) {
+    fedlSetAuthToken(tokenFromUrl);
+    // Remove from URL
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.delete('token');
+    window.history.replaceState({}, '', newUrl);
+    // Reload to apply
+    window.location.reload();
+  }
+  // Handle Discord username prompt
+  const needDiscordUsername = urlParams.get('needDiscordUsername');
+  if (needDiscordUsername) {
+    const discordId = urlParams.get('discordId');
+    const email = urlParams.get('email');
+    const name = urlParams.get('name');
+    const suggestedUsername = urlParams.get('suggestedUsername');
+    if (discordId) {
+      promptForDiscordUsername({ discordId, email, name, suggestedUsername });
+      // Remove from URL
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.delete('needDiscordUsername');
+      newUrl.searchParams.delete('discordId');
+      newUrl.searchParams.delete('email');
+      newUrl.searchParams.delete('name');
+      newUrl.searchParams.delete('suggestedUsername');
+      window.history.replaceState({}, '', newUrl);
+    }
+  }
+
   // Ensure Google Sign-In callback exists on the page
   window.handleCredentialResponse = window.handleCredentialResponse || function(cred){
     try {
@@ -28,6 +60,54 @@
       el.value = token || '';
     }
   };
+
+  function promptForDiscordUsername(payload){
+    const page = document.body.dataset.page;
+    // Determine container to inject UI
+    const containerId = page === 'login' ? 'discord-username-container' : 'discord-username-container-signup';
+    let container = document.getElementById(containerId);
+    if (!container) {
+      // Try to append near the Discord sign-in blocks if container not found
+      container = document.createElement('div');
+      container.id = containerId;
+      container.style.textAlign = 'center';
+      container.style.marginTop = '6px';
+      // Try to place after the sign-in block in login card or signup card
+      const insertAfter = document.querySelector('.auth-panel') || document.body;
+      insertAfter.appendChild(container);
+    }
+    container.innerHTML = `
+      <div class="discord-username-prompt" style="display:inline-block; text-align:left; background:#fff; padding:12px; border-radius:8px; border:1px solid #ddd; margin-top:6px;">
+        <div style="margin-bottom:6px; font-weight:600; color:#000;">Choose a username</div>
+        <input id="discord-username-input" value="${payload.suggestedUsername || ''}" type="text" pattern="[a-z0-9_]{3,24}" placeholder="3-24 chars, a-z 0-9 _" style="width:260px; padding:8px; border-radius:6px; border:1px solid #ccc;" />
+        <button id="discord-finalize-btn" class="btn" style="margin-left:8px;">Create account</button>
+        <div id="discord-username-status" class="muted" style="margin-top:6px; display:block;"></div>
+      </div>`;
+    const finalBtn = document.getElementById('discord-finalize-btn');
+    const input = document.getElementById('discord-username-input');
+    const status = document.getElementById('discord-username-status');
+    finalBtn.addEventListener('click', ()=>{
+      const username = String((input && input.value) || '').trim();
+      if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+        status.textContent = 'Username must be 3-24 characters: lowercase letters, numbers, or underscore.';
+        status.style.color = '#e11d48';
+        return;
+      }
+      fetch(liveApiPath('/api/auth/discord/finalize'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discordId: payload.discordId, email: payload.email, name: payload.name, username })
+      }).then(r => r.json()).then(res => {
+        if (res && res.token) {
+          fedlSetAuthToken(res.token);
+          window.location.reload();
+        } else {
+          status.textContent = res.error || 'Failed to finalize username';
+          status.style.color = '#e11d48';
+        }
+      }).catch(()=>{ status.textContent = 'Network error'; status.style.color = '#e11d48'; });
+    });
+  }
 
   function promptForUsername(payload){
     const page = document.body.dataset.page;
