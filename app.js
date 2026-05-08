@@ -235,6 +235,15 @@
     });
   }
 
+  function loadAdsScript() {
+    if (window.fedlAdScriptLoaded) return;
+    window.fedlAdScriptLoaded = true;
+    const script = document.createElement('script');
+    script.src = 'https://pl29378364.profitablecpmratenetwork.com/85/92/03/859203c62bb20bf95a9f26d1218bb0ad.js';
+    script.async = true;
+    document.head.appendChild(script);
+  }
+
   function animateNumber(el, endValue) {
     if (!window.anime || animationsDisabled()) { el.textContent = String(endValue); return; }
     const obj = { val: 0 };
@@ -269,6 +278,7 @@
   const FEDL_ANIMATIONS_KEY = 'fedl_animations_disabled';
   const FEDL_LIST_ANIM_KEY = 'fedl_list_anim_disabled';
   const FEDL_ANIM_SPEED_KEY = 'fedl_anim_speed';
+  const FEDL_ADS_KEY = 'fedl_ads_enabled';
 
   function animationsDisabled(){
     const val = localStorage.getItem(FEDL_ANIMATIONS_KEY);
@@ -284,6 +294,12 @@
   function getAnimationSpeed(){
     const val = localStorage.getItem(FEDL_ANIM_SPEED_KEY);
     return val ? parseInt(val, 10) : 3000;
+  }
+  function adsEnabled(){
+    return localStorage.getItem(FEDL_ADS_KEY) === 'true';
+  }
+  function setAdsEnabled(val){
+    localStorage.setItem(FEDL_ADS_KEY, String(val));
   }
   loadAnimeJS().then(() => {
     if (window.anime) {
@@ -4200,6 +4216,21 @@
       });
     }
 
+    const adsToggle = qs('account-ads-toggle');
+    if(adsToggle){
+      adsToggle.checked = adsEnabled();
+      adsToggle.addEventListener('change', function(){
+        setAdsEnabled(this.checked);
+        if(this.checked && !window.fedlAdScriptLoaded){
+          loadAdsScript();
+        }
+        const panel = this.closest('.account-panel');
+        if(panel && window.anime && !animationsDisabled()){
+          window.anime({ targets: panel, scale: [1, 1.01, 1], duration: 400, easing: 'easeOutBack' });
+        }
+      });
+    }
+
     const overviewStatusEl = qs('account-overview-status');
     const accountUsernameEl = qs('account-username');
     const accountCreatedEl = qs('account-created');
@@ -4520,6 +4551,11 @@
       window.location.replace('index.html');
     }
   });
+
+  // Load ads if enabled
+  if (adsEnabled()) {
+    loadAdsScript();
+  }
 
   // Utility
   function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}
