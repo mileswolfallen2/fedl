@@ -17,28 +17,40 @@ const messagesPath = path.join(__dirname, 'messages.json');
 const configPath = path.join(__dirname, 'config.json');
 
 const serverConfig = safeReadJsonFile(configPath, {}, 'config.json');
-// Google OAuth credentials (env/.env or NV/EMV/EV files)
+// OAuth credentials are loaded from environment variables and env files.
+// Supported env sources: server/.env, project root .env, NV/EMV/EV credential files.
 let googleClientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
 let googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
-// Lightweight .env loader (server/.env)
+let discordClientId = String(process.env.DISCORD_CLIENT_ID || '').trim();
+let discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || '').trim();
+// Lightweight .env loader (server/.env + project root .env)
 function loadEnvFromFile(){
   try {
-    const envPath = require('path').join(__dirname, '.env');
-    if (!fs.existsSync(envPath)) return;
-    const raw = fs.readFileSync(envPath, 'utf8');
-    raw.split(/\r?\n/).forEach(line => {
-      const m = String(line || '').trim().match(/^([^=]+)=(.*)$/);
-      if (m) {
-        const key = m[1].trim();
-        const val = m[2];
-        if (key) process.env[key] = val;
-      }
+    const paths = [
+      require('path').join(__dirname, '.env'),
+      require('path').join(appRoot, '.env')
+    ];
+    paths.forEach(envPath => {
+      if (!envPath || !fs.existsSync(envPath)) return;
+      const raw = fs.readFileSync(envPath, 'utf8');
+      raw.split(/\r?\n/).forEach(line => {
+        const m = String(line || '').trim().match(/^([^=]+)=(.*)$/);
+        if (m) {
+          const key = m[1].trim();
+          const val = m[2];
+          if (key && !Object.prototype.hasOwnProperty.call(process.env, key)) {
+            process.env[key] = val;
+          }
+        }
+      });
     });
   } catch (e) {}
 }
 loadEnvFromFile();
 googleClientId = String(process.env.GOOGLE_CLIENT_ID || googleClientId || '').trim();
 googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET || googleClientSecret || '').trim();
+discordClientId = String(process.env.DISCORD_CLIENT_ID || discordClientId || '').trim();
+discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || discordClientSecret || '').trim();
 const discordWebhookUrl = serverConfig.discordWebhookUrl || '';
 
  async function sendDiscordNotification(message) {
@@ -117,25 +129,45 @@ function loadOAuthCredentials(){
   const evPath = require('path').join(appRoot, 'EV', 'google_oauth.env');
 
   let data = readKvFileSimple(nvPath);
-  if (data && data.GOOGLE_CLIENT_ID) {
-    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
-    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
-    return;
+  if (data) {
+    if (data.GOOGLE_CLIENT_ID) {
+      googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+      googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    }
+    if (data.DISCORD_CLIENT_ID) {
+      discordClientId = String(data.DISCORD_CLIENT_ID || '').trim();
+      discordClientSecret = String(data.DISCORD_CLIENT_SECRET || '').trim();
+    }
+    if (data.GOOGLE_CLIENT_ID || data.DISCORD_CLIENT_ID) return;
   }
   data = readKvFileSimple(emvPath);
-  if (data && data.GOOGLE_CLIENT_ID) {
-    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
-    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
-    return;
+  if (data) {
+    if (data.GOOGLE_CLIENT_ID) {
+      googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+      googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    }
+    if (data.DISCORD_CLIENT_ID) {
+      discordClientId = String(data.DISCORD_CLIENT_ID || '').trim();
+      discordClientSecret = String(data.DISCORD_CLIENT_SECRET || '').trim();
+    }
+    if (data.GOOGLE_CLIENT_ID || data.DISCORD_CLIENT_ID) return;
   }
   data = readKvFileSimple(evPath);
-  if (data && data.GOOGLE_CLIENT_ID) {
-    googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
-    googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
-    return;
+  if (data) {
+    if (data.GOOGLE_CLIENT_ID) {
+      googleClientId = String(data.GOOGLE_CLIENT_ID || '').trim();
+      googleClientSecret = String(data.GOOGLE_CLIENT_SECRET || '').trim();
+    }
+    if (data.DISCORD_CLIENT_ID) {
+      discordClientId = String(data.DISCORD_CLIENT_ID || '').trim();
+      discordClientSecret = String(data.DISCORD_CLIENT_SECRET || '').trim();
+    }
+    if (data.GOOGLE_CLIENT_ID || data.DISCORD_CLIENT_ID) return;
   }
   if (process.env.GOOGLE_CLIENT_ID) googleClientId = String(process.env.GOOGLE_CLIENT_ID).trim();
   if (process.env.GOOGLE_CLIENT_SECRET) googleClientSecret = String(process.env.GOOGLE_CLIENT_SECRET).trim();
+  if (process.env.DISCORD_CLIENT_ID) discordClientId = String(process.env.DISCORD_CLIENT_ID).trim();
+  if (process.env.DISCORD_CLIENT_SECRET) discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET).trim();
 }
 
 loadOAuthCredentials();
@@ -170,6 +202,75 @@ function createUserFromGoogle(googleId, email, name){
   users.push(user);
   writeUsers(users);
   return user;
+}
+function findUserByDiscordId(discordId) {
+  const users = readUsers();
+  return users.find(u => String(u.discordId || '') === String(discordId));
+}
+function createUserFromDiscord(discordId, email, username, discriminator) {
+  const users = readUsers();
+  let base = String(username || '').toLowerCase().replace(/[^a-z0-9_]/g, '') || 'discord';
+  let candidate = base;
+  let suffix = 1;
+  while (users.some(u => String(u.username || '') === candidate)) {
+    candidate = `${base}_${suffix++}`;
+  }
+  const id = `usr_${Date.now().toString(36)}${crypto.randomBytes(4).toString('hex')}`;
+  const user = {
+    id,
+    username: candidate,
+    discordId,
+    email: email || '',
+    name: `${String(username || 'Discord')}#${String(discriminator || '0000')}`,
+    createdAt: new Date().toISOString()
+  };
+  users.push(user);
+  writeUsers(users);
+  return user;
+}
+function encodeOAuthState(payload) {
+  const json = JSON.stringify(payload || {});
+  return Buffer.from(json, 'utf8').toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function decodeOAuthState(value) {
+  try {
+    const normalized = String(value || '').replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4);
+    const json = Buffer.from(padded, 'base64').toString('utf8');
+    return JSON.parse(json);
+  } catch (e) {
+    return null;
+  }
+}
+function normalizeReturnPath(value) {
+  let returnPath = String(value || '').trim();
+  if (!returnPath) return '/';
+  if (returnPath.startsWith('http://') || returnPath.startsWith('https://') || returnPath.startsWith('//')) {
+    return '/';
+  }
+  returnPath = returnPath.replace(/\\/g, '/');
+  if (returnPath.includes('..')) return '/';
+  if (!returnPath.startsWith('/')) {
+    returnPath = `/${returnPath}`;
+  }
+  return returnPath;
+}
+function sendRedirect(res, location) {
+  setCors(res);
+  res.writeHead(302, {
+    'Location': location,
+    'Cache-Control': 'no-store'
+  });
+  res.end();
+}
+function sendAuthRedirectPage(res, token, returnUrl) {
+  const safeReturn = normalizeReturnPath(returnUrl || '/');
+  const body = `<!doctype html><html><head><meta charset="utf-8"><title>Signing in…</title></head><body><script>try{${token ? `localStorage.setItem('fedl_auth_token', ${JSON.stringify(token)});` : ''}}catch(e){}window.location.replace(${JSON.stringify(safeReturn)});</script><p>Redirecting…</p></body></html>`;
+  res.writeHead(200, {
+    'Content-Type': 'text/html; charset=utf-8',
+    'Cache-Control': 'no-store'
+  });
+  res.end(body);
 }
 const port = Number(process.env.PORT) || 8090;
 const host = process.env.HOST || '127.0.0.1';
@@ -1732,6 +1833,110 @@ function handleRequest(req, res) {
       } catch (error) {
         sendJson(res, 400, { error: 'Invalid Google sign-up request' });
       }
+    });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname.replace(BASE, '') === '/api/auth/discord') {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const mode = String(url.searchParams.get('mode') || 'login') === 'signup' ? 'signup' : 'login';
+    const returnUrl = normalizeReturnPath(url.searchParams.get('return') || '/index.html');
+
+    if (!discordClientId || !discordClientSecret) {
+      sendJson(res, 500, { error: 'Discord OAuth is not configured.' });
+      return;
+    }
+
+    const state = encodeOAuthState({ returnUrl, mode });
+    const redirectUri = `${getAppBaseUrl(req)}/api/auth/discord/callback`;
+    const authUrl = new URL('https://discord.com/api/oauth2/authorize');
+    authUrl.searchParams.set('client_id', discordClientId);
+    authUrl.searchParams.set('redirect_uri', redirectUri);
+    authUrl.searchParams.set('response_type', 'code');
+    authUrl.searchParams.set('scope', 'identify email');
+    authUrl.searchParams.set('state', state);
+
+    sendRedirect(res, authUrl.toString());
+    return;
+  }
+
+  if (req.method === 'GET' && pathname.replace(BASE, '') === '/api/auth/discord/callback') {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const code = String(url.searchParams.get('code') || '').trim();
+    const state = String(url.searchParams.get('state') || '').trim();
+    const oauthState = decodeOAuthState(state) || {};
+    const mode = oauthState.mode === 'signup' ? 'signup' : 'login';
+    const returnUrl = normalizeReturnPath(oauthState.returnUrl || '/index.html');
+
+    if (!code) {
+      sendAuthRedirectPage(res, '', '/login.html');
+      return;
+    }
+
+    if (!discordClientId || !discordClientSecret) {
+      sendAuthRedirectPage(res, '', '/login.html');
+      return;
+    }
+
+    const redirectUri = `${getAppBaseUrl(req)}/api/auth/discord/callback`;
+    fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: discordClientId,
+        client_secret: discordClientSecret,
+        grant_type: 'authorization_code',
+        code,
+        redirect_uri: redirectUri,
+        scope: 'identify email'
+      })
+    }).then(async tokenRes => {
+      if (!tokenRes.ok) {
+        throw new Error('Discord token exchange failed');
+      }
+      return tokenRes.json();
+    }).then(async tokenData => {
+      if (!tokenData || !tokenData.access_token) {
+        throw new Error('Discord access token missing');
+      }
+      const userRes = await fetch('https://discord.com/api/users/@me', {
+        headers: { Authorization: `Bearer ${tokenData.access_token}` }
+      });
+      if (!userRes.ok) {
+        throw new Error('Discord user info fetch failed');
+      }
+      return userRes.json();
+    }).then(discordUser => {
+      const discordId = String(discordUser.id || '').trim();
+      const email = String(discordUser.email || '').trim();
+      const username = String(discordUser.username || '').trim();
+      const discriminator = String(discordUser.discriminator || '').trim();
+      if (!discordId) {
+        throw new Error('Discord user data invalid');
+      }
+      let user = findUserByDiscordId(discordId);
+      const users = readUsers();
+      if (!user && email) {
+        const existing = users.find(u => String((u.email || '')).toLowerCase() === email.toLowerCase());
+        if (existing && !existing.discordId) {
+          existing.discordId = discordId;
+          writeUsers(users);
+          user = existing;
+        }
+      }
+      if (!user && mode === 'signup') {
+        user = createUserFromDiscord(discordId, email, username, discriminator);
+      }
+      if (!user) {
+        const failurePage = mode === 'signup' ? '/signup.html' : '/login.html';
+        sendAuthRedirectPage(res, '', failurePage);
+        return;
+      }
+      const sessionToken = createSession(user.id, user.username);
+      sendAuthRedirectPage(res, sessionToken, returnUrl);
+    }).catch(error => {
+      console.error(`[FEDL] Discord auth failed: ${error.message}`);
+      sendAuthRedirectPage(res, '', '/login.html');
     });
     return;
   }
