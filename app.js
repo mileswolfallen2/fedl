@@ -2156,14 +2156,73 @@
     const searchEl = qs('search');
     const filterSelect = qs('group-filter');
     const groupsEl = qs('player-groups');
+    const totalPlayersEl = qs('player-total-count');
+    const totalRunsEl = qs('player-total-runs');
+    const totalPointsEl = qs('player-total-points');
     if(!playersArea || !searchEl || !filterSelect || !groupsEl) return;
 
     let players = [];
+    let selectedPlayerKey = '';
 
     function getGroupKey(name){
       const first = String(name || '').trim().charAt(0).toUpperCase();
       return first.match(/[A-Z0-9]/) ? first : '#';
     }
+
+    function normalizePlayerKey(name){
+      return String(name || '').trim().toLowerCase();
+    }
+
+    function formatNumber(value){
+      return Number(value || 0).toLocaleString();
+    }
+
+    function formatShortDate(value){
+      if(!value) return 'Unknown date';
+      const d = new Date(value);
+      if(Number.isNaN(d.getTime())) return 'Unknown date';
+      return d.toLocaleDateString(undefined, {year:'numeric', month:'short', day:'numeric'});
+    }
+
+    function updateProfileUrl(player){
+      const url = new URL(window.location.href);
+      if(player && player.name){
+        url.searchParams.set('player', player.name);
+      } else {
+        url.searchParams.delete('player');
+      }
+      window.history.replaceState({}, '', url);
+    }
+
+    function closePlayerProfile(){
+      const modal = document.querySelector('.player-profile-modal');
+      if(modal) modal.remove();
+      selectedPlayerKey = '';
+      updateProfileUrl(null);
+      renderTable();
+    }
+
+    function ensurePlayerProfileModal(){
+      let modal = document.querySelector('.player-profile-modal');
+      if(modal) return modal;
+      modal = document.createElement('div');
+      modal.className = 'video-modal player-profile-modal';
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('aria-label', 'Player profile');
+      modal.innerHTML = '<div class="inner player-profile-inner"></div>';
+      modal.addEventListener('click', event => {
+        if(event.target === modal) closePlayerProfile();
+      });
+      document.body.appendChild(modal);
+      return modal;
+    }
+
+    document.addEventListener('keydown', event => {
+      if(event.key === 'Escape' && document.querySelector('.player-profile-modal')){
+        closePlayerProfile();
+      }
+    });
 
     function computeGroups(items){
       const set = new Set();
@@ -2198,36 +2257,198 @@
     }
 
     function buildPlayers(runs, listItems){
-      const lookup = new Map(listItems.map(item => [String(item.title || '').toLowerCase(), Number(item.position) || 9999]));
+      const lookup = new Map(listItems.map(item => [String(item.title || '').toLowerCase(), item]));
       const map = new Map();
       runs.filter(run => String(run.status || '').toLowerCase() === 'approved').forEach(run => {
         const playerName = String(run.playerName || '').trim();
         if(!playerName) return;
-        const key = playerName.toLowerCase();
+        const key = normalizePlayerKey(playerName);
         let entry = map.get(key);
         if(!entry){
-          entry = {name: playerName, runs: 0, bestRank: 9999, points: 0, topLevels: new Set()};
+          entry = {key, name: playerName, runs: [], points: 0, bestRank: 9999, levels: new Map()};
           map.set(key, entry);
         }
-        entry.runs += 1;
-        const rank = lookup.get(String(run.levelTitle || '').toLowerCase()) || 9999;
+        const level = lookup.get(String(run.levelTitle || '').toLowerCase()) || null;
+        const rank = Number(level && level.position) || 9999;
+        const points = rank > 0 && rank < 1000 ? calculatePoints(rank) : 0;
+        const percent = String(run.percent || '100').trim() || '100';
+        const normalizedRun = {
+          id: run.id || '',
+          levelTitle: String(run.levelTitle || 'Untitled').trim(),
+          levelUrl: level ? level.url : '',
+          levelRank: rank,
+          points,
+          percent,
+          videoUrl: run.videoUrl || '',
+          submittedAt: run.submittedAt || run.updatedAt || '',
+          notes: run.reviewNotes || run.notes || ''
+        };
+        entry.runs.push(normalizedRun);
         if(rank > 0 && rank < entry.bestRank) entry.bestRank = rank;
-        if(rank > 0 && rank < 1000) entry.points += calculatePoints(rank);
-        if(run.levelTitle) entry.topLevels.add(String(run.levelTitle).trim());
+        entry.points += points;
+        const levelKey = String(normalizedRun.levelTitle || '').toLowerCase();
+        const existing = entry.levels.get(levelKey);
+        if(!existing){
+          entry.levels.set(levelKey, {
+            title: normalizedRun.levelTitle,
+            rank,
+            points,
+            bestPercent: percent,
+            runCount: 1,
+            videoUrl: normalizedRun.videoUrl,
+            levelUrl: normalizedRun.levelUrl,
+            latestAt: normalizedRun.submittedAt
+          });
+        } else {
+          existing.runCount += 1;
+          existing.points = Math.max(existing.points, points);
+          existing.rank = Math.min(existing.rank || 9999, rank);
+          const percentNum = Number(percent);
+          const existingPercentNum = Number(existing.bestPercent);
+          if(Number.isFinite(percentNum) && (!Number.isFinite(existingPercentNum) || percentNum > existingPercentNum)){
+            existing.bestPercent = percent;
+          }
+          if(normalizedRun.videoUrl && (!existing.videoUrl || new Date(normalizedRun.submittedAt || 0) > new Date(existing.latestAt || 0))){
+            existing.videoUrl = normalizedRun.videoUrl;
+          }
+          if(normalizedRun.submittedAt && new Date(normalizedRun.submittedAt) > new Date(existing.latestAt || 0)){
+            existing.latestAt = normalizedRun.submittedAt;
+          }
+        }
       });
-      return Array.from(map.values()).map(entry => ({
-        name: entry.name,
-        runs: entry.runs,
-        bestRank: entry.bestRank === 9999 ? '—' : `#${entry.bestRank}`,
-        points: entry.points,
-        topLevels: Array.from(entry.topLevels).slice(0, 3).join(', ')
-      })).sort((a,b) => {
+      const ranked = Array.from(map.values()).map(entry => {
+        const levels = Array.from(entry.levels.values()).sort((a,b)=>{
+          if(a.rank !== b.rank) return a.rank - b.rank;
+          return a.title.localeCompare(b.title);
+        });
+        const sortedRuns = entry.runs.slice().sort((a,b)=>{
+          if(a.levelRank !== b.levelRank) return a.levelRank - b.levelRank;
+          return new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0);
+        });
+        return {
+          key: entry.key,
+          name: entry.name,
+          runs: sortedRuns,
+          runCount: entry.runs.length,
+          levelCount: levels.length,
+          bestRankValue: entry.bestRank,
+          bestRank: entry.bestRank === 9999 ? '-' : `#${entry.bestRank}`,
+          points: entry.points,
+          levels,
+          topLevel: levels[0] || null,
+          latestRun: entry.runs.slice().sort((a,b)=>new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0))[0] || null,
+          leaderboardRank: 0
+        };
+      }).sort((a,b) => {
         if(b.points !== a.points) return b.points - a.points;
-        const aRank = typeof a.bestRank === 'string' ? Number(a.bestRank.slice(1)) || 9999 : a.bestRank;
-        const bRank = typeof b.bestRank === 'string' ? Number(b.bestRank.slice(1)) || 9999 : b.bestRank;
-        if(aRank !== bRank) return aRank - bRank;
+        if(a.bestRankValue !== b.bestRankValue) return a.bestRankValue - b.bestRankValue;
         return a.name.localeCompare(b.name);
       });
+      ranked.forEach((entry, index) => {
+        entry.leaderboardRank = index + 1;
+      });
+      return ranked;
+    }
+
+    function updateSummary(){
+      const runCount = players.reduce((sum, item)=>sum + item.runCount, 0);
+      const pointCount = players.reduce((sum, item)=>sum + item.points, 0);
+      if(totalPlayersEl) totalPlayersEl.textContent = formatNumber(players.length);
+      if(totalRunsEl) totalRunsEl.textContent = formatNumber(runCount);
+      if(totalPointsEl) totalPointsEl.textContent = formatNumber(pointCount);
+    }
+
+    function renderProfile(player){
+      if(!player){
+        closePlayerProfile();
+        return;
+      }
+      selectedPlayerKey = player.key;
+      updateProfileUrl(player);
+      const beatenLevels = player.levels.slice().sort((a,b)=>{
+        const aRank = Number(a.rank) || 9999;
+        const bRank = Number(b.rank) || 9999;
+        if(aRank !== bRank) return aRank - bRank;
+        return a.title.localeCompare(b.title);
+      });
+      const recentRuns = player.runs.slice().sort((a,b)=>new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0)).slice(0, 5);
+      const bestLevelName = player.topLevel ? player.topLevel.title : 'No level yet';
+      const bestLevelRankText = player.topLevel && player.topLevel.rank < 9999 ? ` (#${escapeHtml(player.topLevel.rank)})` : '';
+      const modal = ensurePlayerProfileModal();
+      const profileEl = modal.querySelector('.player-profile-inner');
+      profileEl.innerHTML = `
+        <div class="player-profile-head">
+          <div>
+            <p class="status-label">Player profile</p>
+            <h3>${escapeHtml(player.name)}</h3>
+            <p class="muted">Rank #${escapeHtml(player.leaderboardRank)} by score. Best completion: ${escapeHtml(bestLevelName)}${bestLevelRankText}.</p>
+          </div>
+          <div class="player-profile-actions">
+            <a class="btn small-btn" href="${escapeAttr(window.location.href)}">Share profile</a>
+            <button type="button" class="btn small-btn ghost-btn" data-player-profile-close>Close</button>
+          </div>
+        </div>
+        <div class="player-profile-stats">
+          <article><strong>#${escapeHtml(player.leaderboardRank)}</strong><span>Player rank</span></article>
+          <article><strong>${escapeHtml(formatNumber(player.points))}</strong><span>Score</span></article>
+          <article><strong>${escapeHtml(formatNumber(player.levelCount))}</strong><span>Levels beaten</span></article>
+          <article><strong>${escapeHtml(formatNumber(player.runCount))}</strong><span>Approved runs</span></article>
+        </div>
+        <div class="player-profile-grid">
+          <section>
+            <div class="mini-section-head">
+              <h4>Levels beaten</h4>
+              <span class="muted">${escapeHtml(formatNumber(player.levelCount))} total, highest ranked first</span>
+            </div>
+            <div class="player-level-list">
+              ${beatenLevels.length ? beatenLevels.map(level => `
+                <article class="player-level-card">
+                  <div>
+                    <strong>${escapeHtml(level.title)}</strong>
+                    <span class="muted">Rank ${escapeHtml(level.rank && level.rank < 9999 ? `#${level.rank}` : '-')} - ${escapeHtml(level.bestPercent || '100')}% - ${escapeHtml(formatNumber(level.points))} points</span>
+                  </div>
+                  ${level.videoUrl ? `<a class="text-link" href="${escapeAttr(level.videoUrl)}" target="_blank" rel="noopener noreferrer">Video</a>` : ''}
+                </article>
+              `).join('') : '<p class="muted">No beaten levels found for this player yet.</p>'}
+            </div>
+          </section>
+          <section>
+            <div class="mini-section-head">
+              <h4>Recent approved runs</h4>
+              <span class="muted">${recentRuns.length ? escapeHtml(formatShortDate(recentRuns[0].submittedAt)) : 'No runs'}</span>
+            </div>
+            <div class="player-run-list">
+              ${recentRuns.length ? recentRuns.map(run => `
+                <article class="player-run-card">
+                  <div>
+                    <strong>${escapeHtml(run.levelTitle)}</strong>
+                    <span class="muted">${escapeHtml(run.percent)}% - ${escapeHtml(formatShortDate(run.submittedAt))}</span>
+                  </div>
+                  ${run.videoUrl ? `<a class="text-link" href="${escapeAttr(run.videoUrl)}" target="_blank" rel="noopener noreferrer">Watch</a>` : ''}
+                </article>
+              `).join('') : '<p class="muted">No recent approved runs found.</p>'}
+            </div>
+          </section>
+        </div>
+      `;
+      const closeBtn = profileEl.querySelector('[data-player-profile-close]');
+      if(closeBtn) closeBtn.addEventListener('click', closePlayerProfile);
+      if(!animationsDisabled() && window.anime){
+        modal.style.opacity = '0';
+        modal.style.transform = 'scale(0.95)';
+        modal.style.display = 'flex';
+        window.anime({ targets: modal, opacity: [0,1], scale: [0.95,1], duration: 300, easing: 'easeOutCubic' });
+      } else {
+        modal.style.opacity = '1';
+        modal.style.transform = 'scale(1)';
+        modal.style.display = 'flex';
+      }
+    }
+
+    function selectPlayer(playerKey, shouldRenderTable){
+      const player = players.find(item => item.key === playerKey);
+      renderProfile(player || null);
+      if(shouldRenderTable) renderTable();
     }
 
     function renderTable(){
@@ -2241,35 +2462,52 @@
 
       playersArea.innerHTML = '';
       if(!filtered.length){
-        playersArea.innerHTML = '<tr><td colspan="5" class="muted">No player data found.</td></tr>';
+        playersArea.innerHTML = '<tr><td colspan="6" class="muted">No player data found.</td></tr>';
         return;
       }
 
       const fragment = document.createDocumentFragment();
       filtered.forEach(item => {
         const tr = document.createElement('tr');
+        tr.className = item.key === selectedPlayerKey ? 'is-selected-player' : '';
         const tdName = document.createElement('td'); tdName.textContent = item.name;
-        const tdRuns = document.createElement('td'); tdRuns.textContent = String(item.runs);
-        const tdPoints = document.createElement('td'); tdPoints.textContent = String(item.points);
-        const tdRank = document.createElement('td'); tdRank.textContent = item.bestRank;
-        const tdLevels = document.createElement('td'); tdLevels.textContent = item.topLevels;
+        const tdRuns = document.createElement('td'); tdRuns.textContent = String(item.runCount);
+        const tdPoints = document.createElement('td'); tdPoints.textContent = formatNumber(item.points);
+        const tdRank = document.createElement('td'); tdRank.textContent = `#${item.leaderboardRank}`;
+        const tdBest = document.createElement('td'); tdBest.textContent = item.bestRank;
+        const tdProfile = document.createElement('td');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn small-btn';
+        btn.textContent = 'View profile';
+        btn.addEventListener('click', () => selectPlayer(item.key, true));
+        tdProfile.appendChild(btn);
         tr.appendChild(tdName);
         tr.appendChild(tdRuns);
         tr.appendChild(tdPoints);
         tr.appendChild(tdRank);
-        tr.appendChild(tdLevels);
+        tr.appendChild(tdBest);
+        tr.appendChild(tdProfile);
         fragment.appendChild(tr);
       });
       playersArea.appendChild(fragment);
     }
 
     function showLoading(){
-      playersArea.innerHTML = '<tr><td colspan="5" class="muted">Loading player stats...</td></tr>';
+      playersArea.innerHTML = '<tr><td colspan="6" class="muted">Loading player stats...</td></tr>';
     }
 
     function syncView(newPlayers){
       players = newPlayers;
       setupGroups(players);
+      updateSummary();
+      const requested = normalizePlayerKey(new URLSearchParams(window.location.search).get('player') || '');
+      const selected = requested ? players.find(item => item.key === requested) : null;
+      if(selected){
+        renderProfile(selected);
+      } else {
+        selectedPlayerKey = '';
+      }
       renderTable();
     }
 
@@ -2282,7 +2520,7 @@
         })
         .catch(err => {
           console.error(err);
-          playersArea.innerHTML = '<tr><td colspan="5" class="muted">Could not load player stats.</td></tr>';
+          playersArea.innerHTML = '<tr><td colspan="6" class="muted">Could not load player stats.</td></tr>';
         });
     }
 
