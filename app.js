@@ -3646,6 +3646,7 @@
           qs('run-raw-footage-url').value = entry.rawFootageUrl || '';
           qs('run-notes').value = entry.notes || '';
           setRunFormStatus('Loaded this run into the form. Submit or edit, then save or send to the queue.', false, false);
+          if(window.GlassToast) window.GlassToast.show('info', 'Run loaded', 'Draft filled into the form.');
         });
         const delBtn = document.createElement('button');
         delBtn.type = 'button';
@@ -3699,9 +3700,11 @@
         const res = fedlAddSavedRun(fedlServerUserId, fields);
         if(!res.ok){
           setRunFormStatus(res.error, true);
+          if(window.GlassToast) window.GlassToast.show('error', 'Save failed', res.error);
           return;
         }
         setRunFormStatus('Run saved to your account. You can keep multiple saved runs and load them anytime.', false, true);
+        if(window.GlassToast) window.GlassToast.show('success', 'Run saved', 'Saved to your account.');
         if(window.anime && !animationsDisabled()){
           const statusEl = qs('run-form-status');
           if(statusEl){
@@ -3746,6 +3749,7 @@
       event.preventDefault();
       if(!canUseLiveServer){
         setRunFormStatus('Submitting runs is not available right now.', true);
+        if(window.GlassToast) window.GlassToast.show('error', 'Server offline', 'Submitting runs is not available right now.');
         return;
       }
       const payload = {
@@ -3783,6 +3787,7 @@
           ? `Run submitted successfully. It is linked to your account (${fedlServerUsername}) for moderators.`
           : 'Run submitted successfully. The admin panel can review it now.';
         setRunFormStatus(okMsg, false, true);
+        if(window.GlassToast) window.GlassToast.show('success', 'Run submitted', 'Your run is in the review queue.');
         const submitBtn = qs('run-submit');
         if(submitBtn){
           submitBtn.classList.remove('btn-loading');
@@ -3804,6 +3809,7 @@
           submitBtn.disabled = false;
         }
         setRunFormStatus(err.message || 'Could not submit the run. Check the server and try again.', true);
+        if(window.GlassToast) window.GlassToast.show('error', 'Submit failed', err.message || 'Could not submit the run. Check the server and try again.');
       });
     });
 
@@ -3850,6 +3856,7 @@
       const token = responseEl ? String(responseEl.value || '') : '';
       if(!token){
         setSignupStatus('Please complete the verification challenge.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Verification required', 'Please complete the challenge.');
         return false;
       }
       return true;
@@ -3859,6 +3866,7 @@
       if(!checkTurnstile()) return;
       if (!canUseLiveServer) {
         setSignupStatus('Sign up is not available right now.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Server offline', 'Sign up is not available right now.');
         return;
       }
       const username = String(qs('signup-username').value || '').trim().toLowerCase();
@@ -3866,14 +3874,17 @@
       const password2 = qs('signup-password2').value || '';
       if (!FEDL_USERNAME_RE.test(username)) {
         setSignupStatus('Use 3–24 characters: lowercase letters, numbers, or underscore only.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Invalid username', 'Use 3–24 characters: lowercase letters, numbers, or underscore only.');
         return;
       }
       if (password.length < 8) {
         setSignupStatus('Password must be at least 8 characters.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Weak password', 'Password must be at least 8 characters.');
         return;
       }
       if (password !== password2) {
         setSignupStatus('Passwords do not match.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Passwords mismatch', 'Passwords do not match.');
         return;
       }
       submitBtn.disabled = true;
@@ -3892,6 +3903,7 @@
         fedlServerUsername = data.username;
         document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
         setSignupStatus('Account created successfully. Loading your data…', 'success');
+        if(window.GlassToast) window.GlassToast.show('success', 'Welcome!', 'Account created successfully.');
         return fedlPullUserStateToLocal(data.userId);
       }).then(()=>{
         setSignupStatus('You are signed in. Redirecting…', 'success');
@@ -3903,6 +3915,7 @@
       }).catch(err=>{
         console.error(err);
         setSignupStatus(err.message || 'Could not sign up.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Sign up failed', err.message || 'Could not sign up.');
         submitBtn.disabled = false;
       });
     });
@@ -3921,6 +3934,7 @@
       const token = responseEl ? String(responseEl.value || '') : '';
       if(!token){
         setLoginStatus('Please complete the verification challenge.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Verification required', 'Please complete the challenge.');
         return false;
       }
       return true;
@@ -3930,12 +3944,14 @@
       if(!checkTurnstile()) return;
       if (!canUseLiveServer) {
         setLoginStatus('Log in is not available right now.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Server offline', 'Log in is not available right now.');
         return;
       }
       const username = String(qs('login-username').value || '').trim().toLowerCase();
       const password = qs('login-password').value || '';
       if (!username) {
         setLoginStatus('Enter your username.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Missing username', 'Enter your username.');
         return;
       }
       submitBtn.disabled = true;
@@ -3954,6 +3970,7 @@
         fedlServerUsername = data.username;
         document.dispatchEvent(new CustomEvent('fedl-auth-updated'));
         setLoginStatus('Signed in successfully. Loading your data…', 'success');
+        if(window.GlassToast) window.GlassToast.show('success', 'Welcome back!', 'Signed in successfully.');
         return fedlPullUserStateToLocal(data.userId);
       }).then(()=>{
         setLoginStatus('Welcome back. Redirecting…', 'success');
@@ -3965,6 +3982,7 @@
       }).catch(err=>{
         console.error(err);
         setLoginStatus(err.message || 'Could not log in.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Login failed', err.message || 'Could not log in.');
         submitBtn.disabled = false;
       });
     });
@@ -3999,6 +4017,7 @@
       if (statusEl) {
         fedlSetFormStatus(statusEl, 'Signed in successfully. Loading your data…', 'success');
       }
+      if(window.GlassToast) window.GlassToast.show('success', 'Welcome back!', 'Signed in with Google.');
       return fedlPullUserStateToLocal(data.userId);
     }).then(() => {
       if (statusEl) {
@@ -4014,6 +4033,7 @@
       if (statusEl) {
         fedlSetFormStatus(statusEl, err.message || 'Could not sign in with Google.', 'error');
       }
+      if(window.GlassToast) window.GlassToast.show('error', 'Google sign-in failed', err.message || 'Could not sign in with Google.');
     });
   };
 
@@ -4046,6 +4066,7 @@
       if (statusEl) {
         fedlSetFormStatus(statusEl, 'Account created successfully. Loading your data…', 'success');
       }
+      if(window.GlassToast) window.GlassToast.show('success', 'Welcome!', 'Account created with Google.');
       return fedlPullUserStateToLocal(data.userId);
     }).then(() => {
       if (statusEl) {
@@ -4061,6 +4082,7 @@
       if (statusEl) {
         fedlSetFormStatus(statusEl, err.message || 'Could not create account with Google.', 'error');
       }
+      if(window.GlassToast) window.GlassToast.show('error', 'Google sign-up failed', err.message || 'Could not create account with Google.');
     });
   };
 
@@ -4158,6 +4180,7 @@
           }
         }
         setThemeStatus('Theme saved!', 'success');
+        if(window.GlassToast) window.GlassToast.show('success', 'Theme saved', 'Theme updated successfully.');
         const themePanel = document.querySelector('.account-panel:nth-child(2)');
         if(themePanel && window.anime && !animationsDisabled()){
           themePanel.classList.add('success-shine');
@@ -4285,6 +4308,7 @@
       }).catch(err=>{
         console.error(err);
         setOverviewStatus(err.message || 'Could not load your account.', 'error');
+        if(window.GlassToast) window.GlassToast.show('error', 'Account error', err.message || 'Could not load your account.');
         if (String(err.message || '').toLowerCase().includes('not signed in')) {
           window.location.replace('login.html?return=' + encodeURIComponent('account.html'));
         }
@@ -4304,9 +4328,11 @@
             throw new Error(message || 'Could not send reset code.');
           }
           setResetStatus('Reset code sent! Check your messages.', 'success');
+          if(window.GlassToast) window.GlassToast.show('success', 'Reset code sent', 'Check your messages for the code.');
         }).catch(err=>{
           console.error(err);
           setResetStatus(err.message || 'Could not send reset code.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Reset failed', err.message || 'Could not send reset code.');
         }).finally(()=>{
           resetBtn.disabled = false;
         });
@@ -4321,6 +4347,7 @@
         const confirmPassword = String(qs('account-confirm-password').value || '');
         if (!currentPassword) {
           setPasswordStatus('Enter your current password.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Missing field', 'Enter your current password.');
           if(window.anime && !animationsDisabled()){
             window.anime({ targets: qs('account-current-password'), translateX: [-4,4,-4,4,0], duration: 300, easing: 'easeInOutQuad' });
           }
@@ -4328,10 +4355,12 @@
         }
         if (newPassword.length < 8) {
           setPasswordStatus('New password must be at least 8 characters.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Weak password', 'New password must be at least 8 characters.');
           return;
         }
         if (newPassword !== confirmPassword) {
           setPasswordStatus('New passwords do not match.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Passwords mismatch', 'New passwords do not match.');
           return;
         }
         if (passwordSubmit) {
@@ -4352,9 +4381,11 @@
           }
           passwordForm.reset();
           setPasswordStatus('Password updated.', 'success');
+          if(window.GlassToast) window.GlassToast.show('success', 'Password updated', 'Your password has been changed.');
         }).catch(err=>{
           console.error(err);
           setPasswordStatus(err.message || 'Could not update password.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Password error', err.message || 'Could not update password.');
         }).finally(()=>{
           if (passwordSubmit) {
             passwordSubmit.disabled = false;
@@ -4393,11 +4424,13 @@
         ev.preventDefault();
         if (!canUseLiveServer) {
           setRequestStatus('Password reset is not available right now.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Server offline', 'Password reset is not available right now.');
           return;
         }
         const identifier = String(requestInput ? requestInput.value : '').trim().toLowerCase();
         if (!identifier) {
           setRequestStatus('Enter your username or email.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Missing field', 'Enter your username or email.');
           return;
         }
         if (requestSubmit) {
@@ -4414,12 +4447,14 @@
             throw new Error(data.message || 'Could not request password reset.');
           }
           setRequestStatus(data.message || 'Check your messages for the reset code.', 'success');
+          if(window.GlassToast) window.GlassToast.show('success', 'Reset code sent', 'Check your messages for the reset code.');
           if (requestInput) {
             requestInput.value = '';
           }
         }).catch(err=>{
           console.error(err);
           setRequestStatus(err.message || 'Could not request password reset.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Reset request failed', err.message || 'Could not request password reset.');
         }).finally(()=>{
           if (requestSubmit) {
             requestSubmit.disabled = false;
@@ -4433,6 +4468,7 @@
         ev.preventDefault();
         if (!canUseLiveServer) {
           setResetPasswordStatus('Password reset is not available right now.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Server offline', 'Password reset is not available right now.');
           return;
         }
         const token = String(tokenInput ? tokenInput.value : '').trim();
@@ -4440,14 +4476,17 @@
         const confirmPassword = String(qs('reset-confirm-password').value || '');
         if (!token) {
           setResetPasswordStatus('Paste the reset code below.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Missing code', 'Paste the reset code below.');
           return;
         }
         if (newPassword.length < 8) {
           setResetPasswordStatus('New password must be at least 8 characters.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Weak password', 'New password must be at least 8 characters.');
           return;
         }
         if (newPassword !== confirmPassword) {
           setResetPasswordStatus('New passwords do not match.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Passwords mismatch', 'New passwords do not match.');
           return;
         }
         if (resetSubmit) {
@@ -4468,9 +4507,11 @@
             tokenInput.value = '';
           }
           setResetPasswordStatus('Password reset complete. You can log in with your new password now.', 'success');
+          if(window.GlassToast) window.GlassToast.show('success', 'Password reset', 'You can log in with your new password.');
         }).catch(err=>{
           console.error(err);
           setResetPasswordStatus(err.message || 'Could not reset password.', 'error');
+          if(window.GlassToast) window.GlassToast.show('error', 'Reset failed', err.message || 'Could not reset password.');
         }).finally(()=>{
           if (resetSubmit) {
             resetSubmit.disabled = false;
@@ -4505,6 +4546,7 @@
         event.preventDefault();
         if(!canUseLiveServer){
           setContactFormStatus('Reports are not available right now.', true);
+          if(window.GlassToast) window.GlassToast.show('error', 'Server offline', 'Reports are not available right now.');
           return;
         }
         const payload = {
@@ -4515,6 +4557,7 @@
         };
         if(!payload.subject || !payload.description){
           setContactFormStatus('Subject and description are required.', true);
+          if(window.GlassToast) window.GlassToast.show('error', 'Missing fields', 'Subject and description are required.');
           return;
         }
         setContactFormStatus('Submitting your report...');
@@ -4535,10 +4578,12 @@
           return r.json();
         }).then(()=>{
           setContactFormStatus('Thank you! Your report has been submitted. The admins will review it soon.');
+          if(window.GlassToast) window.GlassToast.show('success', 'Report submitted', 'The admins will review it soon.');
           if(form) form.reset();
         }).catch(err=>{
           console.error(err);
           setContactFormStatus(err.message || 'Could not submit your report. Try again later.', true);
+          if(window.GlassToast) window.GlassToast.show('error', 'Submit failed', err.message || 'Could not submit your report. Try again later.');
         });
       });
     }
@@ -4556,6 +4601,59 @@
   if (adsEnabled()) {
     loadAdsScript();
   }
+
+  // Back to top button
+  (function initBackToTop(){
+    var btn = document.getElementById('back-to-top');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'back-to-top';
+      btn.setAttribute('aria-label', 'Back to top');
+      btn.setAttribute('title', 'Back to top');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>';
+      document.body.appendChild(btn);
+    }
+    var threshold = 400;
+    var visible = false;
+    function onScroll(){
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      if (y > threshold && !visible) {
+        visible = true;
+        btn.classList.add('is-visible');
+        if (window.anime && !animationsDisabled()) {
+          window.anime({ targets: btn, scale: [0.5, 1], opacity: [0, 1], duration: 400, easing: 'easeOutBack' });
+        }
+      } else if (y <= threshold && visible) {
+        visible = false;
+        if (window.anime && !animationsDisabled()) {
+          window.anime({ targets: btn, scale: [1, 0.5], opacity: [1, 0], duration: 300, easing: 'easeInCubic', complete: function(){ btn.classList.remove('is-visible'); } });
+        } else {
+          btn.classList.remove('is-visible');
+        }
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      if (window.anime && !animationsDisabled()) {
+        window.anime({ targets: btn, scale: [1, 0.85, 1], duration: 300, easing: 'easeOutBack' });
+      }
+      var startY = window.pageYOffset || document.documentElement.scrollTop;
+      if (window.anime && !animationsDisabled()) {
+        var obj = { y: startY };
+        window.anime({
+          targets: obj,
+          y: 0,
+          duration: Math.min(startY * 0.5, 800),
+          easing: 'easeInOutCubic',
+          update: function(){ window.scrollTo(0, obj.y); }
+        });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    onScroll();
+  })();
 
   // Utility
   function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}

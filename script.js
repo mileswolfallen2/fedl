@@ -78,7 +78,13 @@
 
     show: function (type, title, desc, duration) {
       var region = document.getElementById("toast-region");
-      if (!region) return;
+      if (!region) {
+        region = document.createElement("div");
+        region.id = "toast-region";
+        region.setAttribute("aria-live", "polite");
+        region.setAttribute("aria-label", "Notifications");
+        document.body.appendChild(region);
+      }
 
       var toast = document.createElement("div");
       toast.className = "glass-toast glass-toast--" + type;
