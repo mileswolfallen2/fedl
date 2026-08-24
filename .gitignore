@@ -9,3 +9,8 @@ server/messages.json
 # Environment variables
 server/.env
 server/config.json
+
+# Wrangler / Cloudflare Workers
+.wrangler/
+.dev.vars
+node_modules/
