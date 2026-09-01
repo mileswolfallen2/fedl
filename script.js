@@ -6,6 +6,15 @@
 (function () {
   "use strict";
 
+  // Upcoming maintenance banner. Remove this block (and maintenance-banner.js)
+  // once the server migration is complete.
+  (function loadMaintBanner() {
+    var s = document.createElement("script");
+    s.src = "maintenance-banner.js";
+    s.async = true;
+    document.body.appendChild(s);
+  })();
+
   var GLASS_KEY = "fedl-glass-on";
   var GLASS_CSS = "style.css";
   var root = document.documentElement;
