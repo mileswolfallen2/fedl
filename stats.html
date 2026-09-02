@@ -5,7 +5,7 @@
      crossorigin="anonymous"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="FEDL live site statistics - page views, requests, and unique visitors via Cloudflare">
+  <meta name="description" content="FEDL site statistics - page views, requests, and unique visitors">
   <meta name="keywords" content="fedl, stats, analytics, page views, visitors">
   <title>Stats — GD fedl</title>
   <link rel="stylesheet" href="styles.css">
@@ -14,16 +14,16 @@
     .stats-page .rule-section { max-width: 820px; }
     .stats-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 18px; }
     .stat-card { background: var(--panel, #1b1f2b); border: 1px solid var(--border, #2c3242); border-radius: 10px; padding: 16px; }
-    .stat-card .label { font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+    .stat-card .label { font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; overflow-wrap: anywhere; }
     .stat-card .value { font-size: 1.6em; font-weight: 700; margin-top: 6px; font-variant-numeric: tabular-nums; }
     table.stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.92em; }
-    table.stats-table th, table.stats-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border, #2c3242); font-variant-numeric: tabular-nums; }
+    table.stats-table th, table.stats-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border, #2c3242); font-variant-numeric: tabular-nums; white-space: nowrap; }
     table.stats-table th { opacity: 0.7; text-transform: uppercase; font-size: 0.78em; letter-spacing: 0.05em; }
-    .range-controls { margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .range-controls select { padding: 6px 8px; border-radius: 6px; background: var(--panel, #1b1f2b); color: inherit; border: 1px solid var(--border, #2c3242); }
     .spinner { opacity: 0.7; }
     .error-box { color: #ff7070; }
     .muted { opacity: 0.7; }
+.file-block { margin-top: 24px; }
+   .file-block h3 { margin-bottom: 2px; }
   </style>
 </head>
 <body data-page="stats">
@@ -41,35 +41,14 @@
   </header>
   <main class="stats-page rules-page">
     <section class="rule-section">
-      <h2>Live Site Stats</h2>
-      <p class="muted">Page views, requests, and unique visitors served through Cloudflare.</p>
-
-      <div class="range-controls">
-        <label for="range">Show data for:</label>
-        <select id="range">
-          <option value="60">Last 1 hour</option>
-          <option value="180">Last 3 hours</option>
-          <option value="720">Last 12 hours</option>
-          <option value="1440" selected>Last 24 hours</option>
-          <option value="10080">Last 7 days</option>
-          <option value="43200">Last 30 days</option>
-        </select>
-        <button id="refresh" class="btn">Refresh</button>
-      </div>
+      <h2>Site Stats</h2>
+      <p class="muted">Live site statistics, updated monthly.</p>
 
       <p id="status" class="spinner">Loading stats…</p>
 
       <div id="summary" class="stats-hero" style="display:none"></div>
 
-      <h3>Daily Breakdown</h3>
-      <div style="overflow-x:auto">
-        <table class="stats-table" id="dailyTable">
-          <thead>
-            <tr><th>Date</th><th>Page Views</th><th>Requests</th><th>Unique Visitors</th></tr>
-          </thead>
-          <tbody id="dailyBody"></tbody>
-        </table>
-      </div>
+      <div id="tables"></div>
     </section>
   </main>
   <script src="app.js" defer></script>
@@ -78,67 +57,280 @@
     (function () {
       const status = document.getElementById('status');
       const summary = document.getElementById('summary');
-      const dailyBody = document.getElementById('dailyBody');
-      const range = document.getElementById('range');
-      const refresh = document.getElementById('refresh');
+      const tables = document.getElementById('tables');
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
 
       function fmt(n) {
-        if (n === null || n === undefined) return '–';
-        return Number(n).toLocaleString();
+        if (n === null || n === undefined || n === '') return '–';
+        const num = Number(n);
+        return isNaN(num) ? String(n) : num.toLocaleString();
       }
 
-      function statCard(label, value) {
-        return '<div class="stat-card"><div class="label">' + label + '</div><div class="value">' + fmt(value) + '</div></div>';
+      function isNumeric(v) {
+        return v !== '' && v !== null && v !== undefined && !isNaN(Number(v)) && String(v).trim() !== '';
       }
 
-      function render(data) {
-        if (!data || !data.hasData) {
-          status.textContent = 'No data available yet. ' + (data && data.note ? data.note : '');
-          status.className = 'muted';
-          summary.style.display = 'none';
-          dailyBody.innerHTML = '';
-          return;
+      function parseCSV(text) {
+        const rows = [];
+        let row = [];
+        let cell = '';
+        let inQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+          const c = text[i];
+          if (inQuotes) {
+            if (c === '"') {
+              if (text[i + 1] === '"') { cell += '"'; i++; }
+              else inQuotes = false;
+            } else cell += c;
+          } else if (c === '"') {
+            inQuotes = true;
+          } else if (c === ',') {
+            row.push(cell); cell = '';
+          } else if (c === '\n' || c === '\r') {
+            if (c === '\r' && text[i + 1] === '\n') i++;
+            row.push(cell); cell = '';
+            if (row.some(function (v) { return v.trim() !== ''; })) rows.push(row);
+            row = [];
+          } else {
+            cell += c;
+          }
         }
+        row.push(cell);
+        if (row.some(function (v) { return v.trim() !== ''; })) rows.push(row);
+        return rows;
+      }
 
-        status.textContent = 'Updated ' + new Date(data.generated).toLocaleTimeString() + ' · ' + data.daily.length + ' day(s) in range';
+      function rowsToObjects(rows) {
+        if (!rows.length) return [];
+        const headers = rows[0].map(function (h) { return h.trim(); });
+        return rows.slice(1).map(function (r) {
+          const obj = {};
+          headers.forEach(function (h, i) { obj[h] = (r[i] !== undefined ? r[i] : '').trim(); });
+          return obj;
+        });
+      }
+
+      async function loadFile(name) {
+        const res = await fetch('data/' + encodeURIComponent(name));
+        if (!res.ok) throw new Error(name + ' -> HTTP ' + res.status);
+        const lower = name.toLowerCase();
+        if (lower.endsWith('.json')) {
+          const j = await res.json();
+          const arr = Array.isArray(j) ? j : (j && Array.isArray(j.data) ? j.data : (j && Array.isArray(j.results) ? j.results : null));
+          if (!arr) throw new Error(name + ' -> no array found');
+          return arr;
+        }
+        const text = await res.text();
+        return rowsToObjects(parseCSV(text));
+      }
+
+      function buildTable(records, fileName) {
+        if (!records.length) return { none: true };
+        const headers = Object.keys(records[0]);
+        const numericCols = headers.filter(function (h) {
+          return records.some(function (r) { return isNumeric(r[h]); });
+        });
+
+        const totals = {};
+        numericCols.forEach(function (h) {
+          let sum = 0;
+          records.forEach(function (r) {
+            const v = Number(r[h]);
+            if (!isNaN(v)) sum += v;
+          });
+          totals[h] = sum;
+        });
+
+        const thead = headers.map(function (h) { return '<th>' + escapeHtml(h) + '</th>'; }).join('');
+        const tbody = records.map(function (r) {
+          return '<tr>' + headers.map(function (h) { return '<td>' + escapeHtml(fmt(r[h])) + '</td>'; }).join('') + '</tr>';
+        }).join('');
+
+        const cards = numericCols.map(function (h) {
+          return '<div class="stat-card"><div class="label">' + escapeHtml(h) + ' (total)</div><div class="value">' + fmt(totals[h]) + '</div></div>';
+        }).join('');
+
+        const fileInfo = '<div class="file-block">' +
+          '<h3>' + escapeHtml(fileName) + '</h3>' +
+          '<div class="stats-hero">' + cards + '</div>' +
+          '<div style="overflow-x:auto"><table class="stats-table"><thead><tr>' + thead + '</tr></thead><tbody>' + tbody + '</tbody></table></div>' +
+          '</div>';
+
+        return { html: fileInfo, cards: cards };
+      }
+
+      const METRIC_INFO = {
+        'data_cached': { label: 'Cached Data', fmt: 'bytes' },
+        'percent_cached': { label: 'Cache Hit Rate', fmt: 'percent' },
+        'total_data_served': { label: 'Data Served', fmt: 'bytes' },
+        'total_requests': { label: 'Requests', fmt: 'int' },
+        'unique_visitors': { label: 'Unique Visitors', fmt: 'int' }
+      };
+
+      const MONTHS = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
+
+      function metricName(fileName) {
+        const base = fileName.replace(/\.csv$/i, '').replace(/\.json$/i, '');
+        return base.replace(/_20\d{2}-\d{2}-\d{2}T.*$/, '');
+      }
+
+      function metricLabel(metric) {
+        const info = METRIC_INFO[metric];
+        return info ? info.label : metric.replace(/_/g, ' ');
+      }
+
+      function metricFmt(metric) {
+        const info = METRIC_INFO[metric];
+        return info ? info.fmt : 'int';
+      }
+
+      function formatMetric(metric, val) {
+        const num = Number(val);
+        if (isNaN(num)) return val === '' ? '–' : String(val);
+        const fmt = metricFmt(metric);
+        if (fmt === 'percent') return num.toLocaleString(undefined, { maximumFractionDigits: 1 }) + '%';
+        if (fmt === 'bytes') {
+          if (num >= 1e9) return (num / 1e9).toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' GB';
+          if (num >= 1e6) return (num / 1e6).toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' MB';
+          if (num >= 1e3) return (num / 1e3).toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' KB';
+          return num.toLocaleString() + ' B';
+        }
+        return num.toLocaleString();
+      }
+
+      function timestampKey(tsStr) {
+        const m = String(tsStr).trim().toUpperCase().match(/^(\d{1,2})\s+([A-Z]{3,})/);
+        if (m && MONTHS[m[2]] !== undefined) return MONTHS[m[2]] * 100 + parseInt(m[1], 10);
+        return Number.MAX_SAFE_INTEGER;
+      }
+
+      function displayDate(tsStr) {
+        const m = String(tsStr).trim().toUpperCase().match(/^(\d{1,2})\s+([A-Z]{3,})/);
+        if (m && MONTHS[m[2]] !== undefined) {
+          const day = parseInt(m[1], 10);
+          const name = m[2][0] + m[2].slice(1).toLowerCase();
+          return name + ' ' + day;
+        }
+        return String(tsStr);
+      }
+
+      function allSeries(lists) {
+        if (!lists.length) return false;
+        return lists.every(function (list) {
+          if (!list.length) return false;
+          const keys = Object.keys(list[0]);
+          return keys.length === 2 && keys[0].toLowerCase().indexOf('time') !== -1 && keys[1] === 'value';
+        });
+      }
+
+      function mergeSeries(files, lists) {
+        const map = {};
+        files.forEach(function (f, fi) {
+          const metric = metricName(f);
+          lists[fi].forEach(function (r) {
+            const t = String(Object.values(r)[0]);
+            if (!map[t]) map[t] = {};
+            map[t][metric] = r.value;
+          });
+        });
+        return Object.keys(map).map(function (t) {
+          const row = { timestamp: t };
+          Object.keys(map[t]).forEach(function (m) { row[m] = map[t][m]; });
+          return row;
+        });
+      }
+
+      function renderCombined(rows, fileNames) {
+        const metrics = fileNames.map(metricName);
+        const headers = ['timestamp'].concat(metrics);
+
+        const totals = {};
+        const counts = {};
+        metrics.forEach(function (h) {
+          let sum = 0;
+          let n = 0;
+          rows.forEach(function (r) {
+            const v = Number(r[h]);
+            if (!isNaN(v)) { sum += v; n++; }
+          });
+          if (n) {
+            totals[h] = metricFmt(h) === 'percent' ? sum / n : sum;
+            counts[h] = n;
+          }
+        });
+
+        const cards = metrics.map(function (h) {
+          if (totals[h] === undefined) return '';
+          const suffix = metricFmt(h) === 'percent' ? ' (avg)' : ' (total)';
+          return '<div class="stat-card"><div class="label">' + escapeHtml(metricLabel(h)) + suffix + '</div><div class="value">' + formatMetric(h, totals[h]) + '</div></div>';
+        }).join('');
+
+        const sorted = rows.slice().sort(function (a, b) {
+          return timestampKey(b.timestamp) - timestampKey(a.timestamp);
+        });
+
+        const thead = headers.map(function (h) {
+          return '<th>' + escapeHtml(h === 'timestamp' ? 'Date' : metricLabel(h)) + '</th>';
+        }).join('');
+        const tbody = sorted.map(function (r) {
+          return '<tr>' + headers.map(function (h) {
+            if (h === 'timestamp') return '<td>' + escapeHtml(displayDate(r[h])) + '</td>';
+            return '<td>' + escapeHtml(formatMetric(h, r[h])) + '</td>';
+          }).join('') + '</tr>';
+        }).join('');
+
+        status.textContent = 'Updated monthly';
         status.className = 'muted';
-
         summary.style.display = 'grid';
-        summary.innerHTML = statCard('Page Views', data.totals.totalPageViews) +
-          statCard('Requests', data.totals.totalRequests) +
-          statCard('Unique Visitors', data.totals.totalUniques);
-
-        dailyBody.innerHTML = data.daily.map(d =>
-          '<tr>' +
-          '<td>' + d.date + '</td>' +
-          '<td>' + fmt(d.pageViews) + '</td>' +
-          '<td>' + fmt(d.requests) + '</td>' +
-          '<td>' + fmt(d.uniques) + '</td>' +
-          '</tr>'
-        ).join('');
+        summary.innerHTML = cards;
+        tables.innerHTML = '<div class="file-block"><h3>Daily Overview</h3>' +
+          '<div style="overflow-x:auto"><table class="stats-table"><thead><tr>' + thead + '</tr></thead><tbody>' + tbody + '</tbody></table></div></div>';
       }
 
       async function load() {
         status.textContent = 'Loading stats…';
         status.className = 'spinner';
+        summary.style.display = 'none';
+        tables.innerHTML = '';
         try {
-          const res = await fetch('/api/stats?minutes=' + encodeURIComponent(range.value));
-          const data = await res.json();
-          if (!res.ok) {
-            status.textContent = 'Error: ' + (data.error || ('HTTP ' + res.status));
-            status.className = 'error-box';
-            summary.style.display = 'none';
-            return;
+          const manRes = await fetch('data/manifest.json');
+          if (!manRes.ok) throw new Error('Unable to load statistics');
+          const manifest = await manRes.json();
+          const files = (manifest && Array.isArray(manifest.files)) ? manifest.files : [];
+          if (!files.length) throw new Error('No statistics available yet');
+
+          const lists = [];
+          for (const f of files) lists.push(await loadFile(f));
+
+          if (allSeries(lists)) {
+            const rows = mergeSeries(files, lists);
+            if (rows.length) {
+              renderCombined(rows, files);
+              return;
+            }
           }
-          render(data);
+
+          let any = false;
+          for (let i = 0; i < lists.length; i++) {
+            const table = buildTable(lists[i], files[i]);
+            if (!table.none) { any = true; tables.innerHTML += table.html; }
+          }
+          if (!any) throw new Error('No statistics available yet');
+          status.textContent = '';
+          status.className = 'muted';
+          summary.style.display = 'grid';
         } catch (e) {
-          status.textContent = 'Could not reach the stats API: ' + e.message;
+          status.textContent = 'Error: ' + e.message;
           status.className = 'error-box';
           summary.style.display = 'none';
         }
       }
 
-      refresh.addEventListener('click', load);
       load();
     })();
   </script>

@@ -2,10 +2,6 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "fedl",
   "compatibility_date": "2026-08-24",
-  "vars": {
-    "CF_API_TOKEN": "cfut_H9adJRfFWecR24zORaukwFMkmHWsTtlpmwE8YyoG04f0312e",
-    "CF_ACCOUNT_ID": "b383c4fd325135e56323d694db7a06d3"
-  },
   "assets": {
     "directory": ".",
     "not_found_handling": "404-page",
