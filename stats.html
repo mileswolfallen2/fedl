@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6951907799659255"
+     crossorigin="anonymous"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="FEDL live site statistics - page views, requests, and unique visitors via Cloudflare">
+  <meta name="keywords" content="fedl, stats, analytics, page views, visitors">
+  <title>Stats — GD fedl</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="pageicon.png">
+  <style>
+    .stats-page .rule-section { max-width: 820px; }
+    .stats-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .stat-card { background: var(--panel, #1b1f2b); border: 1px solid var(--border, #2c3242); border-radius: 10px; padding: 16px; }
+    .stat-card .label { font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+    .stat-card .value { font-size: 1.6em; font-weight: 700; margin-top: 6px; font-variant-numeric: tabular-nums; }
+    table.stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.92em; }
+    table.stats-table th, table.stats-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border, #2c3242); font-variant-numeric: tabular-nums; }
+    table.stats-table th { opacity: 0.7; text-transform: uppercase; font-size: 0.78em; letter-spacing: 0.05em; }
+    .range-controls { margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .range-controls select { padding: 6px 8px; border-radius: 6px; background: var(--panel, #1b1f2b); color: inherit; border: 1px solid var(--border, #2c3242); }
+    .spinner { opacity: 0.7; }
+    .error-box { color: #ff7070; }
+    .muted { opacity: 0.7; }
+  </style>
+</head>
+<body data-page="stats">
+  <header>
+    <h1><img src="pageicon.png" alt="" class="pageicon">Stats</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="players.html">Players</a>
+      <a href="run.html">Submit Run</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="rules.html">Rules</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+  <main class="stats-page rules-page">
+    <section class="rule-section">
+      <h2>Live Site Stats</h2>
+      <p class="muted">Page views, requests, and unique visitors served through Cloudflare.</p>
+
+      <div class="range-controls">
+        <label for="range">Show data for:</label>
+        <select id="range">
+          <option value="60">Last 1 hour</option>
+          <option value="180">Last 3 hours</option>
+          <option value="720">Last 12 hours</option>
+          <option value="1440" selected>Last 24 hours</option>
+          <option value="10080">Last 7 days</option>
+          <option value="43200">Last 30 days</option>
+        </select>
+        <button id="refresh" class="btn">Refresh</button>
+      </div>
+
+      <p id="status" class="spinner">Loading stats…</p>
+
+      <div id="summary" class="stats-hero" style="display:none"></div>
+
+      <h3>Daily Breakdown</h3>
+      <div style="overflow-x:auto">
+        <table class="stats-table" id="dailyTable">
+          <thead>
+            <tr><th>Date</th><th>Page Views</th><th>Requests</th><th>Unique Visitors</th></tr>
+          </thead>
+          <tbody id="dailyBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="app.js" defer></script>
+  <script src="script.js"></script>
+  <script>
+    (function () {
+      const status = document.getElementById('status');
+      const summary = document.getElementById('summary');
+      const dailyBody = document.getElementById('dailyBody');
+      const range = document.getElementById('range');
+      const refresh = document.getElementById('refresh');
+
+      function fmt(n) {
+        if (n === null || n === undefined) return '–';
+        return Number(n).toLocaleString();
+      }
+
+      function statCard(label, value) {
+        return '<div class="stat-card"><div class="label">' + label + '</div><div class="value">' + fmt(value) + '</div></div>';
+      }
+
+      function render(data) {
+        if (!data || !data.hasData) {
+          status.textContent = 'No data available yet. ' + (data && data.note ? data.note : '');
+          status.className = 'muted';
+          summary.style.display = 'none';
+          dailyBody.innerHTML = '';
+          return;
+        }
+
+        status.textContent = 'Updated ' + new Date(data.generated).toLocaleTimeString() + ' · ' + data.daily.length + ' day(s) in range';
+        status.className = 'muted';
+
+        summary.style.display = 'grid';
+        summary.innerHTML = statCard('Page Views', data.totals.totalPageViews) +
+          statCard('Requests', data.totals.totalRequests) +
+          statCard('Unique Visitors', data.totals.totalUniques);
+
+        dailyBody.innerHTML = data.daily.map(d =>
+          '<tr>' +
+          '<td>' + d.date + '</td>' +
+          '<td>' + fmt(d.pageViews) + '</td>' +
+          '<td>' + fmt(d.requests) + '</td>' +
+          '<td>' + fmt(d.uniques) + '</td>' +
+          '</tr>'
+        ).join('');
+      }
+
+      async function load() {
+        status.textContent = 'Loading stats…';
+        status.className = 'spinner';
+        try {
+          const res = await fetch('/api/stats?minutes=' + encodeURIComponent(range.value));
+          const data = await res.json();
+          if (!res.ok) {
+            status.textContent = 'Error: ' + (data.error || ('HTTP ' + res.status));
+            status.className = 'error-box';
+            summary.style.display = 'none';
+            return;
+          }
+          render(data);
+        } catch (e) {
+          status.textContent = 'Could not reach the stats API: ' + e.message;
+          status.className = 'error-box';
+          summary.style.display = 'none';
+        }
+      }
+
+      refresh.addEventListener('click', load);
+      load();
+    })();
+  </script>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>Navigate</h4>
+      <a href="index.html">Home</a>
+      <a href="lists.html">Lists</a>
+      <a href="players.html">Players</a>
+      <a href="run.html">Submit Run</a>
+      <a href="roulette.html">Roulette</a>
+      <a href="rules.html">Rules</a>
+    </div>
+    <div>
+      <h4>Account</h4>
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+      <a href="account.html">Account</a>
+      <a href="messages.html">Messages</a>
+    </div>
+    <div>
+      <h4>More</h4>
+      <a href="guess.html">Guess Game</a>
+      <a href="support.html">Support</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="stats.html">Stats</a>
+      <a href="sitemap.html">Sitemap</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>FEDL — Fair Extreme Demon List</p>
+  </div>
+</footer>
+</body>
+</html>
