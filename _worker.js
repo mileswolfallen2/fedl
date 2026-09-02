@@ -18,33 +18,21 @@ async function handleStats(request, env) {
   const clamped = Math.max(5, Math.min(minutes, 43200));
   const since = new Date(Date.now() - clamped * 60000).toISOString();
 
-  if (!env.CF_API_TOKEN || (!env.CF_ACCOUNT_ID && !env.CF_ZONE_ID)) {
-    return json({ error: 'Not configured. Set CF_API_TOKEN and CF_ACCOUNT_ID (or CF_ZONE_ID) as Worker secrets.' }, 503);
+  if (!env.CF_API_TOKEN || !env.CF_ACCOUNT_ID) {
+    return json({ error: 'Not configured. Set CF_API_TOKEN and CF_ACCOUNT_ID as Worker vars.' }, 503);
   }
 
-  const zoneBlock = env.CF_ZONE_ID
-    ? `zones(filter: { zoneTag: "${env.CF_ZONE_ID}" }) {
-        httpRequests1dGroups(limit: 90, filter: { date_geq: "${since.slice(0, 10)}" }) {
-          dimensions { date }
-          sum { requests pageViews }
-          uniq { uniques }
-        }
-      }`
-    : '';
-
-  const accountBlock = env.CF_ZONE_ID
-    ? ''
-    : `accounts(filter: { accountTag: "${env.CF_ACCOUNT_ID}" }) {
+  const query = `query {
+    viewer {
+      accounts(filter: { accountTag: "${env.CF_ACCOUNT_ID}" }) {
         httpRequests1dGroups(limit: 90, filter: { datetime_geq: "${since}" }) {
           dimensions { date }
           sum { requests pageViews }
           uniq { uniques }
         }
-      }`;
-
-  const query = env.CF_ZONE_ID
-    ? `query { viewer { ${zoneBlock} } }`
-    : `query { viewer { ${accountBlock} } }`;
+      }
+    }
+  }`;
 
   const resp = await fetch(GRAPHQL_URL, {
     method: 'POST',
@@ -62,8 +50,7 @@ async function handleStats(request, env) {
   }
 
   const viewer = (data.data && data.data.viewer) || {};
-  const groups = (viewer.zones && viewer.zones[0] && viewer.zones[0].httpRequests1dGroups) ||
-    (viewer.accounts && viewer.accounts[0] && viewer.accounts[0].httpRequests1dGroups) || [];
+  const groups = (viewer.accounts && viewer.accounts[0] && viewer.accounts[0].httpRequests1dGroups) || [];
 
   let totalRequests = 0;
   let totalPageViews = 0;
@@ -86,7 +73,7 @@ async function handleStats(request, env) {
       uniques: g.uniq.uniques
     })),
     note: groups.length === 0
-      ? 'No data returned. Check CF_API_TOKEN has Analytics:Read permission and CF_ACCOUNT_ID/CF_ZONE_ID are correct.'
+      ? 'No data returned. Check CF_API_TOKEN has Analytics:Read permission and CF_ACCOUNT_ID is correct.'
       : null
   });
 }
