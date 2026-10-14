@@ -339,15 +339,34 @@ function writeDataText(text) {
   }
 }
 
-function setCors(res) {
+function setSecurityHeaders(req, res) {
+  if (!res) return;
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  if (req && req.socket && req.socket.encrypted) {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+}
+
+function setCors(reqOrRes, maybeRes) {
+  const req = maybeRes ? reqOrRes : null;
+  const res = maybeRes || reqOrRes;
+  if (!res) return;
+  setSecurityHeaders(req, res);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Cross-Origin-Opener-Policy', 'unsafe-none');
 }
 
-function sendJson(res, statusCode, payload) {
-  setCors(res);
+function sendJson(reqOrRes, resOrStatusCode, statusCodeOrPayload, maybePayload) {
+  const req = maybePayload === undefined ? null : reqOrRes;
+  const res = maybePayload === undefined ? reqOrRes : resOrStatusCode;
+  const statusCode = maybePayload === undefined ? resOrStatusCode : statusCodeOrPayload;
+  const payload = maybePayload === undefined ? statusCodeOrPayload : maybePayload;
+  setCors(req, res);
   res.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store'
@@ -370,7 +389,10 @@ function isAuthorized(req) {
     const decoded = Buffer.from(authHeader.slice(6), 'base64').toString('utf8');
     const separatorIndex = decoded.indexOf(':');
     const suppliedPassword = separatorIndex === -1 ? '' : decoded.slice(separatorIndex + 1);
-    return suppliedPassword === adminPassword;
+    const suppliedBuf = Buffer.from(String(suppliedPassword), 'utf8');
+    const expectedBuf = Buffer.from(String(adminPassword), 'utf8');
+    if (suppliedBuf.length !== expectedBuf.length) return false;
+    return crypto.timingSafeEqual(suppliedBuf, expectedBuf);
   } catch (error) {
     return false;
   }
@@ -378,7 +400,7 @@ function isAuthorized(req) {
 
 function requireAdmin(req, res) {
   if (isAuthorized(req)) return true;
-  setCors(res);
+  setCors(req, res);
   res.setHeader('WWW-Authenticate', 'Basic realm="FEDL Admin"');
   res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('Authentication required');
@@ -1435,7 +1457,8 @@ function serveFile(reqPath, res) {
 }
 
 function handleRequest(req, res) {
-  const scheme = req.connection.encrypted ? 'https' : 'http';
+  setSecurityHeaders(req, res);
+  const scheme = req.socket && req.socket.encrypted ? 'https' : 'http';
   const url = new URL(req.url, `${scheme}://${req.headers.host}`);
   let pathname = url.pathname;
 
